@@ -1,0 +1,47 @@
+name: flutter_weather
+description: Simple weather forecast
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  bloc: '^6.0.3'
+  cupertino_icons: '^1.0.0'
+  equatable: '^1.2.5'
+  flutter_bloc: '^6.0.5'
+  flutter_switch: '^0.2.0'
+  hydrated_bloc: '^6.0.1'
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  test: '^1.15.7'
+  build_runner: '^1.10.0'
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+
+  fonts:
+    - family: gilroy
+      fonts:
+        - asset: assets/fonts/gilroy/Gilroy-Light.ttf
+          weight: 300
+        - asset: assets/fonts/gilroy/Gilroy-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/gilroy/Gilroy-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/gilroy/Gilroy-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/gilroy/Gilroy-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/gilroy/Gilroy-ExtraBold.ttf
+          weight: 900
