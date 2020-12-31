@@ -29,6 +29,10 @@ class AppLocalizations {
   String get fahrenheit => addMessage('Fahrenheit');
   String get hi => addMessage('Hi');
   String get low => addMessage('Low');
+  String get addLocation => addMessage('Add Location');
+  String get postalCode => addMessage('Add Message');
+  String get country => addMessage('Country');
+  String get lookup => addMessage('Lookup');
 
   addMessage(
     String message, {

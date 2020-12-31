@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.1"
+  bloc_test:
+    dependency: transitive
+    description:
+      name: bloc_test
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "7.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -230,6 +237,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.1"
+  flutter_form_bloc:
+    dependency: "direct main"
+    description:
+      name: flutter_form_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.19.0"
+  flutter_keyboard_visibility:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.3.0"
   flutter_switch:
     dependency: "direct main"
     description:
@@ -242,6 +263,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  form_bloc:
+    dependency: transitive
+    description:
+      name: form_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.19.1"
   glob:
     dependency: transitive
     description:
@@ -347,6 +375,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7"
+  mockito:
+    dependency: transitive
+    description:
+      name: mockito
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.3"
   nested:
     dependency: transitive
     description:
@@ -487,6 +522,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.24.1"
   shelf:
     dependency: transitive
     description:
@@ -520,6 +562,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  source_gen:
+    dependency: transitive
+    description:
+      name: source_gen
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.10+1"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -618,6 +667,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.3"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.2"
   vector_math:
     dependency: transitive
     description:
@@ -639,6 +695,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7+15"
+  weather_icons:
+    dependency: "direct main"
+    description:
+      name: weather_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   web_socket_channel:
     dependency: transitive
     description:

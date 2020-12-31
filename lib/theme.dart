@@ -17,6 +17,9 @@ ThemeMode getThemeMode(
 ThemeData appLightThemeData = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   unselectedWidgetColor: Colors.grey[300],
+  primaryColor: Colors.deepPurple[400],
+  accentColor: Colors.deepPurple[600],
+  hintColor: Colors.grey[900].withOpacity(0.3),
   appBarTheme: AppBarTheme(
     brightness: Brightness.light,
     color: Colors.white,
@@ -29,6 +32,10 @@ ThemeData appLightThemeData = ThemeData(
     ),
     iconTheme: IconThemeData(color: Colors.grey[900]),
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Colors.deepPurple[400],
+    elevation: 0.0,
+  ),
   iconTheme: IconThemeData(
     color: Colors.grey[900],
   ),
@@ -37,6 +44,34 @@ ThemeData appLightThemeData = ThemeData(
       TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
     },
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    contentPadding: EdgeInsets.all(10.0),
+    isDense: true,
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.deepPurple[400],
+        width: 2.0,
+        style: BorderStyle.solid,
+      ),
+    ),
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.deepPurple[400].withOpacity(0.1),
+        width: 2.0,
+        style: BorderStyle.solid,
+      ),
+    ),
+    errorBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.red[800],
+        width: 2.0,
+        style: BorderStyle.solid,
+      ),
+    ),
+    errorStyle: TextStyle(
+      color: Colors.red[800],
+    ),
   ),
   textTheme: TextTheme(
     headline1: TextStyle(
@@ -72,6 +107,7 @@ ThemeData appLightThemeData = ThemeData(
 ThemeData appDarkThemeData = appLightThemeData.copyWith(
   scaffoldBackgroundColor: Colors.grey[900],
   unselectedWidgetColor: Colors.grey[800],
+  hintColor: Colors.white.withOpacity(0.3),
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark,
     color: Colors.grey[900],
@@ -79,7 +115,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
     textTheme: TextTheme(
       headline6: TextStyle(
         color: Colors.white,
-        fontSize: 32.0,
+        fontSize: 20.0,
       ),
     ),
     iconTheme: IconThemeData(color: Colors.white),
