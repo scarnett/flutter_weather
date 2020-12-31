@@ -19,7 +19,7 @@ ThemeData appLightThemeData = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   unselectedWidgetColor: Colors.grey[300],
   appBarTheme: AppBarTheme(
-    brightness: Brightness.dark,
+    brightness: Brightness.light,
     color: Colors.white,
     elevation: 0.0,
     textTheme: TextTheme(
@@ -53,7 +53,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   scaffoldBackgroundColor: Colors.grey[900],
   unselectedWidgetColor: Colors.grey[800],
   appBarTheme: AppBarTheme(
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
     color: Colors.grey[900],
     elevation: 0.0,
     textTheme: TextTheme(
