@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/views/forecast/bloc/bloc.dart';
+import 'package:flutter_weather/widgets/app_day_night_switch.dart';
+import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class ForecastView extends StatelessWidget {
   static Route route() =>
@@ -62,9 +63,12 @@ class _ForecastPageViewState extends State<ForecastPageView> {
         ) =>
             WillPopScope(
           onWillPop: () => _willPopCallback(state),
-          child: Scaffold(
-            extendBody: true,
-            body: _buildContent(state),
+          child: AppUiOverlayStyle(
+            bloc: context.watch<AppBloc>(),
+            child: Scaffold(
+              extendBody: true,
+              body: _buildContent(state),
+            ),
           ),
         ),
       );
@@ -123,7 +127,7 @@ class _ForecastPageViewState extends State<ForecastPageView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            _buildDayNightSwitch(),
+            AppDayNightSwitch(bloc: context.read<AppBloc>()),
             _buildSettingsButton(),
           ],
         ),
@@ -143,38 +147,5 @@ class _ForecastPageViewState extends State<ForecastPageView> {
             ),
           ),
         ),
-      );
-
-  // TODO! move to widget
-  Widget _buildDayNightSwitch() => FlutterSwitch(
-        width: 60.0,
-        height: 28.0,
-        toggleSize: 24.0,
-        borderRadius: 24.0,
-        padding: 1.0,
-        value: (context.read<AppBloc>().state.themeMode == ThemeMode.dark),
-        activeToggleColor: Color(0xFF6E40C9),
-        inactiveToggleColor: Color(0xFF2F363D),
-        activeSwitchBorder: Border.all(
-          color: Color(0xFF3C1E70),
-          width: 2.0,
-        ),
-        inactiveSwitchBorder: Border.all(
-          color: Color(0xFFD1D5DA),
-          width: 2.0,
-        ),
-        activeColor: Color(0xFF271052),
-        inactiveColor: Colors.white,
-        activeIcon: Icon(
-          Icons.nightlight_round,
-          color: Color(0xFFF8E3A1),
-          size: 16.0,
-        ),
-        inactiveIcon: Icon(
-          Icons.wb_sunny,
-          color: Color(0xFFFFDF5D),
-          size: 16.0,
-        ),
-        onToggle: (val) => context.read<AppBloc>().add(ToggleThemeMode()),
       );
 }

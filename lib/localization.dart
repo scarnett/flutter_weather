@@ -18,7 +18,7 @@ class AppLocalizations {
         AppLocalizations,
       );
 
-  static String get appTitle => 'Dispatcher';
+  static String get appTitle => 'Flutter Weather';
 
   String get loading => addMessage('Loading...');
 
@@ -50,7 +50,8 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(
-    Locale locale,
-  ) =>
-      locale.languageCode.toLowerCase().contains('en'); // TODO!
+    Locale locale, {
+    Pattern other: 'en',
+  }) =>
+      locale.languageCode.toLowerCase().contains(other);
 }

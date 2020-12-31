@@ -12,15 +12,6 @@ class WeatherApp extends StatelessWidget {
   WeatherApp({
     Key key,
   }) : super(key: key) {
-    // Status bar configuration
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: AppColors.background,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarDividerColor: Colors.transparent,
-    ));
-
     // Set the orientation to portrait only
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -34,16 +25,16 @@ class WeatherApp extends StatelessWidget {
   ) =>
       BlocProvider(
         create: (BuildContext context) => AppBloc(),
-        child: DispatcherAppView(),
+        child: FlutterWeatherAppView(),
       );
 }
 
-class DispatcherAppView extends StatefulWidget {
+class FlutterWeatherAppView extends StatefulWidget {
   @override
-  _DispatcherAppViewState createState() => _DispatcherAppViewState();
+  _FlutterWeatherAppViewState createState() => _FlutterWeatherAppViewState();
 }
 
-class _DispatcherAppViewState extends State<DispatcherAppView> {
+class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -58,8 +49,8 @@ class _DispatcherAppViewState extends State<DispatcherAppView> {
           ) =>
               MaterialApp(
             title: AppLocalizations.appTitle,
-            theme: ThemeData.light(), // TODO! appThemeData
-            darkTheme: ThemeData.dark(),
+            theme: appLightThemeData,
+            darkTheme: appDarkThemeData,
             themeMode: state.themeMode,
             debugShowCheckedModeBanner: AppConfig.isDebug(context),
             localizationsDelegates: [
