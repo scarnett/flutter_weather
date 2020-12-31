@@ -20,6 +20,7 @@ class AppLocalizations {
 
   static String get appTitle => 'Flutter Weather';
 
+  String get settings => addMessage('Settings');
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');

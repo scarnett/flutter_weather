@@ -41,6 +41,13 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         bloc: context.watch<AppBloc>(),
         child: Scaffold(
           extendBody: true,
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context).settings),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
           body: _buildContent(),
         ),
       );

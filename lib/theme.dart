@@ -18,6 +18,19 @@ ThemeData appLightThemeData = ThemeData(
   fontFamily: 'gilroy',
   scaffoldBackgroundColor: Colors.white,
   unselectedWidgetColor: Colors.grey[300],
+  appBarTheme: AppBarTheme(
+    brightness: Brightness.dark,
+    color: Colors.white,
+    elevation: 0.0,
+    textTheme: TextTheme(
+      headline6: TextStyle(
+        color: Colors.grey[900],
+        fontSize: 20.0,
+        fontFamily: 'gilroy',
+      ),
+    ),
+    iconTheme: IconThemeData(color: Colors.grey[900]),
+  ),
   iconTheme: IconThemeData(
     color: Colors.grey[900],
   ),
@@ -39,6 +52,19 @@ ThemeData appLightThemeData = ThemeData(
 ThemeData appDarkThemeData = appLightThemeData.copyWith(
   scaffoldBackgroundColor: Colors.grey[900],
   unselectedWidgetColor: Colors.grey[800],
+  appBarTheme: AppBarTheme(
+    brightness: Brightness.light,
+    color: Colors.grey[900],
+    elevation: 0.0,
+    textTheme: TextTheme(
+      headline6: TextStyle(
+        color: Colors.white,
+        fontSize: 20.0,
+        fontFamily: 'gilroy',
+      ),
+    ),
+    iconTheme: IconThemeData(color: Colors.white),
+  ),
   dividerColor: Colors.black,
   iconTheme: IconThemeData(
     color: Colors.white,
