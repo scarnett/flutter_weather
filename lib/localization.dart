@@ -27,6 +27,8 @@ class AppLocalizations {
   String get temperatureUnit => addMessage('Temperature Unit');
   String get celsius => addMessage('Celsius');
   String get fahrenheit => addMessage('Fahrenheit');
+  String get hi => addMessage('Hi');
+  String get low => addMessage('Low');
 
   addMessage(
     String message, {

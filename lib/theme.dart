@@ -15,7 +15,6 @@ ThemeMode getThemeMode(
 }
 
 ThemeData appLightThemeData = ThemeData(
-  fontFamily: 'gilroy',
   scaffoldBackgroundColor: Colors.white,
   unselectedWidgetColor: Colors.grey[300],
   appBarTheme: AppBarTheme(
@@ -26,7 +25,6 @@ ThemeData appLightThemeData = ThemeData(
       headline6: TextStyle(
         color: Colors.grey[900],
         fontSize: 20.0,
-        fontFamily: 'gilroy',
       ),
     ),
     iconTheme: IconThemeData(color: Colors.grey[900]),
@@ -41,10 +39,32 @@ ThemeData appLightThemeData = ThemeData(
     },
   ),
   textTheme: TextTheme(
+    headline1: TextStyle(
+      color: Colors.grey[900],
+    ),
+    headline3: TextStyle(
+      color: Colors.grey[900],
+      fontFamily: 'gilroy',
+      fontWeight: FontWeight.w700,
+      fontSize: 40.0,
+      letterSpacing: -1.0,
+      height: 0.75,
+    ),
+    headline5: TextStyle(
+      color: Colors.grey[900].withOpacity(0.3),
+      fontWeight: FontWeight.w500,
+      fontSize: 16.0,
+      letterSpacing: -0.5,
+      height: 0.75,
+    ),
     headline6: TextStyle(
       color: Colors.grey[900],
       fontWeight: FontWeight.w700,
       fontSize: 16.0,
+    ),
+    subtitle2: TextStyle(
+      color: Colors.grey[900].withOpacity(0.3),
+      fontSize: 12.0,
     ),
   ),
 );
@@ -59,8 +79,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
     textTheme: TextTheme(
       headline6: TextStyle(
         color: Colors.white,
-        fontSize: 20.0,
-        fontFamily: 'gilroy',
+        fontSize: 32.0,
       ),
     ),
     iconTheme: IconThemeData(color: Colors.white),
@@ -70,10 +89,32 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
     color: Colors.white,
   ),
   textTheme: TextTheme(
+    headline1: TextStyle(
+      color: Colors.white,
+    ),
+    headline3: TextStyle(
+      color: Colors.white,
+      fontFamily: 'gilroy',
+      fontWeight: FontWeight.w900,
+      fontSize: 40.0,
+      letterSpacing: -1.0,
+      height: 0.75,
+    ),
+    headline5: TextStyle(
+      color: Colors.white.withOpacity(0.3),
+      fontWeight: FontWeight.w500,
+      fontSize: 16.0,
+      letterSpacing: -0.5,
+      height: 0.75,
+    ),
     headline6: TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.w700,
       fontSize: 16.0,
+    ),
+    subtitle2: TextStyle(
+      color: Colors.white.withOpacity(0.3),
+      fontSize: 12.0,
     ),
   ),
 );

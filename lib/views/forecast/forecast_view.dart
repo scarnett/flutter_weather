@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/views/forecast/bloc/bloc.dart';
 import 'package:flutter_weather/views/settings/settings_view.dart';
 import 'package:flutter_weather/widgets/app_day_night_switch.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class ForecastView extends StatelessWidget {
   static Route route() =>
@@ -113,10 +115,111 @@ class _ForecastPageViewState extends State<ForecastPageView> {
             child: PageView(
               physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
-              children: <Widget>[],
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: Column(
+                      children: <Widget>[
+                        _buildLocation(),
+                        _buildCondition(),
+                        _buildTemperature(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
+      );
+
+  Widget _buildLocation() => Container(
+        padding: const EdgeInsets.only(
+          bottom: 30.0,
+        ),
+        child: Column(
+          children: <Widget>[
+            Text(
+              'Midland'.toUpperCase(), // TODO!
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            Text(
+              '${'TX'.toUpperCase()}, United States', // TODO!
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildCondition() => Container(
+        padding: const EdgeInsets.only(
+          bottom: 10.0,
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Snowing'.toUpperCase(), // TODO!
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            BoxedIcon(
+              WeatherIcons.snow,
+              size: 50.0,
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildTemperature() => Container(
+        child: Column(
+          children: [
+            Text(
+              '22\u00B0', // TODO!
+              style: Theme.of(context).textTheme.headline1,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10.0,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).hi.toUpperCase(),
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                      Text(
+                        '25\u00B0', // TODO!
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10.0,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).low.toUpperCase(),
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                      Text(
+                        '18\u00B0', // TODO!
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       );
 
   Widget _buildOptions() => Padding(
