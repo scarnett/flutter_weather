@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/views/forecast/bloc/bloc.dart';
+import 'package:flutter_weather/views/settings/settings_view.dart';
 import 'package:flutter_weather/widgets/app_day_night_switch.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
@@ -143,7 +144,7 @@ class _ForecastPageViewState extends State<ForecastPageView> {
             child: InkWell(
               borderRadius: BorderRadius.circular(40.0),
               child: Icon(Icons.settings),
-              onTap: () => print('settings'), // TODO!
+              onTap: () => Navigator.push(context, SettingsView.route()),
             ),
           ),
         ),

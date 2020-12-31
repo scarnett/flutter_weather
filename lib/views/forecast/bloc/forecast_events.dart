@@ -10,7 +10,9 @@ abstract class ForecastEvent extends Equatable {
 class SelectedForecastIndex extends ForecastEvent {
   final int index;
 
-  const SelectedForecastIndex(this.index);
+  const SelectedForecastIndex(
+    this.index,
+  );
 
   @override
   List<Object> get props => [index];

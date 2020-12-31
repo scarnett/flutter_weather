@@ -20,7 +20,12 @@ class AppLocalizations {
 
   static String get appTitle => 'Flutter Weather';
 
-  String get loading => addMessage('Loading...');
+  String get themeMode => addMessage('Theme Mode');
+  String get light => addMessage('Light');
+  String get dark => addMessage('Dark');
+  String get temperatureUnit => addMessage('Temperature Unit');
+  String get celsius => addMessage('Celsius');
+  String get fahrenheit => addMessage('Fahrenheit');
 
   addMessage(
     String message, {
@@ -50,8 +55,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(
-    Locale locale, {
-    Pattern other: 'en',
-  }) =>
-      locale.languageCode.toLowerCase().contains(other);
+    Locale locale,
+  ) =>
+      locale.languageCode.toLowerCase().contains('en'); // TODO! config
 }
