@@ -6,6 +6,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
+import 'package:flutter_weather/widgets/app_select_dialog.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class LookupView extends StatelessWidget {
@@ -35,6 +36,8 @@ class LookupPageView extends StatefulWidget {
 }
 
 class _LookupPageViewState extends State<LookupPageView> {
+  bool submitting = false;
+
   @override
   Widget build(
     BuildContext context,
@@ -62,6 +65,7 @@ class _LookupPageViewState extends State<LookupPageView> {
           child: SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextFieldBlocBuilder(
                   textFieldBloc: context.watch<LookupFormBloc>().zipCode,
@@ -73,20 +77,23 @@ class _LookupPageViewState extends State<LookupPageView> {
                     ),
                   ),
                 ),
-                TextFieldBlocBuilder(
-                  textFieldBloc: context.watch<LookupFormBloc>().country,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).country,
-                    prefixIcon: Icon(
-                      Icons.language,
-                      color: Colors.deepPurple[400],
-                    ),
-                  ),
+                AppSelectDialogFieldBlocBuilder(
+                  selectFieldBloc: context.watch<LookupFormBloc>().country,
                 ),
                 AppFormButton(
-                  text: AppLocalizations.of(context).lookup,
-                  icon: Icon(Icons.search),
-                  onTap: _tapLookup,
+                  text: submitting ? null : AppLocalizations.of(context).lookup,
+                  icon: submitting
+                      ? SizedBox(
+                          height: 25.0,
+                          width: 25.0,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : Icon(Icons.search),
+                  onTap: submitting ? null : _tapLookup,
                 ),
               ],
             ),
@@ -99,21 +106,34 @@ class _LookupPageViewState extends State<LookupPageView> {
   void _onSubmitting(
     BuildContext context,
     FormBlocSubmitting<String, String> state,
-  ) {
-    // TODO!
-  }
+  ) =>
+      setState(() {
+        submitting = true;
+      });
 
   void _onSuccess(
     BuildContext context,
     FormBlocSuccess<String, String> state,
   ) {
-    // TODO!
+    setState(() {
+      submitting = false;
+    });
+
+    FocusScope.of(context).unfocus();
+    Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).lookupSuccess)));
   }
 
   void _onFailure(
     BuildContext context,
     FormBlocFailure<String, String> state,
   ) {
-    // TODO!
+    setState(() {
+      submitting = false;
+    });
+
+    FocusScope.of(context).unfocus();
+    Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
   }
 }

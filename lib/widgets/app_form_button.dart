@@ -8,12 +8,12 @@ class AppFormButton extends StatelessWidget {
   final Color disabledColor;
   final Color textColor;
   final bool textButton;
-  final Icon icon;
+  final Widget icon;
 
   AppFormButton({
     Key key,
-    @required this.onTap,
-    @required this.text,
+    this.onTap,
+    this.text,
     this.color,
     this.disabledColor,
     this.textColor,
@@ -36,16 +36,18 @@ class AppFormButton extends StatelessWidget {
             : disabledColor,
         textColor: (textColor == null) ? Colors.white : textColor,
         child: (icon == null)
-            ? Text(text)
+            ? (text == null)
+                ? Container()
+                : Text(text)
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                      padding: const EdgeInsets.only(
-                        right: 5.0,
+                      padding: EdgeInsets.only(
+                        right: (text == null) ? 0.0 : 5.0,
                       ),
                       child: icon),
-                  Text(text),
+                  (text == null) ? Container() : Text(text),
                 ],
               ),
         onPressed: onTap,

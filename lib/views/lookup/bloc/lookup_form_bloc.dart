@@ -7,20 +7,17 @@ class LookupFormBloc extends FormBloc<String, String> {
     ],
   );
 
-  final TextFieldBloc country = TextFieldBloc(
+  final SelectFieldBloc country = SelectFieldBloc(
     validators: [
       FieldBlocValidators.required,
     ],
   );
-
-  final BooleanFieldBloc showSuccessResponse = BooleanFieldBloc();
 
   LookupFormBloc() {
     addFieldBlocs(
       fieldBlocs: [
         zipCode,
         country,
-        showSuccessResponse,
       ],
     );
   }
@@ -30,15 +27,13 @@ class LookupFormBloc extends FormBloc<String, String> {
   void onSubmitting() async {
     print(zipCode.value);
     print(country.value);
-    print(showSuccessResponse.value);
 
     await Future<void>.delayed(Duration(seconds: 1));
 
-    if (showSuccessResponse.value) {
-      emitSuccess();
-    } else {
-      emitFailure(failureResponse: 'This is an awesome error!');
-    }
+    emitSuccess(canSubmitAgain: true);
+
+    // TODO! log this failure; sentry?
+    // emitFailure();
   }
 
   @override
@@ -46,6 +41,5 @@ class LookupFormBloc extends FormBloc<String, String> {
     super.close();
     zipCode.close();
     country.close();
-    showSuccessResponse.close();
   }
 }

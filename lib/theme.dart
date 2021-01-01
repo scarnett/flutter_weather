@@ -124,6 +124,10 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   iconTheme: IconThemeData(
     color: Colors.white,
   ),
+  dialogTheme: DialogTheme(
+    backgroundColor: Colors.grey[900],
+    contentTextStyle: TextStyle(color: Colors.white),
+  ),
   textTheme: TextTheme(
     headline1: TextStyle(
       color: Colors.white,

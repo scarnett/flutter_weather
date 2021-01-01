@@ -30,9 +30,15 @@ class AppLocalizations {
   String get hi => addMessage('Hi');
   String get low => addMessage('Low');
   String get addLocation => addMessage('Add Location');
-  String get postalCode => addMessage('Add Message');
+  String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');
   String get lookup => addMessage('Lookup');
+  String get lookupSuccess => addMessage('Location added successfully!');
+  String get lookupFailure => addMessage(
+      'There was an error looking up this location. Please try again.');
+
+  String get selectCountry => addMessage('Select a country');
+  String get filterCountries => addMessage('Filter Countries');
 
   addMessage(
     String message, {
