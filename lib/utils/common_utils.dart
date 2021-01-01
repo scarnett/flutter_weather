@@ -10,3 +10,13 @@ String toCamelCase(
       .replaceAll(RegExp(r'(_|-|\s)+'), '');
   return s[0].toLowerCase() + s.substring(1);
 }
+
+class Nullable<T> {
+  T _value;
+
+  Nullable(
+    this._value,
+  );
+
+  T get value => _value;
+}

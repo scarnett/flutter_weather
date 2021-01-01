@@ -1,13 +1,15 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 
 class LookupFormBloc extends FormBloc<String, String> {
-  final TextFieldBloc zipCode = TextFieldBloc(
+  final TextFieldBloc postalCode = TextFieldBloc(
+    name: 'postalCode',
     validators: [
       FieldBlocValidators.required,
     ],
   );
 
   final SelectFieldBloc country = SelectFieldBloc(
+    name: 'country',
     validators: [
       FieldBlocValidators.required,
     ],
@@ -16,30 +18,19 @@ class LookupFormBloc extends FormBloc<String, String> {
   LookupFormBloc() {
     addFieldBlocs(
       fieldBlocs: [
-        zipCode,
+        postalCode,
         country,
       ],
     );
   }
 
-  // TODO!
   @override
-  void onSubmitting() async {
-    print(zipCode.value);
-    print(country.value);
-
-    await Future<void>.delayed(Duration(seconds: 1));
-
-    emitSuccess(canSubmitAgain: true);
-
-    // TODO! log this failure; sentry?
-    // emitFailure();
-  }
+  void onSubmitting() async => emitSuccess(canSubmitAgain: true);
 
   @override
   Future<void> close() async {
     super.close();
-    zipCode.close();
+    postalCode.close();
     country.close();
   }
 }

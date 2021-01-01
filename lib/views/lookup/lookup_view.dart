@@ -8,6 +8,7 @@ import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_select_dialog.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:iso_countries/iso_countries.dart';
 
 class LookupView extends StatelessWidget {
   static Route route() => MaterialPageRoute<void>(builder: (_) => LookupView());
@@ -20,8 +21,15 @@ class LookupView extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      BlocProvider<LookupFormBloc>(
-        create: (BuildContext context) => LookupFormBloc(),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<LookupBloc>(
+            create: (BuildContext context) => LookupBloc(),
+          ),
+          BlocProvider<LookupFormBloc>(
+            create: (BuildContext context) => LookupFormBloc(),
+          ),
+        ],
         child: LookupPageView(),
       );
 }
@@ -58,17 +66,21 @@ class _LookupPageViewState extends State<LookupPageView> {
       );
 
   Widget _buildContent() => SafeArea(
-        child: FormBlocListener<LookupFormBloc, String, String>(
-          onSubmitting: _onSubmitting,
-          onSuccess: _onSuccess,
-          onFailure: _onFailure,
+        child: MultiBlocListener(
+          listeners: [
+            FormBlocListener<LookupFormBloc, String, String>(
+              onSubmitting: _onSubmitting,
+              onSuccess: _onSuccess,
+              onFailure: _onFailure,
+            ),
+          ],
           child: SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextFieldBlocBuilder(
-                  textFieldBloc: context.watch<LookupFormBloc>().zipCode,
+                  textFieldBloc: context.watch<LookupFormBloc>().postalCode,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context).postalCode,
                     prefixIcon: Icon(
@@ -114,14 +126,24 @@ class _LookupPageViewState extends State<LookupPageView> {
   void _onSuccess(
     BuildContext context,
     FormBlocSuccess<String, String> state,
-  ) {
+  ) async {
     setState(() {
       submitting = false;
     });
 
     FocusScope.of(context).unfocus();
-    Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).lookupSuccess)));
+    Map<String, dynamic> json = state.toJson();
+    final Country country = (await IsoCountries.iso_countries)
+        .firstWhere((e) => e.name == json['country'], orElse: () => null);
+
+    if (country != null) {
+      context
+          .read<LookupBloc>()
+          .add(LookupForecast(json['postalCode'], country.countryCode));
+    } else {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
+    }
   }
 
   void _onFailure(
