@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/lookup/lookup_model.dart';
-import 'package:flutter_weather/views/lookup/lookup_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -22,6 +23,8 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
   ) async* {
     if (event is LookupForecast) {
       yield* _mapLookupForecastToState(event);
+    } else if (event is ClearForecast) {
+      yield* _mapClearForecastToState(event);
     }
   }
 
@@ -32,12 +35,18 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
       status: Nullable<LookupStatus>(null),
     );
 
-    http.Response forecastResponse = await tryLookupForecast(event);
+    http.Response forecastResponse = await tryLookupForecast(
+      event.postalCode,
+      event.countryCode,
+      event.temperatureUnit,
+    );
+
     if (forecastResponse.statusCode == 200) {
       yield state.copyWith(
         postalCode: event.postalCode,
         countryCode: event.countryCode,
-        lookupForecast: Forecast.fromJson(jsonDecode(forecastResponse.body)),
+        lookupForecast: Nullable<Forecast>(
+            Forecast.fromJson(jsonDecode(forecastResponse.body))),
         status: Nullable<LookupStatus>(LookupStatus.FORECAST_FOUND),
       );
     } else {
@@ -45,5 +54,13 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
         status: Nullable<LookupStatus>(LookupStatus.FORECAST_NOT_FOUND),
       );
     }
+  }
+
+  Stream<LookupState> _mapClearForecastToState(
+    ClearForecast event,
+  ) async* {
+    yield state.copyWith(
+      lookupForecast: Nullable<Forecast>(null),
+    );
   }
 }

@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
 
+enum RefreshStatus {
+  REFRESHING,
+}
+
 class Forecast extends Equatable {
   final String postalCode;
   final String countryCode;
@@ -53,6 +57,15 @@ class Forecast extends Equatable {
               list: ForecastDay.fromJsonList(json['list']),
             );
 
+  static List<Forecast> fromJsonList(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? []
+          : List<dynamic>.from(json)
+              .map((dynamic forecastJson) => Forecast.fromJson(forecastJson))
+              .toList();
+
   dynamic toJson() => {
         'postalCode': postalCode,
         'countryCode': countryCode,
@@ -62,6 +75,13 @@ class Forecast extends Equatable {
         'cnt': cnt,
         'list': ForecastDay.toJsonList(list),
       };
+
+  static List<dynamic> toJsonList(
+    List<Forecast> list,
+  ) =>
+      (list == null)
+          ? []
+          : list.map((Forecast forecast) => forecast.toJson()).toList();
 
   @override
   List<Object> get props => [
@@ -77,8 +97,7 @@ class Forecast extends Equatable {
   @override
   String toString() =>
       'Forecast{postalCode: $postalCode, countryCode: $countryCode, ' +
-      'city: $city, cod: $cod, message: $message, cnt: $cnt, ' +
-      'list: $list}';
+      'city: ${city?.name}, cod: $cod, message: $message, cnt: $cnt}';
 }
 
 class ForecastCity extends Equatable {

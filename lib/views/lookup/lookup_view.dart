@@ -4,11 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
+import 'package:flutter_weather/views/lookup/lookup_form.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
-import 'package:flutter_weather/widgets/app_select_dialog.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
-import 'package:iso_countries/iso_countries.dart';
 
 class LookupView extends StatelessWidget {
   static Route route() => MaterialPageRoute<void>(builder: (_) => LookupView());
@@ -21,15 +22,8 @@ class LookupView extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      MultiBlocProvider(
-        providers: [
-          BlocProvider<LookupBloc>(
-            create: (BuildContext context) => LookupBloc(),
-          ),
-          BlocProvider<LookupFormBloc>(
-            create: (BuildContext context) => LookupFormBloc(),
-          ),
-        ],
+      BlocProvider<LookupBloc>(
+        create: (BuildContext context) => LookupBloc(),
         child: LookupPageView(),
       );
 }
@@ -44,118 +38,89 @@ class LookupPageView extends StatefulWidget {
 }
 
 class _LookupPageViewState extends State<LookupPageView> {
-  bool submitting = false;
-
   @override
   Widget build(
     BuildContext context,
   ) =>
-      AppUiOverlayStyle(
-        bloc: context.watch<AppBloc>(),
-        child: Scaffold(
-          extendBody: true,
-          appBar: AppBar(
-            title: Text(AppLocalizations.of(context).addLocation),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-          body: _buildContent(),
-        ),
-      );
-
-  Widget _buildContent() => SafeArea(
-        child: MultiBlocListener(
-          listeners: [
-            FormBlocListener<LookupFormBloc, String, String>(
-              onSubmitting: _onSubmitting,
-              onSuccess: _onSuccess,
-              onFailure: _onFailure,
-            ),
-          ],
-          child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextFieldBlocBuilder(
-                  textFieldBloc: context.watch<LookupFormBloc>().postalCode,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).postalCode,
-                    prefixIcon: Icon(
-                      Icons.place,
-                      color: Colors.deepPurple[400],
-                    ),
-                  ),
+      BlocBuilder<LookupBloc, LookupState>(
+        builder: (
+          BuildContext context,
+          LookupState state,
+        ) =>
+            WillPopScope(
+          onWillPop: () => _willPopCallback(state),
+          child: AppUiOverlayStyle(
+            bloc: context.watch<AppBloc>(),
+            child: Scaffold(
+              extendBody: true,
+              appBar: AppBar(
+                title: Text(AppLocalizations.of(context).addLocation),
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => _handleBack(state),
                 ),
-                AppSelectDialogFieldBlocBuilder(
-                  selectFieldBloc: context.watch<LookupFormBloc>().country,
-                ),
-                AppFormButton(
-                  text: submitting ? null : AppLocalizations.of(context).lookup,
-                  icon: submitting
-                      ? SizedBox(
-                          height: 25.0,
-                          width: 25.0,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        )
-                      : Icon(Icons.search),
-                  onTap: submitting ? null : _tapLookup,
-                ),
-              ],
+              ),
+              body: SafeArea(
+                child: _buildContent(),
+              ),
             ),
           ),
         ),
       );
 
-  void _tapLookup() => context.read<LookupFormBloc>().submit();
-
-  void _onSubmitting(
-    BuildContext context,
-    FormBlocSubmitting<String, String> state,
-  ) =>
-      setState(() {
-        submitting = true;
-      });
-
-  void _onSuccess(
-    BuildContext context,
-    FormBlocSuccess<String, String> state,
+  Future<bool> _willPopCallback(
+    LookupState state,
   ) async {
-    setState(() {
-      submitting = false;
-    });
+    if (state.lookupForecast != null) {
+      context.read<LookupBloc>().add(ClearForecast());
+      return Future.value(false);
+    }
 
-    FocusScope.of(context).unfocus();
-    Map<String, dynamic> json = state.toJson();
-    final Country country = (await IsoCountries.iso_countries)
-        .firstWhere((e) => e.name == json['country'], orElse: () => null);
+    return Future.value(true);
+  }
 
-    if (country != null) {
-      context
-          .read<LookupBloc>()
-          .add(LookupForecast(json['postalCode'], country.countryCode));
+  Widget _buildContent() {
+    Forecast lookupForecast = context.read<LookupBloc>().state.lookupForecast;
+    if (lookupForecast != null) {
+      return Column(
+        children: <Widget>[
+          ForecastDisplay(
+            bloc: context.read<AppBloc>(),
+            forecast: lookupForecast,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 30.0),
+            child: AppFormButton(
+              text: AppLocalizations.of(context).addThisLocation,
+              icon: Icon(Icons.add),
+              onTap: _tapAddLocation,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return LookupForm();
+  }
+
+  void _handleBack(
+    LookupState state,
+  ) {
+    if (state.lookupForecast != null) {
+      context.read<LookupBloc>().add(ClearForecast());
     } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
+      Navigator.of(context).pop();
     }
   }
 
-  void _onFailure(
-    BuildContext context,
-    FormBlocFailure<String, String> state,
-  ) {
-    setState(() {
-      submitting = false;
-    });
+  void _tapAddLocation() {
+    LookupState lookupState = context.read<LookupBloc>().state;
+    Forecast forecast = lookupState.lookupForecast.copyWith(
+      postalCode: lookupState.postalCode,
+      countryCode: lookupState.countryCode,
+    );
 
-    FocusScope.of(context).unfocus();
-    Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
+    context.read<AppBloc>().add(AddForecast(forecast));
+    Navigator.of(context).pop();
   }
 }

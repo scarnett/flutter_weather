@@ -6,12 +6,12 @@ import 'package:iso_countries/iso_countries.dart';
 import 'package:select_dialog/select_dialog.dart';
 
 class AppSelectDialogFieldBlocBuilder<Value> extends StatelessWidget {
+  final SelectFieldBloc<Value, Object> selectFieldBloc;
+
   const AppSelectDialogFieldBlocBuilder({
     Key key,
     @required this.selectFieldBloc,
   }) : super(key: key);
-
-  final SelectFieldBloc<Value, Object> selectFieldBloc;
 
   @override
   Widget build(

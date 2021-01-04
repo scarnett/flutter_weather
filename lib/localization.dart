@@ -25,11 +25,15 @@ class AppLocalizations {
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
   String get temperatureUnit => addMessage('Temperature Unit');
+  String get kelvin => addMessage('Kelvin');
   String get celsius => addMessage('Celsius');
   String get fahrenheit => addMessage('Fahrenheit');
   String get hi => addMessage('Hi');
   String get low => addMessage('Low');
   String get addLocation => addMessage('Add Location');
+  String get addThisLocation => addMessage('Add This Location');
+  String get editLocation => addMessage('Edit Location');
+  String get refreshForecast => addMessage('Refresh Forecast');
   String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');
   String get lookup => addMessage('Lookup');

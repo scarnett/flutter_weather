@@ -21,13 +21,15 @@ class LookupState extends Equatable {
   LookupState copyWith({
     String postalCode,
     String countryCode,
-    Forecast lookupForecast,
+    Nullable<Forecast> lookupForecast,
     Nullable<LookupStatus> status,
   }) =>
       LookupState._(
         postalCode: postalCode ?? this.postalCode,
         countryCode: countryCode ?? this.countryCode,
-        lookupForecast: lookupForecast ?? this.lookupForecast,
+        lookupForecast: (lookupForecast == null)
+            ? this.lookupForecast
+            : lookupForecast.value,
         status: (status == null) ? this.status : status.value,
       );
 

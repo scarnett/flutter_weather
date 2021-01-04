@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+
+class AppTheme {
+  static Color getSecondaryColor(
+    ThemeMode themeMode,
+  ) =>
+      (themeMode == ThemeMode.dark)
+          ? Colors.white.withOpacity(0.3)
+          : Colors.grey[900].withOpacity(0.3);
+}
 
 ThemeMode getThemeMode(
   String themeMode,

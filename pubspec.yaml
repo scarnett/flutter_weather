@@ -19,6 +19,7 @@ dependencies:
   http: '^0.12.2'
   hydrated_bloc: '^6.0.1'
   iso_countries: '^1.1.1'
+  page_view_indicators: '^1.4.0'
   select_dialog: '^1.2.1'
   weather_icons: '^2.0.2'
 

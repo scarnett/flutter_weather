@@ -119,6 +119,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         onTap: _tapTemperatureUnit,
       ),
       Divider(),
+      AppRadioTile<TemperatureUnit>(
+        bloc: bloc,
+        title: AppLocalizations.of(context).kelvin,
+        value: TemperatureUnit.kelvin,
+        groupValue: _temperatureUnit,
+        onTap: _tapTemperatureUnit,
+      ),
+      Divider(),
     ];
   }
 

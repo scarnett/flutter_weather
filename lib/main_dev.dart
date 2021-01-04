@@ -12,6 +12,8 @@ void main() async {
   Bloc.observer = AppBlocObserver();
   HydratedBloc.storage = await HydratedStorage.build();
 
+  // await HydratedBloc.storage.clear();
+
   // DEV Environment Specific Configuration
   AppConfig config = AppConfig(
     flavor: Flavor.dev,
