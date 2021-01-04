@@ -53,7 +53,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with: 
           channel: stable
-          flutter-version: "1.22.4"
+          flutter-version: "1.22.5"
       - 
         env: 
           FLUTTER_WEATHER_DEV_LOCAL_SECRET: "${{ secrets.FLUTTER_WEATHER_LOCAL_SECRET }}"
@@ -97,7 +97,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with: 
           channel: stable
-          flutter-version: "1.22.4"
+          flutter-version: "1.22.5"
       - 
         env: 
           FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
