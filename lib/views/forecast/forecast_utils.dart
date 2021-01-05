@@ -1,5 +1,23 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_weather/model.dart';
 import 'package:weather_icons/weather_icons.dart';
+
+num getTemperature(
+  num temperature,
+  TemperatureUnit unit,
+) {
+  switch (unit) {
+    case TemperatureUnit.fahrenheit:
+      return (temperature * (9 / 5) - 459.67).round();
+
+    case TemperatureUnit.celsius:
+      return (temperature - 273.15).round();
+
+    case TemperatureUnit.kelvin:
+    default:
+      return temperature.round();
+  }
+}
 
 // @see https://openweathermap.org/weather-conditions
 IconData getForecastIconData(

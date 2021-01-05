@@ -92,7 +92,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     http.Response forecastResponse = await tryLookupForecast(
       event.forecast.postalCode,
       event.forecast.countryCode,
-      event.temperatureUnit,
     );
 
     if (forecastResponse.statusCode == 200) {

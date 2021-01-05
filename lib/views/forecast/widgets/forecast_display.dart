@@ -92,7 +92,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         child: Column(
           children: [
             Text(
-              '${currentDay.temp.day.round()}\u00B0',
+              '${getTemperature(currentDay.temp.day, widget.bloc.state.temperatureUnit)}\u00B0',
               style: Theme.of(context).textTheme.headline1,
             ),
             Row(
@@ -117,7 +117,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         style: Theme.of(context).textTheme.subtitle2,
                       ),
                       Text(
-                        '${currentDay.temp.max.round()}\u00B0',
+                        '${getTemperature(currentDay.temp.max, widget.bloc.state.temperatureUnit)}\u00B0',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
@@ -134,7 +134,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         style: Theme.of(context).textTheme.subtitle2,
                       ),
                       Text(
-                        '${currentDay.temp.min.round()}\u00B0',
+                        '${getTemperature(currentDay.temp.min, widget.bloc.state.temperatureUnit)}\u00B0',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
