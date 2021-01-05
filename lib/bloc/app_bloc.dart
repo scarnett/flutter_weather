@@ -6,6 +6,7 @@ import 'package:flutter_weather/bloc/app_state.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:http/http.dart' as http;
@@ -111,6 +112,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       forecasts[forecastIndex] = _forecast.copyWith(
         postalCode: event.forecast.postalCode,
         countryCode: event.forecast.countryCode,
+        lastUpdated: getNow(),
       );
 
       yield state.copyWith(

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/lookup_view.dart';
@@ -55,8 +57,8 @@ class _ForecastPageViewState extends State<ForecastPageView>
     _pageController = PageController(initialPage: selectedForecastIndex);
     _currentForecastNotifier = ValueNotifier<int>(selectedForecastIndex);
 
-    _refreshAnimationController =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    _refreshAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
 
     _refreshAnimation =
         Tween(begin: 0.0, end: pi + pi).animate(_refreshAnimationController);
@@ -153,6 +155,19 @@ class _ForecastPageViewState extends State<ForecastPageView>
                   return null;
                 }
 
+                if (_canRefresh(state)) {
+                  return RefreshIndicator(
+                    onRefresh: () => _pullRefresh(state),
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: ForecastDisplay(
+                        bloc: context.read<AppBloc>(),
+                        forecast: state.forecasts[position],
+                      ),
+                    ),
+                  );
+                }
+
                 return ForecastDisplay(
                   bloc: context.read<AppBloc>(),
                   forecast: state.forecasts[position],
@@ -223,7 +238,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
   Widget _buildRefreshButton(
     AppState state,
   ) =>
-      (state.forecasts?.length == 0)
+      (!_canRefresh(state) || state.forecasts?.length == 0)
           ? Container()
           : Tooltip(
               message: AppLocalizations.of(context).refreshForecast,
@@ -272,6 +287,22 @@ class _ForecastPageViewState extends State<ForecastPageView>
     int page,
   ) =>
       context.read<AppBloc>().add(SelectedForecastIndex(page));
+
+  _canRefresh(
+    AppState state,
+  ) {
+    Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
+    return (selectedForecast == null) ||
+        (selectedForecast.lastUpdated == null) ||
+        selectedForecast.lastUpdated
+            .add(Duration(minutes: EnvConfig.REFRESH_TIMEOUT_MINS))
+            .isBefore(getNow());
+  }
+
+  Future<void> _pullRefresh(
+    AppState state,
+  ) async =>
+      _tapRefresh(state);
 
   void _tapEdit() => Navigator.push(context, SettingsView.route());
   void _tapRefresh(

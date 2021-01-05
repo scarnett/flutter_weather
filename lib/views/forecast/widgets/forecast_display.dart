@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -35,6 +36,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             _buildLocation(),
             _buildCondition(currentDay),
             _buildTemperature(currentDay),
+            _buildLastUpdated(),
           ],
         ),
       ),
@@ -98,9 +100,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.only(
-                    right: 20.0,
-                  ),
+                  padding: const EdgeInsets.only(right: 20.0),
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
@@ -145,4 +145,29 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           ],
         ),
       );
+
+  Widget _buildLastUpdated() {
+    final DateTime lastUpdated = widget.forecast.lastUpdated;
+    if (lastUpdated == null) {
+      return Container();
+    }
+
+    String formattedLastUpdated;
+
+    if (lastUpdated.isToday()) {
+      formattedLastUpdated =
+          formatDateTime(widget.forecast.lastUpdated, 'h:mm a');
+    } else {
+      formattedLastUpdated = formatDateTime(
+          widget.forecast.lastUpdated, 'EEE, MMM d, yyyy @ h:mm a');
+    }
+
+    return Container(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Text(
+        AppLocalizations.of(context).getLastUpdated(formattedLastUpdated),
+        style: Theme.of(context).textTheme.subtitle2,
+      ),
+    );
+  }
 }

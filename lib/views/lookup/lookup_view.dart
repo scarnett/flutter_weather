@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
@@ -118,6 +119,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     Forecast forecast = lookupState.lookupForecast.copyWith(
       postalCode: lookupState.postalCode,
       countryCode: lookupState.countryCode,
+      lastUpdated: getNow(),
     );
 
     context.read<AppBloc>().add(AddForecast(forecast));

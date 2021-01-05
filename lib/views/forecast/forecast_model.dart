@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
 
 enum RefreshStatus {
   REFRESHING,
@@ -12,6 +13,7 @@ class Forecast extends Equatable {
   final num message;
   final int cnt;
   final List<ForecastDay> list;
+  final DateTime lastUpdated;
 
   Forecast({
     this.postalCode,
@@ -21,6 +23,7 @@ class Forecast extends Equatable {
     this.message,
     this.cnt,
     this.list,
+    this.lastUpdated,
   });
 
   Forecast copyWith({
@@ -31,6 +34,7 @@ class Forecast extends Equatable {
     num message,
     int cnt,
     List<ForecastDay> list,
+    DateTime lastUpdated,
   }) =>
       Forecast(
         postalCode: postalCode ?? this.postalCode,
@@ -40,6 +44,7 @@ class Forecast extends Equatable {
         message: message ?? this.message,
         cnt: cnt ?? this.cnt,
         list: list ?? this.list,
+        lastUpdated: lastUpdated ?? this.lastUpdated,
       );
 
   static Forecast fromJson(
@@ -55,6 +60,7 @@ class Forecast extends Equatable {
               message: json['message'],
               cnt: json['cnt'],
               list: ForecastDay.fromJsonList(json['list']),
+              lastUpdated: fromIso8601String(json['lastUpdated']),
             );
 
   static List<Forecast> fromJsonList(
@@ -74,6 +80,7 @@ class Forecast extends Equatable {
         'message': message,
         'cnt': cnt,
         'list': ForecastDay.toJsonList(list),
+        'lastUpdated': toIso8601String(lastUpdated),
       };
 
   static List<dynamic> toJsonList(
@@ -92,12 +99,14 @@ class Forecast extends Equatable {
         message,
         cnt,
         list,
+        lastUpdated,
       ];
 
   @override
   String toString() =>
       'Forecast{postalCode: $postalCode, countryCode: $countryCode, ' +
-      'city: ${city?.name}, cod: $cod, message: $message, cnt: $cnt}';
+      'city: ${city?.name}, cod: $cod, message: $message, cnt: $cnt, ' +
+      'lastUpdated: $lastUpdated}';
 }
 
 class ForecastCity extends Equatable {
