@@ -36,7 +36,6 @@ class AppRadioTile<T> extends StatelessWidget {
                 : (value == groupValue)
                     ? Colors.grey[900]
                     : Colors.grey[400],
-            fontFamily: 'gilroy',
           ),
         ),
         value: value,

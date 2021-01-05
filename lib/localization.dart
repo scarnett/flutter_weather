@@ -44,7 +44,25 @@ class AppLocalizations {
   String get selectCountry => addMessage('Select a country');
   String get filterCountries => addMessage('Filter Countries');
 
-  String getLastUpdated(
+  String getFeelsLike(
+    String temp,
+  ) =>
+      addMessage(
+        'Feels like $temp',
+        name: 'getLastUpdated',
+        args: [temp],
+      );
+
+  String getLastUpdatedAt(
+    String date,
+  ) =>
+      addMessage(
+        'Last updated at $date',
+        name: 'getLastUpdated',
+        args: [date],
+      );
+
+  String getLastUpdatedOn(
     String date,
   ) =>
       addMessage(

@@ -35,19 +35,3 @@ flutter:
 
   assets:
     - assets/
-
-  fonts:
-    - family: gilroy
-      fonts:
-        - asset: assets/fonts/gilroy/Gilroy-Light.ttf
-          weight: 300
-        - asset: assets/fonts/gilroy/Gilroy-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/gilroy/Gilroy-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/gilroy/Gilroy-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/gilroy/Gilroy-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/gilroy/Gilroy-ExtraBold.ttf
-          weight: 900

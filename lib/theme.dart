@@ -27,7 +27,8 @@ ThemeData appLightThemeData = ThemeData(
   unselectedWidgetColor: Colors.grey[300],
   primaryColor: Colors.deepPurple[400],
   accentColor: Colors.deepPurple[600],
-  hintColor: Colors.grey[900].withOpacity(0.3),
+  hintColor: Colors.grey[900].withOpacity(0.7),
+  fontFamily: 'roboto',
   appBarTheme: AppBarTheme(
     brightness: Brightness.light,
     color: Colors.white,
@@ -84,30 +85,36 @@ ThemeData appLightThemeData = ThemeData(
   textTheme: TextTheme(
     headline1: TextStyle(
       color: Colors.grey[900],
+      fontSize: 86.0,
+      fontWeight: FontWeight.w100,
+      height: 0.9,
     ),
     headline3: TextStyle(
       color: Colors.grey[900],
-      fontFamily: 'gilroy',
-      fontWeight: FontWeight.w700,
       fontSize: 40.0,
-      letterSpacing: -1.0,
-      height: 0.75,
+      height: 0.85,
+      fontWeight: FontWeight.w100,
+    ),
+    headline4: TextStyle(
+      color: Colors.grey[900].withOpacity(0.7),
+      fontSize: 24.0,
+      fontWeight: FontWeight.w100,
     ),
     headline5: TextStyle(
-      color: Colors.grey[900].withOpacity(0.3),
-      fontWeight: FontWeight.w500,
+      color: Colors.grey[900].withOpacity(0.7),
       fontSize: 16.0,
-      letterSpacing: -0.5,
       height: 0.75,
+      fontWeight: FontWeight.w100,
     ),
     headline6: TextStyle(
       color: Colors.grey[900],
-      fontWeight: FontWeight.w700,
       fontSize: 16.0,
+      height: 0.9,
     ),
     subtitle2: TextStyle(
-      color: Colors.grey[900].withOpacity(0.3),
+      color: Colors.grey[900].withOpacity(0.7),
       fontSize: 12.0,
+      fontWeight: FontWeight.w100,
     ),
   ),
 );
@@ -115,7 +122,7 @@ ThemeData appLightThemeData = ThemeData(
 ThemeData appDarkThemeData = appLightThemeData.copyWith(
   scaffoldBackgroundColor: Colors.grey[900],
   unselectedWidgetColor: Colors.grey[800],
-  hintColor: Colors.white.withOpacity(0.3),
+  hintColor: Colors.white.withOpacity(0.5),
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark,
     color: Colors.grey[900],
@@ -139,30 +146,36 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   textTheme: TextTheme(
     headline1: TextStyle(
       color: Colors.white,
+      fontSize: 86.0,
+      fontWeight: FontWeight.w100,
+      height: 0.9,
     ),
     headline3: TextStyle(
       color: Colors.white,
-      fontFamily: 'gilroy',
-      fontWeight: FontWeight.w900,
       fontSize: 40.0,
-      letterSpacing: -1.0,
-      height: 0.75,
+      height: 0.85,
+      fontWeight: FontWeight.w100,
+    ),
+    headline4: TextStyle(
+      color: Colors.white.withOpacity(0.7),
+      fontSize: 24.0,
+      fontWeight: FontWeight.w100,
     ),
     headline5: TextStyle(
-      color: Colors.white.withOpacity(0.3),
-      fontWeight: FontWeight.w500,
+      color: Colors.white.withOpacity(0.5),
       fontSize: 16.0,
-      letterSpacing: -0.5,
       height: 0.75,
+      fontWeight: FontWeight.w100,
     ),
     headline6: TextStyle(
       color: Colors.white,
-      fontWeight: FontWeight.w700,
       fontSize: 16.0,
+      height: 0.9,
     ),
     subtitle2: TextStyle(
-      color: Colors.white.withOpacity(0.3),
+      color: Colors.white.withOpacity(0.5),
       fontSize: 12.0,
+      fontWeight: FontWeight.w100,
     ),
   ),
 );

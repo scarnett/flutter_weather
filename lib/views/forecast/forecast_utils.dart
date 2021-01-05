@@ -19,6 +19,24 @@ num getTemperature(
   }
 }
 
+String getUnitSymbol(
+  TemperatureUnit unit,
+) {
+  switch (unit) {
+    case TemperatureUnit.fahrenheit:
+      return '\u2109';
+
+    case TemperatureUnit.celsius:
+      return '\u2103';
+
+    case TemperatureUnit.kelvin:
+      return '\u212A';
+
+    default:
+      return '\u00B0';
+  }
+}
+
 // @see https://openweathermap.org/weather-conditions
 IconData getForecastIconData(
   String iconCode,
