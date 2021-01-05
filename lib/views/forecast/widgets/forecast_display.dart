@@ -27,18 +27,20 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget build(
     BuildContext context,
   ) {
-    ForecastDay currentDay = widget.forecast.list.first;
+    List<ForecastDay> days = widget.forecast.list;
+    ForecastDay currentDay = days.first;
 
     return Align(
       alignment: Alignment.topCenter,
       child: Padding(
-        padding: const EdgeInsets.only(top: 50.0),
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 30.0),
         child: Column(
           children: <Widget>[
             _buildLocation(),
             _buildCurrentTemperature(currentDay),
             _buildCondition(currentDay),
-            _buildCurrentDayNight(currentDay),
+            _buildCurrentHiLow(currentDay),
+            _buildDays(days.getRange(0, 3).toList()), // Three day forecast
             _buildLastUpdated(),
           ],
         ),
@@ -94,7 +96,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               ),
             ],
           ),
-          BoxedIcon(getForecastIconData(currentWeater.icon), size: 70.0),
+          BoxedIcon(
+            getForecastIconData(currentWeater.icon),
+            size: 70.0,
+          ),
         ],
       ),
     );
@@ -111,13 +116,21 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         ),
       );
 
-  Widget _buildCurrentDayNight(
+  Widget _buildCurrentHiLow(
     ForecastDay currentDay,
   ) {
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
 
     return Container(
-      padding: const EdgeInsets.only(bottom: 30.0),
+      padding: const EdgeInsets.only(bottom: 20.0),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: AppTheme.getSecondaryColor(widget.bloc.state.themeMode),
+            width: 1.0,
+          ),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,6 +191,68 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDays(
+    List<ForecastDay> days,
+  ) {
+    TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
+
+    int count = 0;
+    List<Widget> _days = <Widget>[];
+
+    days.forEach((ForecastDay day) {
+      _days.add(
+        Container(
+          padding:
+              EdgeInsets.only(right: (count + 1 == days.length) ? 0.0 : 20.0),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        formatDateTime(epochToDateTime(day.dt), 'EEE'),
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ),
+                    TemperatureDisplay(
+                      temperature: getTemperature(day.temp.max, temperatureUnit)
+                          .toString(),
+                      style: Theme.of(context).textTheme.headline4,
+                      unit: temperatureUnit,
+                      unitSizeFactor: 1.5,
+                    ),
+                  ],
+                ),
+              ),
+              BoxedIcon(
+                getForecastIconData(day.weather.first.icon),
+                size: 30.0,
+                color: Theme.of(context).hintColor,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      count++;
+    });
+
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 20.0,
+        bottom: 30.0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: _days,
       ),
     );
   }

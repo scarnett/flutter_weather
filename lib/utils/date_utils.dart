@@ -125,7 +125,7 @@ String getDateFormat(
 DateTime epochToDateTime(
   int epoch,
 ) {
-  DateTime date = DateTime.fromMicrosecondsSinceEpoch(epoch * 1000);
+  DateTime date = DateTime.fromMillisecondsSinceEpoch(epoch * 1000);
   return date;
 }
 

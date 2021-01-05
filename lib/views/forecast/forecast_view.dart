@@ -287,11 +287,13 @@ class _ForecastPageViewState extends State<ForecastPageView>
     int page,
     AppState state,
   ) {
-    context.read<AppBloc>().add(SelectedForecastIndex(page));
+    setState(() {
+      context.read<AppBloc>().add(SelectedForecastIndex(page));
 
-    if (_canRefresh(state)) {
-      _tapRefresh(state);
-    }
+      if (_canRefresh(state)) {
+        _tapRefresh(state);
+      }
+    });
   }
 
   bool _canRefresh(

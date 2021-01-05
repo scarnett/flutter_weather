@@ -5,8 +5,8 @@ class AppTheme {
     ThemeMode themeMode,
   ) =>
       (themeMode == ThemeMode.dark)
-          ? Colors.white.withOpacity(0.3)
-          : Colors.grey[900].withOpacity(0.3);
+          ? Colors.white.withOpacity(0.1)
+          : Colors.grey[900].withOpacity(0.1);
 }
 
 ThemeMode getThemeMode(
@@ -99,6 +99,7 @@ ThemeData appLightThemeData = ThemeData(
       color: Colors.grey[900].withOpacity(0.7),
       fontSize: 24.0,
       fontWeight: FontWeight.w100,
+      height: 0.9,
     ),
     headline5: TextStyle(
       color: Colors.grey[900].withOpacity(0.7),
@@ -160,6 +161,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
       color: Colors.white.withOpacity(0.7),
       fontSize: 24.0,
       fontWeight: FontWeight.w100,
+      height: 0.9,
     ),
     headline5: TextStyle(
       color: Colors.white.withOpacity(0.5),

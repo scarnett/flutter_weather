@@ -24,26 +24,25 @@ class _TemperatureDisplayState extends State<TemperatureDisplay> {
   @override
   Widget build(
     BuildContext context,
-  ) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          widget.temperature,
-          style: widget.style,
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            getUnitSymbol(widget.unit),
-            style: widget.style.copyWith(
-              fontSize: (widget.style.fontSize / widget.unitSizeFactor),
+  ) =>
+      Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            widget.temperature,
+            style: widget.style,
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              getUnitSymbol(widget.unit),
+              style: widget.style.copyWith(
+                fontSize: (widget.style.fontSize / widget.unitSizeFactor),
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
