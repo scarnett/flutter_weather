@@ -191,12 +191,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     String formattedLastUpdated;
 
     if (lastUpdated.isToday()) {
-      formattedLastUpdated = AppLocalizations.of(context).getLastUpdatedAt(
-          formatDateTime(widget.forecast.lastUpdated, 'h:mm a'));
+      formattedLastUpdated = AppLocalizations.of(context)
+          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a'));
     } else {
       formattedLastUpdated = AppLocalizations.of(context).getLastUpdatedOn(
-          formatDateTime(
-              widget.forecast.lastUpdated, 'EEE, MMM d, yyyy @ h:mm a'));
+          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a'));
     }
 
     return Container(
