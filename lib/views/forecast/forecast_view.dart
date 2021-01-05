@@ -145,7 +145,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
           Expanded(
             child: PageView.builder(
               controller: _pageController,
-              onPageChanged: _onPageChanged,
+              onPageChanged: (int page) => _onPageChanged(page, state),
               itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
               itemBuilder: (
                 BuildContext context,
@@ -283,12 +283,18 @@ class _ForecastPageViewState extends State<ForecastPageView>
         ),
       );
 
-  _onPageChanged(
+  void _onPageChanged(
     int page,
-  ) =>
-      context.read<AppBloc>().add(SelectedForecastIndex(page));
+    AppState state,
+  ) {
+    context.read<AppBloc>().add(SelectedForecastIndex(page));
 
-  _canRefresh(
+    if (_canRefresh(state)) {
+      _tapRefresh(state);
+    }
+  }
+
+  bool _canRefresh(
     AppState state,
   ) {
     Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
