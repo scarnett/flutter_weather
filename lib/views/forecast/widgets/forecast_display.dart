@@ -111,7 +111,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       Container(
         padding: const EdgeInsets.only(bottom: 30.0),
         child: Text(
-          currentDay.weather.first.main.toUpperCase(),
+          currentDay.weather.first.description.toUpperCase(),
           style: Theme.of(context).textTheme.headline4,
         ),
       );
@@ -161,7 +161,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                           .toString(),
                   style: Theme.of(context).textTheme.headline3,
                   unit: temperatureUnit,
-                  unitSizeFactor: 2.0,
+                  unitSizeFactor: 2.5,
                 ),
               ],
             ),
@@ -185,7 +185,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                           .toString(),
                   style: Theme.of(context).textTheme.headline3,
                   unit: temperatureUnit,
-                  unitSizeFactor: 2.0,
+                  unitSizeFactor: 2.5,
                 ),
               ],
             ),
@@ -211,7 +211,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 5.0),
+                padding: const EdgeInsets.only(right: 2.0),
                 child: Column(
                   children: <Widget>[
                     Padding(
@@ -226,7 +226,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                           .toString(),
                       style: Theme.of(context).textTheme.headline4,
                       unit: temperatureUnit,
-                      unitSizeFactor: 1.5,
+                      unitSizeFactor: 2,
                     ),
                   ],
                 ),

@@ -104,7 +104,7 @@ ThemeData appLightThemeData = ThemeData(
     headline5: TextStyle(
       color: Colors.grey[900].withOpacity(0.7),
       fontSize: 16.0,
-      height: 0.75,
+      height: 0.9,
       fontWeight: FontWeight.w100,
     ),
     headline6: TextStyle(
@@ -166,7 +166,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
     headline5: TextStyle(
       color: Colors.white.withOpacity(0.5),
       fontSize: 16.0,
-      height: 0.75,
+      height: 0.9,
       fontWeight: FontWeight.w100,
     ),
     headline6: TextStyle(

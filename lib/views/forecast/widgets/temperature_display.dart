@@ -13,7 +13,7 @@ class TemperatureDisplay extends StatefulWidget {
     @required this.temperature,
     this.style,
     this.unit,
-    this.unitSizeFactor: 2.5,
+    this.unitSizeFactor: 3.5,
   });
 
   @override
