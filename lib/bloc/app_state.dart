@@ -12,21 +12,24 @@ class AppState extends Equatable {
   final int selectedForecastIndex;
   final List<Forecast> forecasts;
   final RefreshStatus refreshStatus;
+  final CRUDStatus crudStatus;
 
   AppState({
     this.themeMode: ThemeMode.light,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
-    this.selectedForecastIndex = 0,
-    this.forecasts,
+    this.selectedForecastIndex: 0,
+    this.forecasts: const [],
     this.refreshStatus,
+    this.crudStatus,
   });
 
   const AppState._({
     this.themeMode: ThemeMode.light,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
-    this.selectedForecastIndex = 0,
-    this.forecasts,
+    this.selectedForecastIndex: 0,
+    this.forecasts: const [],
     this.refreshStatus,
+    this.crudStatus,
   });
 
   const AppState.initial() : this._();
@@ -37,6 +40,7 @@ class AppState extends Equatable {
     int selectedForecastIndex,
     List<Forecast> forecasts,
     Nullable<RefreshStatus> refreshStatus,
+    Nullable<CRUDStatus> crudStatus,
   }) =>
       AppState._(
         themeMode: themeMode ?? this.themeMode,
@@ -46,6 +50,7 @@ class AppState extends Equatable {
         forecasts: forecasts ?? this.forecasts,
         refreshStatus:
             (refreshStatus == null) ? this.refreshStatus : refreshStatus.value,
+        crudStatus: (crudStatus == null) ? this.crudStatus : crudStatus.value,
       );
 
   @override
@@ -55,11 +60,13 @@ class AppState extends Equatable {
         selectedForecastIndex,
         forecasts,
         refreshStatus,
+        crudStatus,
       ];
 
   @override
   String toString() =>
       'AppState{themeMode: $themeMode, temperatureUnit: $temperatureUnit, ' +
       'selectedForecastIndex: $selectedForecastIndex, ' +
-      'forecasts: $forecasts, refreshStatus: $refreshStatus}';
+      'forecasts: $forecasts, refreshStatus: $refreshStatus, ' +
+      'crudStatus: $crudStatus}';
 }

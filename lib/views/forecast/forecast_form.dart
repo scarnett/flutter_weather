@@ -4,44 +4,51 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_select_dialog.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 
-class LookupForm extends StatelessWidget {
-  const LookupForm({
+class ForecastForm extends StatelessWidget {
+  final String buttonText;
+
+  const ForecastForm({
     Key key,
+    this.buttonText,
   }) : super(key: key);
 
   @override
   Widget build(
     BuildContext context,
   ) =>
-      BlocProvider<LookupFormBloc>(
-        create: (BuildContext context) => LookupFormBloc(),
-        child: LookupPageForm(),
+      BlocProvider<ForecastFormBloc>(
+        create: (BuildContext context) => ForecastFormBloc(),
+        child: ForecastPageForm(buttonText: buttonText),
       );
 }
 
-class LookupPageForm extends StatefulWidget {
-  LookupPageForm({
+class ForecastPageForm extends StatefulWidget {
+  final String buttonText;
+
+  ForecastPageForm({
     Key key,
+    this.buttonText,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _LookupPageFormState();
+  State<StatefulWidget> createState() => _ForecastPageFormState();
 }
 
-class _LookupPageFormState extends State<LookupPageForm> {
+class _ForecastPageFormState extends State<ForecastPageForm> {
   bool _submitting = false;
 
   @override
   Widget build(
     BuildContext context,
   ) =>
-      FormBlocListener<LookupFormBloc, String, String>(
+      FormBlocListener<ForecastFormBloc, String, String>(
         onSubmitting: _onSubmitting,
         onSuccess: (
           BuildContext context,
@@ -56,7 +63,7 @@ class _LookupPageFormState extends State<LookupPageForm> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFieldBlocBuilder(
-                textFieldBloc: context.watch<LookupFormBloc>().postalCode,
+                textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context).postalCode,
                   prefixIcon: Icon(
@@ -66,10 +73,10 @@ class _LookupPageFormState extends State<LookupPageForm> {
                 ),
               ),
               AppSelectDialogFieldBlocBuilder(
-                selectFieldBloc: context.watch<LookupFormBloc>().country,
+                selectFieldBloc: context.watch<ForecastFormBloc>().country,
               ),
               AppFormButton(
-                text: _submitting ? null : AppLocalizations.of(context).lookup,
+                text: _submitting ? null : widget.buttonText,
                 icon: _submitting
                     ? SizedBox(
                         height: 25.0,
@@ -135,5 +142,5 @@ class _LookupPageFormState extends State<LookupPageForm> {
         SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
   }
 
-  void _tapLookup() => context.read<LookupFormBloc>().submit();
+  void _tapLookup() => context.read<ForecastFormBloc>().submit();
 }

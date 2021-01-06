@@ -34,6 +34,9 @@ class AppLocalizations {
   String get addThisLocation => addMessage('Add This Location');
   String get editLocation => addMessage('Edit Location');
   String get refreshForecast => addMessage('Refresh Forecast');
+  String get forecastCreated => addMessage('Forecast Created');
+  String get forecastUpdated => addMessage('Forecast Updated');
+  String get forecastRemoved => addMessage('Forecast Removed');
   String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');
   String get lookup => addMessage('Lookup');

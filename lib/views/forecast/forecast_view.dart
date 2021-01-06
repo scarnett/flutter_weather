@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -75,44 +76,73 @@ class _ForecastPageViewState extends State<ForecastPageView>
   Widget build(
     BuildContext context,
   ) =>
-      BlocListener<AppBloc, AppState>(
-        listener: (
-          BuildContext context,
-          AppState state,
-        ) {
-          if (state.refreshStatus == RefreshStatus.REFRESHING) {
-            _refreshAnimationController
-              ..reset()
-              ..forward();
-          }
-
-          _currentForecastNotifier.value = state.selectedForecastIndex;
-        },
-        child: AppUiOverlayStyle(
-          bloc: context.watch<AppBloc>(),
-          child: BlocBuilder<AppBloc, AppState>(
-            builder: (
-              BuildContext context,
-              AppState state,
-            ) =>
-                WillPopScope(
-              onWillPop: () => _willPopCallback(state),
-              child: Scaffold(
-                extendBody: true,
-                body: SafeArea(
+      Scaffold(
+        extendBody: true,
+        body: BlocListener<AppBloc, AppState>(
+          listener: _blocListener,
+          child: AppUiOverlayStyle(
+            bloc: context.watch<AppBloc>(),
+            child: BlocBuilder<AppBloc, AppState>(
+              builder: (
+                BuildContext context,
+                AppState state,
+              ) =>
+                  WillPopScope(
+                onWillPop: () => _willPopCallback(state),
+                child: SafeArea(
                   child: _buildBody(state),
-                ),
-                floatingActionButton: FloatingActionButton(
-                  tooltip: AppLocalizations.of(context).addLocation,
-                  onPressed: _tapAddLocation,
-                  child: Icon(Icons.add),
-                  mini: true,
                 ),
               ),
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          tooltip: AppLocalizations.of(context).addLocation,
+          onPressed: _tapAddLocation,
+          child: Icon(Icons.add),
+          mini: true,
+        ),
       );
+
+  void _blocListener(
+    BuildContext context,
+    AppState state,
+  ) {
+    if (state.refreshStatus == RefreshStatus.REFRESHING) {
+      _refreshAnimationController
+        ..reset()
+        ..forward();
+    }
+
+    if (state.crudStatus != null) {
+      AppLocalizations i18n = AppLocalizations.of(context);
+
+      switch (state.crudStatus) {
+        case CRUDStatus.CREATED:
+          Scaffold.of(context)
+              .showSnackBar(SnackBar(content: Text(i18n.forecastCreated)));
+          break;
+
+        case CRUDStatus.UPDATED:
+          Scaffold.of(context)
+              .showSnackBar(SnackBar(content: Text(i18n.forecastUpdated)));
+          break;
+
+        case CRUDStatus.DELETED:
+          Scaffold.of(context)
+              .showSnackBar(SnackBar(content: Text(i18n.forecastRemoved)));
+          break;
+
+        default:
+          break;
+      }
+
+      context.read<AppBloc>().add(ClearCRUDStatus());
+    }
+
+    _pageController.jumpToPage(state.selectedForecastIndex);
+    _currentForecastNotifier.value = state.selectedForecastIndex;
+  }
 
   Future<bool> _willPopCallback(
     AppState state,
@@ -190,6 +220,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
           selectedSize: 10.0,
           itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
+          onPageSelected: (int page) => _onPageChanged(page, state),
         ),
       );
 
@@ -286,19 +317,22 @@ class _ForecastPageViewState extends State<ForecastPageView>
   void _onPageChanged(
     int page,
     AppState state,
-  ) {
-    setState(() {
-      context.read<AppBloc>().add(SelectedForecastIndex(page));
+  ) =>
+      setState(() {
+        context.read<AppBloc>().add(SelectedForecastIndex(page));
 
-      if (_canRefresh(state)) {
-        _tapRefresh(state);
-      }
-    });
-  }
+        if (_canRefresh(state)) {
+          _tapRefresh(state);
+        }
+      });
 
   bool _canRefresh(
     AppState state,
   ) {
+    if (state.forecasts.isEmpty) {
+      return false;
+    }
+
     Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
     return (selectedForecast == null) ||
         (selectedForecast.lastUpdated == null) ||

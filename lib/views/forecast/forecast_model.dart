@@ -6,6 +6,7 @@ enum RefreshStatus {
 }
 
 class Forecast extends Equatable {
+  final String id;
   final String postalCode;
   final String countryCode;
   final ForecastCity city;
@@ -16,6 +17,7 @@ class Forecast extends Equatable {
   final DateTime lastUpdated;
 
   Forecast({
+    this.id,
     this.postalCode,
     this.countryCode,
     this.city,
@@ -27,6 +29,7 @@ class Forecast extends Equatable {
   });
 
   Forecast copyWith({
+    String id,
     String postalCode,
     String countryCode,
     ForecastCity city,
@@ -37,6 +40,7 @@ class Forecast extends Equatable {
     DateTime lastUpdated,
   }) =>
       Forecast(
+        id: id ?? this.id,
         postalCode: postalCode ?? this.postalCode,
         countryCode: countryCode ?? this.countryCode,
         city: city ?? this.city,
@@ -53,6 +57,7 @@ class Forecast extends Equatable {
       (json == null)
           ? Forecast()
           : Forecast(
+              id: json['id'],
               postalCode: json['postalCode'],
               countryCode: json['countryCode'],
               city: ForecastCity.fromJson(json['city']),
@@ -73,6 +78,7 @@ class Forecast extends Equatable {
               .toList();
 
   dynamic toJson() => {
+        'id': id,
         'postalCode': postalCode,
         'countryCode': countryCode,
         'city': city.toJson(),
@@ -92,6 +98,7 @@ class Forecast extends Equatable {
 
   @override
   List<Object> get props => [
+        id,
         postalCode,
         countryCode,
         city,
@@ -104,7 +111,7 @@ class Forecast extends Equatable {
 
   @override
   String toString() =>
-      'Forecast{postalCode: $postalCode, countryCode: $countryCode, ' +
+      'Forecast{id: $id, postalCode: $postalCode, countryCode: $countryCode, ' +
       'city: ${city?.name}, cod: $cod, message: $message, cnt: $cnt, ' +
       'lastUpdated: $lastUpdated}';
 }

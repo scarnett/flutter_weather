@@ -73,3 +73,10 @@ class SelectedForecastIndex extends AppEvent {
   @override
   List<Object> get props => [index];
 }
+
+class ClearCRUDStatus extends AppEvent {
+  const ClearCRUDStatus();
+
+  @override
+  List<Object> get props => [];
+}

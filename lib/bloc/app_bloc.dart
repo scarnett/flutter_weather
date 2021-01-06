@@ -33,6 +33,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapAddForecastToStates(event);
     } else if (event is RefreshForecast) {
       yield* _mapRefreshForecastToStates(event);
+    } else if (event is ClearCRUDStatus) {
+      yield _mapClearCRUDStatusToStates(event);
     }
   }
 
@@ -69,6 +71,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   Stream<AppState> _mapAddForecastToStates(
     AddForecast event,
   ) async* {
+    yield state.copyWith(
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.CREATING),
+    );
+
     // TODO! sort
     List<Forecast> forecasts = ((state.forecasts == null)
         ? []
@@ -77,6 +83,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     yield state.copyWith(
       forecasts: forecasts,
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.CREATED),
       selectedForecastIndex: forecasts.indexWhere((Forecast forecast) =>
           (forecast.postalCode == event.forecast.postalCode)),
     );
@@ -122,6 +129,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       // TODO! snackbar error
     }
   }
+
+  AppState _mapClearCRUDStatusToStates(
+    ClearCRUDStatus event,
+  ) =>
+      state.copyWith(crudStatus: Nullable<CRUDStatus>(null));
 
   @override
   AppState fromJson(

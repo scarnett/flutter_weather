@@ -1,6 +1,6 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 
-class LookupFormBloc extends FormBloc<String, String> {
+class ForecastFormBloc extends FormBloc<String, String> {
   final TextFieldBloc postalCode = TextFieldBloc(
     name: 'postalCode',
     validators: [
@@ -15,7 +15,7 @@ class LookupFormBloc extends FormBloc<String, String> {
     ],
   );
 
-  LookupFormBloc() {
+  ForecastFormBloc() {
     addFieldBlocs(
       fieldBlocs: [
         postalCode,
