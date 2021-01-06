@@ -40,7 +40,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             _buildCurrentTemperature(currentDay),
             _buildCondition(currentDay),
             _buildCurrentHiLow(currentDay),
-            _buildDays(days.getRange(0, 3).toList()), // Three day forecast
+            _buildDays(days.getRange(1, 4).toList()), // Three day forecast
             _buildLastUpdated(),
           ],
         ),
