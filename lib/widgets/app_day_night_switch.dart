@@ -2,13 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/theme.dart';
 
 class AppDayNightSwitch extends StatelessWidget {
   final AppBloc bloc;
+  final IconData activeIcon;
+  final IconData inactiveIcon;
 
   const AppDayNightSwitch({
     Key key,
     this.bloc,
+    this.activeIcon: Icons.nightlight_round,
+    this.inactiveIcon: Icons.wb_sunny,
   })  : assert(bloc != null),
         super(key: key);
 
@@ -23,25 +28,26 @@ class AppDayNightSwitch extends StatelessWidget {
         borderRadius: 24.0,
         padding: 1.0,
         value: (bloc.state.themeMode == ThemeMode.dark),
-        activeToggleColor: Colors.deepPurple[400],
-        inactiveToggleColor: Colors.grey[900],
+        activeToggleColor: AppTheme.primaryColor,
+        inactiveToggleColor:
+            bloc.state.colorTheme ? Colors.white : AppTheme.secondaryColor,
         activeSwitchBorder: Border.all(
           color: Colors.deepPurple[500],
           width: 2.0,
         ),
         inactiveSwitchBorder: Border.all(
-          color: Colors.grey[300],
+          color: bloc.state.colorTheme ? Colors.white : Colors.grey[300],
           width: 2.0,
         ),
-        activeColor: Colors.grey[900],
-        inactiveColor: Colors.white,
+        activeColor: AppTheme.secondaryColor,
+        inactiveColor: Colors.white.withOpacity(0.5),
         activeIcon: Icon(
-          Icons.nightlight_round,
+          activeIcon,
           color: Colors.yellow[400],
           size: 16.0,
         ),
         inactiveIcon: Icon(
-          Icons.wb_sunny,
+          inactiveIcon,
           color: Colors.amber[500],
           size: 16.0,
         ),

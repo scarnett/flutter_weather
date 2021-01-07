@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -33,12 +34,22 @@ class SettingsPageView extends StatefulWidget {
 }
 
 class _SettingsPageViewState extends State<SettingsPageView> {
+  AppBloc bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    bloc = context.read<AppBloc>();
+  }
+
   @override
   Widget build(
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        bloc: context.watch<AppBloc>(),
+        bloc: bloc,
+        systemNavigationBarIconBrightness:
+            bloc.state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
@@ -52,36 +63,49 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ),
       );
 
-  Widget _buildContent() {
-    AppBloc bloc = context.watch<AppBloc>();
+  Widget _buildContent() => SafeArea(
+        child: Column(
+          children: <Widget>[]
+            ..addAll(_buildThemeModeSection())
+            ..addAll(_buildTemperatureUnitSection()),
+        ),
+      );
 
-    return SafeArea(
-      child: Column(
-        children: <Widget>[]
-          ..addAll(_buildThemeModeSection(bloc))
-          ..addAll(_buildTemperatureUnitSection(bloc)),
-      ),
+  List<Widget> _buildThemeModeSection() {
+    ThemeMode _themeMode = bloc.state.themeMode;
+    List<Widget> widgets = <Widget>[];
+    widgets.addAll(
+      [
+        AppSectionHeader(
+          bloc: bloc,
+          text: AppLocalizations.of(context).themeMode,
+        ),
+        AppRadioTile<ThemeMode>(
+          bloc: bloc,
+          title: AppLocalizations.of(context).light,
+          value: ThemeMode.light,
+          groupValue: _themeMode,
+          onTap: _tapThemeMode,
+        ),
+        Divider(),
+      ],
     );
-  }
 
-  List<Widget> _buildThemeModeSection(
-    AppBloc bloc,
-  ) {
-    ThemeMode _themeMode = context.watch<AppBloc>().state.themeMode;
+    if (_themeMode == ThemeMode.light) {
+      widgets.addAll(
+        [
+          AppChekboxTile(
+            bloc: bloc,
+            title: AppLocalizations.of(context).colorized,
+            checked: bloc.state.colorTheme,
+            onTap: _tapColorized,
+          ),
+          Divider(),
+        ],
+      );
+    }
 
-    return [
-      AppSectionHeader(
-        bloc: bloc,
-        text: AppLocalizations.of(context).themeMode,
-      ),
-      AppRadioTile<ThemeMode>(
-        bloc: bloc,
-        title: AppLocalizations.of(context).light,
-        value: ThemeMode.light,
-        groupValue: _themeMode,
-        onTap: _tapThemeMode,
-      ),
-      Divider(),
+    widgets.add(
       AppRadioTile<ThemeMode>(
         bloc: bloc,
         title: AppLocalizations.of(context).dark,
@@ -89,14 +113,13 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         groupValue: _themeMode,
         onTap: _tapThemeMode,
       ),
-    ];
+    );
+
+    return widgets;
   }
 
-  List<Widget> _buildTemperatureUnitSection(
-    AppBloc bloc,
-  ) {
-    TemperatureUnit _temperatureUnit =
-        context.watch<AppBloc>().state.temperatureUnit;
+  List<Widget> _buildTemperatureUnitSection() {
+    TemperatureUnit _temperatureUnit = bloc.state.temperatureUnit;
 
     return [
       AppSectionHeader(
@@ -133,10 +156,15 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   void _tapThemeMode(
     ThemeMode themeMode,
   ) =>
-      context.read<AppBloc>().add(SetThemeMode(themeMode));
+      bloc.add(SetThemeMode(themeMode));
+
+  void _tapColorized(
+    bool checked,
+  ) =>
+      bloc.add(SetColorTheme(checked));
 
   void _tapTemperatureUnit(
     TemperatureUnit temperatureUnit,
   ) =>
-      context.read<AppBloc>().add(SetTemperatureUnit(temperatureUnit));
+      bloc.add(SetTemperatureUnit(temperatureUnit));
 }

@@ -6,11 +6,15 @@ import 'package:flutter_weather/bloc/bloc.dart';
 class AppUiOverlayStyle extends StatelessWidget {
   final AppBloc bloc;
   final Widget child;
+  final Color systemNavigationBarColor;
+  final Brightness systemNavigationBarIconBrightness;
 
   const AppUiOverlayStyle({
     Key key,
     this.bloc,
     this.child,
+    this.systemNavigationBarColor,
+    this.systemNavigationBarIconBrightness,
   })  : assert(bloc != null),
         assert(child != null),
         super(key: key);
@@ -22,14 +26,25 @@ class AppUiOverlayStyle extends StatelessWidget {
       AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: (bloc.state.themeMode == ThemeMode.light)
+          statusBarBrightness: (bloc.state.themeMode == ThemeMode.light) &&
+                  !bloc.state.colorTheme
               ? Brightness.dark
               : Brightness.light,
-          systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+          statusBarIconBrightness: (bloc.state.themeMode == ThemeMode.light) &&
+                  !bloc.state.colorTheme
+              ? Brightness.dark
+              : Brightness.light,
+          systemNavigationBarColor:
+              bloc.state.colorTheme && (systemNavigationBarColor != null)
+                  ? systemNavigationBarColor
+                  : Theme.of(context).scaffoldBackgroundColor,
           systemNavigationBarIconBrightness:
-              (bloc.state.themeMode == ThemeMode.light)
-                  ? Brightness.dark
-                  : Brightness.light,
+              (systemNavigationBarIconBrightness != null)
+                  ? systemNavigationBarIconBrightness
+                  : (bloc.state.themeMode == ThemeMode.light) &&
+                          !bloc.state.colorTheme
+                      ? Brightness.dark
+                      : Brightness.light,
           systemNavigationBarDividerColor: Colors.transparent,
         ),
         child: child,

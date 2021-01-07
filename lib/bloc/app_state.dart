@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 @immutable
 class AppState extends Equatable {
   final ThemeMode themeMode;
+  final bool colorTheme;
   final TemperatureUnit temperatureUnit;
   final int selectedForecastIndex;
   final List<Forecast> forecasts;
@@ -16,6 +17,7 @@ class AppState extends Equatable {
 
   AppState({
     this.themeMode: ThemeMode.light,
+    this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
@@ -25,6 +27,7 @@ class AppState extends Equatable {
 
   const AppState._({
     this.themeMode: ThemeMode.light,
+    this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
@@ -36,6 +39,7 @@ class AppState extends Equatable {
 
   AppState copyWith({
     ThemeMode themeMode,
+    bool colorTheme,
     TemperatureUnit temperatureUnit,
     int selectedForecastIndex,
     List<Forecast> forecasts,
@@ -44,6 +48,7 @@ class AppState extends Equatable {
   }) =>
       AppState._(
         themeMode: themeMode ?? this.themeMode,
+        colorTheme: colorTheme ?? this.colorTheme,
         temperatureUnit: temperatureUnit ?? this.temperatureUnit,
         selectedForecastIndex:
             selectedForecastIndex ?? this.selectedForecastIndex,
@@ -56,6 +61,7 @@ class AppState extends Equatable {
   @override
   List<Object> get props => [
         themeMode,
+        colorTheme,
         temperatureUnit,
         selectedForecastIndex,
         forecasts,
@@ -65,7 +71,8 @@ class AppState extends Equatable {
 
   @override
   String toString() =>
-      'AppState{themeMode: $themeMode, temperatureUnit: $temperatureUnit, ' +
+      'AppState{themeMode: $themeMode, colorTheme: $colorTheme, ' +
+      'temperatureUnit: $temperatureUnit, ' +
       'selectedForecastIndex: $selectedForecastIndex, ' +
       'forecasts: $forecasts, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus}';

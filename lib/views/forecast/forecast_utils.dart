@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 num getTemperature(
@@ -17,6 +22,74 @@ num getTemperature(
     default:
       return temperature.round();
   }
+}
+
+Color getTemperatureColor(
+  num temperature,
+) {
+  num _temperature = getTemperature(temperature, TemperatureUnit.fahrenheit);
+  if (_temperature > 100) {
+    return Colors.red[900];
+  } else if ((_temperature > 90) && (_temperature <= 100)) {
+    return Colors.red;
+  } else if ((_temperature > 80) && (_temperature <= 90)) {
+    return Colors.deepOrange;
+  } else if ((_temperature > 70) && (_temperature <= 80)) {
+    return Colors.orange;
+  } else if ((_temperature > 60) && (_temperature <= 70)) {
+    return Colors.amber;
+  } else if ((_temperature > 50) && (_temperature <= 60)) {
+    return Colors.yellow;
+  } else if ((_temperature > 40) && (_temperature <= 50)) {
+    return Colors.lightGreen;
+  } else if ((_temperature > 30) && (_temperature <= 40)) {
+    return Colors.green;
+  } else if ((_temperature > 20) && (_temperature <= 30)) {
+    return Colors.cyan;
+  } else if ((_temperature > 10) && (_temperature <= 20)) {
+    return Colors.blue;
+  } else if ((_temperature > 0) && (_temperature <= 10)) {
+    return Colors.indigo;
+  } else if ((_temperature > -10) && (_temperature <= 0)) {
+    return Colors.purple;
+  } else if ((_temperature > -20) && (_temperature <= -10)) {
+    return Colors.deepPurple;
+  } else if ((_temperature > -30) && (_temperature <= -20)) {
+    return Colors.deepPurple[100];
+  }
+
+  return Colors.blueGrey[50];
+}
+
+Animatable<Color> buildForecastColorSequence(
+  List<Forecast> forecastList,
+) {
+  List<TweenSequenceItem<Color>> colors = List<TweenSequenceItem<Color>>();
+
+  if ((forecastList != null) && forecastList.isNotEmpty) {
+    forecastList.asMap().forEach((int index, Forecast forecast) {
+      Color nextColor;
+      Color thisColor = getTemperatureColor(forecast.list.first.temp.day);
+
+      int nextForecastIndex = (index + 1);
+      if (nextForecastIndex < forecastList.length) {
+        Forecast nextForecast = forecastList[nextForecastIndex];
+        nextColor = getTemperatureColor(nextForecast.list.first.temp.day);
+      } else {
+        nextColor = thisColor;
+      }
+
+      colors.add(TweenSequenceItem(
+        weight: 1.0,
+        tween: ColorTween(
+          begin: thisColor,
+          end: nextColor,
+        ),
+      ));
+    });
+  }
+
+  return TweenSequence<Color>(colors);
 }
 
 String getUnitSymbol(
@@ -95,4 +168,19 @@ IconData getForecastIconData(
     default:
       return WeatherIcons.day_sunny;
   }
+}
+
+bool canRefresh(
+  AppState state,
+) {
+  if (state.forecasts.isEmpty) {
+    return false;
+  }
+
+  Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
+  return (selectedForecast == null) ||
+      (selectedForecast.lastUpdated == null) ||
+      selectedForecast.lastUpdated
+          .add(Duration(minutes: EnvConfig.REFRESH_TIMEOUT_MINS))
+          .isBefore(getNow());
 }

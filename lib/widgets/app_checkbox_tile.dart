@@ -3,40 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
-class AppRadioTile<T> extends StatelessWidget {
+class AppChekboxTile extends StatelessWidget {
   final AppBloc bloc;
   final String title;
-  final T value;
-  final T groupValue;
-  final Function(T) onTap;
+  final bool checked;
+  final Function(bool) onTap;
 
-  const AppRadioTile({
+  const AppChekboxTile({
     Key key,
     this.bloc,
     this.title,
-    this.value,
-    this.groupValue,
+    this.checked,
     this.onTap,
   })  : assert(bloc != null),
         assert(title != null),
-        assert(value != null),
+        assert(checked != null),
         super(key: key);
 
   @override
   Widget build(
     BuildContext context,
   ) =>
-      RadioListTile<T>(
+      CheckboxListTile(
         title: Text(
           title,
           style: TextStyle(
-            color: (value == groupValue)
+            color: checked
                 ? AppTheme.getRadioActiveColor(bloc.state.themeMode)
                 : AppTheme.getRadioInactiveColor(bloc.state.themeMode),
           ),
         ),
-        value: value,
-        groupValue: groupValue,
+        value: checked,
         onChanged: onTap,
         controlAffinity: ListTileControlAffinity.trailing,
         activeColor: AppTheme.primaryColor,

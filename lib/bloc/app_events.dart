@@ -28,6 +28,24 @@ class SetThemeMode extends AppEvent {
   List<Object> get props => [themeMode];
 }
 
+class ToggleColorTheme extends AppEvent {
+  const ToggleColorTheme();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SetColorTheme extends AppEvent {
+  final bool colorTheme;
+
+  const SetColorTheme(
+    this.colorTheme,
+  );
+
+  @override
+  List<Object> get props => [colorTheme];
+}
+
 class SetTemperatureUnit extends AppEvent {
   final TemperatureUnit temperatureUnit;
 

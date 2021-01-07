@@ -4,6 +4,7 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
@@ -68,7 +69,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                   labelText: AppLocalizations.of(context).postalCode,
                   prefixIcon: Icon(
                     Icons.place,
-                    color: Colors.deepPurple[400],
+                    color: AppTheme.primaryColor,
                   ),
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/theme.dart';
 import 'package:iso_countries/iso_countries.dart';
 import 'package:select_dialog/select_dialog.dart';
 
@@ -41,7 +42,7 @@ class AppSelectDialogFieldBlocBuilder<Value> extends StatelessWidget {
                       : null,
                   prefixIcon: Icon(
                     Icons.language,
-                    color: Colors.deepPurple[400],
+                    color: AppTheme.primaryColor,
                   ),
                 ),
                 child: Text(state?.value ?? ''),

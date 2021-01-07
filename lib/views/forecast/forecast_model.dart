@@ -227,12 +227,14 @@ class ForecastDay extends Equatable {
   final int sunset;
   final ForecastDayTemp temp;
   final ForecastDayFeelsLike feelsLike;
-  final int pressure;
-  final int humidity;
+  final num pressure;
+  final num humidity;
   final List<ForecastDayWeather> weather;
   final num speed;
-  final int deg;
-  final int clouds;
+  final num deg;
+  final num clouds;
+  final num rain;
+  final num snow;
   final num pop;
 
   ForecastDay({
@@ -247,6 +249,8 @@ class ForecastDay extends Equatable {
     this.speed,
     this.deg,
     this.clouds,
+    this.rain,
+    this.snow,
     this.pop,
   });
 
@@ -262,6 +266,8 @@ class ForecastDay extends Equatable {
     num speed,
     int deg,
     int clouds,
+    num rain,
+    num snow,
     num pop,
   }) =>
       ForecastDay(
@@ -276,6 +282,8 @@ class ForecastDay extends Equatable {
         speed: speed ?? this.speed,
         deg: deg ?? this.deg,
         clouds: clouds ?? this.clouds,
+        rain: rain ?? this.rain,
+        snow: snow ?? this.snow,
         pop: pop ?? this.pop,
       );
 
@@ -296,6 +304,8 @@ class ForecastDay extends Equatable {
               speed: json['speed'],
               deg: json['deg'],
               clouds: json['clouds'],
+              rain: json['rain'],
+              snow: json['snow'],
               pop: json['pop'],
             );
 
@@ -320,6 +330,8 @@ class ForecastDay extends Equatable {
         'speed': speed,
         'deg': deg,
         'clouds': clouds,
+        'rain': rain,
+        'snow': snow,
         'pop': pop,
       };
 
@@ -343,6 +355,8 @@ class ForecastDay extends Equatable {
         speed,
         deg,
         clouds,
+        rain,
+        snow,
         pop,
       ];
 
@@ -351,7 +365,7 @@ class ForecastDay extends Equatable {
       'ForecastDay{dt: $dt, sunrise: $sunrise, sunset: $sunset, temp: $temp, ' +
       'feelsLike: $feelsLike, pressure: $pressure, humidity: $humidity, ' +
       'weather: $weather, speed: $speed, deg: $deg, ' +
-      'clouds: $clouds, pop: $pop}';
+      'clouds: $clouds, rain: $rain, snow: $snow, pop: $pop}';
 }
 
 class ForecastDayTemp extends Equatable {

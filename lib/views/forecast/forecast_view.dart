@@ -1,19 +1,16 @@
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/utils/date_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
 import 'package:flutter_weather/views/lookup/lookup_view.dart';
-import 'package:flutter_weather/views/settings/settings_view.dart';
-import 'package:flutter_weather/widgets/app_day_night_switch.dart';
+import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
@@ -44,31 +41,29 @@ class ForecastPageView extends StatefulWidget {
 class _ForecastPageViewState extends State<ForecastPageView>
     with TickerProviderStateMixin {
   PageController _pageController;
-  Animation _refreshAnimation;
-  AnimationController _refreshAnimationController;
+  Animatable<Color> _pageBackground;
   ValueNotifier<int> _currentForecastNotifier;
+  double _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
 
-    int selectedForecastIndex =
-        context.read<AppBloc>().state.selectedForecastIndex;
+    AppState state = context.read<AppBloc>().state;
 
-    _pageController = PageController(initialPage: selectedForecastIndex);
-    _currentForecastNotifier = ValueNotifier<int>(selectedForecastIndex);
+    _pageController = PageController(initialPage: state.selectedForecastIndex)
+      ..addListener(() => setState(() {
+            _currentPage = _pageController.page;
+            _onPageChanged(_currentPage.toInt());
+          }));
 
-    _refreshAnimationController = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
-
-    _refreshAnimation =
-        Tween(begin: 0.0, end: pi + pi).animate(_refreshAnimationController);
+    _pageBackground = buildForecastColorSequence(state.forecasts);
+    _currentForecastNotifier = ValueNotifier<int>(state.selectedForecastIndex);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
-    _refreshAnimationController.dispose();
     super.dispose();
   }
 
@@ -80,19 +75,10 @@ class _ForecastPageViewState extends State<ForecastPageView>
         extendBody: true,
         body: BlocListener<AppBloc, AppState>(
           listener: _blocListener,
-          child: AppUiOverlayStyle(
-            bloc: context.watch<AppBloc>(),
-            child: BlocBuilder<AppBloc, AppState>(
-              builder: (
-                BuildContext context,
-                AppState state,
-              ) =>
-                  WillPopScope(
-                onWillPop: () => _willPopCallback(state),
-                child: SafeArea(
-                  child: _buildBody(state),
-                ),
-              ),
+          child: BlocBuilder<AppBloc, AppState>(
+            builder: (BuildContext context, AppState state) => WillPopScope(
+              onWillPop: () => _willPopCallback(state),
+              child: _buildBody(state),
             ),
           ),
         ),
@@ -108,12 +94,6 @@ class _ForecastPageViewState extends State<ForecastPageView>
     BuildContext context,
     AppState state,
   ) {
-    if (state.refreshStatus == RefreshStatus.REFRESHING) {
-      _refreshAnimationController
-        ..reset()
-        ..forward();
-    }
-
     if (state.crudStatus != null) {
       AppLocalizations i18n = AppLocalizations.of(context);
 
@@ -140,7 +120,12 @@ class _ForecastPageViewState extends State<ForecastPageView>
       context.read<AppBloc>().add(ClearCRUDStatus());
     }
 
-    _pageController.jumpToPage(state.selectedForecastIndex);
+    if (_pageController.hasClients &&
+        (_currentPage != state.selectedForecastIndex)) {
+      _pageController.jumpToPage(state.selectedForecastIndex);
+    }
+
+    _pageBackground = buildForecastColorSequence(state.forecasts);
     _currentForecastNotifier.value = state.selectedForecastIndex;
   }
 
@@ -153,12 +138,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       } else {
         // Go back to the first forecast
-        _pageController.animateToPage(
-          0,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.ease,
-        );
-
+        _pageController.jumpToPage(0);
         context.read<AppBloc>().add(SelectedForecastIndex(0));
       }
     });
@@ -169,45 +149,96 @@ class _ForecastPageViewState extends State<ForecastPageView>
   Widget _buildBody(
     AppState state,
   ) =>
+      state.colorTheme
+          ? _buildForecastColorContent(state)
+          : _buildLightDarkContent(state);
+
+  Widget _buildContent(
+    AppState state,
+  ) =>
       Column(
         children: <Widget>[
-          _buildOptions(state),
+          ForecastOptions(),
           Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (int page) => _onPageChanged(page, state),
-              itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
-              itemBuilder: (
-                BuildContext context,
-                int position,
-              ) {
-                if (position == state.forecasts.length) {
-                  return null;
-                }
-
-                if (_canRefresh(state)) {
-                  return RefreshIndicator(
-                    onRefresh: () => _pullRefresh(state),
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: ForecastDisplay(
-                        bloc: context.read<AppBloc>(),
-                        forecast: state.forecasts[position],
-                      ),
-                    ),
-                  );
-                }
-
-                return ForecastDisplay(
-                  bloc: context.read<AppBloc>(),
-                  forecast: state.forecasts[position],
-                );
-              },
-            ),
+            child: state.forecasts.isEmpty
+                ? AppNoneFound(text: AppLocalizations.of(context).noForecasts)
+                : PageView.builder(
+                    controller: _pageController,
+                    itemCount: state.forecasts.length,
+                    itemBuilder: (BuildContext context, int position) =>
+                        _buildForecastItem(context, position, state),
+                  ),
           ),
           _buildCircleIndicator(state),
         ],
       );
+
+  Widget _buildForecastColorContent(
+    AppState state,
+  ) =>
+      AnimatedBuilder(
+        animation: _pageController,
+        builder: (BuildContext context, Widget child) {
+          final double _forecastColorValue = _pageController.hasClients &&
+                  (state.forecasts != null) &&
+                  state.forecasts.isNotEmpty
+              ? (_currentPage / state.forecasts.length)
+              : 0.0;
+
+          Color _forecastColor = _pageBackground.evaluate(
+            AlwaysStoppedAnimation(_forecastColorValue),
+          );
+
+          return AppUiOverlayStyle(
+            bloc: context.watch<AppBloc>(),
+            systemNavigationBarColor: _forecastColor,
+            child: DecoratedBox(
+              decoration: BoxDecoration(color: _forecastColor),
+              child: SafeArea(
+                child: _buildContent(state),
+              ),
+            ),
+          );
+        },
+      );
+
+  _buildLightDarkContent(
+    AppState state,
+  ) =>
+      AppUiOverlayStyle(
+        bloc: context.read<AppBloc>(),
+        child: SafeArea(
+          child: _buildContent(state),
+        ),
+      );
+
+  _buildForecastItem(
+    BuildContext context,
+    int position,
+    AppState state,
+  ) {
+    if (position == state.forecasts.length) {
+      return null;
+    }
+
+    if (canRefresh(state)) {
+      return RefreshIndicator(
+        onRefresh: () => _pullRefresh(state),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ForecastDisplay(
+            bloc: context.read<AppBloc>(),
+            forecast: state.forecasts[position],
+          ),
+        ),
+      );
+    }
+
+    return ForecastDisplay(
+      bloc: context.read<AppBloc>(),
+      forecast: state.forecasts[position],
+    );
+  }
 
   _buildCircleIndicator(
     AppState state,
@@ -215,146 +246,31 @@ class _ForecastPageViewState extends State<ForecastPageView>
       Padding(
         padding: const EdgeInsets.only(bottom: 20.0),
         child: CirclePageIndicator(
-          dotColor: AppTheme.getSecondaryColor(state.themeMode),
-          selectedDotColor: Colors.deepPurple[400],
+          dotColor: AppTheme.getHintColor(
+            state.themeMode,
+            colorTheme: state.colorTheme,
+          ),
+          selectedDotColor:
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 10.0,
           itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
-          onPageSelected: (int page) => _onPageChanged(page, state),
-        ),
-      );
-
-  Widget _buildOptions(
-    AppState state,
-  ) =>
-      Container(
-        padding: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
-          top: 20.0,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            _buildEditButton(state),
-            _buildRefreshButton(state),
-            Expanded(child: Container()),
-            AppDayNightSwitch(bloc: context.read<AppBloc>()),
-            _buildSettingsButton(),
-          ],
-        ),
-      );
-
-  Widget _buildEditButton(
-    AppState state,
-  ) =>
-      (state.forecasts?.length == 0)
-          ? Container()
-          : Tooltip(
-              message: AppLocalizations.of(context).editLocation,
-              child: Material(
-                type: MaterialType.transparency,
-                child: Container(
-                  height: 40.0,
-                  width: 40.0,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(40.0),
-                    child: Icon(Icons.edit),
-                    onTap: _tapEdit,
-                  ),
-                ),
-              ),
-            );
-
-  Widget _buildRefreshButton(
-    AppState state,
-  ) =>
-      (!_canRefresh(state) || state.forecasts?.length == 0)
-          ? Container()
-          : Tooltip(
-              message: AppLocalizations.of(context).refreshForecast,
-              child: Material(
-                type: MaterialType.transparency,
-                child: Container(
-                  height: 40.0,
-                  width: 40.0,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(40.0),
-                    child: AnimatedBuilder(
-                      animation: _refreshAnimationController,
-                      builder: (BuildContext context, Widget child) =>
-                          Transform.rotate(
-                        angle: _refreshAnimation.value,
-                        child: child,
-                      ),
-                      child: Icon(Icons.refresh),
-                    ),
-                    onTap: () => _tapRefresh(state),
-                  ),
-                ),
-              ),
-            );
-
-  Widget _buildSettingsButton() => Container(
-        padding: EdgeInsets.only(left: 10.0),
-        child: Tooltip(
-          message: AppLocalizations.of(context).settings,
-          child: Material(
-            type: MaterialType.transparency,
-            child: Container(
-              height: 40.0,
-              width: 40.0,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(40.0),
-                child: Icon(Icons.settings),
-                onTap: _tapSettings,
-              ),
-            ),
-          ),
+          onPageSelected: _onPageChanged,
         ),
       );
 
   void _onPageChanged(
     int page,
-    AppState state,
   ) =>
-      setState(() {
-        context.read<AppBloc>().add(SelectedForecastIndex(page));
-
-        if (_canRefresh(state)) {
-          _tapRefresh(state);
-        }
-      });
-
-  bool _canRefresh(
-    AppState state,
-  ) {
-    if (state.forecasts.isEmpty) {
-      return false;
-    }
-
-    Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
-    return (selectedForecast == null) ||
-        (selectedForecast.lastUpdated == null) ||
-        selectedForecast.lastUpdated
-            .add(Duration(minutes: EnvConfig.REFRESH_TIMEOUT_MINS))
-            .isBefore(getNow());
-  }
+      context.read<AppBloc>().add(SelectedForecastIndex(page));
 
   Future<void> _pullRefresh(
     AppState state,
   ) async =>
-      _tapRefresh(state);
-
-  void _tapEdit() => Navigator.push(context, SettingsView.route());
-  void _tapRefresh(
-    AppState state,
-  ) =>
       context.read<AppBloc>().add(RefreshForecast(
             state.forecasts[state.selectedForecastIndex],
             context.read<AppBloc>().state.temperatureUnit,
           ));
 
-  void _tapSettings() => Navigator.push(context, SettingsView.route());
   void _tapAddLocation() => Navigator.push(context, LookupView.route());
 }

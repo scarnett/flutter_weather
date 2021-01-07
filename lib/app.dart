@@ -49,7 +49,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
           ) =>
               MaterialApp(
             title: AppLocalizations.appTitle,
-            theme: appLightThemeData,
+            theme: state.colorTheme ? appColorThemeData : appLightThemeData,
             darkTheme: appDarkThemeData,
             themeMode: state.themeMode,
             debugShowCheckedModeBanner: AppConfig.isDebug(context),

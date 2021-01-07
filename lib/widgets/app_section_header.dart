@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/theme.dart';
 
 class AppSectionHeader extends StatefulWidget {
   final AppBloc bloc;
@@ -22,30 +23,33 @@ class _AppSectionHeaderState extends State<AppSectionHeader> {
   @override
   Widget build(
     BuildContext context,
-  ) {
-    bool _isDark = (widget.bloc.state.themeMode == ThemeMode.dark);
-
-    return Container(
-      decoration: BoxDecoration(
-        color: _isDark ? Colors.black.withOpacity(0.3) : Colors.grey[100],
-        border: Border(
-          bottom: BorderSide(
-            color: _isDark ? Colors.black : Colors.grey[300],
-            width: widget.borderBottom ? 1.0 : 0.0,
-          ),
-          top: BorderSide(
-            color: _isDark ? Colors.black : Colors.grey[300],
-            width: widget.borderTop ? 1.0 : 0.0,
+  ) =>
+      Container(
+        decoration: BoxDecoration(
+          color: AppTheme.getSectionColor(widget.bloc.state.themeMode),
+          border: Border(
+            bottom: BorderSide(
+              color: AppTheme.getBorderColor(
+                widget.bloc.state.themeMode,
+                colorTheme: widget.bloc.state.colorTheme,
+              ),
+              width: widget.borderBottom ? 1.0 : 0.0,
+            ),
+            top: BorderSide(
+              color: AppTheme.getBorderColor(
+                widget.bloc.state.themeMode,
+                colorTheme: widget.bloc.state.colorTheme,
+              ),
+              width: widget.borderTop ? 1.0 : 0.0,
+            ),
           ),
         ),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15.0,
-        vertical: 10.0,
-      ),
-      child: _buildText(),
-    );
-  }
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15.0,
+          vertical: 10.0,
+        ),
+        child: _buildText(),
+      );
 
   Widget _buildText() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

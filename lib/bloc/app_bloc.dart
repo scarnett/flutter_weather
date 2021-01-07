@@ -25,6 +25,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapToggleThemeModeToStates(event);
     } else if (event is SetThemeMode) {
       yield _mapSetThemeModeToStates(event);
+    } else if (event is ToggleColorTheme) {
+      yield _mapToggleColorThemeToStates(event);
+    } else if (event is SetColorTheme) {
+      yield _mapSetColorThemeToStates(event);
     } else if (event is SetTemperatureUnit) {
       yield _mapSetTemperatureUnitToStates(event);
     } else if (event is SelectedForecastIndex) {
@@ -45,6 +49,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         themeMode: (state.themeMode == ThemeMode.dark)
             ? ThemeMode.light
             : ThemeMode.dark,
+        colorTheme: false,
       );
 
   AppState _mapSetThemeModeToStates(
@@ -52,6 +57,21 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) =>
       state.copyWith(
         themeMode: event.themeMode,
+        colorTheme: false,
+      );
+
+  AppState _mapToggleColorThemeToStates(
+    ToggleColorTheme event,
+  ) =>
+      state.copyWith(
+        colorTheme: !state.colorTheme,
+      );
+
+  AppState _mapSetColorThemeToStates(
+    SetColorTheme event,
+  ) =>
+      state.copyWith(
+        colorTheme: event.colorTheme,
       );
 
   AppState _mapSetTemperatureUnitToStates(
@@ -141,6 +161,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) =>
       AppState(
         themeMode: getThemeMode(json['themeMode']),
+        colorTheme: json['colorTheme'],
         temperatureUnit: getTemperatureUnit(json['temperatureUnit']),
         forecasts: Forecast.fromJsonList(json['forecasts']),
         selectedForecastIndex: json['selectedForecastIndex'],
@@ -152,6 +173,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) =>
       {
         'themeMode': state.themeMode.toString(),
+        'colorTheme': state.colorTheme,
         'temperatureUnit': state.temperatureUnit.toString(),
         'forecasts': Forecast.toJsonList(state.forecasts),
         'selectedForecastIndex': state.selectedForecastIndex,

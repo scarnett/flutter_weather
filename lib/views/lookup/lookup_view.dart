@@ -53,6 +53,10 @@ class _LookupPageViewState extends State<LookupPageView> {
           onWillPop: () => _willPopCallback(state),
           child: AppUiOverlayStyle(
             bloc: context.watch<AppBloc>(),
+            systemNavigationBarIconBrightness:
+                context.watch<AppBloc>().state.colorTheme
+                    ? Brightness.dark
+                    : null,
             child: Scaffold(
               extendBody: true,
               appBar: AppBar(

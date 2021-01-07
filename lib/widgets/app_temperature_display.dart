@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 
-class TemperatureDisplay extends StatefulWidget {
+class AppTemperatureDisplay extends StatefulWidget {
   final String temperature;
   final TextStyle style;
   final TemperatureUnit unit;
   final num unitSizeFactor;
 
-  TemperatureDisplay({
+  AppTemperatureDisplay({
     @required this.temperature,
     this.style,
     this.unit,
@@ -17,10 +17,10 @@ class TemperatureDisplay extends StatefulWidget {
   });
 
   @override
-  _TemperatureDisplayState createState() => _TemperatureDisplayState();
+  _AppTemperatureDisplayState createState() => _AppTemperatureDisplayState();
 }
 
-class _TemperatureDisplayState extends State<TemperatureDisplay> {
+class _AppTemperatureDisplayState extends State<AppTemperatureDisplay> {
   @override
   Widget build(
     BuildContext context,

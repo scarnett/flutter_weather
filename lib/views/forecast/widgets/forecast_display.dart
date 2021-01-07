@@ -6,7 +6,7 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
-import 'package:flutter_weather/views/forecast/widgets/temperature_display.dart';
+import 'package:flutter_weather/widgets/app_temperature_display.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class ForecastDisplay extends StatefulWidget {
@@ -33,13 +33,14 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     return Align(
       alignment: Alignment.topCenter,
       child: Padding(
-        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 30.0),
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40.0),
         child: Column(
           children: <Widget>[
             _buildLocation(),
             _buildCurrentTemperature(currentDay),
             _buildCondition(currentDay),
             _buildCurrentHiLow(currentDay),
+            _buildForecastDetails(currentDay),
             _buildDays(days.getRange(1, 4).toList()), // Three day forecast
             _buildLastUpdated(),
           ],
@@ -49,7 +50,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLocation() => Container(
-        padding: const EdgeInsets.only(bottom: 30.0),
+        padding: const EdgeInsets.only(bottom: 20.0),
         child: Column(
           children: <Widget>[
             Text(
@@ -71,7 +72,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
 
     return Container(
-      padding: const EdgeInsets.only(bottom: 30.0),
+      padding: const EdgeInsets.only(bottom: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -79,14 +80,14 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TemperatureDisplay(
+              AppTemperatureDisplay(
                 temperature:
                     getTemperature(currentDay.temp.day, temperatureUnit)
                         .toString(),
                 style: Theme.of(context).textTheme.headline1,
                 unit: temperatureUnit,
               ),
-              TemperatureDisplay(
+              AppTemperatureDisplay(
                 temperature: AppLocalizations.of(context).getFeelsLike(
                     getTemperature(currentDay.feelsLike.day, temperatureUnit)
                         .toString()),
@@ -98,7 +99,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           ),
           BoxedIcon(
             getForecastIconData(currentWeater.icon),
-            size: 70.0,
+            size: 80.0,
           ),
         ],
       ),
@@ -109,10 +110,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     ForecastDay currentDay,
   ) =>
       Container(
-        padding: const EdgeInsets.only(bottom: 30.0),
+        padding: const EdgeInsets.only(bottom: 20.0),
         child: Text(
           currentDay.weather.first.description.toUpperCase(),
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headline4.copyWith(
+                fontWeight: FontWeight.w300,
+              ),
         ),
       );
 
@@ -123,14 +126,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
     return Container(
       padding: const EdgeInsets.only(bottom: 20.0),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: AppTheme.getSecondaryColor(widget.bloc.state.themeMode),
-            width: 1.0,
-          ),
-        ),
-      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,8 +135,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             decoration: BoxDecoration(
               border: Border(
                 right: BorderSide(
-                  color:
-                      AppTheme.getSecondaryColor(widget.bloc.state.themeMode),
+                  color: AppTheme.getBorderColor(
+                    widget.bloc.state.themeMode,
+                    colorTheme: widget.bloc.state.colorTheme,
+                  ),
                   width: 1.0,
                 ),
               ),
@@ -155,7 +152,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
-                TemperatureDisplay(
+                AppTemperatureDisplay(
                   temperature:
                       getTemperature(currentDay.temp.max, temperatureUnit)
                           .toString(),
@@ -179,7 +176,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
-                TemperatureDisplay(
+                AppTemperatureDisplay(
                   temperature:
                       getTemperature(currentDay.temp.min, temperatureUnit)
                           .toString(),
@@ -194,6 +191,134 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       ),
     );
   }
+
+  Widget _buildForecastDetails(
+    ForecastDay currentDay,
+  ) =>
+      Container(
+        padding: const EdgeInsets.only(bottom: 20.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(right: 20.0),
+              child: Row(
+                children: [
+                  Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          AppLocalizations.of(context).wind,
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                                fontSize: 12.0,
+                              ),
+                        ),
+                      ),
+                      Text(
+                        currentDay.speed.toString(),
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                              fontSize: 20.0,
+                            ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                    width: 30.0,
+                    child: RotationTransition(
+                      turns: AlwaysStoppedAnimation(currentDay.deg / 360.0),
+                      child: Icon(
+                        Icons.navigation,
+                        color: AppTheme.getHintColor(
+                          widget.bloc.state.themeMode,
+                          colorTheme: widget.bloc.state.colorTheme,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(right: 20.0),
+              child: Row(
+                children: [
+                  Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          AppLocalizations.of(context).pressure,
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                                fontSize: 12.0,
+                              ),
+                        ),
+                      ),
+                      Text(
+                        currentDay.pressure.toString(),
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                              fontSize: 20.0,
+                            ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                    width: 30.0,
+                    child: BoxedIcon(
+                      WeatherIcons.barometer,
+                      size: 24.0,
+                      color: AppTheme.getHintColor(
+                        widget.bloc.state.themeMode,
+                        colorTheme: widget.bloc.state.colorTheme,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                children: [
+                  Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          AppLocalizations.of(context).humidity,
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                                fontSize: 12.0,
+                              ),
+                        ),
+                      ),
+                      Text(
+                        currentDay.humidity.toString(),
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                              fontSize: 20.0,
+                            ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                    width: 30.0,
+                    child: BoxedIcon(
+                      WeatherIcons.humidity,
+                      size: 24.0,
+                      color: AppTheme.getHintColor(
+                        widget.bloc.state.themeMode,
+                        colorTheme: widget.bloc.state.colorTheme,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildDays(
     List<ForecastDay> days,
@@ -221,7 +346,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
-                    TemperatureDisplay(
+                    AppTemperatureDisplay(
                       temperature: getTemperature(day.temp.max, temperatureUnit)
                           .toString(),
                       style: Theme.of(context).textTheme.headline4,
@@ -233,8 +358,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               ),
               BoxedIcon(
                 getForecastIconData(day.weather.first.icon),
-                size: 30.0,
-                color: Theme.of(context).hintColor,
+                size: 24.0,
+                color: AppTheme.getHintColor(
+                  widget.bloc.state.themeMode,
+                  colorTheme: widget.bloc.state.colorTheme,
+                ),
               ),
             ],
           ),
@@ -245,12 +373,23 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     });
 
     return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: AppTheme.getBorderColor(
+              widget.bloc.state.themeMode,
+              colorTheme: widget.bloc.state.colorTheme,
+            ),
+            width: 1.0,
+          ),
+        ),
+      ),
       padding: const EdgeInsets.only(
         top: 20.0,
         bottom: 30.0,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: _days,
       ),
@@ -258,7 +397,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLastUpdated() {
-    final DateTime lastUpdated = widget.forecast.lastUpdated;
+    final DateTime lastUpdated = widget.forecast.lastUpdated.toLocal();
     if (lastUpdated == null) {
       return Container();
     }
@@ -267,10 +406,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
     if (lastUpdated.isToday()) {
       formattedLastUpdated = AppLocalizations.of(context)
-          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a'));
+          .getLastUpdatedAt(formatDateTime(lastUpdated, 'h:mm a'));
     } else {
       formattedLastUpdated = AppLocalizations.of(context).getLastUpdatedOn(
-          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a'));
+          formatDateTime(lastUpdated, 'EEE, MMM d, yyyy @ h:mm a'));
     }
 
     return Container(
