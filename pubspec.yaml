@@ -19,6 +19,7 @@ dependencies:
   http: '^0.12.2'
   hydrated_bloc: '^6.0.1'
   iso_countries: '^1.1.1'
+  package_info: '^0.4.3+2'
   page_view_indicators: '^1.4.0'
   select_dialog: '^1.2.1'
   uuid: '^2.2.2'

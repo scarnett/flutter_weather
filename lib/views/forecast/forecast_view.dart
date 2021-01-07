@@ -6,6 +6,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/views/forecast/bloc/forecast_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
@@ -27,7 +28,10 @@ class ForecastView extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      ForecastPageView();
+      BlocProvider<ForecastBloc>(
+        create: (BuildContext context) => ForecastBloc(),
+        child: ForecastPageView(),
+      );
 }
 
 class ForecastPageView extends StatefulWidget {
@@ -76,11 +80,9 @@ class _ForecastPageViewState extends State<ForecastPageView>
         extendBody: true,
         body: BlocListener<AppBloc, AppState>(
           listener: _blocListener,
-          child: BlocBuilder<AppBloc, AppState>(
-            builder: (BuildContext context, AppState state) => WillPopScope(
-              onWillPop: () => _willPopCallback(state),
-              child: _buildBody(state),
-            ),
+          child: WillPopScope(
+            onWillPop: () => _willPopCallback(context.watch<AppBloc>().state),
+            child: _buildBody(context.watch<AppBloc>().state),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -195,9 +197,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
             systemNavigationBarColor: _forecastColor,
             child: DecoratedBox(
               decoration: BoxDecoration(color: _forecastColor),
-              child: SafeArea(
-                child: _buildContent(state),
-              ),
+              child: SafeArea(child: _buildContent(state)),
             ),
           );
         },
@@ -207,10 +207,8 @@ class _ForecastPageViewState extends State<ForecastPageView>
     AppState state,
   ) =>
       AppUiOverlayStyle(
-        bloc: context.read<AppBloc>(),
-        child: SafeArea(
-          child: _buildContent(state),
-        ),
+        bloc: context.watch<AppBloc>(),
+        child: SafeArea(child: _buildContent(state)),
       );
 
   _buildForecastItem(

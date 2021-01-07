@@ -45,28 +45,22 @@ class _ForecastOptionsState extends State<ForecastOptions>
   ) =>
       BlocListener<AppBloc, AppState>(
         listener: _blocListener,
-        child: BlocBuilder<AppBloc, AppState>(
-          builder: (
-            BuildContext context,
-            AppState state,
-          ) =>
-              Container(
-            padding: const EdgeInsets.only(
-              left: 20.0,
-              right: 20.0,
-              top: 20.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                _buildEditButton(state),
-                _buildRefreshButton(state),
-                Expanded(child: Container()),
-                _buildColorThemeButton(state),
-                AppDayNightSwitch(bloc: context.watch<AppBloc>()),
-                _buildSettingsButton(),
-              ],
-            ),
+        child: Container(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 20.0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              _buildEditButton(),
+              _buildRefreshButton(),
+              Expanded(child: Container()),
+              _buildColorThemeButton(),
+              AppDayNightSwitch(bloc: context.watch<AppBloc>()),
+              _buildSettingsButton(),
+            ],
           ),
         ),
       );
@@ -82,13 +76,37 @@ class _ForecastOptionsState extends State<ForecastOptions>
     }
   }
 
-  Widget _buildEditButton(
-    AppState state,
-  ) =>
-      (state.forecasts?.length == 0)
-          ? Container()
-          : Tooltip(
-              message: AppLocalizations.of(context).editLocation,
+  Widget _buildEditButton() {
+    AppState state = context.watch<AppBloc>().state;
+    return (state.forecasts?.length == 0)
+        ? Container()
+        : Tooltip(
+            message: AppLocalizations.of(context).editLocation,
+            child: Material(
+              type: MaterialType.transparency,
+              child: Container(
+                height: 40.0,
+                width: 40.0,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(40.0),
+                  child: Icon(Icons.edit),
+                  onTap: _tapEdit,
+                ),
+              ),
+            ),
+          );
+  }
+
+  Widget _buildColorThemeButton() {
+    AppState state = context.watch<AppBloc>().state;
+    return (state.themeMode == ThemeMode.dark)
+        ? Container()
+        : Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Tooltip(
+              message: state.colorTheme
+                  ? AppLocalizations.of(context).colorThemeDisable
+                  : AppLocalizations.of(context).colorThemeEnable,
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
@@ -96,72 +114,48 @@ class _ForecastOptionsState extends State<ForecastOptions>
                   width: 40.0,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(40.0),
-                    child: Icon(Icons.edit),
-                    onTap: _tapEdit,
-                  ),
-                ),
-              ),
-            );
-
-  Widget _buildColorThemeButton(
-    AppState state,
-  ) =>
-      (state.themeMode == ThemeMode.dark)
-          ? Container()
-          : Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Tooltip(
-                message: state.colorTheme
-                    ? AppLocalizations.of(context).colorThemeDisable
-                    : AppLocalizations.of(context).colorThemeEnable,
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(40.0),
-                      child: Icon(
-                        Icons.brightness_7,
-                        color: state.colorTheme
-                            ? Colors.white
-                            : AppTheme.getHintColor(state.themeMode),
-                      ),
-                      onTap: _tapToggleColorTheme,
+                    child: Icon(
+                      Icons.brightness_7,
+                      color: state.colorTheme
+                          ? Colors.white
+                          : AppTheme.getHintColor(state.themeMode),
                     ),
+                    onTap: _tapToggleColorTheme,
                   ),
                 ),
               ),
-            );
+            ),
+          );
+  }
 
-  Widget _buildRefreshButton(
-    AppState state,
-  ) =>
-      (!canRefresh(state) || state.forecasts?.length == 0)
-          ? Container()
-          : Tooltip(
-              message: AppLocalizations.of(context).refreshForecast,
-              child: Material(
-                type: MaterialType.transparency,
-                child: Container(
-                  height: 40.0,
-                  width: 40.0,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(40.0),
-                    child: AnimatedBuilder(
-                      animation: _refreshAnimationController,
-                      builder: (BuildContext context, Widget child) =>
-                          Transform.rotate(
-                        angle: _refreshAnimation.value,
-                        child: child,
-                      ),
-                      child: Icon(Icons.refresh),
+  Widget _buildRefreshButton() {
+    AppState state = context.watch<AppBloc>().state;
+    return (!canRefresh(state) || state.forecasts?.length == 0)
+        ? Container()
+        : Tooltip(
+            message: AppLocalizations.of(context).refreshForecast,
+            child: Material(
+              type: MaterialType.transparency,
+              child: Container(
+                height: 40.0,
+                width: 40.0,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(40.0),
+                  child: AnimatedBuilder(
+                    animation: _refreshAnimationController,
+                    builder: (BuildContext context, Widget child) =>
+                        Transform.rotate(
+                      angle: _refreshAnimation.value,
+                      child: child,
                     ),
-                    onTap: () => _tapRefresh(state),
+                    child: Icon(Icons.refresh),
                   ),
+                  onTap: () => _tapRefresh(state),
                 ),
               ),
-            );
+            ),
+          );
+  }
 
   Widget _buildSettingsButton() => Container(
         padding: EdgeInsets.only(left: 10.0),
