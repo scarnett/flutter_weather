@@ -1,8 +1,6 @@
 import 'dart:convert';
-
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/app_events.dart';
-import 'package:flutter_weather/bloc/app_state.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -11,6 +9,10 @@ import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:meta/meta.dart';
+
+part 'app_events.dart';
+part 'app_state.dart';
 
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
   AppBloc() : super(AppState.initial());

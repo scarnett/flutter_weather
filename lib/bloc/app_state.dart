@@ -1,9 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_weather/model.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
-import 'package:meta/meta.dart';
+part of 'app_bloc.dart';
 
 @immutable
 class AppState extends Equatable {

@@ -9,7 +9,7 @@ import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
-part 'lookup_event.dart';
+part 'lookup_events.dart';
 part 'lookup_state.dart';
 
 class LookupBloc extends Bloc<LookupEvent, LookupState> {

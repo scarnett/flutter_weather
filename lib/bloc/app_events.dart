@@ -1,7 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_weather/model.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
+part of 'app_bloc.dart';
 
 abstract class AppEvent extends Equatable {
   const AppEvent();
