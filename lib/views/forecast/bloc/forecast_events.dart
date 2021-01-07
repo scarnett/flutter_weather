@@ -8,14 +8,14 @@ abstract class ForecastEvent extends Equatable {
 }
 
 class SetActiveForecastId extends ForecastEvent {
-  final String activeForecastId;
+  final String forecastId;
 
   const SetActiveForecastId(
-    this.activeForecastId,
+    this.forecastId,
   );
 
   @override
-  List<Object> get props => [activeForecastId];
+  List<Object> get props => [forecastId];
 }
 
 class ClearActiveForecastId extends ForecastEvent {

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
-part 'forecast_event.dart';
+part 'forecast_events.dart';
 part 'forecast_state.dart';
 
 class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
@@ -25,7 +25,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     SetActiveForecastId event,
   ) =>
       state.copyWith(
-        activeForecastId: event.activeForecastId,
+        activeForecastId: event.forecastId,
       );
 
   ForecastState _mapClearActiveForecastIdToState(

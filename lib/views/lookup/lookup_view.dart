@@ -93,6 +93,7 @@ class _LookupPageViewState extends State<LookupPageView> {
           ForecastDisplay(
             bloc: context.read<AppBloc>(),
             forecast: lookupForecast,
+            showThreeDayForecast: false,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 30.0),

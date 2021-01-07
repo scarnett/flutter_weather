@@ -12,10 +12,12 @@ import 'package:weather_icons/weather_icons.dart';
 class ForecastDisplay extends StatefulWidget {
   final AppBloc bloc;
   final Forecast forecast;
+  final bool showThreeDayForecast;
 
   ForecastDisplay({
     @required this.bloc,
     @required this.forecast,
+    this.showThreeDayForecast: true,
   });
 
   @override
@@ -324,6 +326,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget _buildDays(
     List<ForecastDay> days,
   ) {
+    if (!widget.showThreeDayForecast) {
+      return Container();
+    }
+
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
 
     int count = 0;
@@ -398,10 +404,16 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLastUpdated() {
-    final DateTime lastUpdated = widget.forecast.lastUpdated.toLocal();
+    if (widget.forecast == null) {
+      return Container();
+    }
+
+    DateTime lastUpdated = widget.forecast.lastUpdated;
     if (lastUpdated == null) {
       return Container();
     }
+
+    lastUpdated = lastUpdated.toLocal();
 
     String formattedLastUpdated;
 

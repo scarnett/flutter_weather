@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/views/forecast/bloc/bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_view.dart';
@@ -78,7 +79,7 @@ class _ForecastOptionsState extends State<ForecastOptions>
 
   Widget _buildEditButton() {
     AppState state = context.watch<AppBloc>().state;
-    return (state.forecasts?.length == 0)
+    return (state.forecasts == null) || state.forecasts.isEmpty
         ? Container()
         : Tooltip(
             message: AppLocalizations.of(context).editLocation,
@@ -90,7 +91,8 @@ class _ForecastOptionsState extends State<ForecastOptions>
                 child: InkWell(
                   borderRadius: BorderRadius.circular(40.0),
                   child: Icon(Icons.edit),
-                  onTap: _tapEdit,
+                  onTap: () =>
+                      _tapEdit(state.forecasts[state.selectedForecastIndex].id),
                 ),
               ),
             ),
@@ -99,7 +101,9 @@ class _ForecastOptionsState extends State<ForecastOptions>
 
   Widget _buildColorThemeButton() {
     AppState state = context.watch<AppBloc>().state;
-    return (state.themeMode == ThemeMode.dark)
+    return (state.themeMode == ThemeMode.dark) ||
+            (state.forecasts == null) ||
+            state.forecasts.isEmpty
         ? Container()
         : Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -130,7 +134,9 @@ class _ForecastOptionsState extends State<ForecastOptions>
 
   Widget _buildRefreshButton() {
     AppState state = context.watch<AppBloc>().state;
-    return (!canRefresh(state) || state.forecasts?.length == 0)
+    return (!canRefresh(state) ||
+            (state.forecasts == null) ||
+            state.forecasts.isEmpty)
         ? Container()
         : Tooltip(
             message: AppLocalizations.of(context).refreshForecast,
@@ -176,7 +182,10 @@ class _ForecastOptionsState extends State<ForecastOptions>
         ),
       );
 
-  void _tapEdit() => Navigator.push(context, SettingsView.route());
+  void _tapEdit(
+    String forecastId,
+  ) =>
+      context.read<ForecastBloc>().add(SetActiveForecastId(forecastId));
 
   void _tapRefresh(
     AppState state,
