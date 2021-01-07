@@ -11,6 +11,7 @@ import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
 import 'package:flutter_weather/views/lookup/lookup_view.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
+import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
@@ -43,7 +44,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
   PageController _pageController;
   Animatable<Color> _pageBackground;
   ValueNotifier<int> _currentForecastNotifier;
-  double _currentPage = 0;
+  double _currentPage = 0.0;
 
   @override
   void initState() {
@@ -52,12 +53,12 @@ class _ForecastPageViewState extends State<ForecastPageView>
     AppState state = context.read<AppBloc>().state;
 
     _pageController = PageController(initialPage: state.selectedForecastIndex)
-      ..addListener(() => setState(() {
-            _currentPage = _pageController.page;
-            _onPageChanged(_currentPage.toInt());
-          }));
+      ..addListener(() => _currentPage = _pageController.page);
 
-    _pageBackground = buildForecastColorSequence(state.forecasts);
+    if (state.colorTheme) {
+      _pageBackground = buildForecastColorSequence(state.forecasts);
+    }
+
     _currentForecastNotifier = ValueNotifier<int>(state.selectedForecastIndex);
   }
 
@@ -120,28 +121,26 @@ class _ForecastPageViewState extends State<ForecastPageView>
       context.read<AppBloc>().add(ClearCRUDStatus());
     }
 
-    if (_pageController.hasClients &&
-        (_currentPage != state.selectedForecastIndex)) {
-      _pageController.jumpToPage(state.selectedForecastIndex);
+    if (_currentForecastNotifier.value != state.selectedForecastIndex) {
+      _currentForecastNotifier.value = state.selectedForecastIndex;
     }
 
-    _pageBackground = buildForecastColorSequence(state.forecasts);
-    _currentForecastNotifier.value = state.selectedForecastIndex;
+    if (state.colorTheme) {
+      _pageBackground = buildForecastColorSequence(state.forecasts);
+    }
   }
 
   Future<bool> _willPopCallback(
     AppState state,
   ) async {
-    setState(() {
-      if (state.selectedForecastIndex == 0) {
-        // Exits the app
-        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      } else {
-        // Go back to the first forecast
-        _pageController.jumpToPage(0);
-        context.read<AppBloc>().add(SelectedForecastIndex(0));
-      }
-    });
+    if (state.selectedForecastIndex == 0) {
+      // Exits the app
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    } else {
+      // Go back to the first forecast
+      _pageController.jumpToPage(0);
+      context.read<AppBloc>().add(SelectedForecastIndex(0));
+    }
 
     return Future.value(false);
   }
@@ -164,9 +163,11 @@ class _ForecastPageViewState extends State<ForecastPageView>
                 ? AppNoneFound(text: AppLocalizations.of(context).noForecasts)
                 : PageView.builder(
                     controller: _pageController,
+                    physics: AppPageViewScrollPhysics(),
                     itemCount: state.forecasts.length,
                     itemBuilder: (BuildContext context, int position) =>
                         _buildForecastItem(context, position, state),
+                    onPageChanged: _onPageChanged,
                   ),
           ),
           _buildCircleIndicator(state),
@@ -269,7 +270,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
   ) async =>
       context.read<AppBloc>().add(RefreshForecast(
             state.forecasts[state.selectedForecastIndex],
-            context.read<AppBloc>().state.temperatureUnit,
+            state.temperatureUnit,
           ));
 
   void _tapAddLocation() => Navigator.push(context, LookupView.route());

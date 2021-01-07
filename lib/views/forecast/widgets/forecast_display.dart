@@ -212,20 +212,20 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         child: Text(
                           AppLocalizations.of(context).wind,
                           style: Theme.of(context).textTheme.headline5.copyWith(
-                                fontSize: 12.0,
+                                fontSize: 10.0,
                               ),
                         ),
                       ),
                       Text(
                         currentDay.speed.toString(),
                         style: Theme.of(context).textTheme.headline4.copyWith(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                             ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 40.0,
+                    height: 30.0,
                     width: 30.0,
                     child: RotationTransition(
                       turns: AlwaysStoppedAnimation(currentDay.deg / 360.0),
@@ -235,6 +235,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                           widget.bloc.state.themeMode,
                           colorTheme: widget.bloc.state.colorTheme,
                         ),
+                        size: 20.0,
                       ),
                     ),
                   ),
@@ -252,24 +253,24 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         child: Text(
                           AppLocalizations.of(context).pressure,
                           style: Theme.of(context).textTheme.headline5.copyWith(
-                                fontSize: 12.0,
+                                fontSize: 10.0,
                               ),
                         ),
                       ),
                       Text(
                         currentDay.pressure.toString(),
                         style: Theme.of(context).textTheme.headline4.copyWith(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                             ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 40.0,
+                    height: 30.0,
                     width: 30.0,
                     child: BoxedIcon(
                       WeatherIcons.barometer,
-                      size: 24.0,
+                      size: 20.0,
                       color: AppTheme.getHintColor(
                         widget.bloc.state.themeMode,
                         colorTheme: widget.bloc.state.colorTheme,
@@ -289,24 +290,24 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         child: Text(
                           AppLocalizations.of(context).humidity,
                           style: Theme.of(context).textTheme.headline5.copyWith(
-                                fontSize: 12.0,
+                                fontSize: 10.0,
                               ),
                         ),
                       ),
                       Text(
                         currentDay.humidity.toString(),
                         style: Theme.of(context).textTheme.headline4.copyWith(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                             ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 40.0,
+                    height: 30.0,
                     width: 30.0,
                     child: BoxedIcon(
                       WeatherIcons.humidity,
-                      size: 24.0,
+                      size: 20.0,
                       color: AppTheme.getHintColor(
                         widget.bloc.state.themeMode,
                         colorTheme: widget.bloc.state.colorTheme,
