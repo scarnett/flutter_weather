@@ -36,16 +36,19 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       alignment: Alignment.topCenter,
       child: Padding(
         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40.0),
-        child: Column(
-          children: <Widget>[
-            _buildLocation(),
-            _buildCurrentTemperature(currentDay),
-            _buildCondition(currentDay),
-            _buildCurrentHiLow(currentDay),
-            _buildForecastDetails(currentDay),
-            _buildDays(days.getRange(1, 4).toList()), // Three day forecast
-            _buildLastUpdated(),
-          ],
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            children: <Widget>[
+              _buildLocation(),
+              _buildCurrentTemperature(currentDay),
+              _buildCondition(currentDay),
+              _buildCurrentHiLow(currentDay),
+              _buildForecastDetails(currentDay),
+              _buildDays(days.getRange(1, 4).toList()), // Three day forecast
+              _buildLastUpdated(),
+            ],
+          ),
         ),
       ),
     );

@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
-import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_select_dialog.dart';
-import 'package:iso_countries/country.dart';
-import 'package:iso_countries/iso_countries.dart';
 
 class ForecastForm extends StatelessWidget {
+  final Forecast forecast;
   final String buttonText;
+  final Function(
+    BuildContext context,
+    FormBlocSuccess<String, String> state,
+  ) onSuccess;
+
+  final Function(
+    BuildContext context,
+    FormBlocFailure<String, String> state,
+  ) onFailure;
 
   const ForecastForm({
     Key key,
+    this.forecast,
     this.buttonText,
+    this.onSuccess,
+    this.onFailure,
   }) : super(key: key);
 
   @override
@@ -25,17 +34,36 @@ class ForecastForm extends StatelessWidget {
     BuildContext context,
   ) =>
       BlocProvider<ForecastFormBloc>(
-        create: (BuildContext context) => ForecastFormBloc(),
-        child: ForecastPageForm(buttonText: buttonText),
+        create: (BuildContext context) =>
+            ForecastFormBloc(initialData: forecast),
+        child: ForecastPageForm(
+          forecast: forecast,
+          buttonText: buttonText,
+          onSuccess: onSuccess,
+          onFailure: onFailure,
+        ),
       );
 }
 
 class ForecastPageForm extends StatefulWidget {
+  final Forecast forecast;
   final String buttonText;
+  final Function(
+    BuildContext context,
+    FormBlocSuccess<String, String> state,
+  ) onSuccess;
+
+  final Function(
+    BuildContext context,
+    FormBlocFailure<String, String> state,
+  ) onFailure;
 
   ForecastPageForm({
     Key key,
+    this.forecast,
     this.buttonText,
+    this.onSuccess,
+    this.onFailure,
   }) : super(key: key);
 
   @override
@@ -51,12 +79,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   ) =>
       FormBlocListener<ForecastFormBloc, String, String>(
         onSubmitting: _onSubmitting,
-        onSuccess: (
-          BuildContext context,
-          FormBlocSuccess<String, String> state,
-        ) =>
-            _onSuccess(
-                context, state, context.read<AppBloc>().state.temperatureUnit),
+        onSuccess: _onSuccess,
         onFailure: _onFailure,
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
@@ -88,8 +111,8 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                               AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       )
-                    : Icon(Icons.search),
-                onTap: _submitting ? null : _tapLookup,
+                    : null,
+                onTap: _submitting ? null : _tapSubmit,
               ),
             ],
           ),
@@ -107,41 +130,19 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   void _onSuccess(
     BuildContext context,
     FormBlocSuccess<String, String> state,
-    TemperatureUnit temperatureUnit,
-  ) async {
+  ) {
+    widget.onSuccess(context, state);
+
     setState(() {
       _submitting = false;
     });
-
-    FocusScope.of(context).unfocus();
-    Map<String, dynamic> json = state.toJson();
-    final Country country = (await IsoCountries.iso_countries)
-        .firstWhere((e) => e.name == json['country'], orElse: () => null);
-
-    if (country != null) {
-      context.read<LookupBloc>().add(LookupForecast(
-            json['postalCode'],
-            country.countryCode,
-            temperatureUnit,
-          ));
-    } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
-    }
   }
 
   void _onFailure(
     BuildContext context,
     FormBlocFailure<String, String> state,
-  ) {
-    setState(() {
-      _submitting = false;
-    });
+  ) =>
+      widget.onFailure(context, state);
 
-    FocusScope.of(context).unfocus();
-    Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
-  }
-
-  void _tapLookup() => context.read<ForecastFormBloc>().submit();
+  void _tapSubmit() => context.read<ForecastFormBloc>().submit();
 }

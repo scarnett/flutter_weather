@@ -47,7 +47,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        bloc: bloc,
+        themeMode: bloc.state.themeMode,
+        colorTheme: bloc.state.colorTheme,
         systemNavigationBarIconBrightness:
             bloc.state.colorTheme ? Brightness.dark : null,
         child: Scaffold(

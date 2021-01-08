@@ -6,7 +6,6 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/views/forecast/bloc/forecast_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
@@ -28,10 +27,7 @@ class ForecastView extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      BlocProvider<ForecastBloc>(
-        create: (BuildContext context) => ForecastBloc(),
-        child: ForecastPageView(),
-      );
+      ForecastPageView();
 }
 
 class ForecastPageView extends StatefulWidget {
@@ -81,7 +77,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
         body: BlocListener<AppBloc, AppState>(
           listener: _blocListener,
           child: WillPopScope(
-            onWillPop: () => _willPopCallback(context.watch<AppBloc>().state),
+            onWillPop: () => _willPopCallback(context.read<AppBloc>().state),
             child: _buildBody(context.watch<AppBloc>().state),
           ),
         ),
@@ -103,7 +99,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
       switch (state.crudStatus) {
         case CRUDStatus.CREATED:
           Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text(i18n.forecastCreated)));
+              .showSnackBar(SnackBar(content: Text(i18n.forecastAdded)));
           break;
 
         case CRUDStatus.UPDATED:
@@ -193,7 +189,8 @@ class _ForecastPageViewState extends State<ForecastPageView>
           );
 
           return AppUiOverlayStyle(
-            bloc: context.watch<AppBloc>(),
+            themeMode: state.themeMode,
+            colorTheme: state.colorTheme,
             systemNavigationBarColor: _forecastColor,
             child: DecoratedBox(
               decoration: BoxDecoration(color: _forecastColor),
@@ -207,7 +204,8 @@ class _ForecastPageViewState extends State<ForecastPageView>
     AppState state,
   ) =>
       AppUiOverlayStyle(
-        bloc: context.watch<AppBloc>(),
+        themeMode: state.themeMode,
+        colorTheme: state.colorTheme,
         child: SafeArea(child: _buildContent(state)),
       );
 

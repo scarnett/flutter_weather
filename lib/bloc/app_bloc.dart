@@ -37,10 +37,16 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapSelectedForecastIndexToStates(event);
     } else if (event is AddForecast) {
       yield* _mapAddForecastToStates(event);
+    } else if (event is UpdateForecast) {
+      yield* _mapUpdateForecastToStates(event);
     } else if (event is RefreshForecast) {
       yield* _mapRefreshForecastToStates(event);
     } else if (event is ClearCRUDStatus) {
       yield _mapClearCRUDStatusToStates(event);
+    } else if (event is SetActiveForecastId) {
+      yield _mapSetActiveForecastIdToState(event);
+    } else if (event is ClearActiveForecastId) {
+      yield _mapClearActiveForecastIdToState(event);
     }
   }
 
@@ -111,6 +117,32 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
   }
 
+  Stream<AppState> _mapUpdateForecastToStates(
+    UpdateForecast event,
+  ) async* {
+    yield state.copyWith(
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATING),
+    );
+
+    List<Forecast> forecasts =
+        ((state.forecasts == null) ? [] : List<Forecast>.from(state.forecasts));
+
+    Forecast _forecast = state.forecasts
+        .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
+
+    forecasts[state.selectedForecastIndex] = _forecast.copyWith(
+      postalCode: event.forecastData['postalCode'],
+      countryCode: event.forecastData['country'],
+      lastUpdated: getNow(),
+    );
+
+    yield state.copyWith(
+      activeForecastId: Nullable<String>(null),
+      forecasts: forecasts,
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATED),
+    );
+  }
+
   Stream<AppState> _mapRefreshForecastToStates(
     RefreshForecast event,
   ) async* {
@@ -156,6 +188,20 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     ClearCRUDStatus event,
   ) =>
       state.copyWith(crudStatus: Nullable<CRUDStatus>(null));
+
+  AppState _mapSetActiveForecastIdToState(
+    SetActiveForecastId event,
+  ) =>
+      state.copyWith(
+        activeForecastId: Nullable<String>(event.forecastId),
+      );
+
+  AppState _mapClearActiveForecastIdToState(
+    ClearActiveForecastId event,
+  ) =>
+      state.copyWith(
+        activeForecastId: Nullable<String>(null),
+      );
 
   @override
   AppState fromJson(

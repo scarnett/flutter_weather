@@ -65,6 +65,19 @@ class AddForecast extends AppEvent {
   List<Object> get props => [forecast];
 }
 
+class UpdateForecast extends AppEvent {
+  final String forecastId;
+  final Map<String, dynamic> forecastData;
+
+  const UpdateForecast(
+    this.forecastId,
+    this.forecastData,
+  );
+
+  @override
+  List<Object> get props => [forecastId, forecastData];
+}
+
 class RefreshForecast extends AppEvent {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
@@ -87,6 +100,24 @@ class SelectedForecastIndex extends AppEvent {
 
   @override
   List<Object> get props => [index];
+}
+
+class SetActiveForecastId extends AppEvent {
+  final String forecastId;
+
+  const SetActiveForecastId(
+    this.forecastId,
+  );
+
+  @override
+  List<Object> get props => [forecastId];
+}
+
+class ClearActiveForecastId extends AppEvent {
+  const ClearActiveForecastId();
+
+  @override
+  List<Object> get props => [];
 }
 
 class ClearCRUDStatus extends AppEvent {

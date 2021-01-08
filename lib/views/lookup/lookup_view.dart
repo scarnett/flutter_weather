@@ -11,6 +11,8 @@ import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:iso_countries/country.dart';
+import 'package:iso_countries/iso_countries.dart';
 import 'package:uuid/uuid.dart';
 
 class LookupView extends StatelessWidget {
@@ -52,7 +54,8 @@ class _LookupPageViewState extends State<LookupPageView> {
             WillPopScope(
           onWillPop: () => _willPopCallback(state),
           child: AppUiOverlayStyle(
-            bloc: context.watch<AppBloc>(),
+            themeMode: context.watch<AppBloc>().state.themeMode,
+            colorTheme: context.watch<AppBloc>().state.colorTheme,
             systemNavigationBarIconBrightness:
                 context.watch<AppBloc>().state.colorTheme
                     ? Brightness.dark
@@ -107,7 +110,11 @@ class _LookupPageViewState extends State<LookupPageView> {
       );
     }
 
-    return ForecastForm(buttonText: AppLocalizations.of(context).lookup);
+    return ForecastForm(
+      buttonText: AppLocalizations.of(context).lookup,
+      onSuccess: _onSuccess,
+      onFailure: _onFailure,
+    );
   }
 
   void _handleBack(
@@ -131,5 +138,35 @@ class _LookupPageViewState extends State<LookupPageView> {
 
     context.read<AppBloc>().add(AddForecast(forecast));
     Navigator.of(context).pop();
+  }
+
+  void _onSuccess(
+    BuildContext context,
+    FormBlocSuccess<String, String> state,
+  ) async {
+    FocusScope.of(context).unfocus();
+    Map<String, dynamic> json = state.toJson();
+    final Country country = (await IsoCountries.iso_countries)
+        .firstWhere((e) => e.name == json['country'], orElse: () => null);
+
+    if (country != null) {
+      context.read<LookupBloc>().add(LookupForecast(
+            json['postalCode'],
+            country.countryCode,
+            context.watch<AppBloc>().state.temperatureUnit,
+          ));
+    } else {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
+    }
+  }
+
+  void _onFailure(
+    BuildContext context,
+    FormBlocFailure<String, String> state,
+  ) {
+    FocusScope.of(context).unfocus();
+    Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
   }
 }

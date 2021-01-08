@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/views/forecast/bloc/bloc.dart';
+import 'package:flutter_weather/views/forecast/forecast_form_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_view.dart';
@@ -91,8 +91,7 @@ class _ForecastOptionsState extends State<ForecastOptions>
                 child: InkWell(
                   borderRadius: BorderRadius.circular(40.0),
                   child: Icon(Icons.edit),
-                  onTap: () =>
-                      _tapEdit(state.forecasts[state.selectedForecastIndex].id),
+                  onTap: () => _tapEdit(state),
                 ),
               ),
             ),
@@ -183,9 +182,14 @@ class _ForecastOptionsState extends State<ForecastOptions>
       );
 
   void _tapEdit(
-    String forecastId,
-  ) =>
-      context.read<ForecastBloc>().add(SetActiveForecastId(forecastId));
+    AppState state,
+  ) {
+    Forecast forecast = state.forecasts[state.selectedForecastIndex];
+    if (forecast != null) {
+      context.read<AppBloc>().add(SetActiveForecastId(forecast.id));
+      Navigator.push(context, ForecastFormView.route());
+    }
+  }
 
   void _tapRefresh(
     AppState state,

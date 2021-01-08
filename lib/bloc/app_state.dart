@@ -7,6 +7,7 @@ class AppState extends Equatable {
   final TemperatureUnit temperatureUnit;
   final int selectedForecastIndex;
   final List<Forecast> forecasts;
+  final String activeForecastId;
   final RefreshStatus refreshStatus;
   final CRUDStatus crudStatus;
 
@@ -16,6 +17,7 @@ class AppState extends Equatable {
     this.temperatureUnit: TemperatureUnit.fahrenheit,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
+    this.activeForecastId,
     this.refreshStatus,
     this.crudStatus,
   });
@@ -26,6 +28,7 @@ class AppState extends Equatable {
     this.temperatureUnit: TemperatureUnit.fahrenheit,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
+    this.activeForecastId,
     this.refreshStatus,
     this.crudStatus,
   });
@@ -38,6 +41,7 @@ class AppState extends Equatable {
     TemperatureUnit temperatureUnit,
     int selectedForecastIndex,
     List<Forecast> forecasts,
+    Nullable<String> activeForecastId,
     Nullable<RefreshStatus> refreshStatus,
     Nullable<CRUDStatus> crudStatus,
   }) =>
@@ -48,6 +52,9 @@ class AppState extends Equatable {
         selectedForecastIndex:
             selectedForecastIndex ?? this.selectedForecastIndex,
         forecasts: forecasts ?? this.forecasts,
+        activeForecastId: (activeForecastId == null)
+            ? this.activeForecastId
+            : activeForecastId.value,
         refreshStatus:
             (refreshStatus == null) ? this.refreshStatus : refreshStatus.value,
         crudStatus: (crudStatus == null) ? this.crudStatus : crudStatus.value,
@@ -60,6 +67,7 @@ class AppState extends Equatable {
         temperatureUnit,
         selectedForecastIndex,
         forecasts,
+        activeForecastId,
         refreshStatus,
         crudStatus,
       ];
@@ -69,6 +77,6 @@ class AppState extends Equatable {
       'AppState{themeMode: $themeMode, colorTheme: $colorTheme, ' +
       'temperatureUnit: $temperatureUnit, ' +
       'selectedForecastIndex: $selectedForecastIndex, ' +
-      'forecasts: $forecasts, refreshStatus: $refreshStatus, ' +
-      'crudStatus: $crudStatus}';
+      'forecasts: $forecasts, activeForecastId: $activeForecastId, ' +
+      'refreshStatus: $refreshStatus, crudStatus: $crudStatus}';
 }

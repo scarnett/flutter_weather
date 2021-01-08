@@ -1,4 +1,4 @@
-// import 'dart:developer' as developer;
+import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 
 class AppBlocObserver extends BlocObserver {
@@ -16,7 +16,7 @@ class AppBlocObserver extends BlocObserver {
     Cubit cubit,
     Change change,
   ) {
-    // developer.log(change.toString(), name: 'AppBlocObserver');
+    developer.log(change.toString(), name: 'AppBlocObserver');
     super.onChange(cubit, change);
   }
 

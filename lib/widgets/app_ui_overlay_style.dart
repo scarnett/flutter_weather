@@ -1,24 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
 
-class AppUiOverlayStyle extends StatelessWidget {
-  final AppBloc bloc;
+class AppUiOverlayStyle extends StatefulWidget {
   final Widget child;
+  final ThemeMode themeMode;
+  final bool colorTheme;
   final Color systemNavigationBarColor;
   final Brightness systemNavigationBarIconBrightness;
 
-  const AppUiOverlayStyle({
-    Key key,
-    this.bloc,
+  AppUiOverlayStyle({
     this.child,
+    this.themeMode,
+    this.colorTheme,
     this.systemNavigationBarColor,
     this.systemNavigationBarIconBrightness,
-  })  : assert(bloc != null),
-        assert(child != null),
-        super(key: key);
+  });
 
+  @override
+  _AppUiOverlayStyleState createState() => _AppUiOverlayStyleState();
+}
+
+class _AppUiOverlayStyleState extends State<AppUiOverlayStyle> {
   @override
   Widget build(
     BuildContext context,
@@ -26,27 +29,26 @@ class AppUiOverlayStyle extends StatelessWidget {
       AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarBrightness: (bloc.state.themeMode == ThemeMode.light) &&
-                  !bloc.state.colorTheme
-              ? Brightness.dark
-              : Brightness.light,
-          statusBarIconBrightness: (bloc.state.themeMode == ThemeMode.light) &&
-                  !bloc.state.colorTheme
-              ? Brightness.dark
-              : Brightness.light,
+          statusBarBrightness:
+              (widget.themeMode == ThemeMode.light) && !widget.colorTheme
+                  ? Brightness.dark
+                  : Brightness.light,
+          statusBarIconBrightness:
+              (widget.themeMode == ThemeMode.light) && !widget.colorTheme
+                  ? Brightness.dark
+                  : Brightness.light,
           systemNavigationBarColor:
-              bloc.state.colorTheme && (systemNavigationBarColor != null)
-                  ? systemNavigationBarColor
+              widget.colorTheme && (widget.systemNavigationBarColor != null)
+                  ? widget.systemNavigationBarColor
                   : Theme.of(context).scaffoldBackgroundColor,
           systemNavigationBarIconBrightness:
-              (systemNavigationBarIconBrightness != null)
-                  ? systemNavigationBarIconBrightness
-                  : (bloc.state.themeMode == ThemeMode.light) &&
-                          !bloc.state.colorTheme
+              (widget.systemNavigationBarIconBrightness != null)
+                  ? widget.systemNavigationBarIconBrightness
+                  : (widget.themeMode == ThemeMode.light) && !widget.colorTheme
                       ? Brightness.dark
                       : Brightness.light,
           systemNavigationBarDividerColor: Colors.transparent,
         ),
-        child: child,
+        child: widget.child,
       );
 }
