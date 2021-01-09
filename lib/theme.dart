@@ -5,6 +5,8 @@ class AppTheme {
   static Color get secondaryColor => Colors.grey[900];
   static Color get disabledColor => primaryColor.withOpacity(0.5);
   static Color get disabledTextColor => Colors.white.withOpacity(0.3);
+  static Color get successColor => Colors.green[700];
+  static Color get warningColor => Colors.yellow[700];
   static Color get dangerColor => Colors.red[700];
 
   static Color getBorderColor(
@@ -76,6 +78,10 @@ ThemeData appLightThemeData = ThemeData(
       ),
     ),
     iconTheme: IconThemeData(color: AppTheme.secondaryColor),
+  ),
+  dividerTheme: DividerThemeData(
+    color: AppTheme.getBorderColor(ThemeMode.light),
+    space: 0.0,
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: AppTheme.primaryColor,
@@ -155,7 +161,10 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
     ),
     iconTheme: IconThemeData(color: Colors.white),
   ),
-  dividerColor: Colors.black,
+  dividerTheme: DividerThemeData(
+    color: AppTheme.getBorderColor(ThemeMode.dark),
+    space: 0.0,
+  ),
   iconTheme: IconThemeData(
     color: Colors.white,
   ),

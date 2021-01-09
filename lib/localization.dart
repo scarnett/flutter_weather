@@ -22,6 +22,9 @@ class AppLocalizations {
   static String get appTitle => 'Flutter Weather';
 
   String get settings => addMessage('Settings');
+  String get version => addMessage('Version');
+  String get latest => addMessage('Latest');
+  String get updateAvailable => addMessage('Update Available');
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
