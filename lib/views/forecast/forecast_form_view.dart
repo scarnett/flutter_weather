@@ -111,7 +111,6 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) async {
     FocusScope.of(context).unfocus();
     Map<String, dynamic> json = formState.toJson();
-    print(json);
 
     final AppState appState = context.read<AppBloc>().state;
     final Country country = (await IsoCountries.iso_countries)
