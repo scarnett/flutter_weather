@@ -37,6 +37,8 @@ class FlutterWeatherAppView extends StatefulWidget {
 class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
+  ThemeData _themeData;
+
   @override
   Widget build(
     BuildContext context,
@@ -47,26 +49,41 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
             BuildContext context,
             AppState state,
           ) =>
-              MaterialApp(
-            title: AppLocalizations.appTitle,
-            theme: _getTheme(state),
-            darkTheme: appDarkThemeData,
-            themeMode: state.themeMode,
-            debugShowCheckedModeBanner: AppConfig.isDebug(context),
-            localizationsDelegates: [
-              AppLocalizationsDelegate(),
-            ],
-            navigatorKey: _navigatorKey,
-            home: ForecastView(),
+              BlocListener<AppBloc, AppState>(
+            listener: _blocListener,
+            child: MaterialApp(
+              title: AppLocalizations.appTitle,
+              theme: _getTheme(state),
+              darkTheme: appDarkThemeData,
+              themeMode: state.themeMode,
+              debugShowCheckedModeBanner: AppConfig.isDebug(context),
+              localizationsDelegates: [
+                AppLocalizationsDelegate(),
+              ],
+              navigatorKey: _navigatorKey,
+              home: ForecastView(),
+            ),
           ),
         ),
       );
 
+  void _blocListener(
+    BuildContext context,
+    AppState state,
+  ) =>
+      setState(() {
+        if (state.activeForecastId != null) {
+          _themeData = appLightThemeData;
+        } else {
+          _themeData = state.colorTheme ? appColorThemeData : appLightThemeData;
+        }
+      });
+
   ThemeData _getTheme(
     AppState state,
   ) {
-    if (state.activeForecastId != null) {
-      return appLightThemeData;
+    if (_themeData != null) {
+      return _themeData;
     }
 
     return state.colorTheme ? appColorThemeData : appLightThemeData;

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:iso_countries/country.dart';
@@ -52,12 +53,33 @@ class _ForecastFormViewState extends State<ForecastPageView> {
               onPressed: _tapBack,
             ),
           ),
-          body: WillPopScope(
-            onWillPop: () => _willPopCallback(context.read<AppBloc>().state),
-            child: _buildBody(context.watch<AppBloc>().state),
+          body: BlocListener<AppBloc, AppState>(
+            listener: _blocListener,
+            child: WillPopScope(
+              onWillPop: () => _willPopCallback(context.read<AppBloc>().state),
+              child: _buildBody(context.watch<AppBloc>().state),
+            ),
           ),
         ),
       );
+
+  void _blocListener(
+    BuildContext context,
+    AppState state,
+  ) {
+    if (state.crudStatus != null) {
+      switch (state.crudStatus) {
+        case CRUDStatus.UPDATED:
+        case CRUDStatus.DELETED:
+          FocusScope.of(context).unfocus();
+          Navigator.of(context).pop();
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
 
   Future<bool> _willPopCallback(
     AppState state,
@@ -100,8 +122,6 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     context
         .read<AppBloc>()
         .add(UpdateForecast(appState.activeForecastId, json));
-
-    Navigator.of(context).pop();
   }
 
   void _onFailure(
@@ -110,9 +130,10 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) {
     FocusScope.of(context).unfocus();
 
+    // TODO!
     /*
     Scaffold.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
-        */
+    */
   }
 }

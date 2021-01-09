@@ -7,7 +7,7 @@ class AppBlocObserver extends BlocObserver {
     Bloc bloc,
     Object event,
   ) {
-    // developer.log(event.toString(), name: 'AppBlocObserver');
+    developer.log(event.toString(), name: 'AppBlocObserver');
     super.onEvent(bloc, event);
   }
 
@@ -25,7 +25,7 @@ class AppBlocObserver extends BlocObserver {
     Bloc bloc,
     Transition transition,
   ) {
-    // developer.log(transition.toString(), name: 'AppBlocObserver');
+    developer.log(transition.toString(), name: 'AppBlocObserver');
     super.onTransition(bloc, transition);
   }
 

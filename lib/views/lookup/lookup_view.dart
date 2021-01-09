@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -46,36 +47,56 @@ class _LookupPageViewState extends State<LookupPageView> {
   Widget build(
     BuildContext context,
   ) =>
-      BlocBuilder<LookupBloc, LookupState>(
-        builder: (
-          BuildContext context,
-          LookupState state,
-        ) =>
-            WillPopScope(
-          onWillPop: () => _willPopCallback(state),
-          child: AppUiOverlayStyle(
-            themeMode: context.watch<AppBloc>().state.themeMode,
-            colorTheme: context.watch<AppBloc>().state.colorTheme,
-            systemNavigationBarIconBrightness:
-                context.watch<AppBloc>().state.colorTheme
-                    ? Brightness.dark
-                    : null,
-            child: Scaffold(
-              extendBody: true,
-              appBar: AppBar(
-                title: Text(AppLocalizations.of(context).addLocation),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => _handleBack(state),
+      BlocListener<AppBloc, AppState>(
+        listener: _blocListener,
+        child: BlocBuilder<LookupBloc, LookupState>(
+          builder: (
+            BuildContext context,
+            LookupState state,
+          ) =>
+              WillPopScope(
+            onWillPop: () => _willPopCallback(state),
+            child: AppUiOverlayStyle(
+              themeMode: context.watch<AppBloc>().state.themeMode,
+              colorTheme: context.watch<AppBloc>().state.colorTheme,
+              systemNavigationBarIconBrightness:
+                  context.watch<AppBloc>().state.colorTheme
+                      ? Brightness.dark
+                      : null,
+              child: Scaffold(
+                extendBody: true,
+                appBar: AppBar(
+                  title: Text(AppLocalizations.of(context).addLocation),
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => _handleBack(state),
+                  ),
                 ),
-              ),
-              body: SafeArea(
-                child: _buildContent(),
+                body: SafeArea(
+                  child: _buildContent(),
+                ),
               ),
             ),
           ),
         ),
       );
+
+  void _blocListener(
+    BuildContext context,
+    AppState state,
+  ) {
+    if (state.crudStatus != null) {
+      switch (state.crudStatus) {
+        case CRUDStatus.CREATED:
+          FocusScope.of(context).unfocus();
+          Navigator.of(context).pop();
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
 
   Future<bool> _willPopCallback(
     LookupState state,
@@ -137,14 +158,12 @@ class _LookupPageViewState extends State<LookupPageView> {
     );
 
     context.read<AppBloc>().add(AddForecast(forecast));
-    Navigator.of(context).pop();
   }
 
   void _onSuccess(
     BuildContext context,
     FormBlocSuccess<String, String> state,
   ) async {
-    FocusScope.of(context).unfocus();
     Map<String, dynamic> json = state.toJson();
     final Country country = (await IsoCountries.iso_countries)
         .firstWhere((e) => e.name == json['country'], orElse: () => null);
@@ -153,7 +172,7 @@ class _LookupPageViewState extends State<LookupPageView> {
       context.read<LookupBloc>().add(LookupForecast(
             json['postalCode'],
             country.countryCode,
-            context.watch<AppBloc>().state.temperatureUnit,
+            context.read<AppBloc>().state.temperatureUnit,
           ));
     } else {
       Scaffold.of(context).showSnackBar(

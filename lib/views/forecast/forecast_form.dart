@@ -123,19 +123,14 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
     BuildContext context,
     FormBlocSubmitting<String, String> state,
   ) =>
-      setState(() {
-        _submitting = true;
-      });
+      setState(() => _submitting = true);
 
   void _onSuccess(
     BuildContext context,
     FormBlocSuccess<String, String> state,
   ) {
     widget.onSuccess(context, state);
-
-    setState(() {
-      _submitting = false;
-    });
+    setState(() => _submitting = false);
   }
 
   void _onFailure(
