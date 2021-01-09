@@ -28,7 +28,7 @@ class AppSelectDialogFieldBlocBuilder<Value> extends StatelessWidget {
           ) =>
               GestureDetector(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 16.0),
+              padding: EdgeInsets.only(bottom: 10.0),
               child: InputDecorator(
                 isEmpty: (state?.value == null),
                 decoration: InputDecoration(

@@ -6,15 +6,16 @@ import 'package:iso_countries/iso_countries.dart';
 class ForecastFormBloc extends FormBloc<String, String> {
   Forecast _initialData;
 
-  final TextFieldBloc postalCode = TextFieldBloc(
-    name: 'postalCode',
-    validators: [
-      FieldBlocValidators.required,
-    ],
+  final TextFieldBloc cityName = TextFieldBloc(
+    name: 'cityName',
   );
 
-  final SelectFieldBloc country = SelectFieldBloc(
-    name: 'country',
+  final TextFieldBloc postalCode = TextFieldBloc(
+    name: 'postalCode',
+  );
+
+  final SelectFieldBloc countryCode = SelectFieldBloc(
+    name: 'countryCode',
   );
 
   ForecastFormBloc({
@@ -24,8 +25,9 @@ class ForecastFormBloc extends FormBloc<String, String> {
 
     addFieldBlocs(
       fieldBlocs: [
+        cityName,
         postalCode,
-        country,
+        countryCode,
       ],
     );
   }
@@ -33,14 +35,22 @@ class ForecastFormBloc extends FormBloc<String, String> {
   @override
   void onLoading() async {
     if (_initialData != null) {
-      postalCode.updateInitialValue(_initialData.postalCode);
+      if (_initialData.city != null) {
+        cityName.updateInitialValue(_initialData.cityName);
+      }
 
-      final Country isoCountry = (await IsoCountries.iso_countries).firstWhere(
-          (e) => e.countryCode == _initialData.countryCode,
-          orElse: () => null);
+      if (_initialData.postalCode != null) {
+        postalCode.updateInitialValue(_initialData.postalCode);
+      }
 
-      if (isoCountry != null) {
-        country.updateInitialValue(isoCountry.name);
+      if (_initialData.countryCode != null) {
+        final Country isoCountry = (await IsoCountries.iso_countries)
+            .firstWhere((e) => e.countryCode == _initialData.countryCode,
+                orElse: () => null);
+
+        if (isoCountry != null) {
+          countryCode.updateInitialValue(isoCountry.name);
+        }
       }
     }
 
@@ -53,7 +63,8 @@ class ForecastFormBloc extends FormBloc<String, String> {
   @override
   Future<void> close() async {
     super.close();
+    cityName.close();
     postalCode.close();
-    country.close();
+    countryCode.close();
   }
 }

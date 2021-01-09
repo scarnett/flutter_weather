@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 
 enum RefreshStatus {
@@ -7,6 +8,7 @@ enum RefreshStatus {
 
 class Forecast extends Equatable {
   final String id;
+  final String cityName;
   final String postalCode;
   final String countryCode;
   final ForecastCity city;
@@ -18,6 +20,7 @@ class Forecast extends Equatable {
 
   Forecast({
     this.id,
+    this.cityName,
     this.postalCode,
     this.countryCode,
     this.city,
@@ -30,8 +33,9 @@ class Forecast extends Equatable {
 
   Forecast copyWith({
     String id,
-    String postalCode,
-    String countryCode,
+    Nullable<String> cityName,
+    Nullable<String> postalCode,
+    Nullable<String> countryCode,
     ForecastCity city,
     String cod,
     num message,
@@ -41,8 +45,10 @@ class Forecast extends Equatable {
   }) =>
       Forecast(
         id: id ?? this.id,
-        postalCode: postalCode ?? this.postalCode,
-        countryCode: countryCode ?? this.countryCode,
+        cityName: (cityName == null) ? this.cityName : cityName.value,
+        postalCode: (postalCode == null) ? this.postalCode : postalCode.value,
+        countryCode:
+            (countryCode == null) ? this.countryCode : countryCode.value,
         city: city ?? this.city,
         cod: cod ?? this.cod,
         message: message ?? this.message,
@@ -58,6 +64,7 @@ class Forecast extends Equatable {
           ? Forecast()
           : Forecast(
               id: json['id'],
+              cityName: json['cityName'],
               postalCode: json['postalCode'],
               countryCode: json['countryCode'],
               city: ForecastCity.fromJson(json['city']),
@@ -79,6 +86,7 @@ class Forecast extends Equatable {
 
   dynamic toJson() => {
         'id': id,
+        'cityName': cityName,
         'postalCode': postalCode,
         'countryCode': countryCode,
         'city': city.toJson(),
@@ -99,6 +107,7 @@ class Forecast extends Equatable {
   @override
   List<Object> get props => [
         id,
+        cityName,
         postalCode,
         countryCode,
         city,
@@ -111,9 +120,9 @@ class Forecast extends Equatable {
 
   @override
   String toString() =>
-      'Forecast{id: $id, postalCode: $postalCode, countryCode: $countryCode, ' +
-      'city: ${city?.name}, cod: $cod, message: $message, cnt: $cnt, ' +
-      'lastUpdated: $lastUpdated}';
+      'Forecast{id: $id, cityName: $cityName, postalCode: $postalCode, ' +
+      'countryCode: $countryCode, city: ${city?.name}, cod: $cod, ' +
+      'message: $message, cnt: $cnt, lastUpdated: $lastUpdated}';
 }
 
 class ForecastCity extends Equatable {

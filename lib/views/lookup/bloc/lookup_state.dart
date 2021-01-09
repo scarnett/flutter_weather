@@ -2,12 +2,14 @@ part of 'lookup_bloc.dart';
 
 @immutable
 class LookupState extends Equatable {
+  final String cityName;
   final String postalCode;
   final String countryCode;
   final Forecast lookupForecast;
   final LookupStatus status;
 
   const LookupState._({
+    this.cityName,
     this.postalCode,
     this.countryCode,
     this.lookupForecast,
@@ -19,14 +21,17 @@ class LookupState extends Equatable {
   const LookupState.clear() : this._();
 
   LookupState copyWith({
-    String postalCode,
-    String countryCode,
+    Nullable<String> cityName,
+    Nullable<String> postalCode,
+    Nullable<String> countryCode,
     Nullable<Forecast> lookupForecast,
     Nullable<LookupStatus> status,
   }) =>
       LookupState._(
-        postalCode: postalCode ?? this.postalCode,
-        countryCode: countryCode ?? this.countryCode,
+        cityName: (cityName == null) ? this.cityName : cityName.value,
+        postalCode: (postalCode == null) ? this.postalCode : postalCode.value,
+        countryCode:
+            (countryCode == null) ? this.countryCode : countryCode.value,
         lookupForecast: (lookupForecast == null)
             ? this.lookupForecast
             : lookupForecast.value,
@@ -34,10 +39,17 @@ class LookupState extends Equatable {
       );
 
   @override
-  List<Object> get props => [postalCode, countryCode, lookupForecast, status];
+  List<Object> get props => [
+        cityName,
+        postalCode,
+        countryCode,
+        lookupForecast,
+        status,
+      ];
 
   @override
   String toString() =>
-      'LookupState{postalCode: $postalCode, countryCode: $countryCode, ' +
-      'lookupForecast: $lookupForecast, status: $status}';
+      'LookupState{cityName: $cityName, postalCode: $postalCode, ' +
+      'countryCode: $countryCode, lookupForecast: $lookupForecast, ' +
+      'status: $status}';
 }

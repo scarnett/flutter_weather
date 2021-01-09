@@ -5,6 +5,7 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -112,22 +113,25 @@ class _LookupPageViewState extends State<LookupPageView> {
   Widget _buildContent() {
     Forecast lookupForecast = context.read<LookupBloc>().state.lookupForecast;
     if (lookupForecast != null) {
-      return Column(
-        children: <Widget>[
-          ForecastDisplay(
-            bloc: context.read<AppBloc>(),
-            forecast: lookupForecast,
-            showThreeDayForecast: false,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
-            child: AppFormButton(
-              text: AppLocalizations.of(context).addThisForecast,
-              icon: Icon(Icons.add),
-              onTap: _tapAddLocation,
+      return SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: Column(
+          children: <Widget>[
+            ForecastDisplay(
+              bloc: context.read<AppBloc>(),
+              forecast: lookupForecast,
+              showThreeDayForecast: false,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: AppFormButton(
+                text: AppLocalizations.of(context).addThisForecast,
+                icon: Icon(Icons.add, size: 16.0),
+                onTap: _tapAddLocation,
+              ),
+            ),
+          ],
+        ),
       );
     }
 
@@ -152,8 +156,9 @@ class _LookupPageViewState extends State<LookupPageView> {
     LookupState lookupState = context.read<LookupBloc>().state;
     Forecast forecast = lookupState.lookupForecast.copyWith(
       id: Uuid().v4(),
-      postalCode: lookupState.postalCode,
-      countryCode: lookupState.countryCode,
+      cityName: Nullable<String>(lookupState.cityName),
+      postalCode: Nullable<String>(lookupState.postalCode),
+      countryCode: Nullable<String>(lookupState.countryCode),
       lastUpdated: getNow(),
     );
 
@@ -164,18 +169,23 @@ class _LookupPageViewState extends State<LookupPageView> {
     BuildContext context,
     FormBlocSuccess<String, String> state,
   ) async {
-    Map<String, dynamic> json = state.toJson();
-    Country country;
+    Map<String, dynamic> lookupData = state.toJson();
 
-    if (json.containsKey('country')) {
-      country = (await IsoCountries.iso_countries)
-          .firstWhere((e) => e.name == json['country'], orElse: () => null);
+    if (lookupData.containsKey('countryCode')) {
+      final Country country = (await IsoCountries.iso_countries).firstWhere(
+          (Country _country) => _country.name == lookupData['countryCode'],
+          orElse: () => null);
+
+      if (country != null) {
+        lookupData['countryCode'] = country.countryCode;
+      }
     }
 
+    print(lookupData);
+
     context.read<LookupBloc>().add(LookupForecast(
-          json['postalCode'],
+          lookupData,
           context.read<AppBloc>().state.temperatureUnit,
-          countryCode: (country == null) ? country : country.countryCode,
         ));
   }
 

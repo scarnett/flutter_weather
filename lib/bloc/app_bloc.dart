@@ -133,8 +133,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
     forecasts[state.selectedForecastIndex] = _forecast.copyWith(
-      postalCode: event.forecastData['postalCode'],
-      countryCode: event.forecastData['country'],
+      cityName: Nullable<String>(event.forecastData['cityName']),
+      postalCode: Nullable<String>(event.forecastData['postalCode']),
+      countryCode: Nullable<String>(event.forecastData['countryCode']),
       lastUpdated: getNow(),
     );
 
@@ -152,11 +153,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       refreshStatus: Nullable<RefreshStatus>(RefreshStatus.REFRESHING),
     );
 
-    http.Response forecastResponse = await tryLookupForecast(
-      event.forecast.postalCode,
-      countryCode: event.forecast.countryCode,
-    );
+    Map<String, String> lookupData = {
+      'cityName': event.forecast.cityName,
+      'postalCode': event.forecast.postalCode,
+      'countryCode': event.forecast.countryCode,
+    };
 
+    http.Response forecastResponse = await tryLookupForecast(lookupData);
     if (forecastResponse.statusCode == 200) {
       List<Forecast> forecasts = ((state.forecasts == null)
           ? []
@@ -172,8 +175,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
       Forecast _forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
       forecasts[forecastIndex] = _forecast.copyWith(
-        postalCode: event.forecast.postalCode,
-        countryCode: event.forecast.countryCode,
+        cityName: Nullable<String>(event.forecast.cityName),
+        postalCode: Nullable<String>(event.forecast.postalCode),
+        countryCode: Nullable<String>(event.forecast.countryCode),
         lastUpdated: getNow(),
       );
 

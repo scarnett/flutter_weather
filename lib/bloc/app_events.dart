@@ -67,7 +67,7 @@ class AddForecast extends AppEvent {
 
 class UpdateForecast extends AppEvent {
   final String forecastId;
-  final Map<String, dynamic> forecastData;
+  final Map<String, String> forecastData;
 
   const UpdateForecast(
     this.forecastId,

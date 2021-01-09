@@ -111,17 +111,20 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     FormBlocSuccess<String, String> formState,
   ) async {
     FocusScope.of(context).unfocus();
-    Map<String, dynamic> json = formState.toJson();
+    Map<String, dynamic> lookupData = formState.toJson();
 
     final AppState appState = context.read<AppBloc>().state;
-    final Country country = (await IsoCountries.iso_countries)
-        .firstWhere((e) => e.name == json['country'], orElse: () => null);
+    final Country country = (await IsoCountries.iso_countries).firstWhere(
+        (Country _country) => _country.name == lookupData['countryCode'],
+        orElse: () => null);
 
-    json['country'] = country.countryCode;
+    if (country != null) {
+      lookupData['countryCode'] = country.countryCode;
+    }
 
     context
         .read<AppBloc>()
-        .add(UpdateForecast(appState.activeForecastId, json));
+        .add(UpdateForecast(appState.activeForecastId, lookupData));
   }
 
   void _onFailure(

@@ -102,6 +102,17 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFieldBlocBuilder(
+                textFieldBloc: context.watch<ForecastFormBloc>().cityName,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).city,
+                  prefixIcon: Icon(
+                    Icons.location_city,
+                    color: AppTheme.primaryColor,
+                  ),
+                ),
+                padding: const EdgeInsets.only(bottom: 0.0),
+              ),
+              TextFieldBlocBuilder(
                 textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context).postalCode,
@@ -110,9 +121,10 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                     color: AppTheme.primaryColor,
                   ),
                 ),
+                padding: const EdgeInsets.only(bottom: 0.0),
               ),
               AppSelectDialogFieldBlocBuilder(
-                selectFieldBloc: context.watch<ForecastFormBloc>().country,
+                selectFieldBloc: context.watch<ForecastFormBloc>().countryCode,
               ),
               _buildButtons(),
             ],
@@ -157,7 +169,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : null,
+                : Icon(Icons.check, size: 16.0),
             onTap: _submitting ? null : _tapSubmit,
           ),
         ),
@@ -179,7 +191,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : null,
+                : Icon(Icons.close, size: 16.0),
             onTap: _deleting ? null : _tapDelete,
           ),
         ),

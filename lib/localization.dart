@@ -52,6 +52,7 @@ class AppLocalizations {
   String get colorThemeEnable => addMessage('Enable Color Theme');
   String get colorThemeDisable => addMessage('Disable Color Theme');
   String get noForecasts => addMessage('0 Forecasts Found');
+  String get city => addMessage('City');
   String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');
   String get save => addMessage('Save');

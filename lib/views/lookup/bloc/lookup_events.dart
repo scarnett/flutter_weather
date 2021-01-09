@@ -8,18 +8,16 @@ abstract class LookupEvent extends Equatable {
 }
 
 class LookupForecast extends LookupEvent {
-  final String postalCode;
-  final String countryCode;
+  final Map<String, dynamic> lookupData;
   final TemperatureUnit temperatureUnit;
 
   const LookupForecast(
-    this.postalCode,
-    this.temperatureUnit, {
-    this.countryCode,
-  });
+    this.lookupData,
+    this.temperatureUnit,
+  );
 
   @override
-  List<Object> get props => [postalCode, countryCode, temperatureUnit];
+  List<Object> get props => [lookupData, temperatureUnit];
 }
 
 class ClearForecast extends LookupEvent {
