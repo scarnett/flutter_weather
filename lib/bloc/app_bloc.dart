@@ -129,10 +129,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     List<Forecast> forecasts =
         ((state.forecasts == null) ? [] : List<Forecast>.from(state.forecasts));
 
-    Forecast _forecast = state.forecasts
+    Forecast forecast = state.forecasts
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
-    forecasts[state.selectedForecastIndex] = _forecast.copyWith(
+    forecasts[state.selectedForecastIndex] = forecast.copyWith(
       id: event.forecastId,
       cityName: Nullable<String>(event.forecastData['cityName']),
       postalCode: Nullable<String>(event.forecastData['postalCode']),
@@ -201,6 +201,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     int _forecastIndex = state.forecasts
         .indexWhere((Forecast forecast) => forecast.id == event.forecastId);
+
     List<Forecast> _forecasts = state.forecasts..removeAt(_forecastIndex);
 
     yield state.copyWith(
