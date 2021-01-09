@@ -60,9 +60,9 @@ class AppLocalizations {
   String get yes => addMessage('Yes');
   String get no => addMessage('No');
   String get lookup => addMessage('Lookup');
-  String get lookupSuccess => addMessage('Location added successfully!');
+  String get lookupSuccess => addMessage('Forecast added successfully!');
   String get lookupFailure => addMessage(
-      'There was an error looking up this location. Please try again.');
+      'There was an error looking up this forecast. Please try again.');
 
   String get selectCountry => addMessage('Select a country');
   String get filterCountries => addMessage('Filter Countries');

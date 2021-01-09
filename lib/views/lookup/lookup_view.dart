@@ -165,19 +165,18 @@ class _LookupPageViewState extends State<LookupPageView> {
     FormBlocSuccess<String, String> state,
   ) async {
     Map<String, dynamic> json = state.toJson();
-    final Country country = (await IsoCountries.iso_countries)
-        .firstWhere((e) => e.name == json['country'], orElse: () => null);
+    Country country;
 
-    if (country != null) {
-      context.read<LookupBloc>().add(LookupForecast(
-            json['postalCode'],
-            context.read<AppBloc>().state.temperatureUnit,
-            countryCode: country.countryCode,
-          ));
-    } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
+    if (json.containsKey('country')) {
+      country = (await IsoCountries.iso_countries)
+          .firstWhere((e) => e.name == json['country'], orElse: () => null);
     }
+
+    context.read<LookupBloc>().add(LookupForecast(
+          json['postalCode'],
+          context.read<AppBloc>().state.temperatureUnit,
+          countryCode: (country == null) ? country : country.countryCode,
+        ));
   }
 
   void _onFailure(
