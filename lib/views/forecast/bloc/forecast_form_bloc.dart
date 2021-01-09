@@ -15,9 +15,6 @@ class ForecastFormBloc extends FormBloc<String, String> {
 
   final SelectFieldBloc country = SelectFieldBloc(
     name: 'country',
-    validators: [
-      FieldBlocValidators.required,
-    ],
   );
 
   ForecastFormBloc({

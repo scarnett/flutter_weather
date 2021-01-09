@@ -171,8 +171,8 @@ class _LookupPageViewState extends State<LookupPageView> {
     if (country != null) {
       context.read<LookupBloc>().add(LookupForecast(
             json['postalCode'],
-            country.countryCode,
             context.read<AppBloc>().state.temperatureUnit,
+            countryCode: country.countryCode,
           ));
     } else {
       Scaffold.of(context).showSnackBar(

@@ -14,9 +14,9 @@ class LookupForecast extends LookupEvent {
 
   const LookupForecast(
     this.postalCode,
+    this.temperatureUnit, {
     this.countryCode,
-    this.temperatureUnit,
-  );
+  });
 
   @override
   List<Object> get props => [postalCode, countryCode, temperatureUnit];

@@ -7,6 +7,23 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+Uri getApiUri(
+  Map<String, String> params, {
+  int count: 10,
+}) {
+  if (!params.containsKey('cnt')) {
+    params['cnt'] = count.toString();
+  }
+
+  params['appid'] = EnvConfig.OPENWEATHERMAP_API_KEY;
+
+  return Uri.https(
+    EnvConfig.OPENWEATHERMAP_API_URI,
+    EnvConfig.OPENWEATHERMAP_API_DAILY_PATH,
+    params,
+  );
+}
+
 num getTemperature(
   num temperature,
   TemperatureUnit unit,

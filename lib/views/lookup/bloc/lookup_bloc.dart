@@ -37,7 +37,7 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
 
     http.Response forecastResponse = await tryLookupForecast(
       event.postalCode,
-      event.countryCode,
+      countryCode: event.countryCode,
     );
 
     if (forecastResponse.statusCode == 200) {
