@@ -5,6 +5,7 @@ class AppTheme {
   static Color get secondaryColor => Colors.grey[900];
   static Color get disabledColor => primaryColor.withOpacity(0.5);
   static Color get disabledTextColor => Colors.white.withOpacity(0.3);
+  static Color get dangerColor => Colors.red[700];
 
   static Color getBorderColor(
     ThemeMode themeMode, {

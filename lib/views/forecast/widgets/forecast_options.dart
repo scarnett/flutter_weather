@@ -82,7 +82,7 @@ class _ForecastOptionsState extends State<ForecastOptions>
     return (state.forecasts == null) || state.forecasts.isEmpty
         ? Container()
         : Tooltip(
-            message: AppLocalizations.of(context).editLocation,
+            message: AppLocalizations.of(context).editForecast,
             child: Material(
               type: MaterialType.transparency,
               child: Container(

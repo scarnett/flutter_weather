@@ -41,6 +41,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapUpdateForecastToStates(event);
     } else if (event is RefreshForecast) {
       yield* _mapRefreshForecastToStates(event);
+    } else if (event is DeleteForecast) {
+      yield* _mapDeleteForecastToStates(event);
     } else if (event is ClearCRUDStatus) {
       yield _mapClearCRUDStatusToStates(event);
     } else if (event is SetActiveForecastId) {
@@ -182,6 +184,27 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     } else {
       // TODO! snackbar error
     }
+  }
+
+  Stream<AppState> _mapDeleteForecastToStates(
+    DeleteForecast event,
+  ) async* {
+    yield state.copyWith(
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETING),
+    );
+
+    int _forecastIndex = state.forecasts
+        .indexWhere((Forecast forecast) => forecast.id == event.forecastId);
+    List<Forecast> _forecasts = state.forecasts..removeAt(_forecastIndex);
+
+    yield state.copyWith(
+      activeForecastId: Nullable<String>(null),
+      forecasts: _forecasts,
+      selectedForecastIndex: (state.selectedForecastIndex > 0)
+          ? (state.selectedForecastIndex - 1)
+          : 0,
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETED),
+    );
   }
 
   AppState _mapClearCRUDStatusToStates(

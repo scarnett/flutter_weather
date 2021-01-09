@@ -35,20 +35,27 @@ class AppLocalizations {
   String get wind => addMessage('Wind');
   String get pressure => addMessage('Pressure');
   String get humidity => addMessage('Humidity');
-  String get addLocation => addMessage('Add Location');
-  String get addThisLocation => addMessage('Add This Location');
-  String get editLocation => addMessage('Edit Location');
+  String get addForecast => addMessage('Add Forecast');
+  String get addThisForecast => addMessage('Add This Forecast');
+  String get editForecast => addMessage('Edit Forecast');
+  String get deleteForecast => addMessage('Delete Forecast');
   String get refreshForecast => addMessage('Refresh Forecast');
   String get forecastAdded => addMessage('Forecast Added');
   String get forecastUpdated => addMessage('Forecast Updated');
-  String get forecastRemoved => addMessage('Forecast Removed');
+  String get forecastDeleted => addMessage('Forecast Deleted');
+  String get forecastDeletedText =>
+      addMessage('Are you sure you want to delete this forecast?');
+
   String get colorThemeEnable => addMessage('Enable Color Theme');
   String get colorThemeDisable => addMessage('Disable Color Theme');
   String get noForecasts => addMessage('0 Forecasts Found');
   String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');
   String get save => addMessage('Save');
+  String get delete => addMessage('Delete');
   String get cancel => addMessage('Cancel');
+  String get yes => addMessage('Yes');
+  String get no => addMessage('No');
   String get lookup => addMessage('Lookup');
   String get lookupSuccess => addMessage('Location added successfully!');
   String get lookupFailure => addMessage(

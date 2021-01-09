@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -10,7 +12,8 @@ import 'package:flutter_weather/widgets/app_select_dialog.dart';
 
 class ForecastForm extends StatelessWidget {
   final Forecast forecast;
-  final String buttonText;
+  final String saveButtonText;
+  final String deleteButtonText;
   final Function(
     BuildContext context,
     FormBlocSuccess<String, String> state,
@@ -24,7 +27,8 @@ class ForecastForm extends StatelessWidget {
   const ForecastForm({
     Key key,
     this.forecast,
-    this.buttonText,
+    this.saveButtonText,
+    this.deleteButtonText,
     this.onSuccess,
     this.onFailure,
   }) : super(key: key);
@@ -38,7 +42,8 @@ class ForecastForm extends StatelessWidget {
             ForecastFormBloc(initialData: forecast),
         child: ForecastPageForm(
           forecast: forecast,
-          buttonText: buttonText,
+          saveButtonText: saveButtonText,
+          deleteButtonText: deleteButtonText,
           onSuccess: onSuccess,
           onFailure: onFailure,
         ),
@@ -47,7 +52,8 @@ class ForecastForm extends StatelessWidget {
 
 class ForecastPageForm extends StatefulWidget {
   final Forecast forecast;
-  final String buttonText;
+  final String saveButtonText;
+  final String deleteButtonText;
   final Function(
     BuildContext context,
     FormBlocSuccess<String, String> state,
@@ -61,7 +67,8 @@ class ForecastPageForm extends StatefulWidget {
   ForecastPageForm({
     Key key,
     this.forecast,
-    this.buttonText,
+    this.saveButtonText,
+    this.deleteButtonText,
     this.onSuccess,
     this.onFailure,
   }) : super(key: key);
@@ -72,15 +79,23 @@ class ForecastPageForm extends StatefulWidget {
 
 class _ForecastPageFormState extends State<ForecastPageForm> {
   bool _submitting = false;
+  bool _deleting = false;
 
   @override
   Widget build(
     BuildContext context,
   ) =>
-      FormBlocListener<ForecastFormBloc, String, String>(
-        onSubmitting: _onSubmitting,
-        onSuccess: _onSuccess,
-        onFailure: _onFailure,
+      MultiBlocListener(
+        listeners: [
+          FormBlocListener<ForecastFormBloc, String, String>(
+            onSubmitting: _onSubmitting,
+            onSuccess: _onSuccess,
+            onFailure: _onFailure,
+          ),
+          BlocListener<AppBloc, AppState>(
+            listener: _blocListener,
+          ),
+        ],
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
           child: Column(
@@ -99,25 +114,83 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
               AppSelectDialogFieldBlocBuilder(
                 selectFieldBloc: context.watch<ForecastFormBloc>().country,
               ),
-              AppFormButton(
-                text: _submitting ? null : widget.buttonText,
-                icon: _submitting
-                    ? SizedBox(
-                        height: 25.0,
-                        width: 25.0,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.0,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : null,
-                onTap: _submitting ? null : _tapSubmit,
-              ),
+              _buildButtons(),
             ],
           ),
         ),
       );
+
+  void _blocListener(
+    BuildContext context,
+    AppState state,
+  ) {
+    if (state.crudStatus != null) {
+      switch (state.crudStatus) {
+        case CRUDStatus.DELETING:
+          setState(() => _deleting = true);
+          break;
+
+        case CRUDStatus.DELETED:
+          Navigator.of(context).pop();
+          setState(() => _deleting = false);
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
+  Widget _buildButtons() {
+    AppState state = context.watch<AppBloc>().state;
+    List<Widget> buttons = <Widget>[]..add(
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: AppFormButton(
+            text: _submitting ? null : widget.saveButtonText,
+            icon: _submitting
+                ? SizedBox(
+                    height: 25.0,
+                    width: 25.0,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : null,
+            onTap: _submitting ? null : _tapSubmit,
+          ),
+        ),
+      );
+
+    if (state.activeForecastId != null) {
+      buttons.add(
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: AppFormButton(
+            text: _deleting ? null : widget.deleteButtonText,
+            color: AppTheme.dangerColor,
+            icon: _deleting
+                ? SizedBox(
+                    height: 25.0,
+                    width: 25.0,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : null,
+            onTap: _deleting ? null : _tapDelete,
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: buttons,
+    );
+  }
 
   void _onSubmitting(
     BuildContext context,
@@ -140,4 +213,37 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       widget.onFailure(context, state);
 
   void _tapSubmit() => context.read<ForecastFormBloc>().submit();
+
+  void _tapDelete() {
+    Widget noButton = FlatButton(
+      child: Text(
+        AppLocalizations.of(context).no,
+        style: TextStyle(color: AppTheme.primaryColor),
+      ),
+      onPressed: () => Navigator.of(context).pop(),
+    );
+
+    Widget yesButton = FlatButton(
+      child: Text(
+        AppLocalizations.of(context).yes,
+        style: TextStyle(color: AppTheme.dangerColor),
+      ),
+      onPressed: _tapConfirmDelete,
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(AppLocalizations.of(context).deleteForecast),
+        content: Text(AppLocalizations.of(context).forecastDeletedText),
+        actions: [
+          noButton,
+          yesButton,
+        ],
+      ),
+    );
+  }
+
+  void _tapConfirmDelete() =>
+      context.read<AppBloc>().add(DeleteForecast(widget.forecast.id));
 }

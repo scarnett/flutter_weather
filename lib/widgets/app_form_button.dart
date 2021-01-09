@@ -6,12 +6,14 @@ class AppFormButton extends StatelessWidget {
   final Function onTap;
   final String text;
   final Widget icon;
+  final Color color;
 
   AppFormButton({
     Key key,
     this.onTap,
     this.text,
     this.icon,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -23,7 +25,7 @@ class AppFormButton extends StatelessWidget {
           horizontal: 10.0,
           vertical: 10.0,
         ),
-        color: AppTheme.primaryColor,
+        color: (color == null) ? AppTheme.primaryColor : color,
         disabledTextColor: AppTheme.disabledTextColor,
         disabledColor: AppTheme.disabledColor,
         textColor: Colors.white,

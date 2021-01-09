@@ -66,7 +66,7 @@ class _LookupPageViewState extends State<LookupPageView> {
               child: Scaffold(
                 extendBody: true,
                 appBar: AppBar(
-                  title: Text(AppLocalizations.of(context).addLocation),
+                  title: Text(AppLocalizations.of(context).addForecast),
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => _handleBack(state),
@@ -122,7 +122,7 @@ class _LookupPageViewState extends State<LookupPageView> {
           Padding(
             padding: const EdgeInsets.only(top: 30.0),
             child: AppFormButton(
-              text: AppLocalizations.of(context).addThisLocation,
+              text: AppLocalizations.of(context).addThisForecast,
               icon: Icon(Icons.add),
               onTap: _tapAddLocation,
             ),
@@ -132,7 +132,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     }
 
     return ForecastForm(
-      buttonText: AppLocalizations.of(context).lookup,
+      saveButtonText: AppLocalizations.of(context).lookup,
       onSuccess: _onSuccess,
       onFailure: _onFailure,
     );

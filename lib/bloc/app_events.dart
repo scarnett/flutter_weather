@@ -91,6 +91,17 @@ class RefreshForecast extends AppEvent {
   List<Object> get props => [forecast, temperatureUnit];
 }
 
+class DeleteForecast extends AppEvent {
+  final String forecastId;
+
+  const DeleteForecast(
+    this.forecastId,
+  );
+
+  @override
+  List<Object> get props => [forecastId];
+}
+
 class SelectedForecastIndex extends AppEvent {
   final int index;
 

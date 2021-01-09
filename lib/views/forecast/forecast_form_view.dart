@@ -47,7 +47,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).editLocation),
+            title: Text(AppLocalizations.of(context).editForecast),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: _tapBack,
@@ -93,7 +93,8 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) =>
       SafeArea(
         child: ForecastForm(
-          buttonText: AppLocalizations.of(context).save,
+          saveButtonText: AppLocalizations.of(context).save,
+          deleteButtonText: AppLocalizations.of(context).delete,
           forecast: state.forecasts[state.selectedForecastIndex],
           onSuccess: _onSuccess,
           onFailure: _onFailure,

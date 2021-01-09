@@ -82,7 +82,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          tooltip: AppLocalizations.of(context).addLocation,
+          tooltip: AppLocalizations.of(context).addForecast,
           onPressed: _tapAddLocation,
           child: Icon(Icons.add),
           mini: true,
@@ -109,7 +109,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
 
         case CRUDStatus.DELETED:
           Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text(i18n.forecastRemoved)));
+              .showSnackBar(SnackBar(content: Text(i18n.forecastDeleted)));
           break;
 
         default:
@@ -117,10 +117,6 @@ class _ForecastPageViewState extends State<ForecastPageView>
       }
 
       context.read<AppBloc>().add(ClearCRUDStatus());
-    }
-
-    if (_currentForecastNotifier.value != state.selectedForecastIndex) {
-      _currentForecastNotifier.value = state.selectedForecastIndex;
     }
 
     if (state.colorTheme) {
@@ -258,8 +254,10 @@ class _ForecastPageViewState extends State<ForecastPageView>
 
   void _onPageChanged(
     int page,
-  ) =>
-      context.read<AppBloc>().add(SelectedForecastIndex(page));
+  ) {
+    context.read<AppBloc>().add(SelectedForecastIndex(page));
+    _currentForecastNotifier.value = page;
+  }
 
   Future<void> _pullRefresh(
     AppState state,
