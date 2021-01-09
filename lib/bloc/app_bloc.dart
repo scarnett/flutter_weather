@@ -133,6 +133,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
     forecasts[state.selectedForecastIndex] = _forecast.copyWith(
+      id: event.forecastId,
       cityName: Nullable<String>(event.forecastData['cityName']),
       postalCode: Nullable<String>(event.forecastData['postalCode']),
       countryCode: Nullable<String>(event.forecastData['countryCode']),
@@ -175,6 +176,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
       Forecast _forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
       forecasts[forecastIndex] = _forecast.copyWith(
+        id: event.forecast.id,
         cityName: Nullable<String>(event.forecast.cityName),
         postalCode: Nullable<String>(event.forecast.postalCode),
         countryCode: Nullable<String>(event.forecast.countryCode),

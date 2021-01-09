@@ -7,8 +7,6 @@ Future<http.Response> tryLookupForecast(
 ) async {
   Map<String, dynamic> params = Map<String, dynamic>();
 
-  print(lookupData);
-
   if (lookupData.containsKey('postalCode') &&
       !(lookupData['postalCode'] as String).isNullOrEmpty()) {
     if (lookupData.containsKey('countryCode') &&
@@ -35,6 +33,5 @@ Future<http.Response> tryLookupForecast(
     params['q'] = query;
   }
 
-  print(getApiUri(params).toString());
   return http.get(getApiUri(params).toString());
 }

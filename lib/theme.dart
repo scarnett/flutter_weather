@@ -128,6 +128,7 @@ ThemeData appLightThemeData = ThemeData(
 );
 
 ThemeData appColorThemeData = appLightThemeData.copyWith(
+  accentColor: Colors.white,
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Colors.white,
     foregroundColor: AppTheme.secondaryColor,

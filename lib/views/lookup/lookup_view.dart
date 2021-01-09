@@ -170,7 +170,6 @@ class _LookupPageViewState extends State<LookupPageView> {
     FormBlocSuccess<String, String> state,
   ) async {
     Map<String, dynamic> lookupData = state.toJson();
-
     if (lookupData.containsKey('countryCode')) {
       final Country country = (await IsoCountries.iso_countries).firstWhere(
           (Country _country) => _country.name == lookupData['countryCode'],
@@ -180,8 +179,6 @@ class _LookupPageViewState extends State<LookupPageView> {
         lookupData['countryCode'] = country.countryCode;
       }
     }
-
-    print(lookupData);
 
     context.read<LookupBloc>().add(LookupForecast(
           lookupData,

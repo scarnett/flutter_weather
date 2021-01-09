@@ -216,6 +216,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
 
     if (canRefresh(state)) {
       return RefreshIndicator(
+        color: AppTheme.primaryColor,
         onRefresh: () => _pullRefresh(state),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
