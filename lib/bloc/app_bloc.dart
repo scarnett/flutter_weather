@@ -145,6 +145,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       forecasts: forecasts,
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATED),
     );
+
+    add(RefreshForecast(
+      forecasts[state.selectedForecastIndex],
+      state.temperatureUnit,
+    ));
   }
 
   Stream<AppState> _mapRefreshForecastToStates(

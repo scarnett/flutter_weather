@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -137,6 +138,7 @@ class _LookupPageViewState extends State<LookupPageView> {
 
     return ForecastForm(
       saveButtonText: AppLocalizations.of(context).lookup,
+      forecasts: context.read<AppBloc>().state.forecasts,
       onSuccess: _onSuccess,
       onFailure: _onFailure,
     );
@@ -175,9 +177,9 @@ class _LookupPageViewState extends State<LookupPageView> {
           (Country _country) => _country.name == lookupData['countryCode'],
           orElse: () => null);
 
-      if (country != null) {
-        lookupData['countryCode'] = country.countryCode;
-      }
+      lookupData['countryCode'] = (country == null)
+          ? EnvConfig.DEFAULT_COUNTRY_CODE
+          : country.countryCode;
     }
 
     context.read<LookupBloc>().add(LookupForecast(
@@ -191,7 +193,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     FormBlocFailure<String, String> state,
   ) {
     FocusScope.of(context).unfocus();
-    Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text(state.failureResponse)));
   }
 }

@@ -49,9 +49,16 @@ class AppLocalizations {
   String get forecastDeletedText =>
       addMessage('Are you sure you want to delete this forecast?');
 
+  String get forecastAlreadyExists => addMessage('Forecast already exists');
+  String get forecastCityAlreadyExists =>
+      addMessage('A forecast for this city already exists.');
+
+  String get forecastPostalCodeAlreadyExists =>
+      addMessage('A forecast for this postal code already exists.');
+
   String get colorThemeEnable => addMessage('Enable Color Theme');
   String get colorThemeDisable => addMessage('Disable Color Theme');
-  String get noForecasts => addMessage('0 Forecasts Found');
+  String get noForecasts => addMessage('No Forecasts Found');
   String get city => addMessage('City');
   String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');

@@ -12,6 +12,7 @@ import 'package:flutter_weather/widgets/app_select_dialog.dart';
 
 class ForecastForm extends StatelessWidget {
   final Forecast forecast;
+  final List<Forecast> forecasts;
   final String saveButtonText;
   final String deleteButtonText;
   final Function(
@@ -27,6 +28,7 @@ class ForecastForm extends StatelessWidget {
   const ForecastForm({
     Key key,
     this.forecast,
+    this.forecasts,
     this.saveButtonText,
     this.deleteButtonText,
     this.onSuccess,
@@ -38,8 +40,11 @@ class ForecastForm extends StatelessWidget {
     BuildContext context,
   ) =>
       BlocProvider<ForecastFormBloc>(
-        create: (BuildContext context) =>
-            ForecastFormBloc(initialData: forecast),
+        create: (BuildContext context) => ForecastFormBloc(
+          context: context,
+          initialForecast: forecast,
+          forecasts: forecasts,
+        ),
         child: ForecastPageForm(
           forecast: forecast,
           saveButtonText: saveButtonText,
@@ -221,8 +226,10 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   void _onFailure(
     BuildContext context,
     FormBlocFailure<String, String> state,
-  ) =>
-      widget.onFailure(context, state);
+  ) {
+    widget.onFailure(context, state);
+    setState(() => _submitting = false);
+  }
 
   void _tapSubmit() => context.read<ForecastFormBloc>().submit();
 

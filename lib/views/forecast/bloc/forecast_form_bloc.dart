@@ -1,10 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 
 class ForecastFormBloc extends FormBloc<String, String> {
-  Forecast _initialData;
+  BuildContext _context;
+  Forecast _initialForecast;
+  List<Forecast> _forecasts;
 
   final TextFieldBloc cityName = TextFieldBloc(
     name: 'cityName',
@@ -19,9 +24,13 @@ class ForecastFormBloc extends FormBloc<String, String> {
   );
 
   ForecastFormBloc({
-    Forecast initialData,
+    BuildContext context,
+    Forecast initialForecast,
+    List<Forecast> forecasts,
   }) : super(isLoading: true) {
-    _initialData = initialData;
+    _context = context;
+    _initialForecast = initialForecast;
+    _forecasts = forecasts;
 
     addFieldBlocs(
       fieldBlocs: [
@@ -34,18 +43,18 @@ class ForecastFormBloc extends FormBloc<String, String> {
 
   @override
   void onLoading() async {
-    if (_initialData != null) {
-      if (_initialData.city != null) {
-        cityName.updateInitialValue(_initialData.cityName);
+    if (_initialForecast != null) {
+      if (_initialForecast.city != null) {
+        cityName.updateInitialValue(_initialForecast.cityName);
       }
 
-      if (_initialData.postalCode != null) {
-        postalCode.updateInitialValue(_initialData.postalCode);
+      if (_initialForecast.postalCode != null) {
+        postalCode.updateInitialValue(_initialForecast.postalCode);
       }
 
-      if (_initialData.countryCode != null) {
+      if (_initialForecast.countryCode != null) {
         final Country isoCountry = (await IsoCountries.iso_countries)
-            .firstWhere((e) => e.countryCode == _initialData.countryCode,
+            .firstWhere((e) => e.countryCode == _initialForecast.countryCode,
                 orElse: () => null);
 
         if (isoCountry != null) {
@@ -58,7 +67,54 @@ class ForecastFormBloc extends FormBloc<String, String> {
   }
 
   @override
-  void onSubmitting() async => emitSuccess(canSubmitAgain: true);
+  void onSubmitting() async {
+    bool _hasError = false;
+
+    _forecasts.forEach((Forecast forecast) {
+      if (!forecast.cityName.isNullOrEmpty() &&
+          !forecast.countryCode.isNullOrEmpty() &&
+          (forecast.cityName.toLowerCase() == cityName.value.toLowerCase()) &&
+          (forecast.countryCode.toLowerCase() ==
+              countryCode.value.toLowerCase())) {
+        if ((_initialForecast == null) ||
+            (_initialForecast.id != forecast.id)) {
+          cityName.addFieldError(
+            AppLocalizations.of(_context).forecastCityAlreadyExists,
+            isPermanent: true,
+          );
+
+          emitFailure(
+              failureResponse:
+                  AppLocalizations.of(_context).forecastAlreadyExists);
+
+          _hasError = true;
+        }
+      } else if (!forecast.postalCode.isNullOrEmpty() &&
+          !forecast.countryCode.isNullOrEmpty() &&
+          (forecast.postalCode.toLowerCase() ==
+              postalCode.value.toLowerCase()) &&
+          (forecast.postalCode.toLowerCase() ==
+              postalCode.value.toLowerCase())) {
+        if ((_initialForecast == null) ||
+            (_initialForecast.id != forecast.id)) {
+          postalCode.addFieldError(
+            AppLocalizations.of(_context).forecastPostalCodeAlreadyExists,
+            isPermanent: true,
+          );
+
+          emitFailure(
+              failureResponse:
+                  AppLocalizations.of(_context).forecastAlreadyExists);
+
+          _hasError = true;
+        }
+      }
+    });
+
+    if (!_hasError) {
+      emitSuccess(canSubmitAgain: true);
+    }
+  }
 
   @override
   Future<void> close() async {

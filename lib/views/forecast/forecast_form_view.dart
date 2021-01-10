@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
+import 'package:flutter_weather/views/forecast/forecast_view.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
@@ -70,6 +73,11 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
         case CRUDStatus.UPDATED:
+          FocusScope.of(context).unfocus();
+          Navigator.of(context)
+              .pushAndRemoveUntil(ForecastView.route(), (route) => false);
+          break;
+
         case CRUDStatus.DELETED:
           FocusScope.of(context).unfocus();
           Navigator.of(context).pop();
@@ -95,7 +103,10 @@ class _ForecastFormViewState extends State<ForecastPageView> {
         child: ForecastForm(
           saveButtonText: AppLocalizations.of(context).save,
           deleteButtonText: AppLocalizations.of(context).delete,
-          forecast: state.forecasts[state.selectedForecastIndex],
+          forecast: state.forecasts.isNullOrEmpty()
+              ? null
+              : state.forecasts[state.selectedForecastIndex],
+          forecasts: state.forecasts,
           onSuccess: _onSuccess,
           onFailure: _onFailure,
         ),
@@ -111,20 +122,20 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     FormBlocSuccess<String, String> formState,
   ) async {
     FocusScope.of(context).unfocus();
-    Map<String, dynamic> lookupData = formState.toJson();
+    Map<String, dynamic> forecastData = formState.toJson();
 
     final AppState appState = context.read<AppBloc>().state;
     final Country country = (await IsoCountries.iso_countries).firstWhere(
-        (Country _country) => _country.name == lookupData['countryCode'],
+        (Country _country) => _country.name == forecastData['countryCode'],
         orElse: () => null);
 
-    if (country != null) {
-      lookupData['countryCode'] = country.countryCode;
-    }
+    forecastData['countryCode'] = (country == null)
+        ? EnvConfig.DEFAULT_COUNTRY_CODE
+        : country.countryCode;
 
     context
         .read<AppBloc>()
-        .add(UpdateForecast(appState.activeForecastId, lookupData));
+        .add(UpdateForecast(appState.activeForecastId, forecastData));
   }
 
   void _onFailure(
@@ -132,11 +143,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     FormBlocFailure<String, String> state,
   ) {
     FocusScope.of(context).unfocus();
-
-    // TODO!
-    /*
-    Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).lookupFailure)));
-    */
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text(state.failureResponse)));
   }
 }
