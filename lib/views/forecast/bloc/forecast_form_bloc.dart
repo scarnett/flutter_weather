@@ -70,6 +70,14 @@ class ForecastFormBloc extends FormBloc<String, String> {
   void onSubmitting() async {
     bool _hasError = false;
 
+    if (cityName.value.isNullOrEmpty() && postalCode.value.isNullOrEmpty()) {
+      emitFailure(
+          failureResponse:
+              AppLocalizations.of(_context).forecastBadForecastInput);
+
+      return;
+    }
+
     _forecasts.forEach((Forecast forecast) {
       if (!forecast.cityName.isNullOrEmpty() &&
           !forecast.countryCode.isNullOrEmpty() &&

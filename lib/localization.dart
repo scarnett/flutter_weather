@@ -49,6 +49,8 @@ class AppLocalizations {
   String get forecastDeletedText =>
       addMessage('Are you sure you want to delete this forecast?');
 
+  String get forecastBadForecastInput =>
+      addMessage('Please enter the city or postal code');
   String get forecastAlreadyExists => addMessage('Forecast already exists');
   String get forecastCityAlreadyExists =>
       addMessage('A forecast for this city already exists.');
