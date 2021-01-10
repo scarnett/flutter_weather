@@ -23,8 +23,8 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
   ) async* {
     if (event is LookupForecast) {
       yield* _mapLookupForecastToState(event);
-    } else if (event is ClearForecast) {
-      yield* _mapClearForecastToState(event);
+    } else if (event is ClearLookupForecast) {
+      yield* _mapClearLookupForecastToState(event);
     }
   }
 
@@ -52,8 +52,8 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     }
   }
 
-  Stream<LookupState> _mapClearForecastToState(
-    ClearForecast event,
+  Stream<LookupState> _mapClearLookupForecastToState(
+    ClearLookupForecast event,
   ) async* {
     yield state.copyWith(
       lookupForecast: Nullable<Forecast>(null),

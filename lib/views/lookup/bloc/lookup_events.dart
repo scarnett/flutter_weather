@@ -20,8 +20,8 @@ class LookupForecast extends LookupEvent {
   List<Object> get props => [lookupData, temperatureUnit];
 }
 
-class ClearForecast extends LookupEvent {
-  const ClearForecast();
+class ClearLookupForecast extends LookupEvent {
+  const ClearLookupForecast();
 
   @override
   List<Object> get props => [];

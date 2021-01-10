@@ -103,7 +103,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     LookupState state,
   ) async {
     if (state.lookupForecast != null) {
-      context.read<LookupBloc>().add(ClearForecast());
+      context.read<LookupBloc>().add(ClearLookupForecast());
       return Future.value(false);
     }
 
@@ -146,7 +146,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     LookupState state,
   ) {
     if (state.lookupForecast != null) {
-      context.read<LookupBloc>().add(ClearForecast());
+      context.read<LookupBloc>().add(ClearLookupForecast());
     } else {
       Navigator.of(context).pop();
     }
