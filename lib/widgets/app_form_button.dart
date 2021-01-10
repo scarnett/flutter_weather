@@ -29,10 +29,11 @@ class AppFormButton extends StatelessWidget {
         disabledTextColor: AppTheme.disabledTextColor,
         disabledColor: AppTheme.disabledColor,
         textColor: Colors.white,
+        height: 50.0,
         child: (icon == null)
             ? (text == null)
                 ? Container()
-                : Text(text)
+                : Text(text, style: TextStyle(fontSize: 16.0))
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -41,7 +42,9 @@ class AppFormButton extends StatelessWidget {
                         right: (text == null) ? 0.0 : 5.0,
                       ),
                       child: icon),
-                  (text == null) ? Container() : Text(text),
+                  (text == null)
+                      ? Container()
+                      : Text(text, style: TextStyle(fontSize: 16.0)),
                 ],
               ),
         onPressed: onTap,
