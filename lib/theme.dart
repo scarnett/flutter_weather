@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 
 class AppTheme {
   static Color get primaryColor => Colors.deepPurple[400];
@@ -219,18 +220,21 @@ TextTheme _lightTextTheme = TextTheme(
     fontSize: 86.0,
     fontWeight: FontWeight.w100,
     height: 0.9,
+    shadows: commonTextShadow(),
   ),
   headline3: TextStyle(
     color: Colors.white,
     fontSize: 40.0,
     height: 0.85,
     fontWeight: FontWeight.w100,
+    shadows: commonTextShadow(),
   ),
   headline4: TextStyle(
     color: Colors.white.withOpacity(0.7),
     fontSize: 24.0,
     fontWeight: FontWeight.w100,
     height: 0.9,
+    shadows: commonTextShadow(),
   ),
   headline5: TextStyle(
     color: Colors.white.withOpacity(0.5),
@@ -246,6 +250,10 @@ TextTheme _lightTextTheme = TextTheme(
   subtitle2: TextStyle(
     color: Colors.white.withOpacity(0.5),
     fontSize: 12.0,
-    fontWeight: FontWeight.w100,
+    fontWeight: FontWeight.w400,
+    shadows: commonTextShadow(
+      color: Colors.black12,
+      blurRadius: 0.1,
+    ),
   ),
 );

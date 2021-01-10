@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 extension Extension on Object {
   bool isNullOrEmpty() => (this == null) || (this == '');
 
@@ -18,6 +20,19 @@ String toCamelCase(
               "${m[0][0].toUpperCase()}${m[0].substring(1).toLowerCase()}")
       .replaceAll(RegExp(r'(_|-|\s)+'), '');
   return s[0].toLowerCase() + s.substring(1);
+}
+
+List<Shadow> commonTextShadow({
+  color: Colors.black38,
+  blurRadius: 1.0,
+}) {
+  return [
+    Shadow(
+      color: color,
+      blurRadius: blurRadius,
+      offset: const Offset(0.0, 1.0),
+    ),
+  ];
 }
 
 class Nullable<T> {
