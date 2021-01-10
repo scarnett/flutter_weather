@@ -73,7 +73,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget _buildCurrentTemperature(
     ForecastDay currentDay,
   ) {
-    ForecastDayWeather currentWeater = currentDay.weather.first;
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
 
     return Container(
@@ -102,12 +101,41 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               ),
             ],
           ),
-          BoxedIcon(
-            getForecastIconData(currentWeater.icon),
-            size: 80.0,
-          ),
+          _buildForecastIcon(currentDay),
         ],
       ),
+    );
+  }
+
+  Widget _buildForecastIcon(
+    ForecastDay currentDay,
+  ) {
+    ForecastDayWeather currentWeater = currentDay.weather.first;
+
+    if (widget.bloc.state.themeMode == ThemeMode.light &&
+        !widget.bloc.state.colorTheme) {
+      return BoxedIcon(
+        getForecastIconData(currentWeater.icon),
+        size: 80.0,
+      );
+    }
+
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          top: 1.0,
+          left: 1.0,
+          child: BoxedIcon(
+            getForecastIconData(currentWeater.icon),
+            color: Colors.black38,
+            size: 80.0,
+          ),
+        ),
+        BoxedIcon(
+          getForecastIconData(currentWeater.icon),
+          size: 80.0,
+        ),
+      ],
     );
   }
 
