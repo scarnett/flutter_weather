@@ -6,6 +6,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
@@ -56,15 +57,17 @@ class _LookupPageViewState extends State<LookupPageView> {
             BuildContext context,
             LookupState state,
           ) =>
-              WillPopScope(
-            onWillPop: () => _willPopCallback(state),
-            child: AppUiOverlayStyle(
-              themeMode: context.watch<AppBloc>().state.themeMode,
-              colorTheme: context.watch<AppBloc>().state.colorTheme,
-              systemNavigationBarIconBrightness:
-                  context.watch<AppBloc>().state.colorTheme
-                      ? Brightness.dark
-                      : null,
+              AppUiOverlayStyle(
+            themeMode: context.watch<AppBloc>().state.themeMode,
+            colorTheme: context.watch<AppBloc>().state.colorTheme,
+            systemNavigationBarIconBrightness:
+                context.watch<AppBloc>().state.colorTheme
+                    ? Brightness.dark
+                    : null,
+            child: Theme(
+              data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
+                  ? appDarkThemeData
+                  : appLightThemeData,
               child: Scaffold(
                 extendBody: true,
                 appBar: AppBar(
@@ -74,8 +77,11 @@ class _LookupPageViewState extends State<LookupPageView> {
                     onPressed: () => _handleBack(state),
                   ),
                 ),
-                body: SafeArea(
-                  child: _buildContent(),
+                body: WillPopScope(
+                  onWillPop: () => _willPopCallback(state),
+                  child: SafeArea(
+                    child: _buildContent(),
+                  ),
                 ),
               ),
             ),
