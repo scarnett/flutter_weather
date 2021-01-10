@@ -167,8 +167,8 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             text: _submitting ? null : widget.saveButtonText,
             icon: _submitting
                 ? SizedBox(
-                    height: 25.0,
-                    width: 25.0,
+                    height: 20.0,
+                    width: 20.0,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.0,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -189,8 +189,8 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             color: AppTheme.dangerColor,
             icon: _deleting
                 ? SizedBox(
-                    height: 25.0,
-                    width: 25.0,
+                    height: 20.0,
+                    width: 20.0,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.0,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
