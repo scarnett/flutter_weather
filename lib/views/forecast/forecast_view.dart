@@ -6,6 +6,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
@@ -184,12 +185,24 @@ class _ForecastPageViewState extends State<ForecastPageView>
             AlwaysStoppedAnimation(_forecastColorValue),
           );
 
+          Color _forecastDarkenedColor = _forecastColor.darken(0.25);
+
           return AppUiOverlayStyle(
             themeMode: state.themeMode,
             colorTheme: state.colorTheme,
-            systemNavigationBarColor: _forecastColor,
+            systemNavigationBarColor: _forecastDarkenedColor,
             child: DecoratedBox(
-              decoration: BoxDecoration(color: _forecastColor),
+              decoration: BoxDecoration(
+                color: _forecastColor,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    _forecastColor,
+                    _forecastDarkenedColor,
+                  ],
+                ),
+              ),
               child: SafeArea(child: _buildContent(state)),
             ),
           );
