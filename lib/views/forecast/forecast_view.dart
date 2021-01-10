@@ -42,6 +42,8 @@ class ForecastPageView extends StatefulWidget {
 
 class _ForecastPageViewState extends State<ForecastPageView>
     with TickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   PageController _pageController;
   Animatable<Color> _pageBackground;
   ValueNotifier<int> _currentForecastNotifier;
@@ -74,6 +76,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
     BuildContext context,
   ) =>
       Scaffold(
+        key: _scaffoldKey,
         extendBody: true,
         body: BlocListener<AppBloc, AppState>(
           listener: _blocListener,
@@ -99,17 +102,17 @@ class _ForecastPageViewState extends State<ForecastPageView>
 
       switch (state.crudStatus) {
         case CRUDStatus.CREATED:
-          Scaffold.of(context)
+          _scaffoldKey.currentState
               .showSnackBar(SnackBar(content: Text(i18n.forecastAdded)));
           break;
 
         case CRUDStatus.UPDATED:
-          Scaffold.of(context)
+          _scaffoldKey.currentState
               .showSnackBar(SnackBar(content: Text(i18n.forecastUpdated)));
           break;
 
         case CRUDStatus.DELETED:
-          Scaffold.of(context)
+          _scaffoldKey.currentState
               .showSnackBar(SnackBar(content: Text(i18n.forecastDeleted)));
           break;
 
