@@ -74,7 +74,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1
         with:
-          path: apps/mobile_flutter/version.txt
+          path: version.txt
       - 
         name: "Flutter get"
         run: "flutter pub get"
@@ -113,7 +113,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1
         with:
-          path: apps/mobile_flutter/version.txt
+          path: version.txt
       - 
         name: "Flutter get"
         run: "flutter pub get"
