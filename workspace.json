@@ -1,6 +1,5 @@
 {
   "version": 1,
-
   "projects": {
     "mobile_flutter": {
       "projectType": "application",
@@ -120,8 +119,135 @@
           }
         }
       }
-    }},
+    },
+    "web_ng": {
+      "projectType": "application",
+      "root": "apps/web_ng",
+      "sourceRoot": "apps/web_ng/src",
+      "prefix": "flutter-weather",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/web_ng",
+            "index": "apps/web_ng/src/index.html",
+            "main": "apps/web_ng/src/main.ts",
+            "polyfills": "apps/web_ng/src/polyfills.ts",
+            "tsConfig": "apps/web_ng/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/web_ng/src/favicon.ico", "apps/web_ng/src/assets"],
+            "styles": ["apps/web_ng/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/web_ng/src/environments/environment.ts",
+                  "with": "apps/web_ng/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "web_ng:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "web_ng:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "web_ng:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/web_ng/tsconfig.app.json",
+              "apps/web_ng/tsconfig.spec.json",
+              "apps/web_ng/tsconfig.editor.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/web_ng/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/web_ng"],
+          "options": {
+            "jestConfig": "apps/web_ng/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web_ng_e2e": {
+      "root": "apps/web_ng_e2e",
+      "sourceRoot": "apps/web_ng_e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/web_ng_e2e/cypress.json",
+            "tsConfig": "apps/web_ng_e2e/tsconfig.e2e.json",
+            "devServerTarget": "web_ng:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "web_ng:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/web_ng_e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/web_ng_e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
   }
 }

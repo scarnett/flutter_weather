@@ -18,18 +18,20 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
   "projects": {
     "mobile_flutter": {
       "tags": []
+    },
+    "web_ng": {
+      "tags": []
+    },
+    "web_ng_e2e": {
+      "tags": [],
+      "implicitDependencies": ["web_ng"]
     }
   }
 }
