@@ -25,12 +25,14 @@ String toCamelCase(
 List<Shadow> commonTextShadow({
   color: Colors.black38,
   blurRadius: 1.0,
+  xOffset: 1.0,
+  yOffset: 1.0,
 }) {
   return [
     Shadow(
       color: color,
       blurRadius: blurRadius,
-      offset: const Offset(0.0, 1.0),
+      offset: Offset(xOffset, yOffset),
     ),
   ];
 }
