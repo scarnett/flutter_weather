@@ -12,8 +12,11 @@ jobs:
       - 
         uses: actions/checkout@v2
       - 
-        name: install Nrwl Nx and build
-        run: npm i nx && npm ci && nx run web_ng:build
+        uses: mansagroup/nrwl-nx-action@v1
+        with:
+          targets: build
+      - 
+        run: npm ci && nx run web_ng:build
       - 
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
