@@ -58,12 +58,12 @@ jobs:
         env: 
           FLUTTER_WEATHER_DEV_LOCAL_SECRET: "${{ secrets.FLUTTER_WEATHER_LOCAL_SECRET }}"
         name: "Decode android local.properties"
-        run: "echo $FLUTTER_WEATHER_DEV_LOCAL_SECRET > android/local.properties"
+        run: "echo $FLUTTER_WEATHER_DEV_LOCAL_SECRET > apps/mobile_flutter/android/local.properties"
       - 
         env: 
           FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
         name: "Decode environment config"
-        run: "echo $FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET > lib/env_config.dart"
+        run: "echo $FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET > apps/mobile_flutter/lib/env_config.dart"
       - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
@@ -74,13 +74,13 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1
         with:
-          path: version.txt
+          path: apps/mobile_flutter/version.txt
       - 
         name: "Flutter get"
         run: "flutter pub get"
       - 
         name: "Flutter build dev"
-        run: "flutter build appbundle -t lib/main_dev.dart --flavor dev --verbose"
+        run: "flutter build appbundle -t apps/mobile_flutter/lib/main_dev.dart --flavor dev --verbose"
 
   buildIos:
     name: "Build iOS"
@@ -102,7 +102,7 @@ jobs:
         env: 
           FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
         name: "Decode environment config"
-        run: "echo $FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET > lib/env_config.dart"
+        run: "echo $FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET > apps/mobile_flutter/lib/env_config.dart"
       - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
@@ -113,10 +113,10 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1
         with:
-          path: version.txt
+          path: apps/mobile_flutter/version.txt
       - 
         name: "Flutter get"
         run: "flutter pub get"
       - 
         name: "Flutter build dev"
-        run: "flutter build ios -t lib/main_dev.dart --no-codesign --verbose"
+        run: "flutter build ios -t apps/mobile_flutter/lib/main_dev.dart --no-codesign --verbose"

@@ -1,0 +1,127 @@
+{
+  "version": 1,
+
+  "projects": {
+    "mobile_flutter": {
+      "projectType": "application",
+      "root": "apps/mobile_flutter",
+      "sourceRoot": "apps/mobile_flutter/src",
+      "architect": {
+        "analyze": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter analyze",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "assemble": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter assemble",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "attach": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter attach",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "buildApk": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter build apk",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "buildAppbundle": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter build appbundle",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "buildBundle": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter build bundle",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "buildIos": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter build ios",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "buildIosFramework": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter build ios-framework",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "buildIpa": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter build ipa",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "clean": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter clean",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "drive": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter drive",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "format": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter format apps/mobile_flutter/*",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "genL10n": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter gen-l10n",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "install": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter install",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "run": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter run",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "test": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter test",
+            "cwd": "apps/mobile_flutter"
+          }
+        }
+      }
+    }},
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  }
+}
