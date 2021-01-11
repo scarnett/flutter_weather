@@ -30,7 +30,7 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.6
       - 
         name: "Create version.txt with nuGetVersion"
-        run: echo ${{ steps.gitversion.outputs.nuGetVersion  }} > version.txt
+        run: echo ${{ steps.gitversion.outputs.nuGetVersion  }} > apps/mobile_flutter/version.txt
       - 
         name: "Upload version.txt"
         uses: actions/upload-artifact@v2
