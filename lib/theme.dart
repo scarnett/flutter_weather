@@ -21,14 +21,9 @@ class AppTheme {
               : secondaryColor.withOpacity(0.05);
 
   static Color getHintColor(
-    ThemeMode themeMode, {
-    bool colorTheme: false,
-  }) =>
-      (themeMode == ThemeMode.dark)
-          ? Colors.white.withOpacity(0.3)
-          : colorTheme
-              ? Colors.white.withOpacity(0.5)
-              : secondaryColor.withOpacity(0.3);
+    ThemeMode themeMode,
+  ) =>
+      (themeMode == ThemeMode.dark) ? Colors.grey[500] : Colors.grey[400];
 
   static Color getSectionColor(
     ThemeMode themeMode,
@@ -207,6 +202,9 @@ TextTheme _darkTextTheme = TextTheme(
     fontSize: 16.0,
     height: 0.9,
   ),
+  subtitle1: TextStyle(
+    color: Colors.white,
+  ),
   subtitle2: TextStyle(
     color: AppTheme.secondaryColor.withOpacity(0.7),
     fontSize: 12.0,
@@ -246,6 +244,9 @@ TextTheme _lightTextTheme = TextTheme(
     color: Colors.white,
     fontSize: 16.0,
     height: 0.9,
+  ),
+  subtitle1: TextStyle(
+    color: Colors.grey[700],
   ),
   subtitle2: TextStyle(
     color: Colors.white.withOpacity(0.5),

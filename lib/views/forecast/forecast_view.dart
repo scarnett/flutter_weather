@@ -258,7 +258,6 @@ class _ForecastPageViewState extends State<ForecastPageView>
         child: CirclePageIndicator(
           dotColor: AppTheme.getHintColor(
             state.themeMode,
-            colorTheme: state.colorTheme,
           ),
           selectedDotColor:
               state.colorTheme ? Colors.white : AppTheme.primaryColor,

@@ -172,7 +172,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             text: AppLocalizations.of(context).version,
           ),
           ListTile(
-            leading: Text(_packageInfo.version),
+            title: Text(
+              _packageInfo.version,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
             trailing: _buildVersionText(),
           ),
           Divider(),

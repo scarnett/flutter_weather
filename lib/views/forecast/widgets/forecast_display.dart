@@ -6,6 +6,8 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_wind_direction.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -74,6 +76,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     ForecastDay currentDay,
   ) {
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
+    ForecastDayWeather currentWeater = currentDay.weather.first;
 
     return Container(
       padding: const EdgeInsets.only(bottom: 20.0),
@@ -101,41 +104,9 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               ),
             ],
           ),
-          _buildForecastIcon(currentDay),
+          ForecastIcon(icon: getForecastIconData(currentWeater.icon)),
         ],
       ),
-    );
-  }
-
-  Widget _buildForecastIcon(
-    ForecastDay currentDay,
-  ) {
-    ForecastDayWeather currentWeater = currentDay.weather.first;
-
-    if (widget.bloc.state.themeMode == ThemeMode.light &&
-        !widget.bloc.state.colorTheme) {
-      return BoxedIcon(
-        getForecastIconData(currentWeater.icon),
-        size: 80.0,
-      );
-    }
-
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: 1.0,
-          left: 1.0,
-          child: BoxedIcon(
-            getForecastIconData(currentWeater.icon),
-            color: Colors.black38,
-            size: 80.0,
-          ),
-        ),
-        BoxedIcon(
-          getForecastIconData(currentWeater.icon),
-          size: 80.0,
-        ),
-      ],
     );
   }
 
@@ -258,18 +229,14 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     ],
                   ),
                   SizedBox(
-                    height: 30.0,
+                    height: 20.0,
                     width: 30.0,
-                    child: RotationTransition(
-                      turns: AlwaysStoppedAnimation(currentDay.deg / 360.0),
-                      child: Icon(
-                        Icons.navigation,
-                        color: AppTheme.getHintColor(
-                          widget.bloc.state.themeMode,
-                          colorTheme: widget.bloc.state.colorTheme,
-                        ),
-                        size: 20.0,
+                    child: ForecastWindDirection(
+                      degree: currentDay.deg,
+                      color: AppTheme.getHintColor(
+                        widget.bloc.state.themeMode,
                       ),
+                      size: 20.0,
                     ),
                   ),
                 ],
@@ -301,13 +268,13 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   SizedBox(
                     height: 30.0,
                     width: 30.0,
-                    child: BoxedIcon(
-                      WeatherIcons.barometer,
+                    child: ForecastIcon(
                       size: 20.0,
+                      icon: WeatherIcons.barometer,
                       color: AppTheme.getHintColor(
                         widget.bloc.state.themeMode,
-                        colorTheme: widget.bloc.state.colorTheme,
                       ),
+                      shadowColor: Colors.black26,
                     ),
                   ),
                 ],
@@ -338,13 +305,13 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   SizedBox(
                     height: 30.0,
                     width: 30.0,
-                    child: BoxedIcon(
-                      WeatherIcons.humidity,
+                    child: ForecastIcon(
                       size: 20.0,
+                      icon: WeatherIcons.humidity,
                       color: AppTheme.getHintColor(
                         widget.bloc.state.themeMode,
-                        colorTheme: widget.bloc.state.colorTheme,
                       ),
+                      shadowColor: Colors.black26,
                     ),
                   ),
                 ],
@@ -394,13 +361,13 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   ],
                 ),
               ),
-              BoxedIcon(
-                getForecastIconData(day.weather.first.icon),
+              ForecastIcon(
                 size: 24.0,
+                icon: getForecastIconData(day.weather.first.icon),
                 color: AppTheme.getHintColor(
                   widget.bloc.state.themeMode,
-                  colorTheme: widget.bloc.state.colorTheme,
                 ),
+                shadowColor: Colors.black26,
               ),
             ],
           ),
