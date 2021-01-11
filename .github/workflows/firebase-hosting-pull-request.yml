@@ -15,8 +15,7 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2.0.3
         with:
           targets: build
-      - 
-        run: nx run web_ng:build
+          projects: web_ng
       - 
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
