@@ -81,7 +81,8 @@ jobs:
         run: "flutter pub get"
       - 
         name: "Flutter build dev"
-        run: "flutter build appbundle -t lib/main_dev.dart --flavor dev --verbose"
+        working-directory: "./apps/mobile_flutter"
+        run: "flutter build appbundle -t apps/mobile_flutter/lib/main_dev.dart --flavor dev --verbose"
 
   buildIos:
     name: "Build iOS"
@@ -121,4 +122,5 @@ jobs:
         run: "flutter pub get"
       - 
         name: "Flutter build dev"
-        run: "flutter build ios -t lib/main_dev.dart --no-codesign --verbose"
+        working-directory: "./apps/mobile_flutter"
+        run: "flutter build ios -t apps/mobile_flutter/lib/main_dev.dart --no-codesign --verbose"
