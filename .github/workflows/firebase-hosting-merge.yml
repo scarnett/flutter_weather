@@ -12,9 +12,8 @@ jobs:
       - 
         uses: actions/checkout@v2
       - 
-        uses: mansagroup/nrwl-nx-action@v2.0.3
-        with:
-          targets: lint,build,deploy
+        name: install Nrwl Nx
+        run: npm i nx
       - 
         run: npm ci && nx run web_ng:build
       - 
