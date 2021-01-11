@@ -7,6 +7,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
@@ -47,7 +48,7 @@ class _ForecastPageViewState extends State<ForecastPageView>
   PageController _pageController;
   Animatable<Color> _pageBackground;
   ValueNotifier<int> _currentForecastNotifier;
-  double _currentPage = 0.0;
+  num _currentPage = 0;
 
   @override
   void initState() {
@@ -56,7 +57,15 @@ class _ForecastPageViewState extends State<ForecastPageView>
     AppState state = context.read<AppBloc>().state;
 
     _pageController = PageController(initialPage: state.selectedForecastIndex)
-      ..addListener(() => _currentPage = _pageController.page);
+      ..addListener(() {
+        _currentPage = _pageController.page;
+
+        if (isInteger(_currentPage)) {
+          context
+              .read<AppBloc>()
+              .add(SelectedForecastIndex(_currentPage.toInt()));
+        }
+      });
 
     if (state.colorTheme) {
       _pageBackground = buildForecastColorSequence(state.forecasts);
@@ -184,9 +193,11 @@ class _ForecastPageViewState extends State<ForecastPageView>
               ? (_currentPage / state.forecasts.length)
               : 0.0;
 
-          Color _forecastColor = _pageBackground.evaluate(
-            AlwaysStoppedAnimation(_forecastColorValue),
-          );
+          Color _forecastColor = (_pageBackground == null)
+              ? Colors.transparent
+              : _pageBackground.evaluate(
+                  AlwaysStoppedAnimation(_forecastColorValue),
+                );
 
           Color _forecastDarkenedColor = _forecastColor.darken(0.25);
 
@@ -264,14 +275,24 @@ class _ForecastPageViewState extends State<ForecastPageView>
           selectedSize: 10.0,
           itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
-          onPageSelected: _onPageChanged,
+          onPageSelected: _onPageSelected,
         ),
       );
 
   void _onPageChanged(
     int page,
+  ) =>
+      _currentForecastNotifier.value = page;
+
+  void _onPageSelected(
+    int page,
   ) {
-    context.read<AppBloc>().add(SelectedForecastIndex(page));
+    _pageController.animateToPage(
+      page,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.linear,
+    );
+
     _currentForecastNotifier.value = page;
   }
 

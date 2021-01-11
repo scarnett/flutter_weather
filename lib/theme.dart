@@ -203,7 +203,7 @@ TextTheme _darkTextTheme = TextTheme(
     height: 0.9,
   ),
   subtitle1: TextStyle(
-    color: Colors.white,
+    color: Colors.grey[700],
   ),
   subtitle2: TextStyle(
     color: AppTheme.secondaryColor.withOpacity(0.7),
@@ -246,7 +246,7 @@ TextTheme _lightTextTheme = TextTheme(
     height: 0.9,
   ),
   subtitle1: TextStyle(
-    color: Colors.grey[700],
+    color: Colors.white,
   ),
   subtitle2: TextStyle(
     color: Colors.white.withOpacity(0.5),

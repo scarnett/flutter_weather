@@ -106,6 +106,10 @@ Animatable<Color> buildForecastColorSequence(
     });
   }
 
+  if ((colors == null) || colors.isEmpty) {
+    return null;
+  }
+
   return TweenSequence<Color>(colors);
 }
 
