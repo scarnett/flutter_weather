@@ -108,6 +108,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             children: <Widget>[
               TextFieldBlocBuilder(
                 textFieldBloc: context.watch<ForecastFormBloc>().cityName,
+                keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context).city,
                   prefixIcon: Icon(
@@ -119,6 +120,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
               ),
               TextFieldBlocBuilder(
                 textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
+                keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context).postalCode,
                   prefixIcon: Icon(
