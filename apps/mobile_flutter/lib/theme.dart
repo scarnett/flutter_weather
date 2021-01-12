@@ -191,7 +191,7 @@ TextTheme _darkTextTheme = TextTheme(
   headline4: TextStyle(
     color: AppTheme.secondaryColor.withOpacity(0.7),
     fontSize: 24.0,
-    fontWeight: FontWeight.w100,
+    fontWeight: FontWeight.w300,
     height: 0.9,
   ),
   headline5: TextStyle(
@@ -231,14 +231,14 @@ TextTheme _lightTextTheme = TextTheme(
     shadows: commonTextShadow(),
   ),
   headline4: TextStyle(
-    color: Colors.white.withOpacity(0.7),
+    color: Colors.white.withOpacity(0.9),
     fontSize: 24.0,
-    fontWeight: FontWeight.w100,
+    fontWeight: FontWeight.w300,
     height: 0.9,
     shadows: commonTextShadow(),
   ),
   headline5: TextStyle(
-    color: Colors.white.withOpacity(0.5),
+    color: Colors.white.withOpacity(0.9),
     fontSize: 16.0,
     height: 0.9,
     fontWeight: FontWeight.w400,
@@ -252,7 +252,7 @@ TextTheme _lightTextTheme = TextTheme(
     color: Colors.white,
   ),
   subtitle2: TextStyle(
-    color: Colors.white.withOpacity(0.5),
+    color: Colors.white.withOpacity(0.9),
     fontSize: 12.0,
     fontWeight: FontWeight.w400,
     shadows: commonTextShadow(

@@ -233,9 +233,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     width: 30.0,
                     child: ForecastWindDirection(
                       degree: currentDay.deg,
-                      color: AppTheme.getHintColor(
-                        widget.bloc.state.themeMode,
-                      ),
                       size: 20.0,
                     ),
                   ),
@@ -271,9 +268,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     child: ForecastIcon(
                       size: 20.0,
                       icon: WeatherIcons.barometer,
-                      color: AppTheme.getHintColor(
-                        widget.bloc.state.themeMode,
-                      ),
                       shadowColor: Colors.black26,
                     ),
                   ),
@@ -308,9 +302,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     child: ForecastIcon(
                       size: 20.0,
                       icon: WeatherIcons.humidity,
-                      color: AppTheme.getHintColor(
-                        widget.bloc.state.themeMode,
-                      ),
                       shadowColor: Colors.black26,
                     ),
                   ),
@@ -364,9 +355,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               ForecastIcon(
                 size: 24.0,
                 icon: getForecastIconData(day.weather.first.icon),
-                color: AppTheme.getHintColor(
-                  widget.bloc.state.themeMode,
-                ),
                 shadowColor: Colors.black26,
               ),
             ],
