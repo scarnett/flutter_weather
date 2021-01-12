@@ -69,6 +69,20 @@
             "cwd": "apps/mobile_flutter"
           }
         },
+        "buildLauncherIcons": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter pub run flutter_launcher_icons:main",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "buildSplashScreens": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter pub run flutter_native_splash:create",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
         "clean": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
@@ -104,10 +118,17 @@
             "cwd": "apps/mobile_flutter"
           }
         },
-        "run": {
+        "runDev": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "flutter run",
+            "command": "flutter run -t lib/main_dev.dart --flavor dev",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
+        "runProd": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter run -t lib/main_prod.dart --flavor prod --release",
             "cwd": "apps/mobile_flutter"
           }
         },
