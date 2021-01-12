@@ -33,6 +33,7 @@ dev_dependencies:
   test: '^1.15.7'
   build_runner: '^1.10.0'
   flutter_launcher_icons: '^0.8.1'
+  flutter_native_splash: '^0.2.4'
 
 flutter:
   uses-material-design: true
@@ -47,3 +48,9 @@ flutter_icons:
   image_path_android: 'assets/images/launcher.png'
   android: true
   ios: true
+
+flutter_native_splash:
+  image: 'assets/images/splash.png'
+  color: '#FFFFFF'
+  image_dark: 'assets/images/splash_invert.png'
+  color_dark: '#262626'
