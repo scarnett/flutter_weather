@@ -1,7 +1,7 @@
 version: '3'
 services:
-  flutter:
-    container_name: flutter_weather
+  flutter_weather_dev:
+    container_name: flutter_weather_dev
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,3 +12,16 @@ services:
     stdin_open: true
     tty: true
     command: flutter run -t lib/main_dev.dart --flavor dev
+
+  flutter_weather_prod:
+    container_name: flutter_weather_prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '$PWD:/home/developer/workspace'
+      - '/dev/bus/usb:/dev/bus/usb'
+    privileged: true
+    stdin_open: true
+    tty: true
+    command: flutter run -t lib/main_dev.dart --flavor prod --release

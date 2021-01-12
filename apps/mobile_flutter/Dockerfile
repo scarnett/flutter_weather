@@ -3,7 +3,7 @@ FROM ubuntu:20.10
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Prerequisites
-RUN apt update && apt install -y curl git unzip xz-utils zip libglu1-mesa openjdk-8-jdk wget
+RUN apt update && apt install -y curl git unzip xz-utils zip libglu1-mesa openjdk-8-jdk wget npm
 
 # Set up new user
 RUN useradd -ms /bin/bash developer
@@ -36,12 +36,9 @@ RUN flutter channel stable
 # Upgrade flutter
 RUN flutter upgrade
 
-# Instal npm
-RUN npm install -g npm@6.14.4
-
 # Install and start the remote dev server
-RUN npm install -g remotedev-server
-RUN remotedev --port 8000
+# RUN npm i -g remotedev-server
+# RUN remotedev --port 8000
 
 WORKDIR /home/developer/workspace
 
