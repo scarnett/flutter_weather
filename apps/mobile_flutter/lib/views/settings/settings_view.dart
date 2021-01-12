@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
@@ -79,7 +81,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           children: <Widget>[]
             ..addAll(_buildThemeModeSection())
             ..addAll(_buildTemperatureUnitSection())
-            ..addAll(_buildVersionSection()),
+            ..addAll(_buildAboutSection())
+            ..addAll(_buildBuildInfoSection()),
         ),
       );
 
@@ -164,12 +167,34 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     ];
   }
 
-  List<Widget> _buildVersionSection() => (_packageInfo == null)
+  List<Widget> _buildAboutSection() => (_packageInfo == null)
       ? [Container()]
       : [
           AppSectionHeader(
             bloc: _bloc,
-            text: AppLocalizations.of(context).version,
+            text: AppLocalizations.of(context).about,
+          ),
+          ListTile(
+            title: RichText(
+              text: TextSpan(
+                text: AppLocalizations.of(context).privacyPolicy,
+                style: TextStyle(
+                  color: AppTheme.primaryColor,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()..onTap = _tapPrivacyPolicy,
+              ),
+            ),
+          ),
+          Divider(),
+        ];
+
+  List<Widget> _buildBuildInfoSection() => (_packageInfo == null)
+      ? [Container()]
+      : [
+          AppSectionHeader(
+            bloc: _bloc,
+            text: AppLocalizations.of(context).buildInformation,
           ),
           ListTile(
             title: Text(
@@ -215,4 +240,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     TemperatureUnit temperatureUnit,
   ) =>
       _bloc.add(SetTemperatureUnit(temperatureUnit));
+
+  void _tapPrivacyPolicy() =>
+      Navigator.push(context, PrivacyPolicyView.route());
 }

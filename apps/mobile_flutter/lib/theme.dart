@@ -139,6 +139,9 @@ ThemeData appColorThemeData = appLightThemeData.copyWith(
       fontSize: 16.0,
       height: 0.9,
     ),
+    subtitle1: TextStyle(
+      color: Colors.grey[700],
+    ),
   ),
 );
 
