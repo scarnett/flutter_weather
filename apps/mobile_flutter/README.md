@@ -7,9 +7,9 @@
 
 &nbsp;
 ## Screenshots
-<div align="center">Colorized</div>|<div align="center">Light</div>|<div align="center">Dark</div>
----------|-----|----
-<span align="center"><img src="../../docs/images/screen1.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="../../docs/images/screen2.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="../../docs/images/screen3.png" width="300" alt="Flutter Weather" /></span>
+|<div align="center">Colorized</div>|<div align="center">Light</div>|<div align="center">Dark</div>|
+|---------|-----|----|
+|<span align="center"><img src="docs/images/screen1.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="docs/images/screen2.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="docs/images/screen3.png" width="300" alt="Flutter Weather" /></span>|
 
 &nbsp;
 ## Environment Configuration
