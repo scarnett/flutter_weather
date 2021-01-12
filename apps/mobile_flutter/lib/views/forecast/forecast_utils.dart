@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -111,6 +112,22 @@ Animatable<Color> buildForecastColorSequence(
   }
 
   return TweenSequence<Color>(colors);
+}
+
+String getLocationText(
+  Forecast forecast,
+) {
+  String text = '';
+
+  if (!forecast.postalCode.isNullOrEmpty()) {
+    text += '${forecast.postalCode.toUpperCase()}, ';
+  }
+
+  if (!forecast.countryCode.isNullOrEmpty()) {
+    text += '${forecast.countryCode.toUpperCase()}';
+  }
+
+  return text.trim();
 }
 
 String getUnitSymbol(

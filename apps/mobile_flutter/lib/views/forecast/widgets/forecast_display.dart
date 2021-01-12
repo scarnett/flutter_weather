@@ -65,7 +65,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               style: Theme.of(context).textTheme.headline3,
             ),
             Text(
-              widget.forecast.city.country.toUpperCase(),
+              getLocationText(widget.forecast),
               style: Theme.of(context).textTheme.subtitle2,
             ),
           ],
