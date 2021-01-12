@@ -5,13 +5,11 @@
 <h1 align="center">Flutter Weather</h1>
 <p align="center">A beautiful weather forecasting application built with the <a href="https://www.flutter.dev/" target="_blank">Flutter development kit</a>.</p>
 
-&nbsp;
 ## Screenshots
 |<div align="center">Colorized</div>|<div align="center">Light</div>|<div align="center">Dark</div>|
 |---------|-----|----|
 |<span align="center"><img src="docs/images/screen1.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="docs/images/screen2.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="docs/images/screen3.png" width="300" alt="Flutter Weather" /></span>|
 
-&nbsp;
 ## Environment Configuration
 You will need to create a file called **env_config.dart** in the **lib** folder with the following:
 
@@ -38,7 +36,6 @@ flutter.buildMode=<debug|profile|release>
 flutter.versionName=1.0.0
 ```
 
-&nbsp;
 ## Run Application (Nx)
 
 **DEV**
@@ -51,7 +48,6 @@ nx run mobile_flutter:runDev
 nx run mobile_flutter:runProd
 ```
 
-&nbsp;
 ## Run Application (Docker)
 
 **DEV**
@@ -64,7 +60,6 @@ docker-compose up flutter_weather_dev
 docker-compose up flutter_weather_prod
 ```
 
-&nbsp;
 ## Build Android
 **APK**
 ```bash
@@ -76,22 +71,22 @@ nx run mobile_flutter:buildApk
 nx run mobile_flutter:buildAppbundle
 ```
 
-&nbsp;
 ## Build iOS
 ```bash
 nx run mobile_flutter:buildIos
 ```
 
-&nbsp;
 ## Build launcher icons
 
 ```bash
 nx run mobile_flutter:buildLauncherIcons
 ```
 
-&nbsp;
 ## Build splash screens
 
 ```bash
 nx run mobile_flutter:buildSplashScreens
 ```
+
+## Credits
+Created by [@scarnett](https://github.com/scarnett/)
