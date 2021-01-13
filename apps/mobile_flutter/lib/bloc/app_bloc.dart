@@ -211,6 +211,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     yield state.copyWith(
       activeForecastId: Nullable<String>(null),
+      colorTheme: (_forecasts.length == 0) ? false : state.colorTheme,
       forecasts: _forecasts,
       selectedForecastIndex: (state.selectedForecastIndex > 0)
           ? (state.selectedForecastIndex - 1)

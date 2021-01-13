@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
-extension Extension on Object {
+extension ObjectExtension on Object {
   bool isNullOrEmpty() => (this == null) || (this == '');
 
   bool isNullEmptyOrFalse() => (this == null) || (this == '') || !this;
 
   bool isNullEmptyZeroOrFalse() =>
       (this == null) || (this == '') || !this || (this == 0);
+}
+
+extension ListExtension on List {
+  bool isNullOrZeroLength() => (this == null) || (this.length == 0);
 }
 
 String toCamelCase(

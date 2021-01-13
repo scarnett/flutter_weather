@@ -103,7 +103,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
         child: ForecastForm(
           saveButtonText: AppLocalizations.of(context).save,
           deleteButtonText: AppLocalizations.of(context).delete,
-          forecast: state.forecasts.isNullOrEmpty()
+          forecast: state.forecasts.isNullOrZeroLength()
               ? null
               : state.forecasts[state.selectedForecastIndex],
           forecasts: state.forecasts,
