@@ -1,14 +1,21 @@
 <p align="center">
-  <img src="../../docs/images/logo.png" width="200" alt="Flutter Weather" />
+  <img src="../../docs/images/logo.png" alt="Flutter Weather" style="max-width:250px; width:100%" />
 </p>
 
 <h1 align="center">Flutter Weather</h1>
 <p align="center">A beautiful weather forecasting application built with the <a href="https://www.flutter.dev/" target="_blank">Flutter development kit</a>.</p>
 
-## Screenshots
-|<div align="center">Colorized</div>|<div align="center">Light</div>|<div align="center">Dark</div>|
-|---------|-----|----|
-|<span align="center"><img src="docs/images/screen1.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="docs/images/screen2.png" width="300" alt="Flutter Weather" /></span>|<span align="center"><img src="docs/images/screen3.png" width="300" alt="Flutter Weather" /></span>|
+
+<h1 align="center">Screenshots</h1>
+<table cellspacing="0" style="width:100%">
+  <tbody>
+    <tr>
+      <td style="text-align:right"><img src="../../docs/images/screen1.png" alt="Flutter Weather" style="max-height:500px" /></td>
+      <td style="text-align:center"><img src="../../docs/images/screen2.png" alt="Flutter Weather" style="max-height:500px" /></td>
+      <td style="text-align:left"><img src="../../docs/images/screen3.png" alt="Flutter Weather" style="max-height:500px" /></td>
+    </tr>
+  </tbody>
+</table>
 
 ## Environment Configuration
 You will need to create a file called **env_config.dart** in the **lib** folder with the following:
