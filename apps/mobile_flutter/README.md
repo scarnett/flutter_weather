@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="../../docs/images/logo.png" alt="Flutter Weather" width="300" />
+  <img src="../../docs/images/logo.png" alt="Flutter Weather" width="200" />
 </p>
 
 <h1 align="center">Flutter Weather</h1>
 <p align="center">A beautiful weather forecasting application built with the <a href="https://www.flutter.dev/" target="_blank">Flutter development kit</a>.</p>
 
 
-<h1 align="center">Screenshots</h1>
+<h2 align="center">Screenshots</h2>
 <table cellspacing="0" style="width:100%">
   <tbody>
     <tr>
