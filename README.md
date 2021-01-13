@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/logo.png" alt="Flutter Weather" style="max-width:250px; width:100%" />
+  <img src="docs/images/logo.png" alt="Flutter Weather" width="300" />
 </p>
 
 <h1 align="center">Flutter Weather</h1>
@@ -43,4 +43,4 @@ Created by [@scarnett](https://github.com/scarnett/)
 
 ## Nx
 <p>This project was generated using <a href="https://nx.dev" target="_blank">Nx</a>.</p>
-<img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"style="max-width:100px;" />
+<img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="100" />

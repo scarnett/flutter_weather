@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../docs/images/logo.png" alt="Flutter Weather" style="max-width:250px; width:100%" />
+  <img src="../../docs/images/logo.png" alt="Flutter Weather" width="300" />
 </p>
 
 <h1 align="center">Flutter Weather</h1>
