@@ -187,11 +187,19 @@ class _ForecastPageViewState extends State<ForecastPageView>
       AnimatedBuilder(
         animation: _pageController,
         builder: (BuildContext context, Widget child) {
-          final double _forecastColorValue = _pageController.hasClients &&
+          num currentPage = _currentPage;
+          if (isInteger(currentPage)) {
+            if (state.selectedForecastIndex != currentPage.toInt()) {
+              currentPage = state.selectedForecastIndex.toDouble();
+            }
+          }
+
+          final double _forecastColorValue = (_pageController.hasClients &&
                   (state.forecasts != null) &&
-                  state.forecasts.isNotEmpty
-              ? (_currentPage / state.forecasts.length)
-              : 0.0;
+                  state.forecasts.isNotEmpty)
+              ? (currentPage / state.forecasts.length)
+              : (state.selectedForecastIndex.toDouble() /
+                  state.forecasts.length);
 
           Color _forecastColor = (_pageBackground == null)
               ? Colors.transparent
