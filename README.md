@@ -41,6 +41,9 @@ nx run web_ng:serve
 ## Credits
 Created by [@scarnett](https://github.com/scarnett/)
 
+## License
+Copyright &copy; 2021 Scott Carnett. Licensed under the MIT License (MIT)
+
 ## Nx
 <p>This project was generated using <a href="https://nx.dev" target="_blank">Nx</a>.</p>
 <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="100" />

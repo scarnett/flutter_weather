@@ -97,3 +97,6 @@ nx run mobile_flutter:buildSplashScreens
 
 ## Credits
 Created by [@scarnett](https://github.com/scarnett/)
+
+## License
+Copyright &copy; 2021 Scott Carnett. Licensed under the MIT License (MIT)
