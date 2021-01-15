@@ -90,7 +90,7 @@ jobs:
           path: version.txt
       - 
         name: "Update version in pubspec.yaml"
-        run: sed -i "s/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g" apps/mobile_flutter/pubspec.yaml
+        run: sed -i "s/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/" apps/mobile_flutter/pubspec.yaml
       - 
         name: "Update version in sonar-project.properties"
         run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' apps/mobile_flutter/sonar-project.properties
