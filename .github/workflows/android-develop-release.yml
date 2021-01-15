@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: apps/mobile_flutter/android/app/key.jks.asc
+          name: key.jks.asc
           path: apps/mobile_flutter/android/app/key.jks.asc
       - 
         env: 
