@@ -97,10 +97,18 @@ jobs:
           replace: ${{ steps.version.outputs.content }}+${{ github.run_number }}
       - 
         name: "Update KeyStore password in gradle properties"
-        run: sed -i 's/#{KEYSTORE_PASS}#/$FLUTTER_WEATHER_KEYSTORE_PASS/g' apps/mobile_flutter/android/key.properties
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "$storePassword"
+          replace: "$FLUTTER_WEATHER_KEYSTORE_PASS"
+          include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update KeyStore key password in gradle properties"
-        run: sed -i 's/#{KEYSTORE_KEY_PASS}#/$FLUTTER_WEATHER_KEYSTORE_KEY_PASS/g' apps/mobile_flutter/android/key.properties
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "$keyPassword"
+          replace: "$FLUTTER_WEATHER_KEYSTORE_KEY_PASS"
+          include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update build mode in local properties"
         uses: jacobtomlinson/gha-find-replace@master
