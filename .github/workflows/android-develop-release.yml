@@ -99,14 +99,14 @@ jobs:
         name: "Update KeyStore password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "storePassword\="
+          find: "storePassword\\="
           replace: "storePassword=$FLUTTER_WEATHER_KEYSTORE_PASS"
           include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update KeyStore key password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "keyPassword\="
+          find: "keyPassword\\="
           replace: "keyPassword=$FLUTTER_WEATHER_KEYSTORE_KEY_PASS"
           include: apps/mobile_flutter/android/key.properties
       - 
