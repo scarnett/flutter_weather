@@ -69,7 +69,7 @@ jobs:
           FLUTTER_WEATHER_KEYSTORE: "${{ secrets.FLUTTER_WEATHER_KEYSTORE }}"
         name: "Decode android keystore"
         run: |
-          echo $FLUTTER_WEATHER_KEYSTORE > apps/mobile_flutter/android/app/key.jks.asc
+          echo "$FLUTTER_WEATHER_KEYSTORE" > apps/mobile_flutter/android/app/key.jks.asc
           gpg -d --passphrase '$FLUTTER_WEATHER_KEYSTORE_KEY_PASS' --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
       - 
         uses: actions/upload-artifact@v2
