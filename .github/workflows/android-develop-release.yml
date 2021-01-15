@@ -90,16 +90,16 @@ jobs:
           path: version.txt
       - 
         name: "Update version in pubspec.yaml"
-        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' apps/mobile_flutter/pubspec.yaml
+        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/' apps/mobile_flutter/pubspec.yaml
       - 
         name: "Update version in sonar-project.properties"
-        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' apps/mobile_flutter/sonar-project.properties
+        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/' apps/mobile_flutter/sonar-project.properties
       - 
         name: "Update version in local.properties"
-        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' apps/mobile_flutter/android/local.properties
+        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/' apps/mobile_flutter/android/local.properties
       - 
         name: "Update version in env_config.dart"
-        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' apps/mobile_flutter/lib/env_config.dart
+        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/' apps/mobile_flutter/lib/env_config.dart
       - 
         name: "Update KeyStore password in gradle properties"
         run: sed -i 's/#{KEYSTORE_PASS}#/${{ secrets.KEYSTORE_PASS }}/g' apps/mobile_flutter/android/key.properties
