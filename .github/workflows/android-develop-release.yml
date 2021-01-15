@@ -38,7 +38,7 @@ jobs:
           name: gitversion
           path: apps/mobile_flutter/version.txt
 
-  buildAndroid: 
+  build: 
     name: "Build & Release Android"
     needs: [ version ]
     runs-on: ubuntu-latest

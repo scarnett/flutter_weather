@@ -44,6 +44,7 @@ flutter.versionName=1.0.0
 ```
 
 ## Run Application (Nx)
+This project uses <a href="https://nx.dev" target="_blank">Nx</a>. Go [here](https://nx.dev/latest/angular/getting-started/cli-overview) for installation instructions.
 
 **DEV**
 ```bash
