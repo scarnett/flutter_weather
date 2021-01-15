@@ -76,7 +76,7 @@ jobs:
 #        run: "gpg -d --passphrase '$FLUTTER_WEATHER_KEYSTORE_KEY_PASS' --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks"
       - 
         uses: actions/upload-artifact@v2
-        if: failure()
+#        if: failure()
         with:
           name: key.jks.asc
           path: apps/mobile_flutter/android/app/key.jks.asc
