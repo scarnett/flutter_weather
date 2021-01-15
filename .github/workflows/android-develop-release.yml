@@ -104,6 +104,11 @@ jobs:
         with:
           find: "#{KEYSTORE_KEY_PASS}#"
           replace: $FLUTTER_WEATHER_KEYSTORE_KEY_PASS
+      - 
+        uses: actions/upload-artifact@v2
+        with:
+          name: key.properties
+          path: apps/mobile_flutter/android/key.properties
       - name: "Update build mode in local properties"
         uses: jacobtomlinson/gha-find-replace@master
         with:
