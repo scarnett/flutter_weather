@@ -78,8 +78,8 @@ jobs:
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: release.keystore.asc
-          path: release.keystore.asc
+          name: apps/mobile_flutter/android/app/key.jks.asc
+          path: apps/mobile_flutter/android/app/key.jks.asc
       - 
         env: 
           FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
