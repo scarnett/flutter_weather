@@ -107,7 +107,7 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
-        name: "Flutter build dev"
+        name: "Flutter build prod"
         working-directory: "./apps/mobile_flutter"
         run: "flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose"
       - 
