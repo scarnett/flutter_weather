@@ -58,12 +58,12 @@ jobs:
         env: 
           FLUTTER_WEATHER_LOCAL_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}"
         name: "Decode android local.properties"
-        run: "echo $FLUTTER_WEATHER_LOCAL_PROPERTIES > apps/mobile_flutter/android/local.properties"
+        run: echo "$FLUTTER_WEATHER_LOCAL_PROPERTIES" > apps/mobile_flutter/android/local.properties
       - 
         env: 
           FLUTTER_WEATHER_KEY_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}"
         name: "Decode android key.properties"
-        run: "echo $FLUTTER_WEATHER_KEY_PROPERTIES > apps/mobile_flutter/android/key.properties"
+        run: echo "$FLUTTER_WEATHER_KEY_PROPERTIES" > apps/mobile_flutter/android/key.properties
       - 
         env: 
           FLUTTER_WEATHER_KEYSTORE: "${{ secrets.FLUTTER_WEATHER_KEYSTORE }}"
@@ -77,7 +77,7 @@ jobs:
         env: 
           FLUTTER_WEATHER_ENV_CONFIG: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}"
         name: "Decode environment config"
-        run: "echo $FLUTTER_WEATHER_ENV_CONFIG > apps/mobile_flutter/lib/env_config.dart"
+        run: echo "$FLUTTER_WEATHER_ENV_CONFIG" > apps/mobile_flutter/lib/env_config.dart
       - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
@@ -123,6 +123,10 @@ jobs:
         name: "Flutter get"
         working-directory: "./apps/mobile_flutter"
         run: "flutter pub get"
+      - 
+        name: "Flutter clean"
+        working-directory: "./apps/mobile_flutter"
+        run: "flutter clean"
       - 
         name: "Flutter test"
         working-directory: "./apps/mobile_flutter"
