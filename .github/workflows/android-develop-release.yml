@@ -75,6 +75,12 @@ jobs:
         name: "Authenticate with keystore"
         run: "gpg -d --passphrase '$FLUTTER_WEATHER_KEYSTORE_KEY_PASS' --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks"
       - 
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: release.keystore.asc
+          path: release.keystore.asc
+      - 
         env: 
           FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
         name: "Decode environment config"
