@@ -71,12 +71,12 @@ jobs:
         name: "Decode android keystore"
         run: |
           echo "$FLUTTER_WEATHER_KEYSTORE" > apps/mobile_flutter/android/app/key.jks.asc
-          gpg -d --passphrase '$FLUTTER_WEATHER_KEYSTORE_PASS' --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
+          gpg -d --passphrase "$FLUTTER_WEATHER_KEYSTORE_PASS" --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
       - 
         env: 
-          FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
+          FLUTTER_WEATHER_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
         name: "Decode environment config"
-        run: "echo $FLUTTER_WEATHER_DEV_ENV_CONFIG_SECRET > apps/mobile_flutter/lib/env_config.dart"
+        run: "echo $FLUTTER_WEATHER_ENV_CONFIG_SECRET > apps/mobile_flutter/lib/env_config.dart"
       - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
