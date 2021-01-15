@@ -39,7 +39,7 @@ jobs:
           path: apps/mobile_flutter/version.txt
 
   build: 
-    name: "Build & Release Android"
+    name: "Build Android"
     needs: [ version ]
     runs-on: ubuntu-latest
     steps: 
