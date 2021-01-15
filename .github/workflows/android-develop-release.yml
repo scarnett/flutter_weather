@@ -100,14 +100,14 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "$storePassword"
-          replace: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}
+          replace: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}"
           include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update KeyStore key password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "$keyPassword"
-          replace: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}
+          replace: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
           include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update build mode in local properties"
