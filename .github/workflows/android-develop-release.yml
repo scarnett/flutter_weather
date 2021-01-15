@@ -3,11 +3,11 @@ name: Android Develop Release
 on:
   push: 
     branches: 
-      - android_release_workflow
+      - develop
 
   pull_request: 
     branches: 
-      - android_release_workflow
+      - develop
 
 jobs: 
   version:
