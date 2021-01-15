@@ -56,27 +56,28 @@ jobs:
           flutter-version: "1.22.5"
       - 
         env: 
-          FLUTTER_WEATHER_LOCAL_SECRET: "${{ secrets.FLUTTER_WEATHER_LOCAL_SECRET }}"
+          FLUTTER_WEATHER_LOCAL_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}"
         name: "Decode android local.properties"
-        run: "echo $FLUTTER_WEATHER_DEV_LOCAL_SECRET > apps/mobile_flutter/android/local.properties"
+        run: "echo $FLUTTER_WEATHER_LOCAL_PROPERTIES > apps/mobile_flutter/android/local.properties"
       - 
         env: 
-          FLUTTER_WEATHER_KEY_SECRET: "${{ secrets.FLUTTER_WEATHER_KEY_SECRET }}"
+          FLUTTER_WEATHER_KEY_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}"
         name: "Decode android key.properties"
-        run: "echo $FLUTTER_WEATHER_KEY_SECRET > apps/mobile_flutter/android/key.properties"
+        run: "echo $FLUTTER_WEATHER_KEY_PROPERTIES > apps/mobile_flutter/android/key.properties"
       - 
         env: 
           FLUTTER_WEATHER_KEYSTORE: "${{ secrets.FLUTTER_WEATHER_KEYSTORE }}"
           FLUTTER_WEATHER_KEYSTORE_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}"
+          FLUTTER_WEATHER_KEYSTORE_KEY_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
         name: "Decode android keystore"
         run: |
           echo "$FLUTTER_WEATHER_KEYSTORE" > apps/mobile_flutter/android/app/key.jks.asc
           gpg -d --passphrase "$FLUTTER_WEATHER_KEYSTORE_PASS" --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
       - 
         env: 
-          FLUTTER_WEATHER_ENV_CONFIG_SECRET: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG_SECRET }}"
+          FLUTTER_WEATHER_ENV_CONFIG: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}"
         name: "Decode environment config"
-        run: "echo $FLUTTER_WEATHER_ENV_CONFIG_SECRET > apps/mobile_flutter/lib/env_config.dart"
+        run: "echo $FLUTTER_WEATHER_ENV_CONFIG > apps/mobile_flutter/lib/env_config.dart"
       - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
@@ -93,12 +94,31 @@ jobs:
         with:
           find: "99.99.99+99"
           replace: ${{ steps.version.outputs.content }}+${{ github.run_number }}
-      - 
-        name: "Update KeyStore password in gradle properties"
-        run: sed -i 's/#{KEYSTORE_PASS}#/${{ secrets.KEYSTORE_PASS }}/g' apps/mobile_flutter/android/key.properties
-      - 
-        name: "Update KeyStore key password in gradle properties"
-        run: sed -i 's/#{KEYSTORE_KEY_PASS}#/${{ secrets.KEYSTORE_KEY_PASS }}/g' apps/mobile_flutter/android/key.properties
+      - name: "Update KeyStore password in gradle properties"
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "#{KEYSTORE_PASS}#"
+          replace: $FLUTTER_WEATHER_KEYSTORE_PASS
+      - name: "Update KeyStore key password in gradle properties"
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "#{KEYSTORE_KEY_PASS}#"
+          replace: $FLUTTER_WEATHER_KEYSTORE_KEY_PASS
+      - name: "Update build mode in local properties"
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "flutter.buildMode=debug"
+          replace: "flutter.buildMode=release"
+      - name: "Update version name in local properties"
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "flutter.versionName=1.0.0"
+          replace: "flutter.versionName=${{ steps.version.outputs.content }}"
+      - name: "Update version code in local properties"
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "flutter.versionCode=1"
+          replace: "flutter.versionCode=${{ github.run_number }}"
       - 
         name: "Flutter get"
         working-directory: "./apps/mobile_flutter"
