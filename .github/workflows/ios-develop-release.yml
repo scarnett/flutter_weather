@@ -87,7 +87,7 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter build ios -t lib/main_dev.dart --no-codesign --verbose"
       - 
-        name: "Create ipa"
+        name: "Compress build"
         working-directory: "./apps/mobile_flutter/build/ios/iphoneos"
         run: |
           mkdir Payload
@@ -99,6 +99,7 @@ jobs:
       - 
         name: "Create github artifact"
         uses: ncipollo/release-action@v1
+        working-directory: "./apps/mobile_flutter"
         with:
           artifacts: "build/ios/iphoneos/*.ipa"
           token: ${{ secrets.GITHUB_TOKEN }}
