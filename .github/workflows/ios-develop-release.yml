@@ -98,10 +98,9 @@ jobs:
           ls -l ios-app.ipa
       - 
         name: "Create github artifact"
-        working-directory: "./apps/mobile_flutter"
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/ios/iphoneos/*.ipa"
+          artifacts: "./apps/mobile_flutter/build/ios/iphoneos/*.ipa"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: "ios-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}

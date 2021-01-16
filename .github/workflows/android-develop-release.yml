@@ -145,10 +145,9 @@ jobs:
         run: "flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose"
       - 
         name: "Create github artifact"
-        working-directory: "./apps/mobile_flutter"
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/bundle/prodRelease/*.aab"
+          artifacts: "./apps/mobile_flutter/build/app/outputs/bundle/prodRelease/*.aab"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: "android-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
