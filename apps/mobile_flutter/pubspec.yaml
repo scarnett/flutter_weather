@@ -1,7 +1,7 @@
 name: flutter_weather
 description: Simple weather forecast
 publish_to: 'none'
-version: '99.99.99'
+version: 99.99.99
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
