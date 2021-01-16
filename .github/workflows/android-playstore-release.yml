@@ -93,7 +93,7 @@ jobs:
         name: "Update app version"
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "99.99.99+99"
+          find: "99.99.99\\+99"
           replace: "${{ steps.version.outputs.content }}+${{ github.run_number }}"
       - 
         name: "Update KeyStore password in gradle properties"
