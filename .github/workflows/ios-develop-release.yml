@@ -94,7 +94,7 @@ jobs:
           cd Payload
           ln -s ../Runner.app
           cd ..
-          zip -r app.ipa Payload
+          zip -r ios-app.zip Payload
           ls -l ios-app.zip
       - 
         name: "Create github artifact"
