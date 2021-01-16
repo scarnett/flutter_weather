@@ -182,6 +182,6 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
         packageName: io.flutter_weather
-        releaseFile: app-prod-release.aab
+        releaseFiles: app-prod-release.aab
         track: internal
         whatsNewDirectory: ./apps/mobile_flutter/dist/whatsnew
