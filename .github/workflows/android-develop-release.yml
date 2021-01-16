@@ -152,7 +152,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/bundle/prodRelease/android-app.zip"
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.version.outputs.content }}
           commit: ${{ github.sha }}
           prerelease: true
