@@ -144,10 +144,16 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose"
       - 
+        name: "Compress build"
+        working-directory: "./apps/mobile_flutter/build/app/outputs/bundle/prodRelease"
+        run: |
+          zip -r android-app.zip app-prod-release.aab
+          ls -l android-app.zip
+      - 
         name: "Create github artifact"
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./apps/mobile_flutter/build/app/outputs/bundle/prodRelease/*.aab"
+          artifacts: "./apps/mobile_flutter/build/app/outputs/bundle/prodRelease/android-app.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: "android-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
