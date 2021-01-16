@@ -89,7 +89,7 @@ jobs:
       - 
         name: "Compress build"
         working-directory: "./apps/mobile_flutter/build/ios/iphoneos"
-        run: "zip -r ios-app.zip Runner.app"
+        run: "zip ios-app.zip Runner.app"
       - 
         name: "Create github artifact"
         uses: ncipollo/release-action@v1
