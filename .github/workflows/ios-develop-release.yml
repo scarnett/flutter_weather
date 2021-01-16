@@ -81,4 +81,4 @@ jobs:
       - 
         name: "Flutter build dev"
         working-directory: "./apps/mobile_flutter"
-        run: "flutter build ios -t lib/main_prod.dart --no-codesign --verbose"
+        run: "flutter build ios -t lib/main_dev.dart --no-codesign --verbose"
