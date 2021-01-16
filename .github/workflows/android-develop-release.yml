@@ -153,6 +153,6 @@ jobs:
         with:
           artifacts: "build/app/outputs/bundle/prodRelease/android-app.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.version.outputs.content }}
+          tag: "android-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
           prerelease: true

@@ -96,6 +96,6 @@ jobs:
         with:
           artifacts: "build/ios/iphoneos/ios-app.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.version.outputs.content }}
+          tag: "ios-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
           prerelease: true
