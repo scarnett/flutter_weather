@@ -3,11 +3,11 @@ name: Android Playstore Release
 on:
   push: 
     branches: 
-      - playstore
+      - main
 
   pull_request: 
     branches: 
-      - playstore
+      - main
 
 jobs: 
   version:
