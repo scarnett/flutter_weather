@@ -102,6 +102,6 @@ jobs:
         with:
           artifacts: "./apps/mobile_flutter/build/ios/iphoneos/ios-app.ipa"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "ios-${{ steps.version.outputs.content }}"
+          tag: "ios-dev-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
           prerelease: true
