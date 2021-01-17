@@ -17,23 +17,10 @@ import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
-class ForecastView extends StatelessWidget {
+class ForecastView extends StatefulWidget {
   static Route route() =>
       MaterialPageRoute<void>(builder: (_) => ForecastView());
-
-  const ForecastView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(
-    BuildContext context,
-  ) =>
-      ForecastPageView();
-}
-
-class ForecastPageView extends StatefulWidget {
-  ForecastPageView({
+  ForecastView({
     Key key,
   }) : super(key: key);
 
@@ -41,37 +28,19 @@ class ForecastPageView extends StatefulWidget {
   State<StatefulWidget> createState() => _ForecastPageViewState();
 }
 
-class _ForecastPageViewState extends State<ForecastPageView>
-    with TickerProviderStateMixin {
+class _ForecastPageViewState extends State<ForecastView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   PageController _pageController;
   Animatable<Color> _pageBackground;
   ValueNotifier<int> _currentForecastNotifier;
   num _currentPage = 0;
+  bool _colorTheme = false;
 
   @override
   void initState() {
     super.initState();
-
-    AppState state = context.read<AppBloc>().state;
-
-    _pageController = PageController(initialPage: state.selectedForecastIndex)
-      ..addListener(() {
-        _currentPage = _pageController.page;
-
-        if (isInteger(_currentPage)) {
-          context
-              .read<AppBloc>()
-              .add(SelectedForecastIndex(_currentPage.toInt()));
-        }
-      });
-
-    if (state.colorTheme) {
-      _pageBackground = buildForecastColorSequence(state.forecasts);
-    }
-
-    _currentForecastNotifier = ValueNotifier<int>(state.selectedForecastIndex);
+    _initialize();
   }
 
   @override
@@ -101,6 +70,31 @@ class _ForecastPageViewState extends State<ForecastPageView>
           mini: true,
         ),
       );
+
+  void _initialize() {
+    AppState state = context.read<AppBloc>().state;
+    _colorTheme = state.colorTheme;
+    _pageController = PageController(
+      initialPage: state.selectedForecastIndex,
+      keepPage: true,
+    )..addListener(() {
+        _currentPage = _pageController.page;
+
+        if (isInteger(_currentPage)) {
+          context
+              .read<AppBloc>()
+              .add(SelectedForecastIndex(_currentPage.toInt()));
+
+          _currentForecastNotifier.value = _currentPage.toInt();
+        }
+      });
+
+    if (state.colorTheme) {
+      _pageBackground = buildForecastColorSequence(state.forecasts);
+    }
+
+    _currentForecastNotifier = ValueNotifier<int>(state.selectedForecastIndex);
+  }
 
   void _blocListener(
     BuildContext context,
@@ -134,6 +128,10 @@ class _ForecastPageViewState extends State<ForecastPageView>
 
     if (state.colorTheme) {
       _pageBackground = buildForecastColorSequence(state.forecasts);
+    }
+
+    if (_colorTheme != state.colorTheme) {
+      _initialize();
     }
   }
 
@@ -174,7 +172,6 @@ class _ForecastPageViewState extends State<ForecastPageView>
                     itemCount: state.forecasts.length,
                     itemBuilder: (BuildContext context, int position) =>
                         _buildForecastItem(context, position, state),
-                    onPageChanged: _onPageChanged,
                   ),
           ),
           _buildCircleIndicator(state),
@@ -286,11 +283,6 @@ class _ForecastPageViewState extends State<ForecastPageView>
           onPageSelected: _onPageSelected,
         ),
       );
-
-  void _onPageChanged(
-    int page,
-  ) =>
-      _currentForecastNotifier.value = page;
 
   void _onPageSelected(
     int page,
