@@ -30,7 +30,7 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.7
       - 
         name: "Create version.txt"
-        run: echo "${{ github.run_id }}-${{ github.run_number }}" > apps/mobile_flutter/version.txt
+        run: echo "${{ steps.gitversion.outputs.MajorMinorPatch }}+${{ github.run_id }}-${{ github.run_number }}" > apps/mobile_flutter/version.txt
       - 
         name: "Upload version.txt"
         uses: actions/upload-artifact@v2
