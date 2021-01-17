@@ -157,31 +157,31 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: "android-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
-      - 
-        name: "Upload appbundle"
-        uses: actions/upload-artifact@v2
-        with:
-          name: appbundle
-          path: ./apps/mobile_flutter/build/app/outputs/bundle/prodRelease/app-prod-release.aab
+#      - 
+#        name: "Upload appbundle"
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: appbundle
+#          path: ./apps/mobile_flutter/build/app/outputs/bundle/prodRelease/app-prod-release.aab
 
-  release:
-    name: "Release Android"
-    needs: [ build ]
-    runs-on: ubuntu-latest
-    steps:
-    - 
-      uses: actions/checkout@v2
-    - 
-      name: "Get appbundle from artifacts"
-      uses: actions/download-artifact@v2
-      with:
-        name: appbundle
-    - 
-      name: "Release to internal track"
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
-        packageName: io.flutter_weather.app.prod
-        releaseFiles: app-prod-release.aab
-        track: internal
-        whatsNewDirectory: ./apps/mobile_flutter/dist/whatsnew
+#  release:
+#    name: "Release Android"
+#    needs: [ build ]
+#    runs-on: ubuntu-latest
+#    steps:
+#    - 
+#      uses: actions/checkout@v2
+#    - 
+#      name: "Get appbundle from artifacts"
+#      uses: actions/download-artifact@v2
+#      with:
+#        name: appbundle
+#    - 
+#      name: "Release to internal track"
+#      uses: r0adkll/upload-google-play@v1
+#      with:
+#        serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
+#        packageName: io.flutter_weather.prod
+#        releaseFiles: app-prod-release.aab
+#        track: internal
+#        whatsNewDirectory: ./apps/mobile_flutter/dist/whatsnew
