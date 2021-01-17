@@ -28,7 +28,6 @@ class EnvConfig {
   static const int REFRESH_TIMEOUT_MINS = 5;
   static const String DEFAULT_COUNTRY_CODE = 'us';
   static const String SUPPORTED_LOCALES = 'en';
-  static const String LATEST_VERSION = '1.0.0';
   static const String PRIVACY_POLICY_URL = '<your_privacy_policy_url>';
 }
 
@@ -44,6 +43,7 @@ flutter.versionName=1.0.0
 ```
 
 ## Run Application (Nx)
+This project uses <a href="https://nx.dev" target="_blank">Nx</a>. Go [here](https://nx.dev/latest/angular/getting-started/cli-overview) for installation instructions.
 
 **DEV**
 ```bash

@@ -207,6 +207,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ];
 
   Widget _buildVersionText() {
+    /*
     if (_packageInfo.version == EnvConfig.LATEST_VERSION) {
       return Text(
         AppLocalizations.of(context).latest,
@@ -221,6 +222,15 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       AppLocalizations.of(context).updateAvailable,
       style: TextStyle(
         color: AppTheme.warningColor,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+    */
+
+    return Text(
+      AppLocalizations.of(context).latest,
+      style: TextStyle(
+        color: AppTheme.successColor,
         fontWeight: FontWeight.w700,
       ),
     );

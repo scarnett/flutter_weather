@@ -50,7 +50,7 @@
     "@nrwl/jest": "11.1.5",
     "@nrwl/tao": "^11.1.5",
     "@nrwl/workspace": "^11.1.5",
-    "@nxrocks/nx-flutter": "^1.1.1",
+    "@nxrocks/nx-flutter": "^1.2.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.19.12",
     "codelyzer": "^6.0.0",
