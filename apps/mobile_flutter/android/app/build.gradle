@@ -96,4 +96,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation 'com.android.billingclient:billing:2.0.3'
 }
