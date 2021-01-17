@@ -43,7 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'io.flutter_weather.app'
+        applicationId 'io.flutter_weather'
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -52,7 +52,7 @@ android {
 
     defaultConfig {
         manifestPlaceholders = [
-            appId: 'io.flutter_weather.app'
+            appId: 'io.flutter_weather'
         ]
     }
 
@@ -76,14 +76,14 @@ android {
     productFlavors {
         dev {
             dimension 'flavor-type'
-            applicationId 'io.flutter_weather.app.dev'
+            applicationId 'io.flutter_weather.dev'
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
         }
 
         prod {
             dimension 'flavor-type'
-            applicationId 'io.flutter_weather.app.prod'
+            applicationId 'io.flutter_weather.prod'
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
         }
@@ -96,4 +96,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation 'com.android.billingclient:billing:2.0.3'
 }
