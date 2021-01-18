@@ -76,6 +76,12 @@ jobs:
         with:
           path: version.txt
       - 
+        name: "Update app version"
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "99.99.99"
+          replace: "${{ steps.version.outputs.content }}"
+      - 
         name: "Flutter get"
         working-directory: "./apps/mobile_flutter"
         run: "flutter pub get"
@@ -88,11 +94,11 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
-        name: "Flutter build"
+        name: "Flutter build ipa"
         working-directory: "./apps/mobile_flutter"
         run: "flutter build ios -t lib/main_prod.dart --no-codesign --verbose"
       - 
-        name: "Compress build"
+        name: "Compress ipa"
         working-directory: "./apps/mobile_flutter/build/ios/iphoneos"
         run: |
           mkdir Payload
@@ -129,7 +135,7 @@ jobs:
         with: 
           java-version: 12.x
       - 
-        name: "Get apk from artifacts"
+        name: "Get ipa from artifacts"
         uses: actions/download-artifact@v2
         with:
           name: ipa
