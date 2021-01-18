@@ -82,17 +82,19 @@ android {
         dev {
             dimension 'flavor-type'
             applicationId 'io.flutter_weather.dev'
-            resValue 'string', 'app_name', flutterAppLabel
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ' - DEV'
         }
 
         prod {
             dimension 'flavor-type'
             applicationId 'io.flutter_weather.prod'
-            resValue 'string', 'app_name', flutterAppLabel
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ''
         }
     }
 }

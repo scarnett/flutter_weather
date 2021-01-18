@@ -3,7 +3,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="@string/app_name"
+        android:label="${appLabel}${appLabelSuffix}"
         android:icon="@mipmap/ic_launcher">
 
         <activity
