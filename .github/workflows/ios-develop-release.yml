@@ -78,7 +78,9 @@ jobs:
       - 
         name: "Update app version"
         working-directory: "./apps/mobile_flutter"
-        run: sed -i '' "s/99.99.99/0.1.0+494341568/g" ./pubspec.yaml
+        run: |
+          ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
+          sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
       - 
         name: "Flutter get"
         working-directory: "./apps/mobile_flutter"
