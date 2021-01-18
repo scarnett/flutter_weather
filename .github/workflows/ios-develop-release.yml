@@ -80,7 +80,6 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: |
           ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
-          echo $ESCAPED_VERSION
           sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
       - 
         name: "Flutter get"
