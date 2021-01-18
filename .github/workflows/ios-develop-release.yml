@@ -77,10 +77,8 @@ jobs:
           path: version.txt
       - 
         name: "Update app version"
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "99.99.99"
-          replace: "${{ steps.version.outputs.content }}"
+        working-directory: "./apps/mobile_flutter"
+        run: sed -i '' "s/99.99.99/${{ steps.version.outputs.content }}/g" ./*
       - 
         name: "Flutter get"
         working-directory: "./apps/mobile_flutter"
