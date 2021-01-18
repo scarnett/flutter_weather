@@ -11,6 +11,11 @@ if (flutterRoot == null) {
     throw new GradleException('Flutter SDK not found. Define location with flutter.sdk in the local.properties file.')
 }
 
+def flutterAppLabel = localProperties.getProperty('flutter.appLabel')
+if (flutterAppLabel == null) {
+    flutterAppLabel = 'Flutter Weather'
+}
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -80,6 +85,8 @@ android {
             applicationId 'io.flutter_weather.dev'
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ' - DEV'
         }
 
         prod {
@@ -87,6 +94,8 @@ android {
             applicationId 'io.flutter_weather.prod'
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ''
         }
     }
 }

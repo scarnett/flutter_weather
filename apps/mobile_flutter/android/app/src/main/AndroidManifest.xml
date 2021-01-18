@@ -3,7 +3,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Flutter Weather"
+        android:label="${appLabel}${appLabelSuffix}"
         android:icon="@mipmap/ic_launcher">
 
         <activity
