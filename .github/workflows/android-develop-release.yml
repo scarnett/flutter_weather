@@ -3,7 +3,7 @@ name: Android Develop Release
 on:
   push: 
     branches: 
-      - android_workflow # TODO!
+      - develop
 
 #  pull_request: 
 #    branches: 
@@ -182,12 +182,12 @@ jobs:
         with: 
           java-version: 12.x
       - 
-        name: "Download Artifact"
+        name: "Get apk from artifacts"
         uses: actions/download-artifact@v2
         with:
           name: apk
       - 
-        name: "Upload APK"
+        name: "Upload apk"
         uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
