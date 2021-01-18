@@ -145,11 +145,11 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
-        name: "Flutter build"
+        name: "Flutter build app bundle"
         working-directory: "./apps/mobile_flutter"
         run: "flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose"
       - 
-        name: "Compress build"
+        name: "Compress app bundle"
         working-directory: "./apps/mobile_flutter/build/app/outputs/bundle/prodRelease"
         run: |
           zip -r android-app.zip app-prod-release.aab
