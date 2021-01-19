@@ -4,7 +4,8 @@ platform :ios, '11.0'
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 target 'Runner' do
-  use_frameworks!
+  #use_frameworks!
+  use_modular_headers!
   pod 'Firebase/Analytics'
   pod 'Firebase/Core'
 end
