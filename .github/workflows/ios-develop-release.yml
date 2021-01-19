@@ -94,7 +94,7 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
-        name: "Flutter test"
+        name: "Install pods"
         working-directory: "./apps/mobile_flutter/ios"
         run: "pod install"
       - 
