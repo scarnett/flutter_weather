@@ -66,6 +66,11 @@ jobs:
         run: echo "$FLUTTER_WEATHER_KEY_PROPERTIES" > apps/mobile_flutter/android/key.properties
       - 
         env: 
+          FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: "${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}"
+        name: "Decode google-services.json"
+        run: echo "$FLUTTER_WEATHER_GOOGLE_SERVICES_JSON" > apps/mobile_flutter/android/app/google-services.json
+      - 
+        env: 
           FLUTTER_WEATHER_KEYSTORE: "${{ secrets.FLUTTER_WEATHER_KEYSTORE }}"
           FLUTTER_WEATHER_KEYSTORE_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}"
           FLUTTER_WEATHER_KEYSTORE_KEY_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
@@ -140,11 +145,11 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
-        name: "Flutter build"
+        name: "Flutter build app bundle"
         working-directory: "./apps/mobile_flutter"
         run: "flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose"
       - 
-        name: "Compress build"
+        name: "Compress app bundle"
         working-directory: "./apps/mobile_flutter/build/app/outputs/bundle/prodRelease"
         run: |
           zip -r android-app.zip app-prod-release.aab
@@ -169,19 +174,19 @@ jobs:
     needs: [ build ]
     runs-on: ubuntu-latest
     steps:
-    - 
-      uses: actions/checkout@v2
-    - 
-      name: "Get app bundle from artifacts"
-      uses: actions/download-artifact@v2
-      with:
-        name: appbundle
-    - 
-      name: "Release to internal track"
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
-        packageName: io.flutter_weather.prod
-        releaseFiles: app-prod-release.aab
-        track: internal
-        whatsNewDirectory: ./apps/mobile_flutter/dist/whatsnew
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: "Get app bundle from artifacts"
+        uses: actions/download-artifact@v2
+        with:
+          name: appbundle
+      - 
+        name: "Release to internal track"
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
+          packageName: io.flutter_weather.prod
+          releaseFiles: app-prod-release.aab
+          track: internal
+          whatsNewDirectory: ./apps/mobile_flutter/dist/whatsnew

@@ -38,6 +38,7 @@ You will need to reate a file called **local.properties** in the **android** fol
 ```bash
 sdk.dir=<path_to_android_sdk>
 flutter.sdk=<path_to_flutter_sdk>
+flutter.appLabel=Flutter Weather
 flutter.buildMode=<debug|profile|release>
 flutter.versionName=1.0.0
 ```

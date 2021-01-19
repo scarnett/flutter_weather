@@ -11,6 +11,11 @@ if (flutterRoot == null) {
     throw new GradleException('Flutter SDK not found. Define location with flutter.sdk in the local.properties file.')
 }
 
+def flutterAppLabel = localProperties.getProperty('flutter.appLabel')
+if (flutterAppLabel == null) {
+    flutterAppLabel = 'Flutter Weather'
+}
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -29,6 +34,7 @@ if (keystorePropertiesFile.exists()) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -79,6 +85,8 @@ android {
             applicationId 'io.flutter_weather.dev'
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ' - DEV'
         }
 
         prod {
@@ -86,6 +94,8 @@ android {
             applicationId 'io.flutter_weather.prod'
             versionCode flutterVersionCode.toInteger()
             versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ''
         }
     }
 }
@@ -97,4 +107,6 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation 'com.android.billingclient:billing:2.0.3'
+    implementation platform('com.google.firebase:firebase-bom:26.3.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
