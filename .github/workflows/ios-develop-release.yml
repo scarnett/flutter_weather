@@ -94,6 +94,10 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
+        name: "Flutter test"
+        working-directory: "./apps/mobile_flutter/ios"
+        run: "pod install"
+      - 
         name: "Flutter build ipa"
         working-directory: "./apps/mobile_flutter"
         run: "flutter build ios -t lib/main_prod.dart --release --no-codesign --verbose"
