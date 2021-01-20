@@ -20,6 +20,7 @@ import 'package:page_view_indicators/circle_page_indicator.dart';
 class ForecastView extends StatefulWidget {
   static Route route() =>
       MaterialPageRoute<void>(builder: (_) => ForecastView());
+
   ForecastView({
     Key key,
   }) : super(key: key);
