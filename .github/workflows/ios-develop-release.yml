@@ -88,7 +88,6 @@ jobs:
       - 
         name: Configure Keychain
         run: |
-          security create-keychain -p "" "$KEYCHAIN"
           security list-keychains -s "$KEYCHAIN"
           security default-keychain -s "$KEYCHAIN"
           security unlock-keychain -p "" "$KEYCHAIN"
