@@ -54,7 +54,7 @@ jobs:
       XC_CONFIGURATION: ${{ 'Automation' }}
       XC_WORKSPACE: ${{ 'apps/mobile_flutter/ios/Runner.xcworkspace' }}
       XC_ARCHIVE_PATH: ${{ './apps/mobile_flutter/ios/Runner.xcarchive' }}
-      XC_EXPORT_PATH: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
+      XC_EXPORT_PATH: ${{ './apps/mobile_flutter/ios/artifacts/' }}
       XC_EXPORT_OPTIONS_FILE_PATH: ${{ './apps/mobile_flutter/ios/ExportOptions.plist' }}
       ENCRYPTED_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12.gpg' }}
       DECRYPTED_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
@@ -138,34 +138,43 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
-        name: "Flutter build ipa"
-        working-directory: "./apps/mobile_flutter"
-        run: "flutter build ios -t lib/main_prod.dart --release --verbose"
-      - 
-        name: "Compress ipa"
-        working-directory: "./apps/mobile_flutter/build/ios/iphoneos"
+        name: "Archive"
+        working-directory: "./apps/mobile_flutter/ios"
         run: |
-          mkdir Payload
-          cd Payload
-          ln -s ../Runner.app
-          cd ..
-          zip -r app-prod-release.ipa Payload
-          ls -l app-prod-release.ipa
+          mkdir artifacts
+          /usr/bin/xcodebuild archive -workspace "$XC_WORKSPACE" -scheme "$XC_SCHEME" -configuration "$XC_CONFIGURATION" -archivePath "$XC_ARCHIVE_PATH" "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
       - 
-        name: "Create github artifact"
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "./apps/mobile_flutter/build/ios/iphoneos/app-prod-release.ipa"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "ios-dev-${{ steps.version.outputs.content }}"
-          commit: ${{ github.sha }}
-          prerelease: true
-      - 
-        name: "Upload ipa"
-        uses: actions/upload-artifact@v2
-        with:
-          name: ipa
-          path: ./apps/mobile_flutter/build/ios/iphoneos/app-prod-release.ipa
+        name: "Export for app store"
+        run: /usr/bin/xcodebuild -exportArchive -archivePath "$XC_ARCHIVE_PATH" -exportOptionsPlist "$XC_EXPORT_OPTIONS_FILE_PATH" -exportPath "$XC_EXPORT_PATH"
+  #     - 
+  #       name: "Flutter build ipa"
+  #       working-directory: "./apps/mobile_flutter"
+  #       run: "flutter build ios -t lib/main_prod.dart --release --verbose"
+  #     - 
+  #       name: "Compress ipa"
+  #       working-directory: "./apps/mobile_flutter/build/ios/iphoneos"
+  #       run: |
+  #         mkdir Payload
+  #         cd Payload
+  #         ln -s ../Runner.app
+  #         cd ..
+  #         zip -r app-prod-release.ipa Payload
+  #         ls -l app-prod-release.ipa
+  #     - 
+  #       name: "Create github artifact"
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         artifacts: "./apps/mobile_flutter/build/ios/iphoneos/app-prod-release.ipa"
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         tag: "ios-dev-${{ steps.version.outputs.content }}"
+  #         commit: ${{ github.sha }}
+  #         prerelease: true
+  #     - 
+  #       name: "Upload ipa"
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: ipa
+  #         path: ./apps/mobile_flutter/build/ios/iphoneos/app-prod-release.ipa
 
   # beta:
   #   name: "Upload iOS Beta to Firebase App Distribution"
