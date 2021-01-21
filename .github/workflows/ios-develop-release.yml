@@ -46,7 +46,7 @@ jobs:
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
       XC_VERSION: ${{ '11.4' }}
-      XC_WORKSPACE: ${{ 'Runner.xcworkspace' }}
+      XC_WORKSPACE: ${{ 'apps/mobile_flutter/ios/Runner.xcworkspace' }}
       XC_SCHEME: ${{ 'Runner' }}
     steps:
       - 
