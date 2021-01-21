@@ -60,7 +60,7 @@ jobs:
       DECRYPTED_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
       ENCRYPTED_PROVISION_FILE_PATH: ${{ './apps/mobile_flutter/ios/provisioning.tar.gz.gpg' }}
       DECRYPTED_PROVISION_FILE_PATH: ${{ './apps/mobile_flutter/ios/provisioning.tar.gz' }}
-      KEYCHAIN: ${{ 'login.keychain' }}
+      KEYCHAIN: ${{ 'flutterWeather.keychain' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -88,6 +88,7 @@ jobs:
       - 
         name: Configure Keychain
         run: |
+          # security create-keychain -p "" "$KEYCHAIN"
           security list-keychains -s "$KEYCHAIN"
           security default-keychain -s "$KEYCHAIN"
           security unlock-keychain -p "" "$KEYCHAIN"
