@@ -94,7 +94,20 @@ jobs:
           security unlock-keychain -p "" "$KEYCHAIN"
           security set-keychain-settings
           security list-keychains
-          
+      - 
+        name: Configure Code Signing
+        run: |
+          gpg -d -o "$DECRYPTED_CERTS_FILE_PATH" --pinentry-mode=loopback --passphrase "$FLUTTER_WEATHER_CERTS_ENCRYPTION_PASSWORD" "$ENCRYPTED_CERTS_FILE_PATH"
+          gpg -d -o "$DECRYPTED_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$FLUTTER_WEATHER_PROVISION_ENCRYPTION_PASSWORD" "$ENCRYPTED_PROVISION_FILE_PATH"
+          security import "$DECRYPTED_CERTS_FILE_PATH" -k "$KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_EXPORT_PASSWORD" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
+          tar xzvf $DECRYPTED_PROVISION_FILE_PATH
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          for PROVISION in `ls ./*.mobileprovision`
+          do
+            UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
+            cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+          done
   #     - 
   #       name: "Get version.txt"
   #       uses: actions/download-artifact@v2
