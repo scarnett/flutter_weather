@@ -45,9 +45,22 @@ jobs:
     env:
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
+      FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST: ${{ secrets.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST }}
+      FLUTTER_WEATHER_CERTS_ENCRYPTION_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_ENCRYPTION_PASSWORD }}
+      FLUTTER_WEATHER_CERTS_EXPORT_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_EXPORT_PASSWORD }}
+      FLUTTER_WEATHER_PROVISION_ENCRYPTION_PASSWORD: ${{ secrets.FLUTTER_WEATHER_PROVISION_ENCRYPTION_PASSWORD }}
       XC_VERSION: ${{ '11.4' }}
-      XC_WORKSPACE: ${{ 'apps/mobile_flutter/ios/Runner.xcworkspace' }}
       XC_SCHEME: ${{ 'Runner' }}
+      XC_CONFIGURATION: ${{ 'Automation' }}
+      XC_WORKSPACE: ${{ 'apps/mobile_flutter/ios/Runner.xcworkspace' }}
+      XC_ARCHIVE_PATH: ${{ './apps/mobile_flutter/ios/Runner.xcarchive' }}
+      XC_EXPORT_PATH: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
+      XC_EXPORT_OPTIONS_FILE_PATH: ${{ './apps/mobile_flutter/ios/ExportOptions.plist' }}
+      ENCRYPTED_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12.gpg' }}
+      DECRYPTED_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
+      ENCRYPTED_PROVISION_FILE_PATH: ${{ './apps/mobile_flutter/ios/provisioning.tar.gz.gpg' }}
+      DECRYPTED_PROVISION_FILE_PATH: ${{ './apps/mobile_flutter/ios/provisioning.tar.gz' }}
+      KEYCHAIN: ${{ 'login.keychain' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -61,14 +74,26 @@ jobs:
           channel: stable
           flutter-version: "1.22.5"
       - 
-        name: Select latest Xcode
-        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-      - 
         name: "Decode GoogleService-Info.plist"
         run: echo "$FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST" > apps/mobile_flutter/ios/Runner/GoogleService-Info.plist
       - 
         name: "Decode environment config"
         run: echo "$FLUTTER_WEATHER_ENV_CONFIG" > apps/mobile_flutter/lib/env_config.dart
+      - 
+        name: "Decode export options plist"
+        run: echo "$FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST" > apps/mobile_flutter/ios/ExportOptions.plist
+      - 
+        name: Select latest Xcode
+        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
+      - 
+        name: Configure Keychain
+        run: |
+          security create-keychain -p "" "$KEYCHAIN"
+          security list-keychains -s "$KEYCHAIN"
+          security default-keychain -s "$KEYCHAIN"
+          security unlock-keychain -p "" "$KEYCHAIN"
+          security set-keychain-settings
+          security list-keychains
   #     - 
   #       name: "Get version.txt"
   #       uses: actions/download-artifact@v2
