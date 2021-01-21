@@ -88,12 +88,13 @@ jobs:
       - 
         name: Configure Keychain
         run: |
-          # security create-keychain -p "" "$KEYCHAIN"
+          security create-keychain -p "" "$KEYCHAIN"
           security list-keychains -s "$KEYCHAIN"
           security default-keychain -s "$KEYCHAIN"
           security unlock-keychain -p "" "$KEYCHAIN"
           security set-keychain-settings
           security list-keychains
+          
   #     - 
   #       name: "Get version.txt"
   #       uses: actions/download-artifact@v2
