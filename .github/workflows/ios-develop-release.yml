@@ -86,7 +86,7 @@ jobs:
         name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
       - 
-        name: Configure Keychain
+        name: "Configure keychain"
         run: |
           security create-keychain -p "" "$KEYCHAIN"
           security list-keychains -s "$KEYCHAIN"
@@ -95,7 +95,7 @@ jobs:
           security set-keychain-settings
           security list-keychains
       - 
-        name: Configure Code Signing
+        name: "Configure code signing"
         run: |
           gpg -d -o "$DECRYPTED_CERTS_FILE_PATH" --pinentry-mode=loopback --passphrase "$FLUTTER_WEATHER_CERTS_ENCRYPTION_PASSWORD" "$ENCRYPTED_CERTS_FILE_PATH"
           gpg -d -o "$DECRYPTED_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$FLUTTER_WEATHER_PROVISION_ENCRYPTION_PASSWORD" "$ENCRYPTED_PROVISION_FILE_PATH"
@@ -108,35 +108,35 @@ jobs:
             UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
             cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
           done
-  #     - 
-  #       name: "Get version.txt"
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: gitversion
-  #     - 
-  #       name: "Read version"
-  #       id: version
-  #       uses: juliangruber/read-file-action@v1
-  #       with:
-  #         path: version.txt
-  #     - 
-  #       name: "Update app version"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: |
-  #         ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
-  #         sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
-  #     - 
-  #       name: "Flutter get"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: "flutter pub get"
-  #     - 
-  #       name: "Flutter clean"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: "flutter clean"
-  #     - 
-  #       name: "Flutter test"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: "flutter test"
+     - 
+       name: "Get version.txt"
+       uses: actions/download-artifact@v2
+       with:
+         name: gitversion
+     - 
+       name: "Read version"
+       id: version
+       uses: juliangruber/read-file-action@v1
+       with:
+         path: version.txt
+     - 
+       name: "Update app version"
+       working-directory: "./apps/mobile_flutter"
+       run: |
+         ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
+         sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
+     - 
+       name: "Flutter get"
+       working-directory: "./apps/mobile_flutter"
+       run: "flutter pub get"
+     - 
+       name: "Flutter clean"
+       working-directory: "./apps/mobile_flutter"
+       run: "flutter clean"
+     - 
+       name: "Flutter test"
+       working-directory: "./apps/mobile_flutter"
+       run: "flutter test"
   #     - 
   #       name: "Flutter build ipa"
   #       working-directory: "./apps/mobile_flutter"
