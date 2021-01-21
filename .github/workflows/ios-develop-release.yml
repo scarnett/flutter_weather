@@ -52,7 +52,7 @@ jobs:
       XC_VERSION: ${{ '11.4' }}
       XC_SCHEME: ${{ 'Runner' }}
       XC_CONFIGURATION: ${{ 'Automation' }}
-      XC_WORKSPACE: ${{ 'apps/mobile_flutter/ios/Runner.xcworkspace' }}
+      XC_WORKSPACE: ${{ './apps/mobile_flutter/ios/Runner.xcworkspace' }}
       XC_ARCHIVE_PATH: ${{ './apps/mobile_flutter/ios/Runner.xcarchive' }}
       XC_EXPORT_PATH: ${{ './apps/mobile_flutter/ios/artifacts/' }}
       XC_EXPORT_OPTIONS_FILE_PATH: ${{ './apps/mobile_flutter/ios/ExportOptions.plist' }}
