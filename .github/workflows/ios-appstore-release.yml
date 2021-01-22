@@ -3,11 +3,7 @@ name: "iOS Develop Release"
 on:
   push: 
     branches: 
-      - develop
-
-#  pull_request: 
-#    branches: 
-#      - develop
+      - ios_workflow # TODO! main
 
 jobs: 
   version:
@@ -134,9 +130,8 @@ jobs:
         with:
           artifacts: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "ios-dev-${{ steps.version.outputs.content }}"
+          tag: "ios-release-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
-          prerelease: true
       - 
         name: "Upload ipa"
         uses: actions/upload-artifact@v2
@@ -145,11 +140,13 @@ jobs:
           path: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
 
   beta:
-    name: "Upload iOS Beta to Firebase App Distribution"
+    name: "Release iOS"
     needs: [ build ]
     runs-on: ubuntu-latest
     env: 
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+      FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
+      FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -164,9 +161,4 @@ jobs:
           name: ipa
       - 
         name: "Upload ipa"
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-        with:
-          appId: ${{ secrets.FIREBASE_IOS_APPID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
-          group: testers
-          file: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
+        run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
