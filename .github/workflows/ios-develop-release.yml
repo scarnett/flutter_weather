@@ -125,18 +125,22 @@ jobs:
         run: |
           ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
           sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
-  #     - 
-  #       name: "Flutter get"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: "flutter pub get"
-  #     - 
-  #       name: "Flutter clean"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: "flutter clean"
-  #     - 
-  #       name: "Flutter test"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: "flutter test"
+      - 
+        name: "Flutter get"
+        working-directory: "./apps/mobile_flutter"
+        run: "flutter pub get"
+      - 
+        name: "Flutter clean"
+        working-directory: "./apps/mobile_flutter"
+        run: "flutter clean"
+      - 
+        name: "Flutter test"
+        working-directory: "./apps/mobile_flutter"
+        run: "flutter test"
+      - 
+        name: "Flutter build ipa"
+        working-directory: "./apps/mobile_flutter"
+        run: "flutter build ios -t lib/main_prod.dart --release --verbose"
       - 
         name: "Archive"
         working-directory: "./apps/mobile_flutter/ios"
@@ -146,10 +150,6 @@ jobs:
       - 
         name: "Export for app store"
         run: /usr/bin/xcodebuild -exportArchive -archivePath "$XC_ARCHIVE_PATH" -exportOptionsPlist "$XC_EXPORT_OPTIONS_FILE_PATH" -exportPath "$XC_EXPORT_PATH"
-  #     - 
-  #       name: "Flutter build ipa"
-  #       working-directory: "./apps/mobile_flutter"
-  #       run: "flutter build ios -t lib/main_prod.dart --release --verbose"
   #     - 
   #       name: "Compress ipa"
   #       working-directory: "./apps/mobile_flutter/build/ios/iphoneos"
