@@ -9,7 +9,7 @@ cd Payload
 ln -s ../Runner.app
 cd ..
 
-for APP in `ls /Applications/*.app`
+for APP in `ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/*`
 do
   echo "$APP"
 done
