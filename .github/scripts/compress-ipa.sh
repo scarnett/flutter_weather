@@ -14,7 +14,7 @@ do
   basename "$FRAMEWORK"
   fileName="$(basename -- $FRAMEWORK)"
   echo "$fileName"
-  cp "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/$fileName" "./SwiftSupport/iphoneos/$fileName"
+  cp "/Applications/Runner.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/$fileName" "./SwiftSupport/iphoneos/$fileName"
 done
 
 zip -r "$FLUTTER_WEATHER_IPA_OUTPUT_FILE" Payload SwiftSupport
