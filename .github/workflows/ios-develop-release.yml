@@ -97,7 +97,6 @@ jobs:
           security import "$FLUTTER_WEATHER_CERTS_FILE_PATH" -k "$KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -A
           security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
           tar xzvf "$FLUTTER_WEATHER_PROVISION_FILE_PATH"
-          //tar xzvf (echo "$PROVISIONING_PROFILE_DATA" | base64 --decode)
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
           for PROVISION in `ls ./*.mobileprovision`
           do
