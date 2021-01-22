@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-security import "${{ env.FLUTTER_WEATHER_CERTS_FILE_PATH }}" -k "${{ env.FLUTTER_WEATHER_KEYCHAIN }}" -P "${{ env.FLUTTER_WEATHER_CERTS_PASSWORD }}" -A
-security set-key-partition-list -S apple-tool:,apple: -s -k "" "${{ env.FLUTTER_WEATHER_KEYCHAIN }}"
-tar xzvf "${{ env.FLUTTER_WEATHER_PROVISION_FILE_PATH }}"
+security import "$FLUTTER_WEATHER_CERTS_FILE_PATH" -k "$FLUTTER_WEATHER_KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -A
+security set-key-partition-list -S apple-tool:,apple: -s -k "" "$FLUTTER_WEATHER_KEYCHAIN"
+tar xzvf "$FLUTTER_WEATHER_PROVISION_FILE_PATH"
 mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
 for PROVISION in `ls ./*.mobileprovision`
 do
