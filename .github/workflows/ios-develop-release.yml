@@ -3,7 +3,7 @@ name: "iOS Develop Release"
 on:
   push: 
     branches: 
-      - develop
+      - ios_workflow
 
 #  pull_request: 
 #    branches: 
