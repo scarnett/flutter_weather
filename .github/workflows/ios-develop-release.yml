@@ -51,7 +51,7 @@ jobs:
       FLUTTER_WEATHER_PROVISION_ENCRYPTION_PASSWORD: ${{ secrets.FLUTTER_WEATHER_PROVISION_ENCRYPTION_PASSWORD }}
       XC_VERSION: ${{ '11.4' }}
       XC_SCHEME: ${{ 'Runner' }}
-      XC_CONFIGURATION: ${{ 'Automation' }}
+      XC_CONFIGURATION: ${{ 'Release' }}
       XC_WORKSPACE: ${{ 'Runner.xcworkspace' }}
       XC_ARCHIVE_PATH: ${{ './apps/mobile_flutter/ios/Runner.xcarchive' }}
       XC_EXPORT_PATH: ${{ './apps/mobile_flutter/ios/artifacts/' }}
@@ -125,18 +125,18 @@ jobs:
         run: |
           ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
           sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
-      - 
-        name: "Flutter get"
-        working-directory: "./apps/mobile_flutter"
-        run: "flutter pub get"
-      - 
-        name: "Flutter clean"
-        working-directory: "./apps/mobile_flutter"
-        run: "flutter clean"
-      - 
-        name: "Flutter test"
-        working-directory: "./apps/mobile_flutter"
-        run: "flutter test"
+  #     - 
+  #       name: "Flutter get"
+  #       working-directory: "./apps/mobile_flutter"
+  #       run: "flutter pub get"
+  #     - 
+  #       name: "Flutter clean"
+  #       working-directory: "./apps/mobile_flutter"
+  #       run: "flutter clean"
+  #     - 
+  #       name: "Flutter test"
+  #       working-directory: "./apps/mobile_flutter"
+  #       run: "flutter test"
       - 
         name: "Archive"
         working-directory: "./apps/mobile_flutter/ios"
