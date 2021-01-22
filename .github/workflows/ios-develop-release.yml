@@ -52,9 +52,10 @@ jobs:
       FLUTTER_WEATHER_CERTS_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_PASSWORD }}
       FLUTTER_WEATHER_PROVISION_PROFILE_DATA: ${{ secrets.FLUTTER_WEATHER_PROVISION_PROFILE_DATA }}
       FLUTTER_WEATHER_PROVISION_FILE_PATH: ${{ './apps/mobile_flutter/ios/provisioning.tar.gz' }}
-      FLUTTER_WEATHER_IPA_OUTPUT_PATH: ${{ './apps/mobile_flutter/build/ios/iphoneos/app-prod-release.ipa' }}
+      FLUTTER_WEATHER_IPA_OUTPUT_FOLDER: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
+      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+      FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       XCODE_VERSION: ${{ '11.4' }}
-      KEYCHAIN: ${{ 'flutterWeather.keychain' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -85,17 +86,17 @@ jobs:
       - 
         name: "Configure keychain"
         run: |
-          security create-keychain -p "" "$KEYCHAIN"
-          security list-keychains -s "$KEYCHAIN"
-          security default-keychain -s "$KEYCHAIN"
-          security unlock-keychain -p "" "$KEYCHAIN"
+          security create-keychain -p "" "$FLUTTER_WEATHER_KEYCHAIN"
+          security list-keychains -s "$FLUTTER_WEATHER_KEYCHAIN"
+          security default-keychain -s "$FLUTTER_WEATHER_KEYCHAIN"
+          security unlock-keychain -p "" "$FLUTTER_WEATHER_KEYCHAIN"
           security set-keychain-settings
           security list-keychains
       - 
         name: "Configure code signing"
         run: |
-          security import "$FLUTTER_WEATHER_CERTS_FILE_PATH" -k "$KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -A
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
+          security import "$FLUTTER_WEATHER_CERTS_FILE_PATH" -k "$FLUTTER_WEATHER_KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "$FLUTTER_WEATHER_KEYCHAIN"
           tar xzvf "$FLUTTER_WEATHER_PROVISION_FILE_PATH"
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
           for PROVISION in `ls ./*.mobileprovision`
@@ -144,45 +145,45 @@ jobs:
           cd Payload
           ln -s ../Runner.app
           cd ..
-          zip -r app-prod-release.ipa Payload
-          ls -l app-prod-release.ipa
-  #     - 
-  #       name: "Create github artifact"
-  #       uses: ncipollo/release-action@v1
-  #       with:
-  #         artifacts: "$FLUTTER_WEATHER_IPA_OUTPUT_PATH"
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         tag: "ios-dev-${{ steps.version.outputs.content }}"
-  #         commit: ${{ github.sha }}
-  #         prerelease: true
-  #     - 
-  #       name: "Upload ipa"
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: ipa
-  #         path: "$FLUTTER_WEATHER_IPA_OUTPUT_PATH"
+          zip -r "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" Payload
+          ls -l "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
+      - 
+        name: "Create github artifact"
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "ios-dev-${{ steps.version.outputs.content }}"
+          commit: ${{ github.sha }}
+          prerelease: true
+      - 
+        name: "Upload ipa"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ipa
+          path: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
 
-  # beta:
-  #   name: "Upload iOS Beta to Firebase App Distribution"
-  #   needs: [ build ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - 
-  #       uses: actions/checkout@v2
-  #     - 
-  #       uses: actions/setup-java@v1
-  #       with: 
-  #         java-version: 12.x
-  #     - 
-  #       name: "Get ipa from artifacts"
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: ipa
-  #     - 
-  #       name: "Upload ipa"
-  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-  #       with:
-  #         appId: ${{ secrets.FIREBASE_IOS_APPID }}
-  #         token: ${{ secrets.FIREBASE_TOKEN }}
-  #         group: testers
-  #         file: app-prod-release.ipa
+  beta:
+    name: "Upload iOS Beta to Firebase App Distribution"
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        uses: actions/checkout@v2
+      - 
+        uses: actions/setup-java@v1
+        with: 
+          java-version: 12.x
+      - 
+        name: "Get ipa from artifacts"
+        uses: actions/download-artifact@v2
+        with:
+          name: ipa
+      - 
+        name: "Upload ipa"
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+        with:
+          appId: ${{ secrets.FIREBASE_IOS_APPID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          group: testers
+          file: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
