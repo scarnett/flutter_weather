@@ -58,7 +58,7 @@ jobs:
       FLUTTER_WEATHER_IPA_OUTPUT_FOLDER: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
-      XCODE_VERSION: ${{ '11.4' }}
+      XCODE_VERSION: ${{ '12.4' }}
     steps:
       - 
         uses: actions/checkout@v2

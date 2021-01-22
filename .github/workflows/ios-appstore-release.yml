@@ -54,7 +54,7 @@ jobs:
       FLUTTER_WEATHER_IPA_OUTPUT_FOLDER: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
-      XCODE_VERSION: ${{ '11.4' }}
+      XCODE_VERSION: ${{ '12.4' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -150,10 +150,6 @@ jobs:
     steps:
       - 
         uses: actions/checkout@v2
-      - 
-        uses: actions/setup-java@v1
-        with: 
-          java-version: 12.x
       - 
         name: "Get ipa from artifacts"
         uses: actions/download-artifact@v2
