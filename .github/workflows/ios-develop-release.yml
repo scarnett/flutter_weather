@@ -76,7 +76,7 @@ jobs:
       - 
         name: "Decode certs"
         run: |
-          echo "$SIGNING_CERTIFICATE_P12_DATA | base64 --decode"
+          echo "($SIGNING_CERTIFICATE_P12_DATA | base64 --decode)"
           echo "$FLUTTER_WEATHER_CERTS_FILE_PATH"
           echo "$SIGNING_CERTIFICATE_P12_DATA | base64 --decode" > "$FLUTTER_WEATHER_CERTS_FILE_PATH"
       - 
