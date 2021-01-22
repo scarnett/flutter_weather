@@ -138,7 +138,7 @@ jobs:
         working-directory: "./apps/mobile_flutter"
         run: "flutter test"
       - 
-        name: "Flutter build ipa"
+        name: "Flutter build"
         working-directory: "./apps/mobile_flutter"
         run: "flutter build ios -t lib/main_prod.dart --release --verbose"
   #     - 
@@ -176,27 +176,27 @@ jobs:
           name: ipa
           path: ./apps/mobile_flutter/build/ios/iphoneos/app-prod-release.ipa
 
-  # beta:
-  #   name: "Upload iOS Beta to Firebase App Distribution"
-  #   needs: [ build ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - 
-  #       uses: actions/checkout@v2
-  #     - 
-  #       uses: actions/setup-java@v1
-  #       with: 
-  #         java-version: 12.x
-  #     - 
-  #       name: "Get ipa from artifacts"
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: ipa
-  #     - 
-  #       name: "Upload ipa"
-  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-  #       with:
-  #         appId: ${{ secrets.FIREBASE_IOS_APPID }}
-  #         token: ${{ secrets.FIREBASE_TOKEN }}
-  #         group: testers
-  #         file: app-prod-release.ipa
+  beta:
+    name: "Upload iOS Beta to Firebase App Distribution"
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        uses: actions/checkout@v2
+      - 
+        uses: actions/setup-java@v1
+        with: 
+          java-version: 12.x
+      - 
+        name: "Get ipa from artifacts"
+        uses: actions/download-artifact@v2
+        with:
+          name: ipa
+      - 
+        name: "Upload ipa"
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+        with:
+          appId: ${{ secrets.FIREBASE_IOS_APPID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          group: testers
+          file: app-prod-release.ipa
