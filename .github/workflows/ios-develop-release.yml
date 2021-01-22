@@ -3,7 +3,7 @@ name: "iOS Develop Release"
 on:
   push: 
     branches: 
-      - ios_workflow # TODO! develop
+      - develop
 
 #  pull_request: 
 #    branches: 
@@ -127,7 +127,6 @@ jobs:
         run: "flutter build ios -t lib/main_prod.dart --release --verbose"
       - 
         name: "Compress ipa"
-        working-directory: "./apps/mobile_flutter/build/ios/iphoneos"
         run: exec .github/scripts/compress-ipa.sh
       - 
         name: "Create github artifact"
