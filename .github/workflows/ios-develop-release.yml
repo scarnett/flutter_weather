@@ -167,6 +167,8 @@ jobs:
     name: "Upload iOS Beta to Firebase App Distribution"
     needs: [ build ]
     runs-on: ubuntu-latest
+    env:
+      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -186,4 +188,4 @@ jobs:
           appId: ${{ secrets.FIREBASE_IOS_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           group: testers
-          file: "$FLUTTER_WEATHER_IPA_OUTPUT_FILE"
+          file: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
