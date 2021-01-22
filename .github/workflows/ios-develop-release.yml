@@ -1,4 +1,4 @@
-name: iOS Develop Release
+name: "iOS Develop Release"
 
 on:
   push: 
@@ -70,34 +70,34 @@ jobs:
           flutter-version: "1.22.5"
       - 
         name: "Decode GoogleService-Info.plist"
-        run: echo "$FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST" > "$FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH"
+        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
       - 
         name: "Decode environment config"
-        run: echo "$FLUTTER_WEATHER_ENV_CONFIG" > "$FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH"
+        run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
       - 
         name: "Decode certs"
-        run: echo "$FLUTTER_WEATHER_CERTS_P12_DATA" | base64 --decode > "$FLUTTER_WEATHER_CERTS_FILE_PATH"
+        run: echo "${{ env.FLUTTER_WEATHER_CERTS_P12_DATA }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_CERTS_FILE_PATH }}"
       - 
         name: "Decode provision profiles"
-        run: echo "$FLUTTER_WEATHER_PROVISION_PROFILE_DATA" | base64 --decode > "$FLUTTER_WEATHER_PROVISION_FILE_PATH"
+        run: echo "${{ env.FLUTTER_WEATHER_PROVISION_PROFILE_DATA }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_PROVISION_FILE_PATH }}"
       - 
         name: "Select xcode"
-        run: "sudo xcode-select -s /Applications/Xcode_$XCODE_VERSION.app"
+        run: "sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app"
       - 
         name: "Configure keychain"
         run: |
-          security create-keychain -p "" "$FLUTTER_WEATHER_KEYCHAIN"
-          security list-keychains -s "$FLUTTER_WEATHER_KEYCHAIN"
-          security default-keychain -s "$FLUTTER_WEATHER_KEYCHAIN"
-          security unlock-keychain -p "" "$FLUTTER_WEATHER_KEYCHAIN"
+          security create-keychain -p "" "${{ env.FLUTTER_WEATHER_KEYCHAIN }}"
+          security list-keychains -s "${{ env.FLUTTER_WEATHER_KEYCHAIN }}"
+          security default-keychain -s "${{ env.FLUTTER_WEATHER_KEYCHAIN }}"
+          security unlock-keychain -p "" "${{ env.FLUTTER_WEATHER_KEYCHAIN }}"
           security set-keychain-settings
           security list-keychains
       - 
         name: "Configure code signing"
         run: |
-          security import "$FLUTTER_WEATHER_CERTS_FILE_PATH" -k "$FLUTTER_WEATHER_KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -A
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" "$FLUTTER_WEATHER_KEYCHAIN"
-          tar xzvf "$FLUTTER_WEATHER_PROVISION_FILE_PATH"
+          security import "${{ env.FLUTTER_WEATHER_CERTS_FILE_PATH }}" -k "${{ env.FLUTTER_WEATHER_KEYCHAIN }}" -P "${{ env.FLUTTER_WEATHER_CERTS_PASSWORD }}" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "${{ env.FLUTTER_WEATHER_KEYCHAIN }}"
+          tar xzvf "${{ env.FLUTTER_WEATHER_PROVISION_FILE_PATH }}"
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
           for PROVISION in `ls ./*.mobileprovision`
           do
@@ -186,4 +186,4 @@ jobs:
           appId: ${{ secrets.FIREBASE_IOS_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           group: testers
-          file: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
+          file: "$FLUTTER_WEATHER_IPA_OUTPUT_FILE"
