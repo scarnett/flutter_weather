@@ -5,6 +5,10 @@ set -euo pipefail
 cd "$FLUTTER_WEATHER_IPA_OUTPUT_FOLDER"
 mkdir Payload
 mkdir -p SwiftSupport/iphoneos
+for FRAMEWORK in `ls ./Payload/Runner.app/Frameworks/*.framework`
+do
+  cp "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/$FRAMEWORK" "./Payload/$FRAMEWORK"
+done
 cd Payload
 ln -s ../Runner.app
 cd ..

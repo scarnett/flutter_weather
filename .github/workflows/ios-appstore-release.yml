@@ -1,4 +1,4 @@
-name: "iOS Develop Release"
+name: "iOS App Store Release"
 
 on:
   push: 
@@ -139,22 +139,22 @@ jobs:
           name: ipa
           path: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
 
-  beta:
-    name: "Release iOS"
-    needs: [ build ]
-    runs-on: macos-latest
-    env: 
-      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
-      FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
-      FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
-    steps:
-      - 
-        uses: actions/checkout@v2
-      - 
-        name: "Get ipa from artifacts"
-        uses: actions/download-artifact@v2
-        with:
-          name: ipa
-      - 
-        name: "Upload ipa"
-        run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
+  # beta:
+  #   name: "Release iOS"
+  #   needs: [ build ]
+  #   runs-on: macos-latest
+  #   env: 
+  #     FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+  #     FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
+  #     FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
+  #   steps:
+  #     - 
+  #       uses: actions/checkout@v2
+  #     - 
+  #       name: "Get ipa from artifacts"
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: ipa
+  #     - 
+  #       name: "Upload ipa"
+  #       run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
