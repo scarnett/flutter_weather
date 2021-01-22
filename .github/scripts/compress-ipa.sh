@@ -9,7 +9,7 @@ cd Payload
 ln -s ../Runner.app
 cd ..
 
-for APP in `ls ./Applications/*.app`
+for APP in `ls /Applications/*.app`
 do
   echo "$APP"
 done
