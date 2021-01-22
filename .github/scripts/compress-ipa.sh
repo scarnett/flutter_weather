@@ -8,5 +8,5 @@ mkdir SwiftSupport
 cd Payload
 ln -s ../Runner.app
 cd ..
-zip -r "$FLUTTER_WEATHER_IPA_OUTPUT_FILE" Payload
+zip -r "$FLUTTER_WEATHER_IPA_OUTPUT_FILE" Payload SwiftSupport
 ls -l "$FLUTTER_WEATHER_IPA_OUTPUT_FILE"
