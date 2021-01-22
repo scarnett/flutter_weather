@@ -142,7 +142,7 @@ jobs:
   beta:
     name: "Release iOS"
     needs: [ build ]
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env: 
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
