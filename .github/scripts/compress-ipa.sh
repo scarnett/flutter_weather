@@ -14,7 +14,7 @@ do
   basename "$MODULE"
   module="$(basename -- $MODULE)"
   echo "$fileName"
-  cp "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/$module" "./SwiftSupport/iphoneos/$module"
+  cp "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/$module" "./SwiftSupport/iphoneos/$module"
 done
 
 zip -r "$FLUTTER_WEATHER_IPA_OUTPUT_FILE" Payload SwiftSupport
