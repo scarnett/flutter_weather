@@ -65,8 +65,8 @@ jobs:
       - 
         uses: subosito/flutter-action@v1
         with: 
-          channel: stable
-          flutter-version: "1.22.5"
+          channel: dev
+          flutter-version: "1.26.0-12.0.pre"
       - 
         name: "Decode GoogleService-Info.plist"
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
@@ -120,41 +120,41 @@ jobs:
       - 
         name: "Flutter build"
         working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter build ios -t lib/main_prod.dart --release --verbose"
-      - 
-        name: "Compress ipa"
-        run: exec .github/scripts/compress-ipa.sh
-      - 
-        name: "Create github artifact"
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "ios-release-${{ steps.version.outputs.content }}"
-          commit: ${{ github.sha }}
-      - 
-        name: "Upload ipa"
-        uses: actions/upload-artifact@v2
-        with:
-          name: ipa
-          path: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
+        run: "flutter build ipa -t lib/main_prod.dart --release --verbose"
+  #     - 
+  #       name: "Compress ipa"
+  #       run: exec .github/scripts/compress-ipa.sh
+  #     - 
+  #       name: "Create github artifact"
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         artifacts: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         tag: "ios-release-${{ steps.version.outputs.content }}"
+  #         commit: ${{ github.sha }}
+  #     - 
+  #       name: "Upload ipa"
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: ipa
+  #         path: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
 
-  release:
-    name: "Release iOS"
-    needs: [ build ]
-    runs-on: macos-latest
-    env: 
-      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
-      FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
-      FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
-    steps:
-      - 
-        uses: actions/checkout@v2
-      - 
-        name: "Get ipa from artifacts"
-        uses: actions/download-artifact@v2
-        with:
-          name: ipa
-      - 
-        name: "Upload ipa"
-        run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
+  # release:
+  #   name: "Release iOS"
+  #   needs: [ build ]
+  #   runs-on: macos-latest
+  #   env: 
+  #     FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+  #     FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
+  #     FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
+  #   steps:
+  #     - 
+  #       uses: actions/checkout@v2
+  #     - 
+  #       name: "Get ipa from artifacts"
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: ipa
+  #     - 
+  #       name: "Upload ipa"
+  #       run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
