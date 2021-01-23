@@ -13,7 +13,8 @@ for MODULE in `ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDef
 do
   basename "$MODULE"
   module="$(basename -- $MODULE)"
-  echo "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/$module"
+  echo "$MODULE"
+  # echo "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/$module"
   # cp "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/$module" "./SwiftSupport/iphoneos/$module"
 done
 
