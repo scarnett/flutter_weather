@@ -9,8 +9,8 @@ ln -s ../Runner.app
 cd ..
 
 APP="Payload/Runner.app"
-
 DEVELOPER_DIR=`xcode-select --print-path`
+
 if [ ! -d "${DEVELOPER_DIR}" ]; then
   echo "No developer directory found!"
   exit 1
@@ -21,8 +21,11 @@ if [ -d "${APP}/Frameworks" ];
 then
     mkdir -p SwiftSupport
     for SWIFT_LIB in $(ls -1 "${APP}/Frameworks/"); do
-        echo "Copying ${SWIFT_LIB}"
-        cp "${DEVELOPER_DIR}/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/${SWIFT_LIB}" "./SwiftSupport"
+        FILE="${DEVELOPER_DIR}/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/${SWIFT_LIB}"
+        if [ -f "$FILE" ]; then
+          echo "Copying ${SWIFT_LIB}"
+          cp "$FILE" "./SwiftSupport"
+        fi
     done
 fi
 
