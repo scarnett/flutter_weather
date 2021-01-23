@@ -68,12 +68,12 @@ jobs:
         with: 
           channel: stable
           flutter-version: "1.22.5"
-        -
-          name: "files"
-          run: |
-            for file in /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/*; do
-              echo "$file"
-            done
+      -
+        name: "files"
+        run: |
+          for file in /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/*; do
+            echo "$file"
+          done
 
   #     - 
   #       name: "Decode GoogleService-Info.plist"
