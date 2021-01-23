@@ -13,7 +13,7 @@ jobs:
   version:
     name: "Generate Version Number"
     runs-on: ubuntu-latest
-    env: 
+    env:
       VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
     steps:
       - 
@@ -44,7 +44,7 @@ jobs:
     name: "Build iOS"
     needs: [ version ]
     runs-on: macos-latest
-    env: 
+    env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
@@ -144,7 +144,7 @@ jobs:
     name: "Upload iOS Beta to Firebase App Distribution"
     needs: [ build ]
     runs-on: ubuntu-latest
-    env: 
+    env:
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
     steps:
       - 

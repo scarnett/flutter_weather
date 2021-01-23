@@ -9,7 +9,7 @@ jobs:
   version:
     name: "Generate Version Number"
     runs-on: ubuntu-latest
-    env: 
+    env:
       VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
     steps:
       - 
@@ -40,7 +40,7 @@ jobs:
     name: "Build Android"
     needs: [ version ]
     runs-on: ubuntu-latest
-    env: 
+    env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_LOCAL_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}
       FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/local.properties' }}
@@ -174,7 +174,7 @@ jobs:
     name: "Release Android"
     needs: [ build ]
     runs-on: ubuntu-latest
-    env: 
+    env:
       FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
       FLUTTER_WEATHER_APPBUNDLE_OUTPUT_FILE: ${{ 'app-prod-release.aab' }}
       FLUTTER_WEATHER_WHATS_NEW_FOLDER: ${{ './apps/mobile_flutter/dist/whatsnew' }}
