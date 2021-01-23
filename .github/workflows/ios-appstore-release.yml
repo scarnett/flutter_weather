@@ -3,7 +3,7 @@ name: "iOS App Store Release"
 on:
   push: 
     branches: 
-      - ios_workflow # TODO! main
+      - main
 
 jobs: 
   version:
