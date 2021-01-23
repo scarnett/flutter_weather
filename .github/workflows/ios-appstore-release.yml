@@ -6,6 +6,36 @@ on:
       - ios_workflow # TODO! main
 
 jobs: 
+  # version:
+  #   name: "Generate Version Number"
+  #   runs-on: ubuntu-latest
+  #   env: 
+  #     VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
+  #   steps:
+  #     - 
+  #       uses: actions/checkout@v2
+  #     - 
+  #       name: "Fetch all history for all tags and branches"
+  #       run: git fetch --unshallow
+  #     - 
+  #       name: "Install GitVersion"
+  #       uses: gittools/actions/gitversion/setup@v0.9.6
+  #       with:
+  #           versionSpec: '5.x'
+  #     - 
+  #       name: "Use GitVersion"
+  #       id: gitversion
+  #       uses: gittools/actions/gitversion/execute@v0.9.6
+  #     - 
+  #       name: "Create version.txt"
+  #       run: echo "${{ steps.gitversion.outputs.MajorMinorPatch }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
+  #     - 
+  #       name: "Upload version.txt"
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: gitversion
+  #         path: "${{ env.VERSION_TXT_PATH }}"
+
   build:
     name: "Build iOS"
     needs: [ version ]
@@ -38,16 +68,9 @@ jobs:
         with: 
           channel: stable
           flutter-version: "1.22.5"
-      -
-        name: "files"
-        run: |
-          for file in /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/*; do
-            echo "$file"
-          done
-
-  #     - 
-  #       name: "Decode GoogleService-Info.plist"
-  #       run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
+      - 
+        name: "Decode GoogleService-Info.plist"
+        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
   #     - 
   #       name: "Decode environment config"
   #       run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
