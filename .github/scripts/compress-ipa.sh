@@ -21,7 +21,7 @@ if [ -d "${APP}/Frameworks" ];
 then
     mkdir -p SwiftSupport
     for SWIFT_LIB in $(ls -1 "${APP}/Frameworks/"); do
-        FILE="${DEVELOPER_DIR}/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/${SWIFT_LIB}"
+        FILE="${DEVELOPER_DIR}/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/iphoneos/${SWIFT_LIB}"
         if [ -f "$FILE" ]; then
           echo "Copying ${SWIFT_LIB}"
           cp "$FILE" "./SwiftSupport"
