@@ -8,15 +8,7 @@ mkdir -p SwiftSupport/iphoneos
 cd Payload
 ln -s ../Runner.app
 cd ..
-
-for MODULE in `ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/*.swiftmodule`
-do
-  basename "$MODULE"
-  module="$(basename -- $MODULE)"
-  echo "$MODULE"
-  # echo "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/$module"
-  # cp "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/$module" "./SwiftSupport/iphoneos/$module"
-done
+cp -vr "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/" "./SwiftSupport/iphoneos/"
 
 zip -r "$FLUTTER_WEATHER_IPA_OUTPUT_FILE" Payload SwiftSupport
 ls -l "$FLUTTER_WEATHER_IPA_OUTPUT_FILE"
