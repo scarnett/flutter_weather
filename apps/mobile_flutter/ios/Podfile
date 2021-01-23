@@ -54,11 +54,13 @@ target 'Runner' do
     generated_xcode_build_settings = parse_KV_file(generated_xcode_build_settings_path)
     cached_framework_dir = generated_xcode_build_settings['FLUTTER_FRAMEWORK_DIR'];
 
-    unless File.exist?(copied_framework_path)
-      FileUtils.cp_r(File.join(cached_framework_dir, 'Flutter.framework'), copied_flutter_dir)
-    end
-    unless File.exist?(copied_podspec_path)
-      FileUtils.cp(File.join(cached_framework_dir, 'Flutter.podspec'), copied_flutter_dir)
+    if cached_framework_dir
+      unless File.exist?(copied_framework_path)
+        FileUtils.cp_r(File.join(cached_framework_dir, 'Flutter.framework'), copied_flutter_dir)
+      end
+      unless File.exist?(copied_podspec_path)
+        FileUtils.cp(File.join(cached_framework_dir, 'Flutter.podspec'), copied_flutter_dir)
+      end
     end
   end
 
