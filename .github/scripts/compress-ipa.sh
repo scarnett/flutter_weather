@@ -9,7 +9,7 @@ cd Payload
 ln -s ../Runner.app
 cd ..
 
-for MODULE in `ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/*.swiftmodule`
+for MODULE in `ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/*.swiftmodule`
 do
   basename "$MODULE"
   module="$(basename -- $MODULE)"
