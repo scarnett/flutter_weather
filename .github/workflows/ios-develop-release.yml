@@ -59,6 +59,7 @@ jobs:
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       XCODE_VERSION: ${{ '12.3' }}
+      XCODE_SWIFT_PREBUILT_MODULES: ${{ '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/' }}
     steps:
       - 
         uses: actions/checkout@v2

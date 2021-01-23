@@ -55,6 +55,7 @@ jobs:
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       XCODE_VERSION: ${{ '12.3' }}
+      XCODE_SWIFT_PREBUILT_MODULES: ${{ '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -139,22 +140,22 @@ jobs:
           name: ipa
           path: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"
 
-  # beta:
-  #   name: "Release iOS"
-  #   needs: [ build ]
-  #   runs-on: macos-latest
-  #   env: 
-  #     FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
-  #     FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
-  #     FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
-  #   steps:
-  #     - 
-  #       uses: actions/checkout@v2
-  #     - 
-  #       name: "Get ipa from artifacts"
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: ipa
-  #     - 
-  #       name: "Upload ipa"
-  #       run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
+  release:
+    name: "Release iOS"
+    needs: [ build ]
+    runs-on: macos-latest
+    env: 
+      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+      FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
+      FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
+    steps:
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: "Get ipa from artifacts"
+        uses: actions/download-artifact@v2
+        with:
+          name: ipa
+      - 
+        name: "Upload ipa"
+        run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
