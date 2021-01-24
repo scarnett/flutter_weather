@@ -3,6 +3,7 @@ next-version: 1.0.0
 branches:
   main:
     regex: main?[/]
+    source-branches: []
     tag: ''
   feature:
     tag: alpha
