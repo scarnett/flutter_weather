@@ -3,7 +3,7 @@ name: "Android Develop Release"
 on:
   push: 
     branches: 
-      - android_workflow # TODO! develop
+      - develop
 
 #  pull_request: 
 #    branches: 
