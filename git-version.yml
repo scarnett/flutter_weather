@@ -1,4 +1,5 @@
 next-version: 1.0.0
+source-branches: ['master', 'develop', 'feature', 'hotfix', 'support']
 branches:
   main:
     regex: main
