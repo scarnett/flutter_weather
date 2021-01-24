@@ -2,5 +2,5 @@
 
 set -euo pipefail
 
-echo "$FLUTTER_WEATHER_KEYSTORE" > apps/mobile_flutter/android/app/key.jks.asc
-gpg -d --passphrase "$FLUTTER_WEATHER_KEYSTORE_PASS" --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
+echo "$FLUTTER_WEATHER_KEYSTORE" > "$FLUTTER_WEATHER_KEYSTORE_JKS_ASC_FILE_PATH"
+gpg -d --passphrase "$FLUTTER_WEATHER_KEYSTORE_PASS" --batch "$FLUTTER_WEATHER_KEYSTORE_JKS_ASC_FILE_PATH"> "$FLUTTER_WEATHER_KEYSTORE_JKS_FILE_PATH"
