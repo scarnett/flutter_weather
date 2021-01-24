@@ -69,15 +69,15 @@ jobs:
         run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > apps/mobile_flutter/android/local.properties
       - 
         name: "Decode android key.properties"
-        run: echo "$FLUTTER_WEATHER_KEY_PROPERTIES" > apps/mobile_flutter/android/key.properties
+        run: echo "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES }}" > apps/mobile_flutter/android/key.properties
       - 
         name: "Decode google-services.json"
-        run: echo "$FLUTTER_WEATHER_GOOGLE_SERVICES_JSON" > apps/mobile_flutter/android/app/google-services.json
+        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" > apps/mobile_flutter/android/app/google-services.json
       - 
         name: "Decode android keystore"
         run: |
-          echo "$FLUTTER_WEATHER_KEYSTORE" > apps/mobile_flutter/android/app/key.jks.asc
-          gpg -d --passphrase "$FLUTTER_WEATHER_KEYSTORE_PASS" --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
+          echo "${{ env.FLUTTER_WEATHER_KEYSTORE }}" > apps/mobile_flutter/android/app/key.jks.asc
+          gpg -d --passphrase "${{ env.FLUTTER_WEATHER_KEYSTORE_PASS }}" --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
       - 
         env: 
           FLUTTER_WEATHER_ENV_CONFIG: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}"
@@ -105,14 +105,14 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "storePassword\\="
-          replace: "storePassword=${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}"
+          replace: "storePassword=${{ env.FLUTTER_WEATHER_KEYSTORE_PASS }}"
           include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update KeyStore key password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "keyPassword\\="
-          replace: "keyPassword=${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
+          replace: "keyPassword=${{ env.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
           include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update build mode in local properties"
