@@ -46,12 +46,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
-      FLUTTER_WEATHER_LOCAL_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}"
-      FLUTTER_WEATHER_KEY_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}"
-      FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: "${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}"
-      FLUTTER_WEATHER_KEYSTORE: "${{ secrets.FLUTTER_WEATHER_KEYSTORE }}"
-      FLUTTER_WEATHER_KEYSTORE_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}"
-      FLUTTER_WEATHER_KEYSTORE_KEY_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
+      FLUTTER_WEATHER_LOCAL_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}
+      FLUTTER_WEATHER_KEY_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}
+      FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}
+      FLUTTER_WEATHER_KEYSTORE: ${{ secrets.FLUTTER_WEATHER_KEYSTORE }}
+      FLUTTER_WEATHER_KEYSTORE_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}
+      FLUTTER_WEATHER_KEYSTORE_KEY_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -66,13 +66,13 @@ jobs:
           flutter-version: "1.22.5"
       - 
         name: "Decode android local.properties"
-        run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > apps/mobile_flutter/android/local.properties
+        run: echo "$FLUTTER_WEATHER_LOCAL_PROPERTIES" > apps/mobile_flutter/android/local.properties
       - 
         name: "Decode android key.properties"
-        run: echo "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES }}" > apps/mobile_flutter/android/key.properties
+        run: echo "$FLUTTER_WEATHER_KEY_PROPERTIES" > apps/mobile_flutter/android/key.properties
       - 
         name: "Decode google-services.json"
-        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" > apps/mobile_flutter/android/app/google-services.json
+        run: echo "$FLUTTER_WEATHER_GOOGLE_SERVICES_JSON" > apps/mobile_flutter/android/app/google-services.json
       - 
         name: "Decode android keystore"
         run: |
