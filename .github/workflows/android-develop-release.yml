@@ -40,13 +40,13 @@ jobs:
           name: gitversion
           path: "${{ env.VERSION_TXT_PATH }}"
 
-  build: 
+  build:
     name: "Build Android"
     needs: [ version ]
     runs-on: ubuntu-latest
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
-    steps: 
+    steps:
       - 
         uses: actions/checkout@v2
       - 
