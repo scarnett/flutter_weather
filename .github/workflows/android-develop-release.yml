@@ -103,7 +103,7 @@ jobs:
         working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: |
           ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
-          sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
+          sed -i "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
       - 
         name: "Update KeyStore password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
