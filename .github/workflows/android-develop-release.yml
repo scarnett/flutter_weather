@@ -72,12 +72,10 @@ jobs:
         run: echo "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES }}" > apps/mobile_flutter/android/key.properties
       - 
         name: "Decode google-services.json"
-        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" > apps/mobile_flutter/android/app/google-services.json
+        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" | base64 --decode > apps/mobile_flutter/android/app/google-services.json
       - 
         name: "Decode android keystore"
-        run: |
-          echo "$FLUTTER_WEATHER_KEYSTORE" > apps/mobile_flutter/android/app/key.jks.asc
-          gpg -d --passphrase "$FLUTTER_WEATHER_KEYSTORE_PASS" --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
+        run: exec .github/scripts/configure-keystore.sh
       - 
         env: 
           FLUTTER_WEATHER_ENV_CONFIG: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}"
