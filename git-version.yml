@@ -3,6 +3,7 @@ mode: ContinuousDeployment
 continuous-delivery-fallback-tag: ''
 branches:
   main:
+    regex: main?[/]
     mode: ContinuousDeployment
     tag: '-dev'
     increment: Minor
