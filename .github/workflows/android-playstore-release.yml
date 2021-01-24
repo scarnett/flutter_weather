@@ -30,6 +30,9 @@ jobs:
         name: "Use GitVersion"
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+          configFilePath: ./git-version.yml
       - 
         name: "Create version.txt"
         run: echo "${{ steps.gitversion.outputs.MajorMinorPatch }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
