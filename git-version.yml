@@ -1,49 +1,39 @@
 next-version: 1.0.0
-source-branches: ['master', 'develop', 'feature', 'hotfix', 'support']
+mode: ContinuousDeployment
+continuous-delivery-fallback-tag: ''
 branches:
   main:
-    regex: main
-    mode: ContinuousDelivery
-    tag: ''
-    increment: Minor
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-    tracks-release-branches: false
-    is-release-branch: false
-  release:
-    regex: release(s)?[/-]
-    mode: ContinuousDelivery
-    tag: beta
-    increment: Minor
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-    tracks-release-branches: false
-    is-release-branch: true
-  feature:
-    regex: feature(s)?[/-]
-    mode: ContinuousDelivery
-    tag: alpha.{BranchName}
-    increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    track-merge-target: false
-    tracks-release-branches: false
-    is-release-branch: false
-  pull-request:
-    regex: (pull|pull\-requests|pr)[/-]
-    mode: ContinuousDelivery
-    tag: PullRequest
-    increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
-    track-merge-target: false
-    tracks-release-branches: false
-    is-release-branch: false
-  develop:
-    regex: dev(elop)?(ment)?$
     mode: ContinuousDeployment
-    tag: alpha
+    tag: '-dev'
     increment: Minor
-    prevent-increment-of-merged-branch-version: false
     track-merge-target: true
     tracks-release-branches: true
     is-release-branch: false
+    prevent-increment-of-merged-branch-version: false
+  release:
+    regex: release?[/]
+    mode: ContinuousDeployment
+    increment: Patch # not working, when merging a bugfix from main
+    tag: ''
+    is-release-branch: true
+    prevent-increment-of-merged-branch-version: true
+  feature:
+    regex: feature?[/]
+    mode: ContinuousDeployment
+    increment: Inherit
+    tag: '-alpha'
+    is-release-branch: false
+    prevent-increment-of-merged-branch-version: true
+  bugfix:
+    regex: bugfix?[/]
+    mode: ContinuousDeployment
+    increment: Inherit
+    tag: '-bugfix'
+    is-release-branch: false
+    prevent-increment-of-merged-branch-version: true
+    source-branches: ['main', 'feature', 'release']
+  pull-request:
+    mode: ContinuousDeployment
+    tag: '-pr'
+ignore:
+  sha: []
