@@ -1,41 +1,10 @@
+mode: Mainline
 next-version: 1.0.0
-mode: ContinuousDeployment
-continuous-delivery-fallback-tag: ''
 branches:
-  main:
-    regex: main?[/]
-    mode: ContinuousDeployment
-    tag: '-dev'
-    increment: Minor
-    track-merge-target: true
-    tracks-release-branches: true
-    is-release-branch: false
-    prevent-increment-of-merged-branch-version: false
-    source-branches: []
-  release:
-    regex: release?[/]
-    mode: ContinuousDeployment
-    increment: Patch # not working, when merging a bugfix from main
+  master:
     tag: ''
-    is-release-branch: true
-    prevent-increment-of-merged-branch-version: true
   feature:
-    regex: feature?[/]
-    mode: ContinuousDeployment
-    increment: Inherit
-    tag: '-alpha'
-    is-release-branch: false
-    prevent-increment-of-merged-branch-version: true
-  bugfix:
-    regex: bugfix?[/]
-    mode: ContinuousDeployment
-    increment: Inherit
-    tag: '-bugfix'
-    is-release-branch: false
-    prevent-increment-of-merged-branch-version: true
-    source-branches: ['main', 'feature', 'release']
-  pull-request:
-    mode: ContinuousDeployment
-    tag: '-pr'
+    tag: alpha
 ignore:
   sha: []
+merge-message-formats: {}
