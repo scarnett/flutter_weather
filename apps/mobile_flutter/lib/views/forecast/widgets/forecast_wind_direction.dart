@@ -27,7 +27,6 @@ class _ForecastWindDirectionState extends State<ForecastWindDirection> {
   Widget build(
     BuildContext context,
   ) {
-    // TODO! fix this
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
         !context.watch<AppBloc>().state.colorTheme) {
       return _rotate(
