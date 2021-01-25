@@ -211,7 +211,7 @@ IconData getForecastIconData(
 bool canRefresh(
   AppState state,
 ) {
-  if (state.forecasts.isEmpty) {
+  if (!hasForecasts(state.forecasts)) {
     return false;
   }
 
@@ -222,3 +222,8 @@ bool canRefresh(
           .add(Duration(minutes: EnvConfig.REFRESH_TIMEOUT_MINS))
           .isBefore(getNow());
 }
+
+bool hasForecasts(
+  List<Forecast> forecasts,
+) =>
+    (forecasts != null) && forecasts.isNotEmpty;
