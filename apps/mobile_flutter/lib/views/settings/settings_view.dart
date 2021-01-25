@@ -3,11 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
@@ -106,7 +106,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ],
     );
 
-    if (_themeMode == ThemeMode.light) {
+    if (_themeMode == ThemeMode.light && hasForecasts(_bloc.state.forecasts)) {
       widgets.addAll(
         [
           AppChekboxTile(

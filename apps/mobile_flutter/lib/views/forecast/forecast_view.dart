@@ -164,15 +164,15 @@ class _ForecastPageViewState extends State<ForecastView> {
         children: <Widget>[
           ForecastOptions(),
           Expanded(
-            child: state.forecasts.isEmpty
-                ? AppNoneFound(text: AppLocalizations.of(context).noForecasts)
-                : PageView.builder(
+            child: hasForecasts(state.forecasts)
+                ? PageView.builder(
                     controller: _pageController,
                     physics: const AppPageViewScrollPhysics(),
                     itemCount: state.forecasts.length,
                     itemBuilder: (BuildContext context, int position) =>
                         _buildForecastItem(context, position, state),
-                  ),
+                  )
+                : AppNoneFound(text: AppLocalizations.of(context).noForecasts),
           ),
           _buildCircleIndicator(state),
         ],

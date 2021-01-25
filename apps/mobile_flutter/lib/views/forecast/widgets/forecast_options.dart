@@ -79,7 +79,7 @@ class _ForecastOptionsState extends State<ForecastOptions>
 
   Widget _buildEditButton() {
     AppState state = context.watch<AppBloc>().state;
-    return (state.forecasts == null) || state.forecasts.isEmpty
+    return !hasForecasts(state.forecasts)
         ? Container()
         : Tooltip(
             message: AppLocalizations.of(context).editForecast,
@@ -100,9 +100,7 @@ class _ForecastOptionsState extends State<ForecastOptions>
 
   Widget _buildRefreshButton() {
     AppState state = context.watch<AppBloc>().state;
-    return (!canRefresh(state) ||
-            (state.forecasts == null) ||
-            state.forecasts.isEmpty)
+    return (!canRefresh(state) || !hasForecasts(state.forecasts))
         ? Container()
         : Tooltip(
             message: AppLocalizations.of(context).refreshForecast,
