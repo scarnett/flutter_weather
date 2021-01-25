@@ -3,11 +3,11 @@ name: "Android Develop Release"
 on:
   push: 
     branches: 
-      - develop
+      - releases-**
 
 #  pull_request: 
 #    branches: 
-#      - develop
+#      - releases-**
 
 jobs: 
   version:
