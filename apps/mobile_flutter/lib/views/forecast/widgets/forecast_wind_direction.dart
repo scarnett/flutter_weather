@@ -27,6 +27,7 @@ class _ForecastWindDirectionState extends State<ForecastWindDirection> {
   Widget build(
     BuildContext context,
   ) {
+    // TODO! fix this
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
         !context.watch<AppBloc>().state.colorTheme) {
       return _rotate(
@@ -39,29 +40,32 @@ class _ForecastWindDirectionState extends State<ForecastWindDirection> {
       );
     }
 
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: 1.0,
-          left: 1.0,
-          child: _rotate(
+    return Align(
+      alignment: Alignment.center,
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: 1.0,
+            left: 1.0,
+            child: _rotate(
+              widget.degree,
+              Icon(
+                Icons.navigation,
+                color: widget.shadowColor,
+                size: widget.size,
+              ),
+            ),
+          ),
+          _rotate(
             widget.degree,
             Icon(
               Icons.navigation,
-              color: widget.shadowColor,
+              color: widget.color,
               size: widget.size,
             ),
           ),
-        ),
-        _rotate(
-          widget.degree,
-          Icon(
-            Icons.navigation,
-            color: widget.color,
-            size: widget.size,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
