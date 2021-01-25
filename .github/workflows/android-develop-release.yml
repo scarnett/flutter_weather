@@ -1,4 +1,4 @@
-name: Android Develop Release
+name: "Android Develop Release"
 
 on:
   push: 
@@ -13,6 +13,8 @@ jobs:
   version:
     name: "Generate Version Number"
     runs-on: ubuntu-latest
+    env:
+      VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -28,21 +30,43 @@ jobs:
         name: "Use GitVersion"
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+          configFilePath: ./git-version.yml
       - 
         name: "Create version.txt"
-        run: echo "${{ steps.gitversion.outputs.MajorMinorPatch }}+${{ github.run_id }}" > apps/mobile_flutter/version.txt
+        run: echo "${{ steps.gitversion.outputs.MajorMinorPatch }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
       - 
         name: "Upload version.txt"
         uses: actions/upload-artifact@v2
         with:
           name: gitversion
-          path: apps/mobile_flutter/version.txt
+          path: "${{ env.VERSION_TXT_PATH }}"
 
-  build: 
+  build:
     name: "Build Android"
     needs: [ version ]
     runs-on: ubuntu-latest
-    steps: 
+    env:
+      FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
+      FLUTTER_WEATHER_LOCAL_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}
+      FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/local.properties' }}
+      FLUTTER_WEATHER_KEY_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}
+      FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/key.properties' }}
+      FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}
+      FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH: ${{ './apps/mobile_flutter/android/app/google-services.json' }}
+      FLUTTER_WEATHER_KEYSTORE: ${{ secrets.FLUTTER_WEATHER_KEYSTORE }}
+      FLUTTER_WEATHER_KEYSTORE_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}
+      FLUTTER_WEATHER_KEYSTORE_KEY_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}
+      FLUTTER_WEATHER_KEYSTORE_JKS_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks' }}
+      FLUTTER_WEATHER_KEYSTORE_JKS_ASC_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks.asc' }}
+      FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
+      FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
+      FLUTTER_WEATHER_RELEASE_FOLDER: ${{ './apps/mobile_flutter/build/app/outputs/apk/prod/release' }}
+      FLUTTER_WEATHER_RELEASE_ZIP: ${{ 'android-app.zip' }}
+      FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
+      FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'android-dev' }}
+    steps:
       - 
         uses: actions/checkout@v2
       - 
@@ -55,34 +79,20 @@ jobs:
           channel: stable
           flutter-version: "1.22.5"
       - 
-        env: 
-          FLUTTER_WEATHER_LOCAL_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}"
         name: "Decode android local.properties"
-        run: echo "$FLUTTER_WEATHER_LOCAL_PROPERTIES" > apps/mobile_flutter/android/local.properties
+        run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
       - 
-        env: 
-          FLUTTER_WEATHER_KEY_PROPERTIES: "${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}"
         name: "Decode android key.properties"
-        run: echo "$FLUTTER_WEATHER_KEY_PROPERTIES" > apps/mobile_flutter/android/key.properties
+        run: echo "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH }}"
       - 
-        env: 
-          FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: "${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}"
         name: "Decode google-services.json"
-        run: echo "$FLUTTER_WEATHER_GOOGLE_SERVICES_JSON" > apps/mobile_flutter/android/app/google-services.json
+        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH }}"
       - 
-        env: 
-          FLUTTER_WEATHER_KEYSTORE: "${{ secrets.FLUTTER_WEATHER_KEYSTORE }}"
-          FLUTTER_WEATHER_KEYSTORE_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}"
-          FLUTTER_WEATHER_KEYSTORE_KEY_PASS: "${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
         name: "Decode android keystore"
-        run: |
-          echo "$FLUTTER_WEATHER_KEYSTORE" > apps/mobile_flutter/android/app/key.jks.asc
-          gpg -d --passphrase "$FLUTTER_WEATHER_KEYSTORE_PASS" --batch apps/mobile_flutter/android/app/key.jks.asc > apps/mobile_flutter/android/app/key.jks
+        run: exec .github/scripts/configure-keystore.sh
       - 
-        env: 
-          FLUTTER_WEATHER_ENV_CONFIG: "${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}"
         name: "Decode environment config"
-        run: echo "$FLUTTER_WEATHER_ENV_CONFIG" > apps/mobile_flutter/lib/env_config.dart
+        run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
       - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
@@ -96,23 +106,23 @@ jobs:
           path: version.txt
       - 
         name: "Update app version"
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "99.99.99"
-          replace: "${{ steps.version.outputs.content }}"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+        run: |
+          ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
+          sed -i "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
       - 
         name: "Update KeyStore password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "storePassword\\="
-          replace: "storePassword=${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}"
+          replace: "storePassword=${{ env.FLUTTER_WEATHER_KEYSTORE_PASS }}"
           include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update KeyStore key password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "keyPassword\\="
-          replace: "keyPassword=${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
+          replace: "keyPassword=${{ env.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}"
           include: apps/mobile_flutter/android/key.properties
       - 
         name: "Update build mode in local properties"
@@ -134,33 +144,30 @@ jobs:
           replace: "flutter.versionCode=${{ github.run_number }}"
       - 
         name: "Flutter get"
-        working-directory: "./apps/mobile_flutter"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter pub get"
       - 
         name: "Flutter clean"
-        working-directory: "./apps/mobile_flutter"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter clean"
       - 
         name: "Flutter test"
-        working-directory: "./apps/mobile_flutter"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter test"
       - 
         name: "Flutter build apk"
-        working-directory: "./apps/mobile_flutter"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter build apk -t lib/main_prod.dart --flavor prod --release --verbose"
       - 
         name: "Compress apk"
-        working-directory: "./apps/mobile_flutter/build/app/outputs/apk/prod/release"
-        run: |
-          zip -r android-app.zip app-prod-release.apk
-          ls -l android-app.zip
+        run: exec .github/scripts/compress-apk.sh
       - 
         name: "Create github artifact"
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./apps/mobile_flutter/build/app/outputs/apk/prod/release/android-app.zip"
+          artifacts: "${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_ZIP }}"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "android-dev-${{ steps.version.outputs.content }}"
+          tag: "${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}"
           commit: ${{ github.sha }}
           prerelease: true
       - 
@@ -168,12 +175,14 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: apk
-          path: ./apps/mobile_flutter/build/app/outputs/apk/prod/release/app-prod-release.apk
+          path: "${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}"
 
   beta:
     name: "Upload Android Beta to Firebase App Distribution"
     needs: [ build ]
     runs-on: ubuntu-latest
+    env:
+      FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -193,4 +202,4 @@ jobs:
           appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           group: testers
-          file: app-prod-release.apk
+          file: "${{ env.FLUTTER_WEATHER_RELEASE_APP }}"

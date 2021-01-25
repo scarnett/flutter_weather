@@ -1,4 +1,4 @@
-name: Deploy to Firebase Hosting on merge
+name: "Deploy to Firebase Hosting on merge"
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
       - 
         run: npm ci
       - 
-        name: Nrwl Nx
+        name: "Nrwl Nx"
         uses: MansaGroup/nrwl-nx-action@v2.0.3
         with:
           targets: build
@@ -22,8 +22,8 @@ jobs:
       - 
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_FLUTTER_WEATHER }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_FLUTTER_WEATHER }}"
           channelId: live
           projectId: my-flutter-weather
         env:
