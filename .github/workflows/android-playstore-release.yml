@@ -160,7 +160,6 @@ jobs:
         run: "flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose"
       - 
         name: "Compress app bundle"
-        working-directory: "${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}"
         run: exec .github/scripts/compress-appbundle.sh
       - 
         name: "Create github artifact"
