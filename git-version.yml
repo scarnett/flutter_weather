@@ -1,12 +1,26 @@
-mode: Mainline
-next-version: 1.0.0
+assembly-versioning-scheme: MajorMinorPatch
+mode: ContinuousDeployment
 branches:
   main:
     regex: main?[/]
     source-branches: []
     tag: ''
   feature:
-    tag: alpha
+    tag: ''
+  release:
+    tag: 'test'
+    increment: Patch
+    tracks-release-branches: true
+    source-branches:
+    - main
+    - bugfix
+  bugfix:
+    tag: ''
+    increment: Patch
+    prevent-increment-of-merged-branch-version: false
+    regex: bugfix(es)?[/-]
+    source-branches:
+    - release
 ignore:
   sha: []
 merge-message-formats: {}
