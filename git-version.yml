@@ -7,7 +7,7 @@ branches:
     tag: ''
   release:
     tag: 'beta'
-    increment: Minor
+    increment: Patch
     tracks-release-branches: true
     source-branches:
     - main
