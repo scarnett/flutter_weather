@@ -86,7 +86,7 @@ jobs:
         run: echo "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH }}"
       - 
         name: "Decode google-services.json"
-        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH }}"
+        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH }}"
       - 
         name: "Decode android keystore"
         run: exec .github/scripts/configure-keystore.sh
