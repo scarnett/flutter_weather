@@ -7,6 +7,7 @@ import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
@@ -211,7 +212,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     yield state.copyWith(
       activeForecastId: Nullable<String>(null),
-      colorTheme: (_forecasts.length == 0) ? false : state.colorTheme,
+      colorTheme: hasForecasts(_forecasts) ? state.colorTheme : false,
       forecasts: _forecasts,
       selectedForecastIndex: (state.selectedForecastIndex > 0)
           ? (state.selectedForecastIndex - 1)

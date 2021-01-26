@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 
 class AppColorThemeToggle extends StatefulWidget {
   final AppBloc bloc;
@@ -22,8 +23,7 @@ class _AppColorThemeToggleState extends State<AppColorThemeToggle> {
     BuildContext context,
   ) =>
       (widget.bloc.state.themeMode == ThemeMode.dark) ||
-              (widget.bloc.state.forecasts == null) ||
-              widget.bloc.state.forecasts.isEmpty
+              !hasForecasts(widget.bloc.state.forecasts)
           ? Container()
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
