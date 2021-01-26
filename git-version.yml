@@ -5,22 +5,21 @@ branches:
     regex: main?[/]
     source-branches: []
     tag: ''
-  feature:
-    tag: ''
   release:
-    tag: ''
-    increment: Patch
+    tag: 'beta'
+    increment: Minor
     tracks-release-branches: true
     source-branches:
     - main
-    - bugfix
+  feature:
+    tag: 'beta'
+    increment: Patch
+    prevent-increment-of-merged-branch-version: false
   bugfix:
-    tag: ''
+    tag: 'beta'
     increment: Patch
     prevent-increment-of-merged-branch-version: false
     regex: bugfix(es)?[/-]
-    source-branches:
-    - release
 ignore:
   sha: []
 merge-message-formats: {}
