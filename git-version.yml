@@ -8,7 +8,7 @@ branches:
   feature:
     tag: ''
   release:
-    tag: 'test'
+    tag: ''
     increment: Patch
     tracks-release-branches: true
     source-branches:
