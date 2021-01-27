@@ -10,6 +10,7 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_view.dart';
 import 'package:flutter_weather/widgets/app_color_theme.dart';
 import 'package:flutter_weather/widgets/app_day_night_switch.dart';
+import 'package:flutter_weather/widgets/app_premium_trigger.dart';
 
 class ForecastOptions extends StatefulWidget {
   ForecastOptions();
@@ -57,6 +58,7 @@ class _ForecastOptionsState extends State<ForecastOptions>
             children: <Widget>[
               _buildEditButton(),
               _buildRefreshButton(),
+              _buildPremiumButton(),
               Expanded(child: Container()),
               AppColorThemeToggle(bloc: context.watch<AppBloc>()),
               AppDayNightSwitch(bloc: context.watch<AppBloc>()),
@@ -126,6 +128,22 @@ class _ForecastOptionsState extends State<ForecastOptions>
             ),
           );
   }
+
+  Widget _buildPremiumButton() => Tooltip(
+        message: AppLocalizations.of(context).upgrade,
+        child: Material(
+          type: MaterialType.transparency,
+          child: Container(
+            height: 40.0,
+            width: 40.0,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(40.0),
+              child: AppPremiumTrigger(),
+              onTap: () => {},
+            ),
+          ),
+        ),
+      );
 
   Widget _buildSettingsButton() => Container(
         padding: EdgeInsets.only(left: 10.0),
