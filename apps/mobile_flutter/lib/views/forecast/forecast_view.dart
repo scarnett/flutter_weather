@@ -304,5 +304,8 @@ class _ForecastPageViewState extends State<ForecastView> {
             state.temperatureUnit,
           ));
 
-  void _tapAddLocation() => Navigator.push(context, LookupView.route());
+  void _tapAddLocation() {
+    _scaffoldKey.currentState.removeCurrentSnackBar();
+    Navigator.push(context, LookupView.route());
+  }
 }

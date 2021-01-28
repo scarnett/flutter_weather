@@ -77,12 +77,15 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   Widget _buildContent() => SafeArea(
-        child: Column(
-          children: <Widget>[]
-            ..addAll(_buildThemeModeSection())
-            ..addAll(_buildTemperatureUnitSection())
-            ..addAll(_buildAboutSection())
-            ..addAll(_buildBuildInfoSection()),
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            children: <Widget>[]
+              ..addAll(_buildThemeModeSection())
+              ..addAll(_buildTemperatureUnitSection())
+              ..addAll(_buildAboutSection())
+              ..addAll(_buildBuildInfoSection()),
+          ),
         ),
       );
 
