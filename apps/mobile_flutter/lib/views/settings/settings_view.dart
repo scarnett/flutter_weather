@@ -3,9 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
@@ -84,7 +86,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               ..addAll(_buildThemeModeSection())
               ..addAll(_buildTemperatureUnitSection())
               ..addAll(_buildAboutSection())
-              ..addAll(_buildBuildInfoSection()),
+              ..addAll(_buildBuildInfoSection())
+              ..add(_buildOpenSourceSection()),
           ),
         ),
       );
@@ -238,6 +241,33 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ),
     );
   }
+
+  Widget _buildOpenSourceSection() => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () => launchURL(EnvConfig.GITHUB_LINK),
+              child: Image.asset(
+                (_bloc.state.themeMode == ThemeMode.light)
+                    ? 'assets/images/github_dark.png'
+                    : 'assets/images/github_light.png',
+                width: 50.0,
+                height: 50.0,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => launchURL('https://opensource.org/'),
+              child: Image.asset(
+                'assets/images/osi.png',
+                width: 50.0,
+                height: 50.0,
+              ),
+            ),
+          ],
+        ),
+      );
 
   void _tapThemeMode(
     ThemeMode themeMode,
