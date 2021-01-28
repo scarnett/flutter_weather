@@ -81,11 +81,11 @@ class _ForecastPageViewState extends State<ForecastView> {
         _currentPage = _pageController.page;
 
         if (isInteger(_currentPage)) {
+          _currentForecastNotifier.value = _currentPage.toInt();
+
           context
               .read<AppBloc>()
               .add(SelectedForecastIndex(_currentPage.toInt()));
-
-          _currentForecastNotifier.value = _currentPage.toInt();
         }
       });
 
@@ -270,7 +270,7 @@ class _ForecastPageViewState extends State<ForecastView> {
     AppState state,
   ) =>
       Padding(
-        padding: const EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.only(bottom: 30.0),
         child: CirclePageIndicator(
           dotColor: AppTheme.getHintColor(
             state.themeMode,
@@ -287,13 +287,12 @@ class _ForecastPageViewState extends State<ForecastView> {
   void _onPageSelected(
     int page,
   ) {
+    _currentForecastNotifier.value = page;
     _pageController.animateToPage(
       page,
       duration: Duration(milliseconds: 300),
       curve: Curves.linear,
     );
-
-    _currentForecastNotifier.value = page;
   }
 
   Future<void> _pullRefresh(

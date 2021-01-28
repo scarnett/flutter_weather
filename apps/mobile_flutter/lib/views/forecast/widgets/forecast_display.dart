@@ -37,7 +37,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     return Align(
       alignment: Alignment.topCenter,
       child: Padding(
-        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40.0),
+        padding: const EdgeInsets.only(
+          left: 10.0,
+          right: 10.0,
+          top: 10.0,
+        ),
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
           child: Column(
