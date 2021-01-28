@@ -1,9 +1,11 @@
 name: "Android Develop Release"
 
-on:
-  push: 
-    branches: 
-      - release-**
+on: workflow_dispatch
+
+# on:
+#   push: 
+#     branches: 
+#       - release-**
 
 #  pull_request: 
 #    branches: 
