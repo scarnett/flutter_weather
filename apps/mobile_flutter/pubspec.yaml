@@ -22,6 +22,7 @@ dependencies:
   package_info: '^0.4.3+2'
   page_view_indicators: '^1.4.0'
   select_dialog: '^1.2.1'
+  url_launcher: '^5.7.10'
   uuid: '^2.2.2'
   weather_icons: '^2.0.2'
   webview_flutter: '^1.0.7'
@@ -39,7 +40,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
+    - assets/images/
 
 flutter_icons:
   adaptive_icon_background: 'assets/images/launcher_background.png'
