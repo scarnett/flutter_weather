@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 extension ObjectExtension on Object {
   bool isNullOrEmpty() => (this == null) || (this == '');
@@ -45,6 +46,16 @@ bool isInteger(
   num value,
 ) =>
     (value is int) || (value == value.roundToDouble());
+
+launchURL(
+  String url,
+) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 class Nullable<T> {
   T _value;

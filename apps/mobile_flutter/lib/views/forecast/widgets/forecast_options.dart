@@ -152,6 +152,7 @@ class _ForecastOptionsState extends State<ForecastOptions>
     Forecast forecast = state.forecasts[state.selectedForecastIndex];
     if (forecast != null) {
       context.read<AppBloc>().add(SetActiveForecastId(forecast.id));
+      Scaffold.of(context).hideCurrentSnackBar();
       Navigator.push(context, ForecastFormView.route());
     }
   }
@@ -164,5 +165,8 @@ class _ForecastOptionsState extends State<ForecastOptions>
             context.read<AppBloc>().state.temperatureUnit,
           ));
 
-  void _tapSettings() => Navigator.push(context, SettingsView.route());
+  void _tapSettings() {
+    Scaffold.of(context).hideCurrentSnackBar();
+    Navigator.push(context, SettingsView.route());
+  }
 }

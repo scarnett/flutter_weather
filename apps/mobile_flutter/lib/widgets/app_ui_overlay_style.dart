@@ -31,8 +31,8 @@ class _AppUiOverlayStyleState extends State<AppUiOverlayStyle> {
           statusBarColor: Colors.transparent,
           statusBarBrightness:
               (widget.themeMode == ThemeMode.light) && !widget.colorTheme
-                  ? Brightness.dark
-                  : Brightness.light,
+                  ? Brightness.light
+                  : Brightness.dark,
           statusBarIconBrightness:
               (widget.themeMode == ThemeMode.light) && !widget.colorTheme
                   ? Brightness.dark
