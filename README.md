@@ -5,18 +5,9 @@
 <h1 align="center">Flutter Weather</h1>
 <p align="center">A beautiful weather forecasting application built with the <a href="https://www.flutter.dev/" target="_blank">Flutter development kit</a>.</p>
 
-<table cellspacing="0" style="width:100%">
-  <tbody>
-    <tr>
-      <td style="text-align:right">
-        <a href="https://play.google.com/store/apps/details?id=io.flutter_weather.prod" target="_blank"><img src="docs/images/play_store.png" height="50" /></a>
-      </td>
-      <td style="text-align:left">
-        <a href="https://apps.apple.com/us/app/my-flutter-weather/id1550322379" target="_blank"><img src="docs/images/app_store.png"  height="50" /></a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<p align="center">
+<a href="https://play.google.com/store/apps/details?id=io.flutter_weather.prod" target="_blank"><img src="docs/images/play_store.png" height="50" /></a>&nbsp;&nbsp;&nbsp;<a href="https://apps.apple.com/us/app/my-flutter-weather/id1550322379" target="_blank"><img src="docs/images/app_store.png"  height="50" /></a>
+</p>
 
 <h2 align="center">Screenshots</h2>
 <table cellspacing="0" style="width:100%">
