@@ -32,15 +32,14 @@ List<Shadow> commonTextShadow({
   blurRadius: 1.0,
   xOffset: 1.0,
   yOffset: 1.0,
-}) {
-  return [
-    Shadow(
-      color: color,
-      blurRadius: blurRadius,
-      offset: Offset(xOffset, yOffset),
-    ),
-  ];
-}
+}) =>
+    [
+      Shadow(
+        color: color,
+        blurRadius: blurRadius,
+        offset: Offset(xOffset, yOffset),
+      ),
+    ];
 
 bool isInteger(
   num value,
