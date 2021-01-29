@@ -44,6 +44,7 @@ jobs:
     needs: [ version ]
     runs-on: macos-latest
     env:
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
@@ -105,6 +106,9 @@ jobs:
         run: |
           ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
           sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
+      - 
+        name: "Update firebase remote configuration"
+        run: exec .github/scripts/update-remote-config.sh -p ios -v "${{ steps.version.outputs.content }}"
       - 
         name: "Flutter get"
         working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
