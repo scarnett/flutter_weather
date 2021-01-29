@@ -54,7 +54,7 @@ jobs:
         name: "Download firebase remote configuration"
         uses: w9jds/firebase-action@master
         with:
-          args: remoteconfig:get -o .github/templates/firebase-remote-config.json
+          args: remoteconfig:get -o firebase-remote-config.json
         env:
           FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
           PROJECT_ID: "${{ secrets.FIREBASE_PROJECT_ID }}"
