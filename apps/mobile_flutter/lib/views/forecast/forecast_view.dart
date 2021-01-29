@@ -165,16 +165,20 @@ class _ForecastPageViewState extends State<ForecastView> {
           ForecastOptions(),
           Expanded(
             child: hasForecasts(state.forecasts)
-                ? PageView.builder(
-                    controller: _pageController,
-                    physics: const AppPageViewScrollPhysics(),
-                    itemCount: state.forecasts.length,
-                    itemBuilder: (BuildContext context, int position) =>
-                        _buildForecastItem(context, position, state),
+                ? Stack(
+                    children: [
+                      PageView.builder(
+                        controller: _pageController,
+                        physics: const AppPageViewScrollPhysics(),
+                        itemCount: state.forecasts.length,
+                        itemBuilder: (BuildContext context, int position) =>
+                            _buildForecastItem(context, position, state),
+                      ),
+                      _buildCircleIndicator(state),
+                    ],
                   )
                 : AppNoneFound(text: AppLocalizations.of(context).noForecasts),
           ),
-          _buildCircleIndicator(state),
         ],
       );
 
@@ -269,18 +273,21 @@ class _ForecastPageViewState extends State<ForecastView> {
   _buildCircleIndicator(
     AppState state,
   ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
-        child: CirclePageIndicator(
-          dotColor: AppTheme.getHintColor(
-            state.themeMode,
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: CirclePageIndicator(
+            dotColor: AppTheme.getHintColor(
+              state.themeMode,
+            ),
+            selectedDotColor:
+                state.colorTheme ? Colors.white : AppTheme.primaryColor,
+            selectedSize: 10.0,
+            itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
+            currentPageNotifier: _currentForecastNotifier,
+            onPageSelected: _onPageSelected,
           ),
-          selectedDotColor:
-              state.colorTheme ? Colors.white : AppTheme.primaryColor,
-          selectedSize: 10.0,
-          itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
-          currentPageNotifier: _currentForecastNotifier,
-          onPageSelected: _onPageSelected,
         ),
       );
 

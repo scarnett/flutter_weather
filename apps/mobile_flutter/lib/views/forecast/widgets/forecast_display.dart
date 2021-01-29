@@ -61,7 +61,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLocation() => Container(
-        padding: const EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.only(bottom: 10.0),
         child: Column(
           children: <Widget>[
             Text(
@@ -133,7 +133,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
 
     return Container(
-      padding: const EdgeInsets.only(bottom: 20.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -383,7 +383,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       ),
       padding: const EdgeInsets.only(
         top: 20.0,
-        bottom: 30.0,
+        bottom: 20.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
