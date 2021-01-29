@@ -15,6 +15,7 @@ import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:package_info/package_info.dart';
+import 'package:version/version.dart';
 
 class SettingsView extends StatelessWidget {
   static Route route() =>
@@ -204,7 +205,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           ),
           ListTile(
             title: Text(
-              '${_packageInfo.version} - ${_bloc.state.appVersion}',
+              _packageInfo.version,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             trailing: _buildVersionText(),
@@ -213,25 +214,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ];
 
   Widget _buildVersionText() {
-    /*
-    if (_packageInfo.version == EnvConfig.LATEST_VERSION) {
+    Version latestVersion = Version.parse(_bloc.state.appVersion.split('+')[0]);
+    Version currentVersion = Version.parse(_packageInfo.version);
+    if (latestVersion > currentVersion) {
       return Text(
-        AppLocalizations.of(context).latest,
+        AppLocalizations.of(context).updateAvailable,
         style: TextStyle(
-          color: AppTheme.successColor,
+          color: AppTheme.warningColor,
           fontWeight: FontWeight.w700,
         ),
       );
     }
-
-    return Text(
-      AppLocalizations.of(context).updateAvailable,
-      style: TextStyle(
-        color: AppTheme.warningColor,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-    */
 
     return Text(
       AppLocalizations.of(context).latest,
