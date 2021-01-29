@@ -13,6 +13,9 @@ while getopts ":p:v:" opt; do
   esac
 done
 
+# INstall firebase
+npm install -g firebase-tools
+
 # Download the remote configuration template and dump it to a file
 firebase remoteconfig:get -o ../templates/firebase-remote-config.json
 
