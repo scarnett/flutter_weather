@@ -51,6 +51,17 @@ jobs:
         with: 
           java-version: 12.x
       - 
+        name: "Get version.txt"
+        uses: actions/download-artifact@v2
+        with:
+          name: gitversion
+      - 
+        name: "Read version"
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version.txt
+      - 
         name: "Download firebase remote configuration"
         uses: w9jds/firebase-action@master
         with:
