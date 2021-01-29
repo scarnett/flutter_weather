@@ -52,7 +52,7 @@ jobs:
           java-version: 12.x
       - 
         name: "Download firebase remote configuration"
-        uses: ridermansb/firebase-action@master
+        uses: w9jds/firebase-action@master
         with:
           args: remoteconfig:get -o .github/templates/firebase-remote-config.json
         env:
@@ -63,8 +63,9 @@ jobs:
         run: exec .github/scripts/update-remote-config.sh -p android -v "${{ steps.version.outputs.content }}"
       - 
         name: "Deploy firebase remote configuration"
-        uses: ridermansb/firebase-action@master
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only remoteconfig
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
