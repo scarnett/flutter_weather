@@ -16,7 +16,7 @@ try:
         elif currentArgument in ('-v', '--version'):
             version = currentValue
 
-    with open('../templates/firebase-remote-config.json', 'r+') as f:
+    with open('.github/templates/firebase-remote-config.json', 'r+') as f:
       data = json.load(f)
       data['parameters']['app_version']['conditionalValues'][platform]['value'] = version
       f.seek(0)
