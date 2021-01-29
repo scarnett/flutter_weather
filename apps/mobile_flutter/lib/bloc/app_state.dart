@@ -2,6 +2,7 @@ part of 'app_bloc.dart';
 
 @immutable
 class AppState extends Equatable {
+  final String appVersion;
   final ThemeMode themeMode;
   final bool colorTheme;
   final TemperatureUnit temperatureUnit;
@@ -12,6 +13,7 @@ class AppState extends Equatable {
   final CRUDStatus crudStatus;
 
   AppState({
+    this.appVersion,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
@@ -23,6 +25,7 @@ class AppState extends Equatable {
   });
 
   const AppState._({
+    this.appVersion,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
@@ -36,6 +39,7 @@ class AppState extends Equatable {
   const AppState.initial() : this._();
 
   AppState copyWith({
+    String appVersion,
     ThemeMode themeMode,
     bool colorTheme,
     TemperatureUnit temperatureUnit,
@@ -46,6 +50,7 @@ class AppState extends Equatable {
     Nullable<CRUDStatus> crudStatus,
   }) =>
       AppState._(
+        appVersion: appVersion ?? this.appVersion,
         themeMode: themeMode ?? this.themeMode,
         colorTheme: colorTheme ?? this.colorTheme,
         temperatureUnit: temperatureUnit ?? this.temperatureUnit,
@@ -62,6 +67,7 @@ class AppState extends Equatable {
 
   @override
   List<Object> get props => [
+        appVersion,
         themeMode,
         colorTheme,
         temperatureUnit,
@@ -74,8 +80,8 @@ class AppState extends Equatable {
 
   @override
   String toString() =>
-      'AppState{themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit, ' +
+      'AppState{appVersion: $appVersion, themeMode: $themeMode, ' +
+      'colorTheme: $colorTheme, temperatureUnit: $temperatureUnit, ' +
       'selectedForecastIndex: $selectedForecastIndex, ' +
       'forecasts: $forecasts, activeForecastId: $activeForecastId, ' +
       'refreshStatus: $refreshStatus, crudStatus: $crudStatus}';

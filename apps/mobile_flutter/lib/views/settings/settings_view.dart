@@ -204,7 +204,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           ),
           ListTile(
             title: Text(
-              _packageInfo.version,
+              '${_packageInfo.version} - ${_bloc.state.appVersion}',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             trailing: _buildVersionText(),
