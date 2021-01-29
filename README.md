@@ -52,6 +52,7 @@ nx run web_ng:serve
 Created by [@scarnett](https://github.com/scarnett/)
 
 ## License
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 Copyright &copy; 2021 Scott Carnett. Licensed under the MIT License (MIT)
 
 ## Nx
