@@ -14,6 +14,6 @@
     ]
   },
   "remoteconfig": {
-    "template": ".github/scripts/firebase-remote-config.json"
+    "template": "firebase-remote-config.json"
   }
 }
