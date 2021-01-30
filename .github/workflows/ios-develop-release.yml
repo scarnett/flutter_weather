@@ -75,7 +75,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with: 
           channel: stable
-          flutter-version: "1.22.5"
+          flutter-version: "1.22.6"
       - 
         name: "Decode GoogleService-Info.plist"
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
