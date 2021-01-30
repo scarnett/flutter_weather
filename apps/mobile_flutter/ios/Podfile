@@ -1,4 +1,4 @@
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 pod 'Firebase/Analytics'
 
@@ -36,7 +36,7 @@ def parse_KV_file(file, separator='=')
 end
 
 target 'Runner' do
-  # use_frameworks!
+  use_frameworks!
   use_modular_headers!
   
   # Flutter Pod
