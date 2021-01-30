@@ -214,7 +214,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ];
 
   Widget _buildVersionText() {
-    Version latestVersion = Version.parse(_bloc.state.appVersion.split('+')[0]);
+    Version latestVersion;
+
+    if (_bloc.state.appVersion.contains('+')) {
+      latestVersion = Version.parse(_bloc.state.appVersion.split('+')[0]);
+    } else {
+      latestVersion = Version.parse(_bloc.state.appVersion);
+    }
+
     Version currentVersion = Version.parse(_packageInfo.version);
     if (latestVersion > currentVersion) {
       return Text(
