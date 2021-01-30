@@ -1,8 +1,5 @@
 platform :ios, '12.0'
 
-pod 'Firebase/Core'
-pod 'Firebase/Analytics'
-
 ENV['SWIFT_VERSION'] = '5'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
@@ -39,6 +36,9 @@ end
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
+
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
   
   # Flutter Pod
 
