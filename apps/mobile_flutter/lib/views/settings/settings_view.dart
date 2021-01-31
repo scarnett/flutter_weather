@@ -3,9 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
@@ -13,6 +15,7 @@ import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:package_info/package_info.dart';
+import 'package:version/version.dart';
 
 class SettingsView extends StatelessWidget {
   static Route route() =>
@@ -77,12 +80,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   Widget _buildContent() => SafeArea(
-        child: Column(
-          children: <Widget>[]
-            ..addAll(_buildThemeModeSection())
-            ..addAll(_buildTemperatureUnitSection())
-            ..addAll(_buildAboutSection())
-            ..addAll(_buildBuildInfoSection()),
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            children: <Widget>[]
+              ..addAll(_buildThemeModeSection())
+              ..addAll(_buildTemperatureUnitSection())
+              ..addAll(_buildAboutSection())
+              ..addAll(_buildBuildInfoSection())
+              ..add(_buildOpenSourceSection()),
+          ),
         ),
       );
 
@@ -207,25 +214,24 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ];
 
   Widget _buildVersionText() {
-    /*
-    if (_packageInfo.version == EnvConfig.LATEST_VERSION) {
+    Version latestVersion;
+
+    if (_bloc.state.appVersion.contains('+')) {
+      latestVersion = Version.parse(_bloc.state.appVersion.split('+')[0]);
+    } else {
+      latestVersion = Version.parse(_bloc.state.appVersion);
+    }
+
+    Version currentVersion = Version.parse(_packageInfo.version);
+    if (latestVersion > currentVersion) {
       return Text(
-        AppLocalizations.of(context).latest,
+        AppLocalizations.of(context).updateAvailable,
         style: TextStyle(
-          color: AppTheme.successColor,
+          color: AppTheme.warningColor,
           fontWeight: FontWeight.w700,
         ),
       );
     }
-
-    return Text(
-      AppLocalizations.of(context).updateAvailable,
-      style: TextStyle(
-        color: AppTheme.warningColor,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-    */
 
     return Text(
       AppLocalizations.of(context).latest,
@@ -235,6 +241,33 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ),
     );
   }
+
+  Widget _buildOpenSourceSection() => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () => launchURL(EnvConfig.GITHUB_LINK),
+              child: Image.asset(
+                (_bloc.state.themeMode == ThemeMode.light)
+                    ? 'assets/images/github_dark.png'
+                    : 'assets/images/github_light.png',
+                width: 50.0,
+                height: 50.0,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => launchURL('https://opensource.org/'),
+              child: Image.asset(
+                'assets/images/osi.png',
+                width: 50.0,
+                height: 50.0,
+              ),
+            ),
+          ],
+        ),
+      );
 
   void _tapThemeMode(
     ThemeMode themeMode,

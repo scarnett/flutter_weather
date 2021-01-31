@@ -79,7 +79,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with: 
           channel: stable
-          flutter-version: "1.22.5"
+          flutter-version: "1.22.6"
       - 
         name: "Decode android local.properties"
         run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"

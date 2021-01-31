@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 extension ObjectExtension on Object {
   bool isNullOrEmpty() => (this == null) || (this == '');
@@ -31,20 +32,29 @@ List<Shadow> commonTextShadow({
   blurRadius: 1.0,
   xOffset: 1.0,
   yOffset: 1.0,
-}) {
-  return [
-    Shadow(
-      color: color,
-      blurRadius: blurRadius,
-      offset: Offset(xOffset, yOffset),
-    ),
-  ];
-}
+}) =>
+    [
+      Shadow(
+        color: color,
+        blurRadius: blurRadius,
+        offset: Offset(xOffset, yOffset),
+      ),
+    ];
 
 bool isInteger(
   num value,
 ) =>
     (value is int) || (value == value.roundToDouble());
+
+launchURL(
+  String url,
+) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 class Nullable<T> {
   T _value;

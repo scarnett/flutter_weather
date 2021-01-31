@@ -185,7 +185,6 @@ TextTheme _darkTextTheme = TextTheme(
   headline3: TextStyle(
     color: AppTheme.secondaryColor,
     fontSize: 40.0,
-    height: 0.85,
     fontWeight: FontWeight.w100,
   ),
   headline4: TextStyle(
@@ -226,7 +225,6 @@ TextTheme _lightTextTheme = TextTheme(
   headline3: TextStyle(
     color: Colors.white,
     fontSize: 40.0,
-    height: 0.85,
     fontWeight: FontWeight.w100,
     shadows: commonTextShadow(),
   ),

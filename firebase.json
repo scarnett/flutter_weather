@@ -12,5 +12,8 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "remoteconfig": {
+    "template": "firebase-remote-config.json"
   }
 }
