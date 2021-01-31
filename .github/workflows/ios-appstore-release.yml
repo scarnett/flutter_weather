@@ -48,6 +48,8 @@ jobs:
       FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
     steps:
       - 
+        uses: actions/checkout@v2
+      - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
         with:
