@@ -89,6 +89,8 @@ jobs:
     needs: [ version ]
     runs-on: ubuntu-latest
     env:
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_LOCAL_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}
       FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/local.properties' }}
@@ -151,6 +153,25 @@ jobs:
         run: |
           ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
           sed -i "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
+      - 
+        name: "Download firebase remote configuration"
+        uses: w9jds/firebase-action@master
+        with:
+          args: remoteconfig:get -o firebase-remote-config.json
+        env:
+          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
+          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
+      - 
+        name: "Update firebase remote configuration"
+        run: exec .github/scripts/update-remote-config.sh -p android -v "${{ steps.version.outputs.content }}"
+      - 
+        name: "Deploy firebase remote configuration"
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only remoteconfig
+        env:
+          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
+          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
       - 
         name: "Update KeyStore password in gradle properties"
         uses: jacobtomlinson/gha-find-replace@master
