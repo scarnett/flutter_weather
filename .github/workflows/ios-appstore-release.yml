@@ -39,8 +39,8 @@ jobs:
           name: gitversion
           path: "${{ env.VERSION_TXT_PATH }}"
 
-  build: 
-    name: "Update App Version"
+  remoteconfig: 
+    name: "Update Remote Configuration"
     needs: [ version ]
     runs-on: ubuntu-latest
     steps:
