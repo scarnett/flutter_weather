@@ -1,16 +1,16 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
-class FirebaseRemoteonfigService {
+class FirebaseRemoteConfigService {
   final RemoteConfig _remoteConfig;
 
-  FirebaseRemoteonfigService({
+  FirebaseRemoteConfigService({
     RemoteConfig remoteConfig,
   }) : _remoteConfig = remoteConfig;
 
-  static FirebaseRemoteonfigService _instance;
-  static Future<FirebaseRemoteonfigService> getInstance() async {
+  static FirebaseRemoteConfigService _instance;
+  static Future<FirebaseRemoteConfigService> getInstance() async {
     if (_instance == null) {
-      _instance = FirebaseRemoteonfigService(
+      _instance = FirebaseRemoteConfigService(
         remoteConfig: await RemoteConfig.instance,
       );
     }

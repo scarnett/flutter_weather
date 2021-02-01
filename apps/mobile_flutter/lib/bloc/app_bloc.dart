@@ -59,8 +59,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   Stream<AppState> _mapGetCurrentAppVersionToStates(
     GetCurrentAppVersion event,
   ) async* {
-    final FirebaseRemoteonfigService instance =
-        await FirebaseRemoteonfigService.getInstance();
+    final FirebaseRemoteConfigService instance =
+        await FirebaseRemoteConfigService.getInstance();
 
     instance.initialise();
 
