@@ -17,38 +17,24 @@ import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
-class SettingsView extends StatelessWidget {
+class SettingsView extends StatefulWidget {
   static Route route() =>
       MaterialPageRoute<void>(builder: (_) => SettingsView());
 
-  const SettingsView({
+  SettingsView({
     Key key,
   }) : super(key: key);
 
   @override
-  Widget build(
-    BuildContext context,
-  ) =>
-      SettingsPageView();
+  State<StatefulWidget> createState() => _SettingsViewState();
 }
 
-class SettingsPageView extends StatefulWidget {
-  SettingsPageView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _SettingsPageViewState();
-}
-
-class _SettingsPageViewState extends State<SettingsPageView> {
-  AppBloc _bloc;
+class _SettingsViewState extends State<SettingsView> {
   PackageInfo _packageInfo;
 
   @override
   void initState() {
     super.initState();
-    _bloc = context.read<AppBloc>();
     _initPackageInfo();
   }
 
@@ -57,10 +43,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: _bloc.state.themeMode,
-        colorTheme: _bloc.state.colorTheme,
+        themeMode: context.read<AppBloc>().state.themeMode,
+        colorTheme: context.read<AppBloc>().state.colorTheme,
         systemNavigationBarIconBrightness:
-            _bloc.state.colorTheme ? Brightness.dark : null,
+            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
@@ -94,16 +80,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       );
 
   List<Widget> _buildThemeModeSection() {
-    ThemeMode _themeMode = _bloc.state.themeMode;
+    AppState _state = context.read<AppBloc>().state;
+    ThemeMode _themeMode = _state.themeMode;
     List<Widget> widgets = <Widget>[];
     widgets.addAll(
       [
         AppSectionHeader(
-          bloc: _bloc,
+          bloc: context.read<AppBloc>(),
           text: AppLocalizations.of(context).themeMode,
         ),
         AppRadioTile<ThemeMode>(
-          bloc: _bloc,
+          bloc: context.read<AppBloc>(),
           title: AppLocalizations.of(context).light,
           value: ThemeMode.light,
           groupValue: _themeMode,
@@ -113,13 +100,13 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ],
     );
 
-    if (_themeMode == ThemeMode.light && hasForecasts(_bloc.state.forecasts)) {
+    if (_themeMode == ThemeMode.light && hasForecasts(_state.forecasts)) {
       widgets.addAll(
         [
           AppChekboxTile(
-            bloc: _bloc,
+            bloc: context.read<AppBloc>(),
             title: AppLocalizations.of(context).colorized,
-            checked: _bloc.state.colorTheme,
+            checked: _state.colorTheme,
             onTap: _tapColorized,
           ),
           Divider(),
@@ -129,7 +116,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
     widgets.add(
       AppRadioTile<ThemeMode>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).dark,
         value: ThemeMode.dark,
         groupValue: _themeMode,
@@ -141,15 +128,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   List<Widget> _buildTemperatureUnitSection() {
-    TemperatureUnit _temperatureUnit = _bloc.state.temperatureUnit;
+    TemperatureUnit _temperatureUnit =
+        context.read<AppBloc>().state.temperatureUnit;
 
     return [
       AppSectionHeader(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         text: AppLocalizations.of(context).temperatureUnit,
       ),
       AppRadioTile<TemperatureUnit>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).celsius,
         value: TemperatureUnit.celsius,
         groupValue: _temperatureUnit,
@@ -157,7 +145,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ),
       Divider(),
       AppRadioTile<TemperatureUnit>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).fahrenheit,
         value: TemperatureUnit.fahrenheit,
         groupValue: _temperatureUnit,
@@ -165,7 +153,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ),
       Divider(),
       AppRadioTile<TemperatureUnit>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).kelvin,
         value: TemperatureUnit.kelvin,
         groupValue: _temperatureUnit,
@@ -178,7 +166,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ? [Container()]
       : [
           AppSectionHeader(
-            bloc: _bloc,
+            bloc: context.read<AppBloc>(),
             text: AppLocalizations.of(context).about,
           ),
           ListTile(
@@ -200,7 +188,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ? [Container()]
       : [
           AppSectionHeader(
-            bloc: _bloc,
+            bloc: context.read<AppBloc>(),
             text: AppLocalizations.of(context).buildInformation,
           ),
           ListTile(
@@ -216,10 +204,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   Widget _buildVersionText() {
     Version latestVersion;
 
-    if (_bloc.state.appVersion.contains('+')) {
-      latestVersion = Version.parse(_bloc.state.appVersion.split('+')[0]);
+    if (context.read<AppBloc>().state.appVersion.contains('+')) {
+      latestVersion =
+          Version.parse(context.read<AppBloc>().state.appVersion.split('+')[0]);
     } else {
-      latestVersion = Version.parse(_bloc.state.appVersion);
+      latestVersion = Version.parse(context.read<AppBloc>().state.appVersion);
     }
 
     Version currentVersion = Version.parse(_packageInfo.version);
@@ -250,7 +239,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             GestureDetector(
               onTap: () => launchURL(EnvConfig.GITHUB_LINK),
               child: Image.asset(
-                (_bloc.state.themeMode == ThemeMode.light)
+                (context.read<AppBloc>().state.themeMode == ThemeMode.light)
                     ? 'assets/images/github_dark.png'
                     : 'assets/images/github_light.png',
                 width: 50.0,
@@ -272,17 +261,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   void _tapThemeMode(
     ThemeMode themeMode,
   ) =>
-      _bloc.add(SetThemeMode(themeMode));
+      context.read<AppBloc>().add(SetThemeMode(themeMode));
 
   void _tapColorized(
     bool checked,
   ) =>
-      _bloc.add(SetColorTheme(checked));
+      context.read<AppBloc>().add(SetColorTheme(checked));
 
   void _tapTemperatureUnit(
     TemperatureUnit temperatureUnit,
   ) =>
-      _bloc.add(SetTemperatureUnit(temperatureUnit));
+      context.read<AppBloc>().add(SetTemperatureUnit(temperatureUnit));
 
   void _tapPrivacyPolicy() =>
       Navigator.push(context, PrivacyPolicyView.route());
