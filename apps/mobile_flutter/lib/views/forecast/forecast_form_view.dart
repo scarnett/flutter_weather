@@ -44,9 +44,11 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) =>
       AppUiOverlayStyle(
         themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: context.watch<AppBloc>().state.colorTheme,
+        colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
         systemNavigationBarIconBrightness:
-            context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
+            (context.watch<AppBloc>().state.colorTheme ?? false)
+                ? Brightness.dark
+                : null,
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(

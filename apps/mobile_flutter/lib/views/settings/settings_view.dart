@@ -17,19 +17,31 @@ import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
-class SettingsView extends StatefulWidget {
+class SettingsView extends StatelessWidget {
   static Route route() =>
       MaterialPageRoute<void>(builder: (_) => SettingsView());
 
-  SettingsView({
+  const SettingsView({
     Key key,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _SettingsViewState();
+  Widget build(
+    BuildContext context,
+  ) =>
+      SettingsPageView();
 }
 
-class _SettingsViewState extends State<SettingsView> {
+class SettingsPageView extends StatefulWidget {
+  SettingsPageView({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _SettingsPageViewState();
+}
+
+class _SettingsPageViewState extends State<SettingsPageView> {
   PackageInfo _packageInfo;
 
   @override
@@ -80,8 +92,7 @@ class _SettingsViewState extends State<SettingsView> {
       );
 
   List<Widget> _buildThemeModeSection() {
-    AppState _state = context.read<AppBloc>().state;
-    ThemeMode _themeMode = _state.themeMode;
+    ThemeMode _themeMode = context.read<AppBloc>().state.themeMode;
     List<Widget> widgets = <Widget>[];
     widgets.addAll(
       [
@@ -100,13 +111,14 @@ class _SettingsViewState extends State<SettingsView> {
       ],
     );
 
-    if (_themeMode == ThemeMode.light && hasForecasts(_state.forecasts)) {
+    if (_themeMode == ThemeMode.light &&
+        hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
           AppChekboxTile(
             bloc: context.read<AppBloc>(),
             title: AppLocalizations.of(context).colorized,
-            checked: _state.colorTheme,
+            checked: context.read<AppBloc>().state.colorTheme,
             onTap: _tapColorized,
           ),
           Divider(),
