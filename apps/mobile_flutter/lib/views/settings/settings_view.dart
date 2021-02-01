@@ -42,7 +42,12 @@ class SettingsPageView extends StatefulWidget {
 }
 
 class _SettingsPageViewState extends State<SettingsPageView> {
-  PackageInfo _packageInfo;
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'unknown',
+    packageName: 'unknown',
+    version: 'unknown',
+    buildNumber: 'unknown',
+  );
 
   @override
   void initState() {
@@ -205,7 +210,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           ),
           ListTile(
             title: Text(
-              _packageInfo.version,
+              _packageInfo.version ?? 'unknown',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             trailing: _buildVersionText(),
@@ -214,6 +219,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ];
 
   Widget _buildVersionText() {
+    if ((_packageInfo.version == null) || (_packageInfo.version == 'unknown')) {
+      return Container();
+    }
+
     Version latestVersion;
 
     if (context.read<AppBloc>().state.appVersion.contains('+')) {
