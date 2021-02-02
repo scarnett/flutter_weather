@@ -219,7 +219,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ];
 
   Widget _buildVersionText() {
-    if ((_packageInfo.version == null) || (_packageInfo.version == 'unknown')) {
+    String _version = _packageInfo.version;
+    if ((_version == null) || (_version == 'unknown')) {
       return Container();
     }
 
@@ -232,7 +233,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       latestVersion = Version.parse(context.read<AppBloc>().state.appVersion);
     }
 
-    Version currentVersion = Version.parse(_packageInfo.version);
+    Version currentVersion = Version.parse(_version);
     if (latestVersion > currentVersion) {
       return Text(
         AppLocalizations.of(context).updateAvailable,

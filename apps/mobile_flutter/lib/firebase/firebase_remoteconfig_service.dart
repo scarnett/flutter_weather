@@ -1,4 +1,5 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:sentry/sentry.dart';
 
 class FirebaseRemoteConfigService {
   final RemoteConfig _remoteConfig;
@@ -21,12 +22,15 @@ class FirebaseRemoteConfigService {
   Future initialise() async {
     try {
       await _fetchAndActivate();
-    } on FetchThrottledException catch (exception) {
+    } on FetchThrottledException catch (exception, stackTrace) {
       // Fetch throttled.
       print('Remote config fetch throttled: $exception');
-    } catch (exception) {
+      await Sentry.captureException(exception, stackTrace: stackTrace);
+    } catch (exception, stackTrace) {
       print('Unable to fetch remote config. Cached or default values will be '
           'used');
+
+      await Sentry.captureException(exception, stackTrace: stackTrace);
     }
   }
 
