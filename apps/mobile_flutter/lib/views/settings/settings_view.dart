@@ -218,7 +218,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           Divider(),
         ];
 
-  _buildVersionText() async {
+  _buildVersionText() {
     Version _latestVersion;
 
     try {
