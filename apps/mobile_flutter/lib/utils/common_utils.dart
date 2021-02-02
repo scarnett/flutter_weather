@@ -21,7 +21,9 @@ String scrubVersion(
     return null;
   }
 
-  String scrubbedVersion = version.replaceAll('\n', '').replaceAll(' ', '');
+  String scrubbedVersion = version.replaceAllMapped(
+      RegExp(r'/[^0-9.+]+/ig'), (Match match) => match.group(0));
+
   return scrubbedVersion;
 }
 
