@@ -14,6 +14,17 @@ extension ListExtension on List {
   bool isNullOrZeroLength() => (this == null) || (this.length == 0);
 }
 
+String scrubVersion(
+  String version,
+) {
+  if (version.isNullOrEmpty()) {
+    return null;
+  }
+
+  String scrubbedVersion = version.replaceAll('\n', '').replaceAll(' ', '');
+  return scrubbedVersion;
+}
+
 String toCamelCase(
   String str,
 ) {

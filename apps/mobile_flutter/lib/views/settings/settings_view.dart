@@ -210,7 +210,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           ),
           ListTile(
             title: Text(
-              _packageInfo.version ?? 'unknown',
+              scrubVersion(_packageInfo.version),
               style: Theme.of(context).textTheme.subtitle1,
             ),
             trailing: _buildVersionText(),
@@ -233,7 +233,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         }
       }
 
-      String _packageVersion = _packageInfo.version;
+      String _packageVersion = scrubVersion(_packageInfo.version);
       if ((_packageVersion == null) || (_packageVersion == 'unknown')) {
         return Container();
       }
