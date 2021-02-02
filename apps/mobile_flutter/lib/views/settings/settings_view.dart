@@ -224,7 +224,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     try {
       String _appVersion = context.read<AppBloc>().state.appVersion;
       if (_appVersion.isNullOrEmpty()) {
-        return Container();
+        return Text('');
       } else {
         if (_appVersion.contains('+')) {
           _latestVersion = Version.parse(_appVersion.split('+')[0]);
@@ -235,7 +235,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
       String _packageVersion = scrubVersion(_packageInfo.version);
       if ((_packageVersion == null) || (_packageVersion == 'unknown')) {
-        return Container();
+        return Text('');
       }
 
       Version _currentVersion = Version.parse(_packageVersion);
@@ -257,7 +257,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ),
       );
     } on FormatException {
-      return Container();
+      return Text('');
     }
   }
 
