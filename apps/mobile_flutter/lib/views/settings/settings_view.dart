@@ -218,39 +218,47 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           Divider(),
         ];
 
-  Widget _buildVersionText() {
-    String _version = _packageInfo.version;
-    if ((_version == null) || (_version == 'unknown')) {
-      return Container();
-    }
+  _buildVersionText() async {
+    Version _latestVersion;
 
-    Version latestVersion;
+    try {
+      String _appVersion = context.read<AppBloc>().state.appVersion;
+      if (_appVersion.isNullOrEmpty()) {
+        return Container();
+      } else {
+        if (_appVersion.contains('+')) {
+          _latestVersion = Version.parse(_appVersion.split('+')[0]);
+        } else {
+          _latestVersion = Version.parse(_appVersion);
+        }
+      }
 
-    if (context.read<AppBloc>().state.appVersion.contains('+')) {
-      latestVersion =
-          Version.parse(context.read<AppBloc>().state.appVersion.split('+')[0]);
-    } else {
-      latestVersion = Version.parse(context.read<AppBloc>().state.appVersion);
-    }
+      String _packageVersion = _packageInfo.version;
+      if ((_packageVersion == null) || (_packageVersion == 'unknown')) {
+        return Container();
+      }
 
-    Version currentVersion = Version.parse(_version);
-    if (latestVersion > currentVersion) {
+      Version _currentVersion = Version.parse(_packageVersion);
+      if (_latestVersion > _currentVersion) {
+        return Text(
+          AppLocalizations.of(context).updateAvailable,
+          style: TextStyle(
+            color: AppTheme.warningColor,
+            fontWeight: FontWeight.w700,
+          ),
+        );
+      }
+
       return Text(
-        AppLocalizations.of(context).updateAvailable,
+        AppLocalizations.of(context).latest,
         style: TextStyle(
-          color: AppTheme.warningColor,
+          color: AppTheme.successColor,
           fontWeight: FontWeight.w700,
         ),
       );
+    } on FormatException {
+      return Container();
     }
-
-    return Text(
-      AppLocalizations.of(context).latest,
-      style: TextStyle(
-        color: AppTheme.successColor,
-        fontWeight: FontWeight.w700,
-      ),
-    );
   }
 
   Widget _buildOpenSourceSection() => Padding(
@@ -259,7 +267,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             GestureDetector(
-              onTap: () => launchURL(EnvConfig.GITHUB_LINK),
+              onTap: () => launchURL(EnvConfig.GITHUB_URL),
               child: Image.asset(
                 (context.read<AppBloc>().state.themeMode == ThemeMode.light)
                     ? 'assets/images/github_dark.png'
