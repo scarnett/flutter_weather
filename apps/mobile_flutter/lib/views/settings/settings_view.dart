@@ -83,19 +83,28 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     setState(() => _packageInfo = info);
   }
 
-  Widget _buildContent() => SafeArea(
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Column(
-            children: <Widget>[]
-              ..addAll(_buildThemeModeSection())
-              ..addAll(_buildTemperatureUnitSection())
-              ..addAll(_buildAboutSection())
-              ..addAll(_buildBuildInfoSection())
-              ..add(_buildOpenSourceSection()),
-          ),
-        ),
-      );
+  Widget _buildContent() {
+    List<Widget> children = []
+      ..addAll(_buildThemeModeSection())
+      ..addAll(_buildTemperatureUnitSection());
+
+    if (EnvConfig.PRIVACY_POLICY_URL != null) {
+      children..addAll(_buildAboutSection());
+    }
+
+    children..addAll(_buildBuildInfoSection());
+
+    if (EnvConfig.GITHUB_URL != null) {
+      children..add(_buildOpenSourceSection());
+    }
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: Column(children: children),
+      ),
+    );
+  }
 
   List<Widget> _buildThemeModeSection() {
     ThemeMode _themeMode = context.read<AppBloc>().state.themeMode;
