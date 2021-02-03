@@ -13,7 +13,7 @@ class AppState extends Equatable {
   final CRUDStatus crudStatus;
 
   AppState({
-    this.appVersion,
+    this.appVersion: '1.0.0',
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
@@ -25,7 +25,7 @@ class AppState extends Equatable {
   });
 
   const AppState._({
-    this.appVersion,
+    this.appVersion: '1.0.0',
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
