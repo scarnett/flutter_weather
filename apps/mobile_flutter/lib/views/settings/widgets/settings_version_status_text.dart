@@ -5,6 +5,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
+import 'package:flutter_weather/widgets/app_update_dialog.dart';
 import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
@@ -37,11 +38,14 @@ class SettingsVersionStatusText extends StatelessWidget {
       }
 
       if (needsAppUpdate(_latestVersion.toString(), packageInfo.version)) {
-        return Text(
-          AppLocalizations.of(context).updateAvailable,
-          style: TextStyle(
-            color: AppTheme.warningColor,
-            fontWeight: FontWeight.w700,
+        return GestureDetector(
+          onTap: () => _showAppUpdateDialog(context),
+          child: Text(
+            AppLocalizations.of(context).updateAvailable,
+            style: TextStyle(
+              color: AppTheme.warningColor,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         );
       } else if (isAppBeta(_latestVersion.toString(), packageInfo.version)) {
@@ -65,4 +69,16 @@ class SettingsVersionStatusText extends StatelessWidget {
       return Text('');
     }
   }
+
+  _showAppUpdateDialog(
+    BuildContext context,
+  ) async =>
+      await showDialog<String>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => AppUpdateDialog(
+          packageInfo: packageInfo,
+          appVersion: bloc.state.appVersion,
+        ),
+      );
 }

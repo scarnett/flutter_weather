@@ -6,14 +6,16 @@ class AppFormButton extends StatelessWidget {
   final Function onTap;
   final String text;
   final Widget icon;
-  final Color color;
+  final Color buttonColor;
+  final Color textColor;
 
   AppFormButton({
     Key key,
     this.onTap,
     this.text,
     this.icon,
-    this.color,
+    this.buttonColor,
+    this.textColor,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class AppFormButton extends StatelessWidget {
           horizontal: 10.0,
           vertical: 10.0,
         ),
-        color: (color == null) ? AppTheme.primaryColor : color,
+        color: (buttonColor == null) ? AppTheme.primaryColor : buttonColor,
         disabledTextColor: AppTheme.disabledTextColor,
         disabledColor: AppTheme.disabledColor,
         textColor: Colors.white,
@@ -33,7 +35,11 @@ class AppFormButton extends StatelessWidget {
         child: (icon == null)
             ? (text == null)
                 ? Container()
-                : Text(text, style: TextStyle(fontSize: 16.0))
+                : Text(text,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: textColor,
+                    ))
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -44,7 +50,11 @@ class AppFormButton extends StatelessWidget {
                       child: icon),
                   (text == null)
                       ? Container()
-                      : Text(text, style: TextStyle(fontSize: 16.0)),
+                      : Text(text,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: textColor,
+                          )),
                 ],
               ),
         onPressed: onTap,

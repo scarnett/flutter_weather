@@ -26,6 +26,7 @@ dependencies:
   select_dialog: '^1.2.1'
   sentry: '^4.0.4'
   sentry_flutter: '^4.0.4'
+  store_redirect: '^1.0.2'
   url_launcher: '^5.7.10'
   uuid: '^2.2.2'
   version: '^1.2.0'
