@@ -59,7 +59,7 @@ class _LookupPageViewState extends State<LookupPageView> {
           ) =>
               AppUiOverlayStyle(
             themeMode: context.watch<AppBloc>().state.themeMode,
-            colorTheme: context.watch<AppBloc>().state.colorTheme,
+            colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
             systemNavigationBarIconBrightness:
                 context.watch<AppBloc>().state.colorTheme
                     ? Brightness.dark

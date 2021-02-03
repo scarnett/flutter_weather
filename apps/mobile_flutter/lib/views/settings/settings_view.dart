@@ -42,13 +42,16 @@ class SettingsPageView extends StatefulWidget {
 }
 
 class _SettingsPageViewState extends State<SettingsPageView> {
-  AppBloc _bloc;
-  PackageInfo _packageInfo;
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'unknown',
+    packageName: 'unknown',
+    version: 'unknown',
+    buildNumber: 'unknown',
+  );
 
   @override
   void initState() {
     super.initState();
-    _bloc = context.read<AppBloc>();
     _initPackageInfo();
   }
 
@@ -57,10 +60,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: _bloc.state.themeMode,
-        colorTheme: _bloc.state.colorTheme,
+        themeMode: context.read<AppBloc>().state.themeMode,
+        colorTheme: context.read<AppBloc>().state.colorTheme,
         systemNavigationBarIconBrightness:
-            _bloc.state.colorTheme ? Brightness.dark : null,
+            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
@@ -94,16 +97,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       );
 
   List<Widget> _buildThemeModeSection() {
-    ThemeMode _themeMode = _bloc.state.themeMode;
+    ThemeMode _themeMode = context.read<AppBloc>().state.themeMode;
     List<Widget> widgets = <Widget>[];
     widgets.addAll(
       [
         AppSectionHeader(
-          bloc: _bloc,
+          bloc: context.read<AppBloc>(),
           text: AppLocalizations.of(context).themeMode,
         ),
         AppRadioTile<ThemeMode>(
-          bloc: _bloc,
+          bloc: context.read<AppBloc>(),
           title: AppLocalizations.of(context).light,
           value: ThemeMode.light,
           groupValue: _themeMode,
@@ -113,13 +116,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ],
     );
 
-    if (_themeMode == ThemeMode.light && hasForecasts(_bloc.state.forecasts)) {
+    if (_themeMode == ThemeMode.light &&
+        hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
           AppChekboxTile(
-            bloc: _bloc,
+            bloc: context.read<AppBloc>(),
             title: AppLocalizations.of(context).colorized,
-            checked: _bloc.state.colorTheme,
+            checked: context.read<AppBloc>().state.colorTheme,
             onTap: _tapColorized,
           ),
           Divider(),
@@ -129,7 +133,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
     widgets.add(
       AppRadioTile<ThemeMode>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).dark,
         value: ThemeMode.dark,
         groupValue: _themeMode,
@@ -141,15 +145,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   List<Widget> _buildTemperatureUnitSection() {
-    TemperatureUnit _temperatureUnit = _bloc.state.temperatureUnit;
+    TemperatureUnit _temperatureUnit =
+        context.read<AppBloc>().state.temperatureUnit;
 
     return [
       AppSectionHeader(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         text: AppLocalizations.of(context).temperatureUnit,
       ),
       AppRadioTile<TemperatureUnit>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).celsius,
         value: TemperatureUnit.celsius,
         groupValue: _temperatureUnit,
@@ -157,7 +162,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ),
       Divider(),
       AppRadioTile<TemperatureUnit>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).fahrenheit,
         value: TemperatureUnit.fahrenheit,
         groupValue: _temperatureUnit,
@@ -165,7 +170,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ),
       Divider(),
       AppRadioTile<TemperatureUnit>(
-        bloc: _bloc,
+        bloc: context.read<AppBloc>(),
         title: AppLocalizations.of(context).kelvin,
         value: TemperatureUnit.kelvin,
         groupValue: _temperatureUnit,
@@ -178,7 +183,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ? [Container()]
       : [
           AppSectionHeader(
-            bloc: _bloc,
+            bloc: context.read<AppBloc>(),
             text: AppLocalizations.of(context).about,
           ),
           ListTile(
@@ -200,12 +205,12 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ? [Container()]
       : [
           AppSectionHeader(
-            bloc: _bloc,
+            bloc: context.read<AppBloc>(),
             text: AppLocalizations.of(context).buildInformation,
           ),
           ListTile(
             title: Text(
-              _packageInfo.version,
+              scrubVersion(_packageInfo.version),
               style: Theme.of(context).textTheme.subtitle1,
             ),
             trailing: _buildVersionText(),
@@ -213,33 +218,47 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           Divider(),
         ];
 
-  Widget _buildVersionText() {
-    Version latestVersion;
+  _buildVersionText() {
+    Version _latestVersion;
 
-    if (_bloc.state.appVersion.contains('+')) {
-      latestVersion = Version.parse(_bloc.state.appVersion.split('+')[0]);
-    } else {
-      latestVersion = Version.parse(_bloc.state.appVersion);
-    }
+    try {
+      String _appVersion = context.read<AppBloc>().state.appVersion;
+      if (_appVersion.isNullOrEmpty()) {
+        return Text('');
+      } else {
+        if (_appVersion.contains('+')) {
+          _latestVersion = Version.parse(_appVersion.split('+')[0]);
+        } else {
+          _latestVersion = Version.parse(_appVersion);
+        }
+      }
 
-    Version currentVersion = Version.parse(_packageInfo.version);
-    if (latestVersion > currentVersion) {
+      String _packageVersion = scrubVersion(_packageInfo.version);
+      if ((_packageVersion == null) || (_packageVersion == 'unknown')) {
+        return Text('');
+      }
+
+      Version _currentVersion = Version.parse(_packageVersion);
+      if (_latestVersion > _currentVersion) {
+        return Text(
+          AppLocalizations.of(context).updateAvailable,
+          style: TextStyle(
+            color: AppTheme.warningColor,
+            fontWeight: FontWeight.w700,
+          ),
+        );
+      }
+
       return Text(
-        AppLocalizations.of(context).updateAvailable,
+        AppLocalizations.of(context).latest,
         style: TextStyle(
-          color: AppTheme.warningColor,
+          color: AppTheme.successColor,
           fontWeight: FontWeight.w700,
         ),
       );
+    } on FormatException {
+      return Text('');
     }
-
-    return Text(
-      AppLocalizations.of(context).latest,
-      style: TextStyle(
-        color: AppTheme.successColor,
-        fontWeight: FontWeight.w700,
-      ),
-    );
   }
 
   Widget _buildOpenSourceSection() => Padding(
@@ -248,9 +267,9 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             GestureDetector(
-              onTap: () => launchURL(EnvConfig.GITHUB_LINK),
+              onTap: () => launchURL(EnvConfig.GITHUB_URL),
               child: Image.asset(
-                (_bloc.state.themeMode == ThemeMode.light)
+                (context.read<AppBloc>().state.themeMode == ThemeMode.light)
                     ? 'assets/images/github_dark.png'
                     : 'assets/images/github_light.png',
                 width: 50.0,
@@ -272,17 +291,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   void _tapThemeMode(
     ThemeMode themeMode,
   ) =>
-      _bloc.add(SetThemeMode(themeMode));
+      context.read<AppBloc>().add(SetThemeMode(themeMode));
 
   void _tapColorized(
     bool checked,
   ) =>
-      _bloc.add(SetColorTheme(checked));
+      context.read<AppBloc>().add(SetColorTheme(checked));
 
   void _tapTemperatureUnit(
     TemperatureUnit temperatureUnit,
   ) =>
-      _bloc.add(SetTemperatureUnit(temperatureUnit));
+      context.read<AppBloc>().add(SetTemperatureUnit(temperatureUnit));
 
   void _tapPrivacyPolicy() =>
       Navigator.push(context, PrivacyPolicyView.route());

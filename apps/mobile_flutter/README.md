@@ -32,7 +32,8 @@ class EnvConfig {
   static const String DEFAULT_COUNTRY_CODE = 'us';
   static const String SUPPORTED_LOCALES = 'en';
   static const String PRIVACY_POLICY_URL = '<your_privacy_policy_url>';
-  static const String GITHUB_LINK = '<link_to_your_github>';
+  static const String GITHUB_URL = '<your_github_url>';
+  static const String SENTRY_DSN = '<your_sentry_dsn_or_null>';
 }
 ```
 

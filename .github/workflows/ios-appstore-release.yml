@@ -1,11 +1,9 @@
 name: "iOS App Store Release"
 
-on: workflow_dispatch
-
-# on:
-#   push: 
-#     branches: 
-#       - main
+on:
+  push: 
+    branches: 
+      - main
 
 jobs: 
   version:
