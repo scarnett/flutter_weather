@@ -27,6 +27,7 @@ class AppLocalizations {
   String get privacyPolicy => addMessage('Privacy Policy');
   String get latest => addMessage('Latest');
   String get updateAvailable => addMessage('Update Available');
+  String get beta => addMessage('Beta');
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
