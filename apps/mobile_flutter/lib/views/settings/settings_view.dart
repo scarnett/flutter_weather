@@ -261,31 +261,38 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     }
   }
 
-  Widget _buildOpenSourceSection() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            GestureDetector(
+  Widget _buildOpenSourceSection() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            child: InkWell(
               onTap: () => launchURL(EnvConfig.GITHUB_URL),
-              child: Image.asset(
-                (context.read<AppBloc>().state.themeMode == ThemeMode.light)
-                    ? 'assets/images/github_dark.png'
-                    : 'assets/images/github_light.png',
-                width: 50.0,
-                height: 50.0,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  (context.read<AppBloc>().state.themeMode == ThemeMode.light)
+                      ? 'assets/images/github_dark.png'
+                      : 'assets/images/github_light.png',
+                  width: 50.0,
+                  height: 50.0,
+                ),
               ),
             ),
-            GestureDetector(
+          ),
+          Expanded(
+            child: InkWell(
               onTap: () => launchURL('https://opensource.org/'),
-              child: Image.asset(
-                'assets/images/osi.png',
-                width: 50.0,
-                height: 50.0,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  'assets/images/osi.png',
+                  width: 50.0,
+                  height: 50.0,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
 
   void _tapThemeMode(
