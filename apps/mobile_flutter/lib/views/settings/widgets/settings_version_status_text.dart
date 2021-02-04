@@ -29,9 +29,9 @@ class SettingsVersionStatusText extends StatelessWidget {
       String _appVersion = bloc.state.appVersion;
       if (_appVersion.isNullOrEmpty()) {
         return Text('');
-      } else {
-        _latestVersion = getAppVersion(_appVersion);
       }
+
+      _latestVersion = getAppVersion(_appVersion);
 
       if (packageInfo.version == 'unknown') {
         return Text('');

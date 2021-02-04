@@ -30,7 +30,7 @@ class ForecastView extends StatefulWidget {
 }
 
 class _ForecastPageViewState extends State<ForecastView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   PageController _pageController;
   Animatable<Color> _pageBackground;
