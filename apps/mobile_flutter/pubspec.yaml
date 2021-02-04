@@ -18,8 +18,10 @@ dependencies:
   flutter_bloc: '^6.0.5'
   flutter_form_bloc: '^0.19.0'
   flutter_switch: '^0.2.0'
+  get_it: '^5.0.6'
   http: '^0.12.2'
   hydrated_bloc: '^6.0.1'
+  injectable: '^1.0.7'
   iso_countries: '^1.1.1'
   package_info: '^0.4.3+4'
   page_view_indicators: '^1.4.0'
@@ -38,9 +40,12 @@ dev_dependencies:
     sdk: flutter
 
   test: '^1.15.7'
+  bloc_test: '^7.1.0'
   build_runner: '^1.10.0'
   flutter_launcher_icons: '^0.8.1'
   flutter_native_splash: '^0.2.4'
+  injectable_generator: '^1.0.7'
+  mockito: '^4.1.4'
 
 flutter:
   uses-material-design: true
