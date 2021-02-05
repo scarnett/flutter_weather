@@ -164,7 +164,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   temperature:
                       getTemperature(currentDay.temp.max, temperatureUnit)
                           .toString(),
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline3
+                      .copyWith(height: 0.85),
                   unit: temperatureUnit,
                   unitSizeFactor: 2.5,
                 ),
@@ -188,7 +191,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   temperature:
                       getTemperature(currentDay.temp.min, temperatureUnit)
                           .toString(),
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline3
+                      .copyWith(height: 0.85),
                   unit: temperatureUnit,
                   unitSizeFactor: 2.5,
                 ),
