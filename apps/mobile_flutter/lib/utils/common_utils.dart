@@ -67,6 +67,10 @@ bool isInteger(
 launchURL(
   String url,
 ) async {
+  if (url == null) {
+    throw 'URL is null';
+  }
+
   if (await canLaunch(url)) {
     await launch(url);
   } else {
