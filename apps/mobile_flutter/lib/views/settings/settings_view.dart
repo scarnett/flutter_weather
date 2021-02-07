@@ -8,14 +8,15 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:package_info/package_info.dart';
-import 'package:version/version.dart';
 
 class SettingsView extends StatelessWidget {
   static Route route() =>
@@ -82,19 +83,28 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     setState(() => _packageInfo = info);
   }
 
-  Widget _buildContent() => SafeArea(
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Column(
-            children: <Widget>[]
-              ..addAll(_buildThemeModeSection())
-              ..addAll(_buildTemperatureUnitSection())
-              ..addAll(_buildAboutSection())
-              ..addAll(_buildBuildInfoSection())
-              ..add(_buildOpenSourceSection()),
-          ),
-        ),
-      );
+  Widget _buildContent() {
+    List<Widget> children = []
+      ..addAll(_buildThemeModeSection())
+      ..addAll(_buildTemperatureUnitSection());
+
+    if (EnvConfig.PRIVACY_POLICY_URL != null) {
+      children..addAll(_buildAboutSection());
+    }
+
+    children..addAll(_buildBuildInfoSection());
+
+    if (EnvConfig.GITHUB_URL != null) {
+      children..add(_buildOpenSourceSection());
+    }
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: Column(children: children),
+      ),
+    );
+  }
 
   List<Widget> _buildThemeModeSection() {
     ThemeMode _themeMode = context.read<AppBloc>().state.themeMode;
@@ -116,7 +126,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ],
     );
 
-    if (_themeMode == ThemeMode.light &&
+    if ((_themeMode == ThemeMode.light) &&
         hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
@@ -179,113 +189,76 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     ];
   }
 
-  List<Widget> _buildAboutSection() => (_packageInfo == null)
-      ? [Container()]
-      : [
-          AppSectionHeader(
-            bloc: context.read<AppBloc>(),
-            text: AppLocalizations.of(context).about,
-          ),
-          ListTile(
-            title: RichText(
-              text: TextSpan(
-                text: AppLocalizations.of(context).privacyPolicy,
-                style: TextStyle(
-                  color: AppTheme.primaryColor,
-                  decoration: TextDecoration.underline,
-                ),
-                recognizer: TapGestureRecognizer()..onTap = _tapPrivacyPolicy,
-              ),
-            ),
-          ),
-          Divider(),
-        ];
-
-  List<Widget> _buildBuildInfoSection() => (_packageInfo == null)
-      ? [Container()]
-      : [
-          AppSectionHeader(
-            bloc: context.read<AppBloc>(),
-            text: AppLocalizations.of(context).buildInformation,
-          ),
-          ListTile(
-            title: Text(
-              scrubVersion(_packageInfo.version),
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            trailing: _buildVersionText(),
-          ),
-          Divider(),
-        ];
-
-  _buildVersionText() {
-    Version _latestVersion;
-
-    try {
-      String _appVersion = context.read<AppBloc>().state.appVersion;
-      if (_appVersion.isNullOrEmpty()) {
-        return Text('');
-      } else {
-        if (_appVersion.contains('+')) {
-          _latestVersion = Version.parse(_appVersion.split('+')[0]);
-        } else {
-          _latestVersion = Version.parse(_appVersion);
-        }
-      }
-
-      String _packageVersion = scrubVersion(_packageInfo.version);
-      if ((_packageVersion == null) || (_packageVersion == 'unknown')) {
-        return Text('');
-      }
-
-      Version _currentVersion = Version.parse(_packageVersion);
-      if (_latestVersion > _currentVersion) {
-        return Text(
-          AppLocalizations.of(context).updateAvailable,
-          style: TextStyle(
-            color: AppTheme.warningColor,
-            fontWeight: FontWeight.w700,
-          ),
-        );
-      }
-
-      return Text(
-        AppLocalizations.of(context).latest,
-        style: TextStyle(
-          color: AppTheme.successColor,
-          fontWeight: FontWeight.w700,
+  List<Widget> _buildAboutSection() => [
+        AppSectionHeader(
+          bloc: context.read<AppBloc>(),
+          text: AppLocalizations.of(context).about,
         ),
-      );
-    } on FormatException {
-      return Text('');
-    }
-  }
+        ListTile(
+          title: RichText(
+            text: TextSpan(
+              text: AppLocalizations.of(context).privacyPolicy,
+              style: TextStyle(
+                color: AppTheme.primaryColor,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()..onTap = _tapPrivacyPolicy,
+            ),
+          ),
+        ),
+        Divider(),
+      ];
 
-  Widget _buildOpenSourceSection() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            GestureDetector(
+  List<Widget> _buildBuildInfoSection() => [
+        AppSectionHeader(
+          bloc: context.read<AppBloc>(),
+          text: AppLocalizations.of(context).buildInformation,
+        ),
+        ListTile(
+          title: Text(
+            scrubVersion(_packageInfo.version),
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          trailing: SettingsVersionStatusText(
+            bloc: context.read<AppBloc>(),
+            packageInfo: _packageInfo,
+          ),
+        ),
+        Divider(),
+      ];
+
+  Widget _buildOpenSourceSection() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            child: InkWell(
               onTap: () => launchURL(EnvConfig.GITHUB_URL),
-              child: Image.asset(
-                (context.read<AppBloc>().state.themeMode == ThemeMode.light)
-                    ? 'assets/images/github_dark.png'
-                    : 'assets/images/github_light.png',
-                width: 50.0,
-                height: 50.0,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  (context.read<AppBloc>().state.themeMode == ThemeMode.light)
+                      ? 'assets/images/github_dark.png'
+                      : 'assets/images/github_light.png',
+                  width: 50.0,
+                  height: 50.0,
+                ),
               ),
             ),
-            GestureDetector(
+          ),
+          Expanded(
+            child: InkWell(
               onTap: () => launchURL('https://opensource.org/'),
-              child: Image.asset(
-                'assets/images/osi.png',
-                width: 50.0,
-                height: 50.0,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  'assets/images/osi.png',
+                  width: 50.0,
+                  height: 50.0,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
 
   void _tapThemeMode(
