@@ -198,7 +198,7 @@ jobs:
       - 
         name: "Flutter build app bundle"
         working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose"
+        run: exec .github/scripts/build-appbundle.sh
       - 
         name: "Compress app bundle"
         run: exec .github/scripts/compress-appbundle.sh

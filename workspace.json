@@ -121,7 +121,7 @@
         "runDev": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "flutter run -t lib/main_dev.dart --flavor dev",
+            "command": "flutter run -t lib/main.dart --flavor dev",
             "cwd": "apps/mobile_flutter"
           }
         },

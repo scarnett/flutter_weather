@@ -11,7 +11,7 @@ services:
     privileged: true
     stdin_open: true
     tty: true
-    command: flutter run -t lib/main_dev.dart --flavor dev
+    command: flutter run -t lib/main.dart --flavor dev
 
   flutter_weather_prod:
     container_name: flutter_weather_prod

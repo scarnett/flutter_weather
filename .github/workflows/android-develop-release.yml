@@ -68,6 +68,8 @@ jobs:
       FLUTTER_WEATHER_RELEASE_ZIP: ${{ 'android-app.zip' }}
       FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'android-dev' }}
+      FLUTTER_WEATHER_DEBUG_FOLDER: ${{ './apps/mobile_flutter/build/app/outputs/apk/androidTest/prod' }}
+      FLUTTER_WEATHER_DEBUG_APP: ${{ 'app-prod-debug-androidTest.apk' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -153,13 +155,13 @@ jobs:
         working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter clean"
       - 
-        name: "Flutter test"
-        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter test"
-      - 
         name: "Flutter build apk"
         working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter build apk -t lib/main_prod.dart --flavor prod --release --verbose"
+        run: exec .github/scripts/build-apk.sh
+      - 
+        name: "Flutter build 'debug' apk"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}/android"
+        run: exec .github/scripts/build-debug-apk.sh
       - 
         name: "Compress apk"
         run: exec .github/scripts/compress-apk.sh
@@ -173,35 +175,64 @@ jobs:
           commit: ${{ github.sha }}
           prerelease: true
       - 
-        name: "Upload apk"
+        name: "Upload 'release' apk"
         uses: actions/upload-artifact@v2
         with:
-          name: apk
+          name: release-apk
           path: "${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}"
+      - 
+        name: "Upload 'debug' apk"
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug-apk
+          path: "${{ env.FLUTTER_WEATHER_DEBUG_FOLDER }}/${{ env.FLUTTER_WEATHER_DEBUG_APP }}"
 
-  beta:
-    name: "Upload Android Beta to Firebase App Distribution"
+  test:
+    name: "Run App Tests"
     needs: [ build ]
     runs-on: ubuntu-latest
     env:
-      FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
+      FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
     steps:
       - 
         uses: actions/checkout@v2
       - 
-        uses: actions/setup-java@v1
+        uses: subosito/flutter-action@v1
         with: 
-          java-version: 12.x
+          channel: stable
+          flutter-version: "1.22.6"
       - 
-        name: "Get apk from artifacts"
-        uses: actions/download-artifact@v2
-        with:
-          name: apk
+        name: "Flutter clean"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+        run: "flutter clean"
       - 
-        name: "Upload apk"
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-        with:
-          appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: testers
-          file: "${{ env.FLUTTER_WEATHER_RELEASE_APP }}"
+        name: "Run unit and widget tests"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+        run: "flutter test"
+
+  # beta:
+  #   name: "Upload Android Beta to Firebase App Distribution"
+  #   needs: [ build ]
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
+  #   steps:
+  #     - 
+  #       uses: actions/checkout@v2
+  #     - 
+  #       uses: actions/setup-java@v1
+  #       with: 
+  #         java-version: 12.x
+  #     - 
+  #       name: "Get 'release' apk from artifacts"
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: release-apk
+  #     - 
+  #       name: "Upload 'release' apk"
+  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+  #       with:
+  #         appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
+  #         token: ${{ secrets.FIREBASE_TOKEN }}
+  #         groups: testers
+  #         file: "${{ env.FLUTTER_WEATHER_RELEASE_APP }}"

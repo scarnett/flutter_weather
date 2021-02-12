@@ -65,6 +65,7 @@ class _ForecastPageViewState extends State<ForecastView> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          key: Key('addLocation'),
           tooltip: AppLocalizations.of(context).addForecast,
           onPressed: _tapAddLocation,
           child: Icon(Icons.add),
