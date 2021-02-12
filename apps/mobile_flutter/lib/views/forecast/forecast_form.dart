@@ -188,7 +188,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
           padding: const EdgeInsets.only(right: 10.0),
           child: AppFormButton(
             text: _deleting ? null : widget.deleteButtonText,
-            color: AppTheme.dangerColor,
+            buttonColor: AppTheme.dangerColor,
             icon: _deleting
                 ? SizedBox(
                     height: 20.0,

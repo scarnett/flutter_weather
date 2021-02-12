@@ -60,6 +60,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
               debugShowCheckedModeBanner: AppConfig.isDebug(context),
               localizationsDelegates: [
                 AppLocalizationsDelegate(),
+                FallbackCupertinoLocalisationsDelegate(),
               ],
               navigatorKey: _navigatorKey,
               home: ForecastView(),

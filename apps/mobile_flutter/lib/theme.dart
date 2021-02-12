@@ -9,6 +9,7 @@ class AppTheme {
   static Color get successColor => Colors.green[700];
   static Color get warningColor => Colors.yellow[700];
   static Color get dangerColor => Colors.red[700];
+  static Color get infoColor => Colors.lightBlue;
 
   static Color getBorderColor(
     ThemeMode themeMode, {

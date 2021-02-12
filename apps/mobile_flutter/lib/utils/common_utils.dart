@@ -14,19 +14,6 @@ extension ListExtension on List {
   bool isNullOrZeroLength() => (this == null) || (this.length == 0);
 }
 
-String scrubVersion(
-  String version,
-) {
-  if (version.isNullOrEmpty()) {
-    return '';
-  }
-
-  String scrubbedVersion = version.replaceAllMapped(
-      RegExp(r'/[^0-9.+]+/ig'), (Match match) => match.group(0));
-
-  return scrubbedVersion;
-}
-
 String toCamelCase(
   String str,
 ) {
@@ -67,6 +54,10 @@ bool isInteger(
 launchURL(
   String url,
 ) async {
+  if (url == null) {
+    throw 'URL is null';
+  }
+
   if (await canLaunch(url)) {
     await launch(url);
   } else {
