@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
@@ -30,7 +31,7 @@ class ForecastView extends StatefulWidget {
 }
 
 class _ForecastPageViewState extends State<ForecastView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   PageController _pageController;
   Animatable<Color> _pageBackground;
@@ -65,7 +66,7 @@ class _ForecastPageViewState extends State<ForecastView> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          key: Key('addLocation'),
+          key: Key(AppKeys.addLocationKey),
           tooltip: AppLocalizations.of(context).addForecast,
           onPressed: _tapAddLocation,
           child: Icon(Icons.add),

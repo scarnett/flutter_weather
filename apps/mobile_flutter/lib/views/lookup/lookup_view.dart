@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
@@ -132,6 +133,7 @@ class _LookupPageViewState extends State<LookupPageView> {
             Padding(
               padding: const EdgeInsets.only(top: 30.0),
               child: AppFormButton(
+                key: Key(AppKeys.addThisForecastKey),
                 text: AppLocalizations.of(context).addThisForecast,
                 icon: Icon(Icons.add, size: 16.0),
                 onTap: _tapAddLocation,
@@ -143,6 +145,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     }
 
     return ForecastForm(
+      buttonKey: Key(AppKeys.locationLookupButtonKey),
       saveButtonText: AppLocalizations.of(context).lookup,
       forecasts: context.read<AppBloc>().state.forecasts,
       onSuccess: _onSuccess,

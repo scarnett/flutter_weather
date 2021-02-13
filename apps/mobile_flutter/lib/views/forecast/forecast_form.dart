@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_select_dialog.dart';
 
 class ForecastForm extends StatelessWidget {
+  final Key buttonKey;
   final Forecast forecast;
   final List<Forecast> forecasts;
   final String saveButtonText;
@@ -27,6 +29,7 @@ class ForecastForm extends StatelessWidget {
 
   const ForecastForm({
     Key key,
+    this.buttonKey,
     this.forecast,
     this.forecasts,
     this.saveButtonText,
@@ -46,6 +49,7 @@ class ForecastForm extends StatelessWidget {
           forecasts: forecasts,
         ),
         child: ForecastPageForm(
+          buttonKey: buttonKey,
           forecast: forecast,
           saveButtonText: saveButtonText,
           deleteButtonText: deleteButtonText,
@@ -56,6 +60,7 @@ class ForecastForm extends StatelessWidget {
 }
 
 class ForecastPageForm extends StatefulWidget {
+  final Key buttonKey;
   final Forecast forecast;
   final String saveButtonText;
   final String deleteButtonText;
@@ -71,6 +76,7 @@ class ForecastPageForm extends StatefulWidget {
 
   ForecastPageForm({
     Key key,
+    this.buttonKey,
     this.forecast,
     this.saveButtonText,
     this.deleteButtonText,
@@ -107,6 +113,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFieldBlocBuilder(
+                key: Key(AppKeys.locationCityKey),
                 textFieldBloc: context.watch<ForecastFormBloc>().cityName,
                 keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
@@ -119,6 +126,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 padding: const EdgeInsets.only(bottom: 0.0),
               ),
               TextFieldBlocBuilder(
+                key: Key(AppKeys.locationPostalCodeKey),
                 textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
                 keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
@@ -131,6 +139,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 padding: const EdgeInsets.only(bottom: 0.0),
               ),
               AppSelectDialogFieldBlocBuilder(
+                key: Key(AppKeys.locationCountryKey),
                 selectFieldBloc: context.watch<ForecastFormBloc>().countryCode,
               ),
               _buildButtons(),
@@ -166,6 +175,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: AppFormButton(
+            key: widget.buttonKey,
             text: _submitting ? null : widget.saveButtonText,
             icon: _submitting
                 ? SizedBox(
@@ -187,6 +197,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: AppFormButton(
+            key: Key(AppKeys.deleteForecastButtonKey),
             text: _deleting ? null : widget.deleteButtonText,
             color: AppTheme.dangerColor,
             icon: _deleting
