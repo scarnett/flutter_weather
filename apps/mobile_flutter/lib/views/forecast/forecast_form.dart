@@ -199,7 +199,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
           child: AppFormButton(
             key: Key(AppKeys.deleteForecastButtonKey),
             text: _deleting ? null : widget.deleteButtonText,
-            color: AppTheme.dangerColor,
+            buttonColor: AppTheme.dangerColor,
             icon: _deleting
                 ? SizedBox(
                     height: 20.0,
