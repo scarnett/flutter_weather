@@ -91,6 +91,15 @@ android {
             manifestPlaceholders.appLabelSuffix = ' - DEV'
         }
 
+        tst {
+            dimension 'flavor-type'
+            applicationId 'io.flutter_weather.prod'
+            versionCode flutterVersionCode.toInteger()
+            versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ' - TEST'
+        }
+
         prod {
             dimension 'flavor-type'
             applicationId 'io.flutter_weather.prod'

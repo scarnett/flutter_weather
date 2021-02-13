@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 enum Flavor {
   dev,
+  tst,
   prod,
 }
 
@@ -27,6 +28,9 @@ class AppConfig extends InheritedWidget {
       case Flavor.dev:
         return true;
 
+      case Flavor.tst:
+        return false;
+
       case Flavor.prod:
       default:
         return false;
@@ -41,6 +45,7 @@ class AppConfig extends InheritedWidget {
       case Flavor.prod:
         return true;
 
+      case Flavor.tst:
       case Flavor.dev:
       default:
         return false;
