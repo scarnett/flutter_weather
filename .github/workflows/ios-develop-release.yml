@@ -1,9 +1,11 @@
 name: "iOS Develop Release"
 
-on:
-  push: 
-    branches: 
-      - release-**
+on: workflow_dispatch
+
+# on:
+#   push: 
+#     branches: 
+#       - release-**
 
 #  pull_request: 
 #    branches: 
@@ -73,7 +75,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with: 
           channel: stable
-          flutter-version: "1.22.5"
+          flutter-version: "1.22.6"
       - 
         name: "Decode GoogleService-Info.plist"
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
@@ -168,5 +170,5 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_IOS_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
-          group: testers
+          groups: testers
           file: "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}"

@@ -9,6 +9,7 @@ class AppTheme {
   static Color get successColor => Colors.green[700];
   static Color get warningColor => Colors.yellow[700];
   static Color get dangerColor => Colors.red[700];
+  static Color get infoColor => Colors.lightBlue;
 
   static Color getBorderColor(
     ThemeMode themeMode, {
@@ -185,7 +186,6 @@ TextTheme _darkTextTheme = TextTheme(
   headline3: TextStyle(
     color: AppTheme.secondaryColor,
     fontSize: 40.0,
-    height: 0.85,
     fontWeight: FontWeight.w100,
   ),
   headline4: TextStyle(
@@ -226,7 +226,6 @@ TextTheme _lightTextTheme = TextTheme(
   headline3: TextStyle(
     color: Colors.white,
     fontSize: 40.0,
-    height: 0.85,
     fontWeight: FontWeight.w100,
     shadows: commonTextShadow(),
   ),

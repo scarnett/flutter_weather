@@ -1,9 +1,11 @@
 name: "Android Develop Release"
 
-on:
-  push: 
-    branches: 
-      - release-**
+on: workflow_dispatch
+
+# on:
+#   push: 
+#     branches: 
+#       - release-**
 
 #  pull_request: 
 #    branches: 
@@ -77,7 +79,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with: 
           channel: stable
-          flutter-version: "1.22.5"
+          flutter-version: "1.22.6"
       - 
         name: "Decode android local.properties"
         run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
@@ -201,5 +203,5 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
-          group: testers
+          groups: testers
           file: "${{ env.FLUTTER_WEATHER_RELEASE_APP }}"

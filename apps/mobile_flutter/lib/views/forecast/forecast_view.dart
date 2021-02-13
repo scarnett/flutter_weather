@@ -30,7 +30,7 @@ class ForecastView extends StatefulWidget {
 }
 
 class _ForecastPageViewState extends State<ForecastView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   PageController _pageController;
   Animatable<Color> _pageBackground;
@@ -82,11 +82,11 @@ class _ForecastPageViewState extends State<ForecastView> {
         _currentPage = _pageController.page;
 
         if (isInteger(_currentPage)) {
+          _currentForecastNotifier.value = _currentPage.toInt();
+
           context
               .read<AppBloc>()
               .add(SelectedForecastIndex(_currentPage.toInt()));
-
-          _currentForecastNotifier.value = _currentPage.toInt();
         }
       });
 
@@ -166,16 +166,20 @@ class _ForecastPageViewState extends State<ForecastView> {
           ForecastOptions(),
           Expanded(
             child: hasForecasts(state.forecasts)
-                ? PageView.builder(
-                    controller: _pageController,
-                    physics: const AppPageViewScrollPhysics(),
-                    itemCount: state.forecasts.length,
-                    itemBuilder: (BuildContext context, int position) =>
-                        _buildForecastItem(context, position, state),
+                ? Stack(
+                    children: [
+                      PageView.builder(
+                        controller: _pageController,
+                        physics: const AppPageViewScrollPhysics(),
+                        itemCount: state.forecasts.length,
+                        itemBuilder: (BuildContext context, int position) =>
+                            _buildForecastItem(context, position, state),
+                      ),
+                      _buildCircleIndicator(state),
+                    ],
                   )
                 : AppNoneFound(text: AppLocalizations.of(context).noForecasts),
           ),
-          _buildCircleIndicator(state),
         ],
       );
 
@@ -270,31 +274,33 @@ class _ForecastPageViewState extends State<ForecastView> {
   _buildCircleIndicator(
     AppState state,
   ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 20.0),
-        child: CirclePageIndicator(
-          dotColor: AppTheme.getHintColor(
-            state.themeMode,
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: CirclePageIndicator(
+            dotColor: AppTheme.getHintColor(
+              state.themeMode,
+            ),
+            selectedDotColor:
+                state.colorTheme ? Colors.white : AppTheme.primaryColor,
+            selectedSize: 10.0,
+            itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
+            currentPageNotifier: _currentForecastNotifier,
+            onPageSelected: _onPageSelected,
           ),
-          selectedDotColor:
-              state.colorTheme ? Colors.white : AppTheme.primaryColor,
-          selectedSize: 10.0,
-          itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
-          currentPageNotifier: _currentForecastNotifier,
-          onPageSelected: _onPageSelected,
         ),
       );
 
   void _onPageSelected(
     int page,
   ) {
+    _currentForecastNotifier.value = page;
     _pageController.animateToPage(
       page,
       duration: Duration(milliseconds: 300),
       curve: Curves.linear,
     );
-
-    _currentForecastNotifier.value = page;
   }
 
   Future<void> _pullRefresh(
@@ -305,5 +311,8 @@ class _ForecastPageViewState extends State<ForecastView> {
             state.temperatureUnit,
           ));
 
-  void _tapAddLocation() => Navigator.push(context, LookupView.route());
+  void _tapAddLocation() {
+    _scaffoldKey.currentState.removeCurrentSnackBar();
+    Navigator.push(context, LookupView.route());
+  }
 }

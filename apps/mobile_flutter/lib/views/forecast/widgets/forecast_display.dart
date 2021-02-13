@@ -37,7 +37,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     return Align(
       alignment: Alignment.topCenter,
       child: Padding(
-        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40.0),
+        padding: const EdgeInsets.only(
+          left: 10.0,
+          right: 10.0,
+          top: 10.0,
+        ),
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
           child: Column(
@@ -57,7 +61,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLocation() => Container(
-        padding: const EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.only(bottom: 10.0),
         child: Column(
           children: <Widget>[
             Text(
@@ -129,7 +133,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
 
     return Container(
-      padding: const EdgeInsets.only(bottom: 20.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,7 +164,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   temperature:
                       getTemperature(currentDay.temp.max, temperatureUnit)
                           .toString(),
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline3
+                      .copyWith(height: 0.85),
                   unit: temperatureUnit,
                   unitSizeFactor: 2.5,
                 ),
@@ -184,7 +191,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   temperature:
                       getTemperature(currentDay.temp.min, temperatureUnit)
                           .toString(),
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline3
+                      .copyWith(height: 0.85),
                   unit: temperatureUnit,
                   unitSizeFactor: 2.5,
                 ),
@@ -379,7 +389,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       ),
       padding: const EdgeInsets.only(
         top: 20.0,
-        bottom: 30.0,
+        bottom: 20.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -399,16 +409,14 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       return Container();
     }
 
-    lastUpdated = lastUpdated.toLocal();
-
     String formattedLastUpdated;
 
     if (lastUpdated.isToday()) {
       formattedLastUpdated = AppLocalizations.of(context)
-          .getLastUpdatedAt(formatDateTime(lastUpdated, 'h:mm a'));
+          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a'));
     } else {
       formattedLastUpdated = AppLocalizations.of(context).getLastUpdatedOn(
-          formatDateTime(lastUpdated, 'EEE, MMM d, yyyy @ h:mm a'));
+          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a'));
     }
 
     return Container(

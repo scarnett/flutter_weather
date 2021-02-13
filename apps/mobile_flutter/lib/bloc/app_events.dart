@@ -7,6 +7,13 @@ abstract class AppEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetCurrentAppVersion extends AppEvent {
+  const GetCurrentAppVersion();
+
+  @override
+  List<Object> get props => [];
+}
+
 class ToggleThemeMode extends AppEvent {
   const ToggleThemeMode();
 

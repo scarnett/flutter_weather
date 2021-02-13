@@ -24,7 +24,8 @@ class WeatherApp extends StatelessWidget {
     BuildContext context,
   ) =>
       BlocProvider(
-        create: (BuildContext context) => AppBloc(),
+        create: (BuildContext context) =>
+            AppBloc()..add(GetCurrentAppVersion()),
         child: FlutterWeatherAppView(),
       );
 }
@@ -59,6 +60,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
               debugShowCheckedModeBanner: AppConfig.isDebug(context),
               localizationsDelegates: [
                 AppLocalizationsDelegate(),
+                FallbackCupertinoLocalisationsDelegate(),
               ],
               navigatorKey: _navigatorKey,
               home: ForecastView(),

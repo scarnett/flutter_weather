@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -28,6 +30,9 @@ class AppLocalizations {
   String get privacyPolicy => addMessage('Privacy Policy');
   String get latest => addMessage('Latest');
   String get updateAvailable => addMessage('Update Available');
+  String get updateNow => addMessage('Update Now');
+  String get later => addMessage('Later');
+  String get beta => addMessage('Beta');
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
@@ -85,7 +90,7 @@ class AppLocalizations {
   ) =>
       addMessage(
         'Feels like $temp',
-        name: 'getLastUpdated',
+        name: 'getFeelsLike',
         args: [temp],
       );
 
@@ -94,7 +99,7 @@ class AppLocalizations {
   ) =>
       addMessage(
         'Last updated at $date',
-        name: 'getLastUpdated',
+        name: 'getLastUpdatedAt',
         args: [date],
       );
 
@@ -103,8 +108,24 @@ class AppLocalizations {
   ) =>
       addMessage(
         'Last updated on $date',
-        name: 'getLastUpdated',
+        name: 'getLastUpdatedOn',
         args: [date],
+      );
+
+  String getUpdateAvailableText(
+    String appTitle,
+    String packageVersion,
+    String appVersion,
+  ) =>
+      addMessage(
+        'Version $appVersion of $appTitle is now available. You\'re ' +
+            'currently using version $packageVersion.',
+        name: 'getLastUpdated',
+        args: [
+          appTitle,
+          packageVersion,
+          appVersion,
+        ],
       );
 
   addMessage(
@@ -125,7 +146,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   Future<AppLocalizations> load(
     Locale locale,
   ) =>
-      Future(() => AppLocalizations(locale));
+      SynchronousFuture<AppLocalizations>(AppLocalizations(locale));
 
   @override
   bool shouldReload(
@@ -138,4 +159,27 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
     Locale locale,
   ) =>
       locale.languageCode.toLowerCase().contains(EnvConfig.SUPPORTED_LOCALES);
+}
+
+class FallbackCupertinoLocalisationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
+  const FallbackCupertinoLocalisationsDelegate();
+
+  @override
+  bool isSupported(
+    Locale locale,
+  ) =>
+      true;
+
+  @override
+  Future<CupertinoLocalizations> load(
+    Locale locale,
+  ) =>
+      DefaultCupertinoLocalizations.load(locale);
+
+  @override
+  bool shouldReload(
+    FallbackCupertinoLocalisationsDelegate old,
+  ) =>
+      false;
 }
