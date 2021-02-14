@@ -1,4 +1,4 @@
-name: "Android Playstore Release"
+name: "Firebase Remote Configuration"
 
 on: workflow_dispatch
 
