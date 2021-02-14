@@ -237,7 +237,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
-          packageName: io.flutter_weather.prod
+          packageName: "${{ secrets.FIREBASE_ANDROID_PACKAGE_NAME }}"
           releaseFiles: "${{ env.FLUTTER_WEATHER_RELEASE_APP }}"
           track: internal
           whatsNewDirectory: "${{ env.FLUTTER_WEATHER_WHATS_NEW_FOLDER }}"
