@@ -1,0 +1,78 @@
+name: "Android Playstore Release"
+
+on: workflow_dispatch
+
+jobs: 
+  version:
+    name: "Generate Version Number"
+    runs-on: ubuntu-latest
+    env:
+      VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
+    steps:
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: "Fetch all history for all tags and branches"
+        run: git fetch --unshallow
+      - 
+        name: "Install GitVersion"
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+            versionSpec: '5.x'
+      - 
+        name: "Use GitVersion"
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+          configFilePath: ./git-version.yml
+      - 
+        name: "Create version.txt"
+        run: echo "${{ steps.gitversion.outputs.NuGetVersion }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
+      - 
+        name: "Upload version.txt"
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitversion
+          path: "${{ env.VERSION_TXT_PATH }}"
+
+  remoteconfig: 
+    name: "Update Remote Configuration"
+    needs: [ version ]
+    runs-on: ubuntu-latest
+    env:
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+    steps:
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: "Get version.txt"
+        uses: actions/download-artifact@v2
+        with:
+          name: gitversion
+      - 
+        name: "Read version"
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version.txt
+      - 
+        name: "Download firebase remote configuration"
+        uses: w9jds/firebase-action@master
+        with:
+          args: remoteconfig:get -o firebase-remote-config.json
+        env:
+          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
+          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
+      - 
+        name: "Update firebase remote configuration"
+        run: exec .github/scripts/update-remote-config.sh -v "${{ steps.version.outputs.content }}"
+      - 
+        name: "Deploy firebase remote configuration"
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only remoteconfig
+        env:
+          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
+          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
