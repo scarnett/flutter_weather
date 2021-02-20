@@ -7,6 +7,7 @@ import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/lookup/lookup_country/lookup_country_view.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_select_dialog.dart';
 
@@ -130,8 +131,19 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 ),
                 padding: const EdgeInsets.only(bottom: 0.0),
               ),
-              AppSelectDialogFieldBlocBuilder(
-                selectFieldBloc: context.watch<ForecastFormBloc>().countryCode,
+              TextFieldBlocBuilder(
+                textFieldBloc: context.watch<ForecastFormBloc>().countryCode,
+                keyboardType: TextInputType.text,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).country,
+                  prefixIcon: Icon(
+                    Icons.language,
+                    color: AppTheme.primaryColor,
+                  ),
+                ),
+                padding: const EdgeInsets.only(bottom: 10.0),
+                onTap: () => Navigator.push(context, LookupCountryView.route()),
               ),
               _buildButtons(),
             ],
