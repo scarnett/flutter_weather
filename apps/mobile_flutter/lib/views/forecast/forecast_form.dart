@@ -5,17 +5,28 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
-import 'package:flutter_weather/views/lookup/lookup_country/lookup_country_view.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
-import 'package:flutter_weather/widgets/app_select_dialog.dart';
+import 'package:iso_countries/country.dart';
+
+class ForecastFormController {
+  Function(Map formData) updateFormData;
+
+  void dispose() {
+    updateFormData = null;
+  }
+}
 
 class ForecastForm extends StatelessWidget {
+  final ForecastFormController formController;
+  final PageController pageController;
   final Forecast forecast;
   final List<Forecast> forecasts;
   final String saveButtonText;
   final String deleteButtonText;
+
   final Function(
     BuildContext context,
     FormBlocSuccess<String, String> state,
@@ -28,6 +39,8 @@ class ForecastForm extends StatelessWidget {
 
   const ForecastForm({
     Key key,
+    this.formController,
+    this.pageController,
     this.forecast,
     this.forecasts,
     this.saveButtonText,
@@ -47,6 +60,8 @@ class ForecastForm extends StatelessWidget {
           forecasts: forecasts,
         ),
         child: ForecastPageForm(
+          formController: formController,
+          pageController: pageController,
           forecast: forecast,
           saveButtonText: saveButtonText,
           deleteButtonText: deleteButtonText,
@@ -57,6 +72,8 @@ class ForecastForm extends StatelessWidget {
 }
 
 class ForecastPageForm extends StatefulWidget {
+  final ForecastFormController formController;
+  final PageController pageController;
   final Forecast forecast;
   final String saveButtonText;
   final String deleteButtonText;
@@ -72,6 +89,8 @@ class ForecastPageForm extends StatefulWidget {
 
   ForecastPageForm({
     Key key,
+    this.formController,
+    this.pageController,
     this.forecast,
     this.saveButtonText,
     this.deleteButtonText,
@@ -88,6 +107,15 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   bool _deleting = false;
 
   @override
+  void initState() {
+    super.initState();
+    ForecastFormController _formController = widget.formController;
+    if (_formController != null) {
+      _formController.updateFormData = _updateFormData;
+    }
+  }
+
+  @override
   Widget build(
     BuildContext context,
   ) =>
@@ -98,9 +126,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             onSuccess: _onSuccess,
             onFailure: _onFailure,
           ),
-          BlocListener<AppBloc, AppState>(
-            listener: _blocListener,
-          ),
+          BlocListener<AppBloc, AppState>(listener: _blocListener),
         ],
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
@@ -143,7 +169,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                   ),
                 ),
                 padding: const EdgeInsets.only(bottom: 10.0),
-                onTap: () => Navigator.push(context, LookupCountryView.route()),
+                onTap: () => animatePage(widget.pageController, page: 1),
               ),
               _buildButtons(),
             ],
@@ -221,6 +247,33 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: buttons,
     );
+  }
+
+  void _updateFormData(
+    Map formData,
+  ) {
+    if (formData != null) {
+      if (formData.containsKey('cityName')) {
+        context
+            .read<ForecastFormBloc>()
+            .cityName
+            .updateInitialValue(formData['cityName']);
+      }
+
+      if (formData.containsKey('postalCode')) {
+        context
+            .read<ForecastFormBloc>()
+            .postalCode
+            .updateInitialValue(formData['postalCode']);
+      }
+
+      if (formData.containsKey('countryCode')) {
+        context
+            .read<ForecastFormBloc>()
+            .countryCode
+            .updateInitialValue(formData['countryCode']);
+      }
+    }
   }
 
   void _onSubmitting(

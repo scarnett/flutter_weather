@@ -4,41 +4,24 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 
-class LookupCountryView extends StatelessWidget {
-  static Route route() =>
-      MaterialPageRoute<void>(builder: (_) => LookupCountryView());
+class LookupCountryView extends StatefulWidget {
+  final Function onTap;
 
-  const LookupCountryView({
+  LookupCountryView({
     Key key,
+    this.onTap,
   }) : super(key: key);
 
   @override
-  Widget build(
-    BuildContext context,
-  ) =>
-      BlocProvider<LookupBloc>(
-        create: (BuildContext context) => LookupBloc(),
-        child: LookupCountryPageView(),
-      );
+  State<StatefulWidget> createState() => _LookupCountryViewState();
 }
 
-class LookupCountryPageView extends StatefulWidget {
-  LookupCountryPageView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _LookupCountryPageViewState();
-}
-
-class _LookupCountryPageViewState extends State<LookupCountryPageView> {
+class _LookupCountryViewState extends State<LookupCountryView> {
   List<Country> _countryList;
   Country _country;
 
@@ -52,55 +35,27 @@ class _LookupCountryPageViewState extends State<LookupCountryPageView> {
   Widget build(
     BuildContext context,
   ) =>
-      BlocBuilder<LookupBloc, LookupState>(
-        builder: (
-          BuildContext context,
-          LookupState state,
-        ) =>
-            AppUiOverlayStyle(
-          themeMode: context.watch<AppBloc>().state.themeMode,
-          colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
-          systemNavigationBarIconBrightness:
-              context.watch<AppBloc>().state.colorTheme
-                  ? Brightness.dark
-                  : null,
-          child: Theme(
-            data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
-                ? appDarkThemeData
-                : appLightThemeData,
-            child: Scaffold(
-              extendBody: true,
-              appBar: AppBar(
-                title: Text(AppLocalizations.of(context).country),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => _handleBack(state),
-                ),
-              ),
-              body: SafeArea(
-                child: _buildContent(),
-              ),
-            ),
+      AppUiOverlayStyle(
+        themeMode: context.watch<AppBloc>().state.themeMode,
+        colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
+        systemNavigationBarIconBrightness:
+            context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
+        child: Theme(
+          data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
+              ? appDarkThemeData
+              : appLightThemeData,
+          child: Scaffold(
+            extendBody: true,
+            body: _buildListOfCountries(),
           ),
         ),
       );
-
-  Widget _buildContent() => SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: _buildListOfCountries(),
-      );
-
-  void _handleBack(
-    LookupState state,
-  ) {
-    Navigator.of(context).pop();
-  }
 
   Future<void> _prepareDefaultCountries() async {
     List<Country> countries;
 
     try {
-      countries = await IsoCountries.iso_countries;
+      countries = await IsoCountries.iso_countries_for_locale('en-en'); // TODO
     } on PlatformException {
       countries = null;
     }
@@ -112,7 +67,7 @@ class _LookupCountryPageViewState extends State<LookupCountryPageView> {
     setState(() => _countryList = countries);
   }
 
-  Widget _buildListOfCountries() => ListView.builder(
+  Widget _buildListOfCountries() => ListView.separated(
         itemBuilder: (
           BuildContext context,
           int index,
@@ -120,16 +75,33 @@ class _LookupCountryPageViewState extends State<LookupCountryPageView> {
           final Country country = _countryList[index];
 
           return ListTile(
-            title: Text(country.name),
-            subtitle: Text(country.countryCode),
-            onTap: () => _getCountryForCodeWithIdentifier(
-              country.countryCode,
-              'de-de',
+            title: Text(
+              country.name,
+              style: Theme.of(context).textTheme.headline5,
             ),
+            subtitle: Text(
+              country.countryCode,
+              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+            onTap: () => _tapCountry(country),
           );
         },
+        separatorBuilder: (context, index) => Divider(),
         itemCount: (_countryList != null) ? _countryList.length : 0,
       );
+
+  Future<void> _tapCountry(
+    Country country,
+  ) async {
+    await _getCountryForCodeWithIdentifier(
+      country.countryCode,
+      'en-en', // TODO
+    );
+
+    widget.onTap(_country);
+  }
 
   Future<void> _getCountryForCodeWithIdentifier(
     String code,
