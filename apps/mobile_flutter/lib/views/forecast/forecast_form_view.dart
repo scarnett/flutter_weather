@@ -75,13 +75,13 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
         case CRUDStatus.UPDATED:
-          FocusScope.of(context).unfocus();
+          closeKeyboard(context);
           Navigator.of(context)
               .pushAndRemoveUntil(ForecastView.route(), (route) => false);
           break;
 
         case CRUDStatus.DELETED:
-          FocusScope.of(context).unfocus();
+          closeKeyboard(context);
           Navigator.of(context).pop();
           break;
 
@@ -123,7 +123,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     BuildContext context,
     FormBlocSuccess<String, String> formState,
   ) async {
-    FocusScope.of(context).unfocus();
+    closeKeyboard(context);
     Map<String, dynamic> forecastData = formState.toJson();
 
     final AppState appState = context.read<AppBloc>().state;
@@ -144,7 +144,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     BuildContext context,
     FormBlocFailure<String, String> state,
   ) {
-    FocusScope.of(context).unfocus();
+    closeKeyboard(context);
     Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text(state.failureResponse)));
   }

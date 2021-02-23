@@ -78,6 +78,11 @@ animatePage(
   );
 }
 
+void closeKeyboard(
+  BuildContext context,
+) =>
+    FocusScope.of(context).unfocus();
+
 class Nullable<T> {
   T _value;
 
