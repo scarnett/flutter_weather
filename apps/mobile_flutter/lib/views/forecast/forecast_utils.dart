@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -206,6 +207,14 @@ IconData getForecastIconData(
     default:
       return WeatherIcons.day_sunny;
   }
+}
+
+String getTitle(BuildContext context, num _currentPage) {
+  if ((_currentPage != null) && (_currentPage.toInt() == 1)) {
+    return AppLocalizations.of(context).country;
+  }
+
+  return AppLocalizations.of(context).editForecast;
 }
 
 bool canRefresh(

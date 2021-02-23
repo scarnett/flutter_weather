@@ -125,7 +125,6 @@ class _LookupPageViewState extends State<LookupPageView> {
   Future<bool> _willPopCallback(
     LookupState state,
   ) {
-    print(_currentPage);
     if (_currentPage > 0) {
       _formController.animateToPage(0);
       return Future.value(false);
