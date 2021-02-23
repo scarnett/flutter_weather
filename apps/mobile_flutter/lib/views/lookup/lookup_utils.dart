@@ -1,10 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_weather/localization.dart';
 
-String getTitle(BuildContext context, num _currentPage) {
-  if ((_currentPage != null) && (_currentPage.toInt() == 1)) {
-    return AppLocalizations.of(context).country;
+String getTitle(
+  AppLocalizations localization,
+  num currentPage,
+) {
+  if (localization == null) {
+    return null;
   }
 
-  return AppLocalizations.of(context).addForecast;
+  if ((currentPage != null) && (currentPage.toInt() == 1)) {
+    return localization.country;
+  }
+
+  return localization.addForecast;
 }
