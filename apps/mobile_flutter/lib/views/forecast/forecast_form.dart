@@ -216,6 +216,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
               padding: const EdgeInsets.only(bottom: 0.0),
             ),
             TextFieldBlocBuilder(
+              key: Key('country'), // TODO!
               textFieldBloc: context.watch<ForecastFormBloc>().countryCode,
               keyboardType: TextInputType.text,
               readOnly: true,

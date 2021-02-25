@@ -209,7 +209,10 @@ IconData getForecastIconData(
   }
 }
 
-String getTitle(BuildContext context, num _currentPage) {
+String getTitle(
+  BuildContext context,
+  num _currentPage,
+) {
   if ((_currentPage != null) && (_currentPage.toInt() == 1)) {
     return AppLocalizations.of(context).country;
   }
