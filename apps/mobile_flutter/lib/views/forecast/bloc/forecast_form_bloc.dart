@@ -11,17 +11,9 @@ class ForecastFormBloc extends FormBloc<String, String> {
   Forecast _initialForecast;
   List<Forecast> _forecasts;
 
-  final TextFieldBloc cityName = TextFieldBloc(
-    name: 'cityName',
-  );
-
-  final TextFieldBloc postalCode = TextFieldBloc(
-    name: 'postalCode',
-  );
-
-  final SelectFieldBloc countryCode = SelectFieldBloc(
-    name: 'countryCode',
-  );
+  final TextFieldBloc cityName = TextFieldBloc(name: 'cityName');
+  final TextFieldBloc postalCode = TextFieldBloc(name: 'postalCode');
+  final TextFieldBloc countryCode = TextFieldBloc(name: 'countryCode');
 
   ForecastFormBloc({
     BuildContext context,
@@ -74,7 +66,6 @@ class ForecastFormBloc extends FormBloc<String, String> {
       emitFailure(
           failureResponse:
               AppLocalizations.of(_context).forecastBadForecastInput);
-
       return;
     }
 

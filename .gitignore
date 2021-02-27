@@ -1,7 +1,6 @@
 # Environment
 environment_config.yaml
 .env
-lib/env_config.dart
 
 # Miscellaneous
 *.class
@@ -20,10 +19,9 @@ lib/env_config.dart
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Visual Studio Code related
+.vscode/settings.json
+.vscode/extensions.json
 
 # Flutter/Dart/Pub related
 **/doc/api/

@@ -325,7 +325,7 @@ packages:
     source: hosted
     version: "0.19.1"
   get_it:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: get_it
       url: "https://pub.dartlang.org"
@@ -388,7 +388,7 @@ packages:
     source: hosted
     version: "2.1.19"
   injectable:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: injectable
       url: "https://pub.dartlang.org"
@@ -639,13 +639,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.24.1"
-  select_dialog:
-    dependency: "direct main"
-    description:
-      name: select_dialog
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.3"
   sentry:
     dependency: "direct main"
     description:
