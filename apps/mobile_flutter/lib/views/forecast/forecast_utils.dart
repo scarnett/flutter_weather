@@ -230,10 +230,13 @@ bool canRefresh(
   Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
   return (selectedForecast == null) ||
       (selectedForecast.lastUpdated == null) ||
-      selectedForecast.lastUpdated
-          .add(Duration(minutes: EnvConfig.REFRESH_TIMEOUT_MINS))
-          .isBefore(getNow());
+      getNextUpdateTime(selectedForecast.lastUpdated).isBefore(getNow());
 }
+
+DateTime getNextUpdateTime(
+  DateTime dateTime,
+) =>
+    dateTime.add(Duration(milliseconds: EnvConfig.REFRESH_TIMEOUT));
 
 bool hasForecasts(
   List<Forecast> forecasts,
