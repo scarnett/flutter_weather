@@ -18,9 +18,8 @@ jobs:
     steps:
       - 
         uses: actions/checkout@v2
-      - 
-        name: "Fetch all history for all tags and branches"
-        run: git fetch --unshallow
+        with:
+          fetch-depth: 0
       - 
         name: "Install GitVersion"
         uses: gittools/actions/gitversion/setup@v0.9.7
