@@ -14,8 +14,11 @@ jobs:
     steps:
       - 
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - 
+        name: "Fetch tags and branches"
+        run: |
+          git fetch --tags
+          git branch --create-reflog main origin/main
       - 
         name: "Install GitVersion"
         uses: gittools/actions/gitversion/setup@v0.9.7
