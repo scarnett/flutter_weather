@@ -8,6 +8,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:iso_countries/country.dart';
@@ -38,6 +39,21 @@ class ForecastPageView extends StatefulWidget {
 }
 
 class _ForecastFormViewState extends State<ForecastPageView> {
+  ForecastFormController _formController;
+  num _currentPage = 0;
+
+  @override
+  void initState() {
+    _formController = ForecastFormController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _formController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(
     BuildContext context,
@@ -52,7 +68,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).editForecast),
+            title: Text(getTitle(context, _currentPage)),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: _tapBack,
@@ -75,13 +91,13 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
         case CRUDStatus.UPDATED:
-          FocusScope.of(context).unfocus();
+          closeKeyboard(context);
           Navigator.of(context)
               .pushAndRemoveUntil(ForecastView.route(), (route) => false);
           break;
 
         case CRUDStatus.DELETED:
-          FocusScope.of(context).unfocus();
+          closeKeyboard(context);
           Navigator.of(context).pop();
           break;
 
@@ -94,6 +110,11 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   Future<bool> _willPopCallback(
     AppState state,
   ) async {
+    if (_currentPage > 0) {
+      _formController.animateToPage(0);
+      return Future.value(false);
+    }
+
     context.read<AppBloc>().add(ClearActiveForecastId());
     return Future.value(true);
   }
@@ -103,6 +124,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) =>
       SafeArea(
         child: ForecastForm(
+          formController: _formController,
           saveButtonText: AppLocalizations.of(context).save,
           deleteButtonText: AppLocalizations.of(context).delete,
           forecast: state.forecasts.isNullOrZeroLength()
@@ -111,19 +133,24 @@ class _ForecastFormViewState extends State<ForecastPageView> {
           forecasts: state.forecasts,
           onSuccess: _onSuccess,
           onFailure: _onFailure,
+          onPageChange: _onPageChange,
         ),
       );
 
   _tapBack() {
-    context.read<AppBloc>().add(ClearActiveForecastId());
-    Navigator.of(context).pop();
+    if (_currentPage > 0) {
+      _formController.animateToPage(0);
+    } else {
+      context.read<AppBloc>().add(ClearActiveForecastId());
+      Navigator.of(context).pop();
+    }
   }
 
   void _onSuccess(
     BuildContext context,
     FormBlocSuccess<String, String> formState,
   ) async {
-    FocusScope.of(context).unfocus();
+    closeKeyboard(context);
     Map<String, dynamic> forecastData = formState.toJson();
 
     final AppState appState = context.read<AppBloc>().state;
@@ -144,8 +171,14 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     BuildContext context,
     FormBlocFailure<String, String> state,
   ) {
-    FocusScope.of(context).unfocus();
+    closeKeyboard(context);
     Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text(state.failureResponse)));
+  }
+
+  void _onPageChange(
+    num currentPage,
+  ) {
+    setState(() => _currentPage = currentPage);
   }
 }

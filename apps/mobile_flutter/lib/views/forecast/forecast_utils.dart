@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -208,6 +209,17 @@ IconData getForecastIconData(
   }
 }
 
+String getTitle(
+  BuildContext context,
+  num _currentPage,
+) {
+  if ((_currentPage != null) && (_currentPage.toInt() == 1)) {
+    return AppLocalizations.of(context).country;
+  }
+
+  return AppLocalizations.of(context).editForecast;
+}
+
 bool canRefresh(
   AppState state,
 ) {
@@ -218,10 +230,13 @@ bool canRefresh(
   Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
   return (selectedForecast == null) ||
       (selectedForecast.lastUpdated == null) ||
-      selectedForecast.lastUpdated
-          .add(Duration(minutes: EnvConfig.REFRESH_TIMEOUT_MINS))
-          .isBefore(getNow());
+      getNextUpdateTime(selectedForecast.lastUpdated).isBefore(getNow());
 }
+
+DateTime getNextUpdateTime(
+  DateTime dateTime,
+) =>
+    dateTime.add(Duration(milliseconds: EnvConfig.REFRESH_TIMEOUT));
 
 bool hasForecasts(
   List<Forecast> forecasts,
