@@ -65,6 +65,24 @@ launchURL(
   }
 }
 
+animatePage(
+  PageController pageController, {
+  num page: 0,
+  int duration: 150,
+  Curve curve: Curves.linear,
+}) {
+  pageController.animateToPage(
+    page,
+    duration: Duration(milliseconds: duration),
+    curve: curve,
+  );
+}
+
+void closeKeyboard(
+  BuildContext context,
+) =>
+    FocusScope.of(context).unfocus();
+
 class Nullable<T> {
   T _value;
 

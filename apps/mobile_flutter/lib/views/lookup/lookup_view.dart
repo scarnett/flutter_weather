@@ -14,6 +14,7 @@ import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
+import 'package:flutter_weather/views/lookup/lookup_utils.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:iso_countries/country.dart';
@@ -47,6 +48,21 @@ class LookupPageView extends StatefulWidget {
 }
 
 class _LookupPageViewState extends State<LookupPageView> {
+  ForecastFormController _formController;
+  num _currentPage = 0;
+
+  @override
+  void initState() {
+    _formController = ForecastFormController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _formController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(
     BuildContext context,
@@ -72,7 +88,9 @@ class _LookupPageViewState extends State<LookupPageView> {
               child: Scaffold(
                 extendBody: true,
                 appBar: AppBar(
-                  title: Text(AppLocalizations.of(context).addForecast),
+                  title: Text(
+                    getTitle(AppLocalizations.of(context), _currentPage),
+                  ),
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => _handleBack(state),
@@ -97,7 +115,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
         case CRUDStatus.CREATED:
-          FocusScope.of(context).unfocus();
+          closeKeyboard(context);
           Navigator.of(context).pop();
           break;
 
@@ -109,8 +127,11 @@ class _LookupPageViewState extends State<LookupPageView> {
 
   Future<bool> _willPopCallback(
     LookupState state,
-  ) async {
-    if (state.lookupForecast != null) {
+  ) {
+    if (_currentPage > 0) {
+      _formController.animateToPage(0);
+      return Future.value(false);
+    } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
       return Future.value(false);
     }
@@ -146,17 +167,21 @@ class _LookupPageViewState extends State<LookupPageView> {
 
     return ForecastForm(
       buttonKey: Key(AppKeys.locationLookupButtonKey),
+      formController: _formController,
       saveButtonText: AppLocalizations.of(context).lookup,
       forecasts: context.read<AppBloc>().state.forecasts,
       onSuccess: _onSuccess,
       onFailure: _onFailure,
+      onPageChange: _onPageChange,
     );
   }
 
   void _handleBack(
     LookupState state,
   ) {
-    if (state.lookupForecast != null) {
+    if (_currentPage > 0) {
+      _formController.animateToPage(0);
+    } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
     } else {
       Navigator.of(context).pop();
@@ -201,8 +226,14 @@ class _LookupPageViewState extends State<LookupPageView> {
     BuildContext context,
     FormBlocFailure<String, String> state,
   ) {
-    FocusScope.of(context).unfocus();
+    closeKeyboard(context);
     Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text(state.failureResponse)));
+  }
+
+  void _onPageChange(
+    num currentPage,
+  ) {
+    setState(() => _currentPage = currentPage);
   }
 }

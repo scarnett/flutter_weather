@@ -8,6 +8,14 @@ class LookupState extends Equatable {
   final Forecast lookupForecast;
   final LookupStatus status;
 
+  LookupState({
+    this.cityName,
+    this.postalCode,
+    this.countryCode,
+    this.lookupForecast,
+    this.status,
+  });
+
   const LookupState._({
     this.cityName,
     this.postalCode,

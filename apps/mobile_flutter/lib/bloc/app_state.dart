@@ -44,6 +44,7 @@ class AppState extends Equatable {
     bool colorTheme,
     TemperatureUnit temperatureUnit,
     int selectedForecastIndex,
+    Nullable<String> selectedCountry,
     List<Forecast> forecasts,
     Nullable<String> activeForecastId,
     Nullable<RefreshStatus> refreshStatus,
