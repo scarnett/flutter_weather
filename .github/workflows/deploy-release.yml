@@ -72,47 +72,6 @@ jobs:
         working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter test"
 
-  remoteConfig: 
-    name: "Update Remote Configuration"
-    needs: [ version, test ]
-    runs-on: ubuntu-latest
-    env:
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-    steps:
-      - 
-        uses: actions/checkout@v2
-      - 
-        name: "Get version.txt"
-        uses: actions/download-artifact@v2
-        with:
-          name: gitversion
-      - 
-        name: "Read version"
-        id: version
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: version.txt
-      - 
-        name: "Download firebase remote configuration"
-        uses: w9jds/firebase-action@master
-        with:
-          args: remoteconfig:get -o firebase-remote-config.json
-        env:
-          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
-          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
-      - 
-        name: "Update firebase remote configuration"
-        run: exec .github/scripts/update-remote-config.sh -v "${{ steps.version.outputs.content }}"
-      - 
-        name: "Deploy firebase remote configuration"
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only remoteconfig
-        env:
-          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
-          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
-
   buildAndroid: 
     name: "Build Android"
     needs: [ version, test ]
@@ -382,3 +341,44 @@ jobs:
       - 
         name: "Upload ipa"
         run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
+
+  remoteConfig: 
+    name: "Update Remote Configuration"
+    needs: [ deployAndroid, deployIos ]
+    runs-on: ubuntu-latest
+    env:
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+    steps:
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: "Get version.txt"
+        uses: actions/download-artifact@v2
+        with:
+          name: gitversion
+      - 
+        name: "Read version"
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version.txt
+      - 
+        name: "Download firebase remote configuration"
+        uses: w9jds/firebase-action@master
+        with:
+          args: remoteconfig:get -o firebase-remote-config.json
+        env:
+          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
+          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
+      - 
+        name: "Update firebase remote configuration"
+        run: exec .github/scripts/update-remote-config.sh -v "${{ steps.version.outputs.content }}"
+      - 
+        name: "Deploy firebase remote configuration"
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only remoteconfig
+        env:
+          FIREBASE_TOKEN: "${{ env.FIREBASE_TOKEN }}"
+          PROJECT_ID: "${{ env.FIREBASE_PROJECT_ID }}"
