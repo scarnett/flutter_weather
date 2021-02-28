@@ -296,11 +296,7 @@ class _ForecastPageViewState extends State<ForecastView> {
     int page,
   ) {
     _currentForecastNotifier.value = page;
-    _pageController.animateToPage(
-      page,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.linear,
-    );
+    animatePage(_pageController, page: page);
   }
 
   Future<void> _pullRefresh(

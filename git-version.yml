@@ -3,8 +3,8 @@ mode: ContinuousDeployment
 continuous-delivery-fallback-tag: ''
 next-version: 1.0.6
 branches:
-  main:
-    regex: main?[/]
+  master:
+    regex: (^main$|^origin\/main$)
     source-branches: []
     tag: ''
   release:

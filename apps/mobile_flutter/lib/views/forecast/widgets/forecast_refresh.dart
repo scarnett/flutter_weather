@@ -1,0 +1,119 @@
+import 'dart:math';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:timer_builder/timer_builder.dart';
+
+class ForecastRefresh extends StatefulWidget {
+  ForecastRefresh();
+
+  @override
+  _ForecastRefreshState createState() => _ForecastRefreshState();
+}
+
+class _ForecastRefreshState extends State<ForecastRefresh>
+    with TickerProviderStateMixin {
+  Animation _refreshAnimation;
+  AnimationController _refreshAnimationController;
+  DateTime _nextRefreshTime;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _refreshAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _refreshAnimation =
+        Tween(begin: 0.0, end: pi + pi).animate(_refreshAnimationController);
+
+    _nextRefreshTime = getNow().toLocal();
+  }
+
+  @override
+  void dispose() {
+    _refreshAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) =>
+      BlocListener<AppBloc, AppState>(
+        listener: _blocListener,
+        child: _buildContent(),
+      );
+
+  void _blocListener(
+    BuildContext context,
+    AppState state,
+  ) {
+    if (state.refreshStatus == RefreshStatus.REFRESHING) {
+      _refreshAnimationController
+        ..reset()
+        ..forward();
+
+      setState(() => _nextRefreshTime = getNextUpdateTime(getNow().toLocal()));
+    } else {
+      setState(() {
+        if (canRefresh(state)) {
+          _nextRefreshTime = getNow().toLocal();
+        } else {
+          _nextRefreshTime = getNextUpdateTime(
+              state.forecasts[state.selectedForecastIndex].lastUpdated);
+        }
+      });
+    }
+  }
+
+  Widget _buildContent() => TimerBuilder.scheduled([_nextRefreshTime],
+          builder: (BuildContext context) {
+        AppState state = context.watch<AppBloc>().state;
+        return _buildRefreshIcon(state);
+      });
+
+  Widget _buildRefreshIcon(
+    AppState state,
+  ) =>
+      canRefresh(state)
+          ? Tooltip(
+              message: AppLocalizations.of(context).refreshForecast,
+              child: Material(
+                type: MaterialType.transparency,
+                child: Container(
+                  height: 40.0,
+                  width: 40.0,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(40.0),
+                    child: AnimatedBuilder(
+                      animation: _refreshAnimationController,
+                      builder: (BuildContext context, Widget child) =>
+                          Transform.rotate(
+                        angle: _refreshAnimation.value,
+                        child: child,
+                      ),
+                      child: Icon(Icons.refresh),
+                    ),
+                    onTap: () => _tapRefresh(state),
+                  ),
+                ),
+              ),
+            )
+          : Container();
+
+  void _tapRefresh(
+    AppState state,
+  ) =>
+      context.read<AppBloc>().add(RefreshForecast(
+            state.forecasts[state.selectedForecastIndex],
+            context.read<AppBloc>().state.temperatureUnit,
+          ));
+}
