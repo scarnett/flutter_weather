@@ -13,7 +13,7 @@ jobs:
       id: provisioning
       uses: apple-actions/download-provisioning-profiles@v1
       with: 
-        bundle-id: ${{ secrets.FIREBASE_IOS_APPID }}
+        bundle-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
         profile-type: "IOS_APP_STORE"
         issuer-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }}
         api-key-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }}
