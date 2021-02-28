@@ -47,6 +47,8 @@ jobs:
     name: "Run Tests"
     needs: [ version ]
     runs-on: ubuntu-latest
+    env:
+      FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
     steps:
       - 
         uses: actions/checkout@v2
@@ -58,9 +60,11 @@ jobs:
           flutter-version: "1.22.6"
       - 
         name: "Flutter clean"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter clean"
       - 
         name: "Flutter test"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
         run: "flutter test"
 
   remoteConfig: 
