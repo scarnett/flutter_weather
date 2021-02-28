@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
       - 
         name: "Fetch tags and branches"
-        run: git fetch --tags
+        run: git fetch --unshallow
       - 
         name: "Install GitVersion"
         uses: gittools/actions/gitversion/setup@v0.9.9
