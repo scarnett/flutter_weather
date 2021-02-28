@@ -267,38 +267,38 @@ jobs:
       - 
         name: "Configure code signing"
         run: exec .github/scripts/import-profiles.sh "${{ steps.provisioning.outputs.profiles }}"
-      # - 
-      #   name: "Get version.txt"
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: gitversion
-      # - 
-      #   name: "Read version"
-      #   id: version
-      #   uses: juliangruber/read-file-action@v1
-      #   with:
-      #     path: version.txt
-      # - 
-      #   name: "Update app version"
-      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-      #   run: |
-      #     ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
-      #     sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
-      # - 
-      #   name: "Flutter get"
-      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-      #   run: "flutter pub get"
-      # - 
-      #   name: "Flutter clean"
-      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-      #   run: "flutter clean"
-      # - 
-      #   name: "Flutter build"
-      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-      #   run: "flutter build ios -t lib/main_prod.dart --release --verbose"
-      # - 
-      #   name: "Compress ipa"
-      #   run: exec .github/scripts/compress-ipa.sh
+      - 
+        name: "Get version.txt"
+        uses: actions/download-artifact@v2
+        with:
+          name: gitversion
+      - 
+        name: "Read version"
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version.txt
+      - 
+        name: "Update app version"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+        run: |
+          ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
+          sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
+      - 
+        name: "Flutter get"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+        run: "flutter pub get"
+      - 
+        name: "Flutter clean"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+        run: "flutter clean"
+      - 
+        name: "Flutter build"
+        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+        run: "flutter build ios -t lib/main_prod.dart --release --verbose"
+      - 
+        name: "Compress ipa"
+        run: exec .github/scripts/compress-ipa.sh
       # - 
       #   name: "Create github artifact"
       #   uses: ncipollo/release-action@v1
