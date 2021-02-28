@@ -2,8 +2,8 @@ assembly-versioning-scheme: MajorMinorPatch
 mode: ContinuousDeployment
 continuous-delivery-fallback-tag: ''
 branches:
-  main:
-    regex: main?[/]
+  master:
+    regex: (^main$|^origin\/main$)
     source-branches: []
     tag: ''
   release:
