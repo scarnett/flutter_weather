@@ -1,0 +1,23 @@
+name: "Download Provisioning Profile TEST"
+
+on:
+  push: 
+    branches: 
+      - feature-download-provisioning-profile
+      
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - name: 'Download Provisioning Profiles'
+      id: provisioning
+      uses: apple-actions/download-provisioning-profiles@v1
+      with: 
+        bundle-id: ${{ secrets.FIREBASE_IOS_APPID }}
+        profile-type: "IOS_APP_STORE"
+        issuer-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }}
+        api-key-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }}
+        api-private-key: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
+  
+    - name: "Downloaded Profiles"
+      run: echo ${{ steps.provisioning.outputs.profiles }}
