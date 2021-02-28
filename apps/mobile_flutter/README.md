@@ -28,7 +28,7 @@ class EnvConfig {
   static const String OPENWEATHERMAP_API_KEY = '<your_openweather_api_key>';
   static const String OPENWEATHERMAP_API_URI = 'api.openweathermap.org';
   static const String OPENWEATHERMAP_API_DAILY_PATH = '/data/2.5/forecast/daily';
-  static const int REFRESH_TIMEOUT_MINS = 5;
+  static const int REFRESH_TIMEOUT = 300000; // 5 minutes
   static const String DEFAULT_COUNTRY_CODE = 'us';
   static const String SUPPORTED_LOCALES = 'en';
   static const String PRIVACY_POLICY_URL = '<your_privacy_policy_url_or_null>';
