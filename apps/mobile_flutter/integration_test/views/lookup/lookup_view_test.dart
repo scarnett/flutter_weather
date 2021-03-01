@@ -32,6 +32,28 @@ void main() {
         await tester.tap(locationPostalCodeField);
         await tester.enterText(locationPostalCodeField, '90210');
 
+        // Find the 'country' text field
+        Finder locationCountryField =
+            find.byKey(Key(AppKeys.locationCountryKey));
+
+        // Tap the 'country' text field and enter some text
+        await tester.tap(locationCountryField);
+        await pumpForSeconds(tester, 1);
+
+        // Find the 'lookup' button
+        Finder locationCountryFilterField =
+            find.byKey(Key(AppKeys.locationCountryFilterKey));
+
+        // Tap the 'country filter' text field and enter some text
+        await tester.tap(locationCountryFilterField);
+        await tester.enterText(locationCountryFilterField, 'United States');
+        await pumpForSeconds(tester, 1);
+
+        // Find the 'US' country tile and tap it
+        Finder locationUSCountryTile = find.byKey(Key('US'));
+        await tester.tap(locationUSCountryTile);
+        await pumpForSeconds(tester, 1);
+
         // Find the 'lookup' button
         Finder lookupLocationButton =
             find.byKey(Key(AppKeys.locationLookupButtonKey));
