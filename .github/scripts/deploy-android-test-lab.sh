@@ -11,11 +11,11 @@ gcloud auth activate-service-account --key-file="my-flutter-weather-firebase-adm
 gcloud --quiet config set project "my-flutter-weather"
 gcloud firebase test android run \
   --type instrumentation \
-  --app /home/scott/dev/apps/flutter_weather/apps/mobile_flutter/build/app/outputs/flutter-apk/app-prod-debug.apk \
-  --test /home/scott/dev/apps/flutter_weather/apps/mobile_flutter/build/app/outputs/apk/androidTest/prod/debug/app-prod-debug-androidTest.apk \
-  --device model=Pixel2,version=29,orientation=portrait \
+  --app /home/scott/dev/apps/flutter_weather/apps/mobile_flutter/build/app/outputs/apk/tst/debug/app-tst-debug.apk \
+  --test /home/scott/dev/apps/flutter_weather/apps/mobile_flutter/build/app/outputs/apk/androidTest/tst/debug/app-tst-debug-androidTest.apk \
+  --device model=jeter,version=26,orientation=portrait \
   --environment-variables package="io.flutter_weather.prod",debug=false \
-  --timeout 2m \
+  --timeout 5m \
   --results-bucket=flutter-weather
 
 # --environment-variables package="$FIREBASE_ANDROID_PACKAGE_NAME",debug=false \
