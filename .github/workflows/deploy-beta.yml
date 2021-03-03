@@ -277,9 +277,6 @@ jobs:
         working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
         run: sed -i '' "s/FLUTTER_WEATHER_BUNDLE_ID/$FLUTTER_WEATHER_APPSTORE_BUNDLE_ID/g" ./project.pbxproj
       - 
-        name: "Configure code signing"
-        run: exec .github/scripts/import-profiles.sh
-      - 
         name: "Get version.txt"
         uses: actions/download-artifact@v2
         with:

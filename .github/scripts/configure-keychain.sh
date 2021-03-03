@@ -11,3 +11,6 @@ security list-keychains
 
 sudo security add-trusted-cert -d -r trustRoot -k "$FLUTTER_WEATHER_KEYCHAIN" "./flutterWeather.cer"
 security export -k "$FLUTTER_WEATHER_KEYCHAIN" -t all -f pkcs12 -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -o "$FLUTTER_WEATHER_CERTS_FILE_PATH"
+
+security import "$FLUTTER_WEATHER_CERTS_FILE_PATH" -k "$FLUTTER_WEATHER_KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -A
+security set-key-partition-list -S apple-tool:,apple: -s -k "" "$FLUTTER_WEATHER_KEYCHAIN"
