@@ -260,11 +260,12 @@ jobs:
           api-private-key: ${{ env.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
       - 
         name: "Update provisioning profile specifiers in project.pbxproj"
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "FLUTTER_WEATHER_PROVISIONING_PROFILE"
-          replace: "${{ env.FLUTTER_WEATHER_APPSTORE_PROFILE_NAME }}"
-          include: apps/mobile_flutter/ios/Runner.xcodeproj/project.pbxproj
+        working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
+        run: sed -i '' "s/FLUTTER_WEATHER_PROVISIONING_PROFILE/$FLUTTER_WEATHER_APPSTORE_PROFILE_NAME/g" ./project.pbxproj
+      - 
+        name: "Update bundle identifiers in project.pbxproj"
+        working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
+        run: sed -i '' "s/FLUTTER_WEATHER_BUNDLE_ID/$FLUTTER_WEATHER_APPSTORE_BUNDLE_ID/g" ./project.pbxproj
       - 
         name: "Configure code signing"
         run: exec .github/scripts/import-profiles.sh
