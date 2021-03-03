@@ -262,8 +262,8 @@ jobs:
         name: "Update provisioning profile specifiers in project.pbxproj"
         uses: jacobtomlinson/gha-find-replace@master
         with: 
-          find: "PROVISIONING_PROFILE_SPECIFIER \\= "";"
-          replace: "PROVISIONING_PROFILE_SPECIFIER = "${{ env.FLUTTER_WEATHER_APPSTORE_PROFILE_NAME }}";"
+          find: "PROVISIONING_PROFILE_SPECIFIER \\= \\"\\";"
+          replace: "PROVISIONING_PROFILE_SPECIFIER = \\"${{ env.FLUTTER_WEATHER_APPSTORE_PROFILE_NAME }}\\";"
           include: apps/mobile_flutter/ios/Runner.xcodeproj/project.pbxproj
       - 
         name: "Configure code signing"
