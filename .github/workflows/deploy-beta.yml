@@ -260,7 +260,7 @@ jobs:
         run: exec .github/scripts/configure-keychain.sh
       - 
         name: "Create provisioning profile"
-        run: exec .github/scripts/create-provisining-profile.sh
+        run: exec .github/scripts/create-provisioning-profile.sh
       - 
         name: "Download provisioning profile"
         id: provisioning
