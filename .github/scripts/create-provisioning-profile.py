@@ -1,4 +1,4 @@
-import argparse, requests, time, json
+import argparse, requests, time, json, base64
 from authlib.jose import jwt
 
 
@@ -13,6 +13,7 @@ def parse_options():
     parser.add_argument('--privateKey')
     parser.add_argument('--identifier')
     parser.add_argument('--certificateId')
+    parser.add_argument('--certificatePath')
     parser.add_argument('--profileName')
     parser.add_argument('--profileType')
     return parser.parse_args()
@@ -78,7 +79,21 @@ def get_devices(token):
                 'id': device['id']
             })
         return devices
-    except BaseException as e:
+    except Exception as e:
+        print(e)
+        return []
+
+
+def download_certificate(token):
+    URL = 'https://api.appstoreconnect.apple.com/v1/certificates/{}'.format(args.certificateId) 
+    response = requests.get(URL, headers=http_headers(token))
+
+    try:
+        with open(args.certificatePath, 'w') as text_file:
+            json = response.json()
+            if 'data' in json:
+                text_file.write(base64.b64decode(response.json()['data']['attributes']['certificateContent']))
+    except Exception as e:
         print(e)
         return []
 
@@ -123,7 +138,7 @@ def register_profile(token):
     try:
         response = requests.post(URL, json.dumps(data), headers=http_headers(token))
         # print(response.json())
-    except BaseException as e:
+    except Exception as e:
         print(e)
 
 try:
@@ -135,5 +150,7 @@ try:
 
     # Create the provisioning profile
     register_profile(token)
+
+    download_certificate(token)
 except Exception as err:
     print(str(err))

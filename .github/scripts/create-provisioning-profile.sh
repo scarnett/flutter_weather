@@ -17,5 +17,6 @@ python .github/scripts/create-provisioning-profile.py \
   --privateKey "$FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY" \
   --identifier "$FLUTTER_WEATHER_APPSTORE_IDENTIFIER" \
   --certificateId "$FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID" \
+  --certificatePath "$FLUTTER_WEATHER_CERTS_FILE_PATH" \
   --profileName "$FLUTTER_WEATHER_APPSTORE_PROFILE_NAME" \
   --profileType "$FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE"
