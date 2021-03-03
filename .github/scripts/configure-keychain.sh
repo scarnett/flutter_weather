@@ -9,4 +9,5 @@ security unlock-keychain -p "" "$FLUTTER_WEATHER_KEYCHAIN"
 security set-keychain-settings
 security list-keychains
 
-security export -k "$FLUTTER_WEATHER_KEYCHAIN" -t all -f pkcs12 -P "$FLUTTER_WEATHER_CERTS_PASSWORD"
+sudo security add-trusted-cert -d -r trustRoot -k "$FLUTTER_WEATHER_KEYCHAIN" "./flutterWeather.cer"
+security export -k "$FLUTTER_WEATHER_KEYCHAIN" -t all -f pkcs12 -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -o "$FLUTTER_WEATHER_CERTS_FILE_PATH"
