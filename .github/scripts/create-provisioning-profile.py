@@ -1,7 +1,6 @@
 import argparse, requests, time, json
 from authlib.jose import jwt
 
-args = None
 expirationDate = int(round(time.time() + (20.0 * 60.0))) # 20 minutes timestamp
 
 
@@ -18,7 +17,7 @@ def parse_options():
     parser.add_argument('--certificateId')
     parser.add_argument('--profileName')
     parser.add_argument('--profileType')
-    args = parser.parse_args()
+    return parser.parse_args()
 
 
 def get_token():
@@ -128,6 +127,8 @@ def register_profile(token):
         # print(response.json())
     except BaseException as e:
         print(e)
+
+args = parse_options()
 
 # Parse the options
 parse_options()
