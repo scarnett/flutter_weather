@@ -13,38 +13,38 @@ on:
 #       - release-**
 
 jobs: 
-  # version:
-  #   name: "Generate Version Number"
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
-  #   steps:
-  #     - 
-  #       uses: actions/checkout@v2
-  #     - 
-  #       name: "Fetch all history for all tags and branches"
-  #       run: git fetch --unshallow
-  #     - 
-  #       name: "Install GitVersion"
-  #       uses: gittools/actions/gitversion/setup@v0.9.9
-  #       with:
-  #           versionSpec: '5.x'
-  #     - 
-  #       name: "Use GitVersion"
-  #       id: gitversion
-  #       uses: gittools/actions/gitversion/execute@v0.9.9
-  #       with:
-  #         useConfigFile: true
-  #         configFilePath: ./git-version.yml
-  #     - 
-  #       name: "Create version.txt"
-  #       run: echo "${{ steps.gitversion.outputs.NuGetVersion }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
-  #     - 
-  #       name: "Upload version.txt"
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: gitversion
-  #         path: "${{ env.VERSION_TXT_PATH }}"
+  version:
+    name: "Generate Version Number"
+    runs-on: ubuntu-latest
+    env:
+      VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
+    steps:
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: "Fetch all history for all tags and branches"
+        run: git fetch --unshallow
+      - 
+        name: "Install GitVersion"
+        uses: gittools/actions/gitversion/setup@v0.9.9
+        with:
+            versionSpec: '5.x'
+      - 
+        name: "Use GitVersion"
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.9
+        with:
+          useConfigFile: true
+          configFilePath: ./git-version.yml
+      - 
+        name: "Create version.txt"
+        run: echo "${{ steps.gitversion.outputs.NuGetVersion }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
+      - 
+        name: "Upload version.txt"
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitversion
+          path: "${{ env.VERSION_TXT_PATH }}"
 
   # test:
   #   name: "Run Tests"
@@ -207,7 +207,7 @@ jobs:
 
   buildIos:
     name: "Build iOS"
-    # needs: [ version, test ]
+    needs: [ version ]
     runs-on: macos-latest
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
