@@ -13,67 +13,67 @@ on:
 #       - release-**
 
 jobs: 
-  version:
-    name: "Generate Version Number"
-    runs-on: ubuntu-latest
-    env:
-      VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
-    steps:
-      - 
-        uses: actions/checkout@v2
-      - 
-        name: "Fetch all history for all tags and branches"
-        run: git fetch --unshallow
-      - 
-        name: "Install GitVersion"
-        uses: gittools/actions/gitversion/setup@v0.9.9
-        with:
-            versionSpec: '5.x'
-      - 
-        name: "Use GitVersion"
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.9
-        with:
-          useConfigFile: true
-          configFilePath: ./git-version.yml
-      - 
-        name: "Create version.txt"
-        run: echo "${{ steps.gitversion.outputs.NuGetVersion }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
-      - 
-        name: "Upload version.txt"
-        uses: actions/upload-artifact@v2
-        with:
-          name: gitversion
-          path: "${{ env.VERSION_TXT_PATH }}"
+  # version:
+  #   name: "Generate Version Number"
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
+  #   steps:
+  #     - 
+  #       uses: actions/checkout@v2
+  #     - 
+  #       name: "Fetch all history for all tags and branches"
+  #       run: git fetch --unshallow
+  #     - 
+  #       name: "Install GitVersion"
+  #       uses: gittools/actions/gitversion/setup@v0.9.9
+  #       with:
+  #           versionSpec: '5.x'
+  #     - 
+  #       name: "Use GitVersion"
+  #       id: gitversion
+  #       uses: gittools/actions/gitversion/execute@v0.9.9
+  #       with:
+  #         useConfigFile: true
+  #         configFilePath: ./git-version.yml
+  #     - 
+  #       name: "Create version.txt"
+  #       run: echo "${{ steps.gitversion.outputs.NuGetVersion }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
+  #     - 
+  #       name: "Upload version.txt"
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: gitversion
+  #         path: "${{ env.VERSION_TXT_PATH }}"
 
-  test:
-    name: "Run Tests"
-    needs: [ version ]
-    runs-on: ubuntu-latest
-    env:
-      FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
-      FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
-      FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
-    steps:
-      - 
-        uses: actions/checkout@v2
-      - 
-        name: "Configure Flutter"
-        uses: subosito/flutter-action@v1
-        with: 
-          channel: stable
-          flutter-version: "1.22.6"
-      - 
-        name: "Decode environment config"
-        run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
-      - 
-        name: "Flutter clean"
-        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter clean"
-      - 
-        name: "Flutter test"
-        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter test"
+  # test:
+  #   name: "Run Tests"
+  #   needs: [ version ]
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
+  #     FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
+  #     FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
+  #   steps:
+  #     - 
+  #       uses: actions/checkout@v2
+  #     - 
+  #       name: "Configure Flutter"
+  #       uses: subosito/flutter-action@v1
+  #       with: 
+  #         channel: stable
+  #         flutter-version: "1.22.6"
+  #     - 
+  #       name: "Decode environment config"
+  #       run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
+  #     - 
+  #       name: "Flutter clean"
+  #       working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+  #       run: "flutter clean"
+  #     - 
+  #       name: "Flutter test"
+  #       working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+  #       run: "flutter test"
 
   # buildAndroid:
   #   name: "Build Android"
@@ -207,7 +207,7 @@ jobs:
 
   buildIos:
     name: "Build iOS"
-    needs: [ version, test ]
+    # needs: [ version, test ]
     runs-on: macos-latest
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
@@ -279,38 +279,38 @@ jobs:
       - 
         name: "Configure code signing"
         run: exec .github/scripts/import-profiles.sh
-      - 
-        name: "Get version.txt"
-        uses: actions/download-artifact@v2
-        with:
-          name: gitversion
-      - 
-        name: "Read version"
-        id: version
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: version.txt
-      - 
-        name: "Update app version"
-        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: |
-          ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
-          sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
-      - 
-        name: "Flutter get"
-        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter pub get"
-      - 
-        name: "Flutter clean"
-        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter clean"
-      - 
-        name: "Flutter build"
-        working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
-        run: "flutter build ios -t lib/main_prod.dart --release --verbose"
-      - 
-        name: "Compress ipa"
-        run: exec .github/scripts/compress-ipa.sh
+      # - 
+      #   name: "Get version.txt"
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: gitversion
+      # - 
+      #   name: "Read version"
+      #   id: version
+      #   uses: juliangruber/read-file-action@v1
+      #   with:
+      #     path: version.txt
+      # - 
+      #   name: "Update app version"
+      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+      #   run: |
+      #     ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
+      #     sed -i '' "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
+      # - 
+      #   name: "Flutter get"
+      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+      #   run: "flutter pub get"
+      # - 
+      #   name: "Flutter clean"
+      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+      #   run: "flutter clean"
+      # - 
+      #   name: "Flutter build"
+      #   working-directory: "${{ env.FLUTTER_WEATHER_FOLDER }}"
+      #   run: "flutter build ios -t lib/main_prod.dart --release --verbose"
+      # - 
+      #   name: "Compress ipa"
+      #   run: exec .github/scripts/compress-ipa.sh
       # - 
       #   name: "Create github artifact"
       #   uses: ncipollo/release-action@v1

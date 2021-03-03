@@ -89,7 +89,7 @@ def download_certificate(token):
     response = requests.get(URL, headers=http_headers(token))
 
     try:
-        with open(args.certificatePath, 'w') as text_file:
+        with open('./flutterWeather.cer', 'w') as text_file:
             json = response.json()
             if 'data' in json:
                 text_file.write(base64.b64decode(response.json()['data']['attributes']['certificateContent']))
