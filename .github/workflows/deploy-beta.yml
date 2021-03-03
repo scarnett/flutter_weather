@@ -219,7 +219,7 @@ jobs:
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
       FLUTTER_WEATHER_CERTS_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_PASSWORD }}
       FLUTTER_WEATHER_APPSTORE_BUNDLE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
-      FLUTTER_WEATHER_APPSTORE_PROFILE_NAME: ${{ 'FLUTTER_WEATHER_ADHOC' }}
+      FLUTTER_WEATHER_APPSTORE_PROFILE_NAME: ${{ 'Flutter Weather Ad Hoc' }}
       FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE: ${{ 'IOS_APP_ADHOC' }}
       FLUTTER_WEATHER_APPSTORE_IDENTIFIER: ${{ secrets.FLUTTER_WEATHER_APPSTORE_IDENTIFIER }} # https://developer.apple.com/account/resources/identifiers/bundleId/edit/<identifier>
       FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID }} # https://developer.apple.com/account/resources/certificates/download/<certificateId>
@@ -271,6 +271,13 @@ jobs:
           issuer-id: "${{ env.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }}"
           api-key-id: "${{ env.FLUTTER_WEATHER_APPSTORE_KEY_ID }}"
           api-private-key: "${{ env.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}"
+      - 
+        name: "Update provisioning profile specifiers in project.pbxproj"
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "PROVISIONING_PROFILE_SPECIFIER \\= "";"
+          replace: "PROVISIONING_PROFILE_SPECIFIER = "${{ env.FLUTTER_WEATHER_APPSTORE_PROFILE_NAME }}";"
+          include: apps/mobile_flutter/ios/Runner.xcodeproj/project.pbxproj
       - 
         name: "Configure code signing"
         run: exec .github/scripts/import-profiles.sh
