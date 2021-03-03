@@ -1,8 +1,6 @@
 import argparse, requests, time, json
 from authlib.jose import jwt
 
-expirationDate = int(round(time.time() + (20.0 * 60.0))) # 20 minutes timestamp
-
 
 def parse_options():
     '''
@@ -36,7 +34,7 @@ def get_token():
 
     payload = {
         'iss': args.issuerId,
-        'exp': expirationDate,
+        'exp': int(round(time.time() + (20.0 * 60.0))), # 20 minutes timestamp
         'aud': 'appstoreconnect-v1'
     }
 
@@ -128,13 +126,14 @@ def register_profile(token):
     except BaseException as e:
         print(e)
 
-args = parse_options()
+try:
+    # Parse the options
+    args = parse_options()
 
-# Parse the options
-parse_options()
+    # Generate a new JWT token
+    token = get_token().decode('UTF-8')
 
-# Generate a new JWT token
-token = get_token().decode('UTF-8')
-
-# Create the provisioning profile
-register_profile(token)
+    # Create the provisioning profile
+    register_profile(token)
+except Exception as err:
+    print(str(err))
