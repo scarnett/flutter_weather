@@ -210,6 +210,11 @@ jobs:
       FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_P12_DATA }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
       FLUTTER_WEATHER_CERTS_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_PASSWORD }}
+      FLUTTER_WEATHER_APPSTORE_BUNDLE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
+      FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE: ${{ 'IOS_APP_STORE' }}
+      FLUTTER_WEATHER_APPSTORE_ISSUER_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }} # https://appstoreconnect.apple.com/access/api
+      FLUTTER_WEATHER_APPSTORE_KEY_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }} # https://appstoreconnect.apple.com/access/api
+      FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
       FLUTTER_WEATHER_IPA_OUTPUT_FOLDER: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
@@ -247,11 +252,11 @@ jobs:
         id: provisioning
         uses: apple-actions/download-provisioning-profiles@v1
         with: 
-          bundle-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
-          profile-type: "IOS_APP_STORE"
-          issuer-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }}
-          api-private-key: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
+          bundle-id: ${{ env.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
+          profile-type: "${{ env.FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE }}"
+          issuer-id: ${{ env.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ env.FLUTTER_WEATHER_APPSTORE_KEY_ID }}
+          api-private-key: ${{ env.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
       - 
         name: "Configure code signing"
         run: exec .github/scripts/import-profiles.sh
