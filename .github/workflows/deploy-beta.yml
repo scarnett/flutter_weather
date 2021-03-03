@@ -258,24 +258,24 @@ jobs:
       - 
         name: "Configure keychain"
         run: exec .github/scripts/configure-keychain.sh
-      # - 
-      #   name: "Download provisioning profile"
-      #   id: provisioning
-      #   uses: apple-actions/download-provisioning-profiles@v1
-      #   with: 
-      #     bundle-id: "${{ env.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}"
-      #     profile-type: "${{ env.FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE }}"
-      #     issuer-id: "${{ env.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }}"
-      #     api-key-id: "${{ env.FLUTTER_WEATHER_APPSTORE_KEY_ID }}"
-      #     api-private-key: "${{ env.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}"
-      # - 
-      #   name: "Update provisioning profile specifiers in project.pbxproj"
-      #   working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
-      #   run: sed -i '' "s/FLUTTER_WEATHER_PROVISIONING_PROFILE/$FLUTTER_WEATHER_APPSTORE_PROFILE_NAME/g" ./project.pbxproj
-      # - 
-      #   name: "Update bundle identifiers in project.pbxproj"
-      #   working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
-      #   run: sed -i '' "s/FLUTTER_WEATHER_BUNDLE_ID/$FLUTTER_WEATHER_APPSTORE_BUNDLE_ID/g" ./project.pbxproj
+      - 
+        name: "Download provisioning profile"
+        id: provisioning
+        uses: apple-actions/download-provisioning-profiles@v1
+        with: 
+          bundle-id: "${{ env.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}"
+          profile-type: "${{ env.FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE }}"
+          issuer-id: "${{ env.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }}"
+          api-key-id: "${{ env.FLUTTER_WEATHER_APPSTORE_KEY_ID }}"
+          api-private-key: "${{ env.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}"
+      - 
+        name: "Update provisioning profile specifiers in project.pbxproj"
+        working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
+        run: sed -i '' "s/FLUTTER_WEATHER_PROVISIONING_PROFILE/$FLUTTER_WEATHER_APPSTORE_PROFILE_NAME/g" ./project.pbxproj
+      - 
+        name: "Update bundle identifiers in project.pbxproj"
+        working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
+        run: sed -i '' "s/FLUTTER_WEATHER_BUNDLE_ID/$FLUTTER_WEATHER_APPSTORE_BUNDLE_ID/g" ./project.pbxproj
       # - 
       #   name: "Configure code signing"
       #   run: exec .github/scripts/import-profiles.sh
