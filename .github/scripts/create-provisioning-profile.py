@@ -1,34 +1,24 @@
-import getopt, sys, requests, time, json
+import argparse, requests, time, json
 from authlib.jose import jwt
 
-keyId = None            # https://appstoreconnect.apple.com/access/api
-issuerId = None         # https://appstoreconnect.apple.com/access/api
-privateKey = None       # p8 file
-identifier = None       # https://developer.apple.com/account/resources/identifiers/bundleId/edit/<identifier>
-certificateId = None    # https://developer.apple.com/account/resources/certificates/download/<certificateId>
-profileName = None
-profileType = None
+args = None
 expirationDate = int(round(time.time() + (20.0 * 60.0))) # 20 minutes timestamp
 
 
 def parse_options():
-    options = ['keyId', 'issuerId', 'privateKey', 'identifier', 'certificateId', 'profileName', 'profileType']
-    arguments, values = getopt.getopt(sys.argv[1:], '', options)
-    for currentArgument, currentValue in arguments:
-        if currentArgument in ('--keyId'):
-            keyId = currentValue
-        elif currentArgument in ('--issuerId'):
-            issuerId = currentValue
-        elif currentArgument in ('--privateKey'):
-            privateKey = currentValue
-        elif currentArgument in ('--identifier'):
-            identifier = currentValue
-        elif currentArgument in ('--certificateId'):
-            certificateId = currentValue
-        elif currentArgument in ('--profileName'):
-            profileName = currentValue
-        elif currentArgument in ('--profileType'):
-            profileType = currentValue
+    '''
+    Parses the program options
+    '''
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--keyId')
+    parser.add_argument('--issuerId')
+    parser.add_argument('--privateKey')
+    parser.add_argument('--identifier')
+    parser.add_argument('--certificateId')
+    parser.add_argument('--profileName')
+    parser.add_argument('--profileType')
+    args = parser.parse_args()
 
 
 def get_token():
@@ -41,17 +31,17 @@ def get_token():
 
     header = {
         'alg': 'ES256',
-        'kid': keyId,
+        'kid': args.keyId,
         'typ': 'JWT'
     }
 
     payload = {
-        'iss': issuerId,
+        'iss': args.issuerId,
         'exp': expirationDate,
         'aud': 'appstoreconnect-v1'
     }
 
-    return jwt.encode(header, payload, privateKey)
+    return jwt.encode(header, payload, args.privateKey)
 
 
 def http_headers(token):
@@ -110,20 +100,20 @@ def register_profile(token):
         'data': {
             'type': 'profiles',
             'attributes': {
-                'name': profileName,
-                'profileType': profileType
+                'name': args.profileName,
+                'profileType': args.profileType
             },
             'relationships': {
                 'bundleId': {
                     'data': {
                         'type': 'bundleIds',
-                        'id': identifier
+                        'id': args.identifier
                     }
                 },
                 'certificates': {
                     'data': [{         
                         'type': 'certificates',
-                        'id': certificateId
+                        'id': args.certificateId
                     }]
                 },
                 'devices': {
