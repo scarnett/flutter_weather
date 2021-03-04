@@ -162,7 +162,7 @@ def create_profile(token):
 
         # Add devices to the ad hoc provisioning profile
         if args.profileType == 'IOS_APP_ADHOC':
-            data['relationships']['devices'] = {
+            data['data']['relationships']['devices'] = {
                 'data': get_devices(token)
             }
 
