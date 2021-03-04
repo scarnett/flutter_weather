@@ -99,7 +99,7 @@ def find_profile(token, name):
     try:
         url = 'https://api.appstoreconnect.apple.com/v1/profiles'
         response = requests.get(url, data={name: name}, headers=http_headers(token))
-        jsonData = response.jsonData()
+        jsonData = response.json()
         if 'data' in json:
             return jsonData['data']
         else:
