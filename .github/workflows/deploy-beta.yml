@@ -237,17 +237,17 @@ jobs:
         uses: actions/setup-java@v1
         with: 
           java-version: 12.x
-      - 
-        uses: subosito/flutter-action@v1
-        with: 
-          channel: stable
-          flutter-version: "1.22.6"
-      - 
-        name: "Decode GoogleService-Info.plist"
-        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
-      - 
-        name: "Decode environment config"
-        run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
+      # - 
+      #   uses: subosito/flutter-action@v1
+      #   with: 
+      #     channel: stable
+      #     flutter-version: "1.22.6"
+      # - 
+      #   name: "Decode GoogleService-Info.plist"
+      #   run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
+      # - 
+      #   name: "Decode environment config"
+      #   run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
       - 
         name: "Download certificate and create provisioning profile"
         run: exec .github/scripts/create-provisioning-profile.sh
