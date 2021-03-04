@@ -218,8 +218,8 @@ jobs:
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
       FLUTTER_WEATHER_CERTS_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_PASSWORD }}
       FLUTTER_WEATHER_APPSTORE_BUNDLE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
-      FLUTTER_WEATHER_APPSTORE_PROFILE_NAME: ${{ 'Flutter Weather Ad Hoc' }}
-      FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE: ${{ 'IOS_APP_ADHOC' }}
+      FLUTTER_WEATHER_APPSTORE_PROFILE_NAME: ${{ 'Flutter Weather Dist iOS' }}
+      FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE: ${{ 'IOS_APP_STORE' }}
       FLUTTER_WEATHER_APPSTORE_IDENTIFIER: ${{ secrets.FLUTTER_WEATHER_APPSTORE_IDENTIFIER }} # https://developer.apple.com/account/resources/identifiers/bundleId/edit/<identifier>
       FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID }} # https://developer.apple.com/account/resources/certificates/download/<certificateId>
       FLUTTER_WEATHER_APPSTORE_ISSUER_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }} # https://appstoreconnect.apple.com/access/api
