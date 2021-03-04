@@ -240,29 +240,43 @@ def letsDoThis():
         if token:
             print('jwt token created')
 
-            # Find the existing provisioning profile if it exists
-            oldProfile = find_profile(token)
-            if oldProfile:
-                print('old profile found. deleting...')
+            # Ad Hoc
+            if args.profileType == 'IOS_APP_ADHOC':
+                # Find the existing provisioning profile if it exists
+                oldProfile = find_profile(token)
+                if oldProfile:
+                    print('old profile found. deleting...')
 
-                # Delete the provisioning profile
-                if delete_profile(token, oldProfile['id']):
-                    print('old profile deleted')
-                else:
-                    print('failed to delete old profile')
+                    # Delete the provisioning profile
+                    if delete_profile(token, oldProfile['id']):
+                        print('old profile deleted')
+                    else:
+                        print('failed to delete old profile')
 
-            # Create a new provisioning profile
-            print('creating new profile...')
-            newProfile = create_profile(token)
-            if newProfile:
-                print('new profile created')
-                print('downloading certificate')
+                # Create a new provisioning profile
+                print('creating new profile...')
+                newProfile = create_profile(token)
+                if newProfile:
+                    print('new profile created')
+                    print('downloading certificate')
 
-                certificate = download_certificate(token, newProfile['id'])
-                if certificate:
-                    print('certificate downloaded')
-                else:
-                    print('failed to download certificate')
+                    certificate = download_certificate(token, newProfile['id'])
+                    if certificate:
+                        print('certificate downloaded')
+                    else:
+                        print('failed to download certificate')
+            # Distribution
+            elif args.profileType == 'IOS_APP_STORE':
+                profile = find_profile(token)
+                if profile:
+                    print('profile found')
+
+                    certificate = download_certificate(token, profile['id'])
+                    if certificate:
+                        print('certificate downloaded')
+                    else:
+                        print('failed to download certificate')
+                pass
         else:
             print('failed to create jwt token')
     except Exception as err:
