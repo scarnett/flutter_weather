@@ -1,4 +1,4 @@
-import argparse, requests, os, time, json, base64
+import argparse, requests, os, time, json, base64, errno
 from authlib.jose import jwt
 
 
@@ -170,9 +170,9 @@ def create_profile(token):
 
             # Write the provisioning profile content to a file
             filePath = '{}/Library/MobileDevice/Provisioning Profiles/profile.mobileprovision'.format(args.homePath)
-            if not os.path.exists(filePath):
-                with open(filePath, 'w+') as provisionFile:
-                    provisionFile.write(base64.b64decode(profile['attributes']['profileContent']))
+            makeFile(filePath)
+            with open(filePath, 'w+') as provisionFile:
+                provisionFile.write(base64.b64decode(profile['attributes']['profileContent']))
 
             return profile
         else:
@@ -200,9 +200,9 @@ def download_certificate(token, profileId):
 
             # Write the certificate content to a file
             filePath = './flutterWeather.cer' #TODO! cer path
-            if not os.path.exists(filePath):
-                with open(filePath, 'w+') as cerFile:
-                    cerFile.write(base64.b64decode(certificates[0]['attributes']['certificateContent']))
+            makeFile(filePath)
+            with open(filePath, 'w+') as cerFile:
+                cerFile.write(base64.b64decode(certificates[0]['attributes']['certificateContent']))
 
             return certificates[0]
         else:
@@ -210,6 +210,15 @@ def download_certificate(token, profileId):
     except Exception as e:
         print('download_certificate error: {}'.format(e))
     return None
+
+
+def makeFile(fileName):
+    if not os.path.exists(os.path.dirname(fileName)):
+        try:
+            os.makedirs(os.path.dirname(fileName))
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
 
 
 def letsDoThis():
