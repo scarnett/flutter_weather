@@ -1,4 +1,4 @@
-import argparse, requests, time, json, base64
+import argparse, requests, os, time, json, base64
 from authlib.jose import jwt
 
 
@@ -170,14 +170,15 @@ def create_profile(token):
 
             # Write the provisioning profile content to a file
             filePath = '{}/Library/MobileDevice/Provisioning Profiles/profile.mobileprovision'.format(args.homePath)
-            with open(filePath, 'w+') as text_file:
-                text_file.write(base64.b64decode(profile['attributes']['profileContent']))
+            if not os.path.exists(filePath):
+                with open(filePath, 'w+') as provisionFile:
+                    provisionFile.write(base64.b64decode(profile['attributes']['profileContent']))
 
             return profile
         else:
-            print('register_profile bad response: {}'.format(jsonData))
+            print('create_profile bad response: {}'.format(jsonData))
     except Exception as e:
-        print('register_profile error: {}'.format(e))
+        print('create_profile error: {}'.format(e))
     return None
 
 
@@ -199,9 +200,10 @@ def download_certificate(token, profileId):
 
             # Write the certificate content to a file
             filePath = './flutterWeather.cer' #TODO! cer path
-            with open(filePath, 'w+') as text_file:
-                text_file.write(base64.b64decode(certificates[0]['attributes']['certificateContent']))
-            
+            if not os.path.exists(filePath):
+                with open(filePath, 'w+') as cerFile:
+                    cerFile.write(base64.b64decode(certificates[0]['attributes']['certificateContent']))
+
             return certificates[0]
         else:
             print('download_certificate bad response: {}'.format(jsonData))
