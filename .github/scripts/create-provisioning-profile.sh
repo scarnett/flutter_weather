@@ -12,6 +12,7 @@ pip install requests Authlib
 
 # Create the provisioning profile
 python .github/scripts/create-provisioning-profile.py \
+  --homePath "$HOME" \
   --keyId "$FLUTTER_WEATHER_APPSTORE_KEY_ID" \
   --issuerId "$FLUTTER_WEATHER_APPSTORE_ISSUER_ID" \
   --privateKey "$FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY" \
