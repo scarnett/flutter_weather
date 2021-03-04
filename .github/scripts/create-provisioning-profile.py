@@ -95,7 +95,6 @@ def download_certificate(profileId):
                 text_file.write(base64.b64decode(json['data'][0]['attributes']['certificateContent']))
     except Exception as e:
         print(e)
-        return []
 
 
 def register_profile(token):
@@ -136,8 +135,9 @@ def register_profile(token):
     }
 
     try:
+        # TODO! delee existing profile before re-creating
         response = requests.post(URL, json.dumps(data), headers=http_headers(token))
-        download_certificate(response.json()['data'][0]['id'])
+        download_certificate(response.json()['data']['id'])
     except Exception as e:
         print(e)
 
