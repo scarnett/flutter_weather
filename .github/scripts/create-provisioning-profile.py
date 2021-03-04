@@ -89,10 +89,10 @@ def download_certificate(profileId):
     response = requests.get(URL, headers=http_headers(token))
 
     try:
-        with open('./flutterWeather.cer', 'w') as text_file:
-            json = response.json()
-            if 'data' in json:
-                text_file.write(base64.b64decode(json['data']['attributes']['certificateContent']))
+        json = response.json()
+        if 'data' in json:
+            with open('./flutterWeather.cer', 'w') as text_file:
+                text_file.write(base64.b64decode(json['data'][0]['attributes']['certificateContent']))
     except Exception as e:
         print(e)
         return []
@@ -137,7 +137,7 @@ def register_profile(token):
 
     try:
         response = requests.post(URL, json.dumps(data), headers=http_headers(token))
-        download_certificate(response.json()['data']['id'])
+        download_certificate(response.json()['data'][0]['id'])
     except Exception as e:
         print(e)
 
