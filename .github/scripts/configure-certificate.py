@@ -155,13 +155,16 @@ def create_profile(token):
                             'type': 'certificates',
                             'id': args.certificateId
                         }]
-                    },
-                    'devices': {
-                        'data': get_devices(token)
                     }
                 }
             }
         }
+
+        # Add devices to the ad hoc provisioning profile
+        if args.profileType == 'IOS_APP_ADHOC':
+            data['relationships']['devices'] = {
+                'data': get_devices(token)
+            }
 
         response = requests.post(url, json.dumps(data), headers=http_headers(token))
         jsonData = response.json()
