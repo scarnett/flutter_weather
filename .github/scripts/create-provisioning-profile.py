@@ -87,21 +87,20 @@ def get_devices(token):
     return []
 
 
-def find_profile(token, name):
+def find_profile(token):
     '''
     Finds a provisioning profile by its name
 
     Args:
         token (string): The JWT token
-        name (string): The profile name
     '''
 
     try:
         url = 'https://api.appstoreconnect.apple.com/v1/profiles'
-        response = requests.get(url, params={'filter[name]': name}, headers=http_headers(token))
+        response = requests.get(url, params={'filter[name]': args.profileName}, headers=http_headers(token))
         jsonData = response.json()
         if 'data' in jsonData:
-            return jsonData['data']
+            return jsonData['data'][0]
         else:
             print('find_profile bad response: {}'.format(jsonData))
     except Exception as e:
@@ -224,7 +223,7 @@ def letsDoThis():
             print('jwt token created')
 
             # Find the existing provisioning profile if it exists
-            oldProfile = find_profile(token, args.profileName)
+            oldProfile = find_profile(token)
             if oldProfile:
                 print('old profile found. deleting...')
 
