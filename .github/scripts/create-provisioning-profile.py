@@ -170,7 +170,7 @@ def create_profile(token):
 
             # Write the provisioning profile content to a file
             filePath = '{}/Library/MobileDevice/Provisioning Profiles/profile.mobileprovision'.format(args.homePath)
-            with open(filePath, 'w') as text_file:
+            with open(filePath, 'w+') as text_file:
                 text_file.write(base64.b64decode(profile['attributes']['profileContent']))
 
             return profile
@@ -199,7 +199,7 @@ def download_certificate(token, profileId):
 
             # Write the certificate content to a file
             filePath = './flutterWeather.cer' #TODO! cer path
-            with open(filePath, 'w') as text_file:
+            with open(filePath, 'w+') as text_file:
                 text_file.write(base64.b64decode(certificates[0]['attributes']['certificateContent']))
             
             return certificates[0]
