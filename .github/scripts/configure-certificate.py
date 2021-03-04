@@ -213,6 +213,10 @@ def download_certificate(token, profileId):
 
 
 def makeFile(fileName):
+    '''
+    Creates a file and its parent folders if they don't already exist
+    '''
+
     if not os.path.exists(os.path.dirname(fileName)):
         try:
             os.makedirs(os.path.dirname(fileName))
