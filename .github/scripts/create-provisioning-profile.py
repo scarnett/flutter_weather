@@ -251,7 +251,7 @@ def letsDoThis():
                 print('new profile created')
                 print('downloading certificate')
 
-                certificate = download_certificate(newProfile['id'])
+                certificate = download_certificate(token, newProfile['id'])
                 if certificate:
                     print('certificate downloaded')
                 else:
