@@ -12,7 +12,7 @@ on:
 #     branches: 
 #       - release-**
 
-# jobs: 
+jobs: 
 #   version:
 #     name: "Generate Version Number"
 #     runs-on: ubuntu-latest
