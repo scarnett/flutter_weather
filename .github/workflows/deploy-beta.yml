@@ -207,7 +207,7 @@ jobs:
 
   buildIos:
     name: "Build iOS"
-    needs: [ version, test ]
+    # needs: [ version, test ]
     runs-on: macos-latest
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
