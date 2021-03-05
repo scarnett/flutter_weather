@@ -261,8 +261,8 @@ def letsDoThis():
                 print('creating new profile...')
                 newProfile = create_profile(token)
                 if newProfile:
-                    print('new profile created')
-                    print('downloading certificate')
+                    print('new profile downloaded')
+                    # print('downloading certificate')
 
                     """
                     certificate = download_certificate(token, newProfile['id'])
@@ -275,7 +275,7 @@ def letsDoThis():
             elif args.profileType == 'IOS_APP_STORE':
                 profile = find_profile(token)
                 if profile:
-                    print('profile found')
+                    print('profile downloaded')
 
                     """
                     certificate = download_certificate(token, profile['id'])
