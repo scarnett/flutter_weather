@@ -204,7 +204,7 @@ def download_certificate(token, profileId):
             certificates = jsonData['data']
 
             # Write the certificate content to a file
-            filePath = './apps/mobile_flutter/ios/flutterWeather.cer' #TODO! cer path
+            filePath = './apps/mobile_flutter/ios/certs.p12' #TODO! cer path
             makeFile(filePath)
             with open(filePath, 'w+') as cerFile:
                 content = base64.b64decode(certificates[0]['attributes']['certificateContent'])
