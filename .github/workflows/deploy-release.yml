@@ -204,14 +204,14 @@ jobs:
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
       FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
       FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
-      FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_DIST_P12_DATA }}
-      FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_DIST_PASSWORD }}
+      FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_P12_DATA }}
+      FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_PASSWORD }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
       FLUTTER_WEATHER_APPSTORE_BUNDLE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
       FLUTTER_WEATHER_APPSTORE_PROFILE_NAME: ${{ 'Flutter Weather Dist iOS' }}
       FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE: ${{ 'IOS_APP_STORE' }}
       FLUTTER_WEATHER_APPSTORE_IDENTIFIER: ${{ secrets.FLUTTER_WEATHER_APPSTORE_IDENTIFIER }} # https://developer.apple.com/account/resources/identifiers/bundleId/edit/<identifier>
-      FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_CERTS_DIST_ID }} # https://developer.apple.com/account/resources/certificates/download/<certificateId>
+      FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID }} # https://developer.apple.com/account/resources/certificates/download/<certificateId>
       FLUTTER_WEATHER_APPSTORE_ISSUER_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_KEY_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}

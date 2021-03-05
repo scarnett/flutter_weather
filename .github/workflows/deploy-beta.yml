@@ -1,6 +1,11 @@
 name: 'Deploy Beta to Firebase App Distribution'
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - feature-profile-automation
+
+# on: workflow_dispatch
 
 # on:
 #   push:
@@ -179,23 +184,23 @@ jobs:
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter build apk -t lib/main_prod.dart --flavor prod --release --verbose'
 
-      - name: 'Compress apk'
-        run: exec .github/scripts/compress-android-apk.sh
+      # - name: 'Compress apk'
+      #   run: exec .github/scripts/compress-android-apk.sh
 
-      - name: 'Create github artifact'
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_ZIP }}'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
-          commit: ${{ github.sha }}
-          prerelease: true
+      # - name: 'Create github artifact'
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_ZIP }}'
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
+      #     commit: ${{ github.sha }}
+      #     prerelease: true
 
-      - name: 'Upload apk'
-        uses: actions/upload-artifact@v2
-        with:
-          name: apk
-          path: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
+      # - name: 'Upload apk'
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: apk
+      #     path: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
 
   buildIos:
     name: 'Build iOS'
@@ -207,14 +212,14 @@ jobs:
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
       FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
       FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
-      FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_P12_DATA }}
-      FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_PASSWORD }}
+      FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_P12_DATA }}
+      FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_PASSWORD }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
       FLUTTER_WEATHER_APPSTORE_BUNDLE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
       FLUTTER_WEATHER_APPSTORE_PROFILE_NAME: ${{ 'Flutter Weather Ad Hoc' }}
       FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE: ${{ 'IOS_APP_ADHOC' }}
       FLUTTER_WEATHER_APPSTORE_IDENTIFIER: ${{ secrets.FLUTTER_WEATHER_APPSTORE_IDENTIFIER }} # https://developer.apple.com/account/resources/identifiers/bundleId/edit/<identifier>
-      FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_CERTS_AD_HOC_ID }} # https://developer.apple.com/account/resources/certificates/download/<certificateId>
+      FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID }} # https://developer.apple.com/account/resources/certificates/download/<certificateId>
       FLUTTER_WEATHER_APPSTORE_ISSUER_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_KEY_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
@@ -293,64 +298,64 @@ jobs:
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter build ios -t lib/main_prod.dart --release --verbose'
 
-      - name: 'Compress ipa'
-        run: exec .github/scripts/compress-ios-ipa.sh
+      # - name: 'Compress ipa'
+      #   run: exec .github/scripts/compress-ios-ipa.sh
 
-      - name: 'Create github artifact'
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
-          commit: ${{ github.sha }}
-          prerelease: true
+      # - name: 'Create github artifact'
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
+      #     commit: ${{ github.sha }}
+      #     prerelease: true
 
-      - name: 'Upload ipa'
-        uses: actions/upload-artifact@v2
-        with:
-          name: ipa
-          path: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+      # - name: 'Upload ipa'
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: ipa
+      #     path: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
 
-  deployAndroid:
-    name: 'Deploy Android Beta to Firebase App Distribution'
-    needs: [buildAndroid]
-    runs-on: ubuntu-latest
-    env:
-      FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
-    steps:
-      - uses: actions/checkout@v2
+  # deployAndroid:
+  #   name: 'Deploy Android Beta to Firebase App Distribution'
+  #   needs: [buildAndroid]
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: 'Get apk from artifacts'
-        uses: actions/download-artifact@v2
-        with:
-          name: apk
+  #     - name: 'Get apk from artifacts'
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: apk
 
-      - name: 'Upload apk'
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-        with:
-          appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: testers
-          file: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
+  #     - name: 'Upload apk'
+  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+  #       with:
+  #         appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
+  #         token: ${{ secrets.FIREBASE_TOKEN }}
+  #         groups: testers
+  #         file: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
 
-  deployIos:
-    name: 'Deploy iOS Beta to Firebase App Distribution'
-    needs: [buildIos]
-    runs-on: ubuntu-latest
-    env:
-      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
-    steps:
-      - uses: actions/checkout@v2
+  # deployIos:
+  #   name: 'Deploy iOS Beta to Firebase App Distribution'
+  #   needs: [buildIos]
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: 'Get ipa from artifacts'
-        uses: actions/download-artifact@v2
-        with:
-          name: ipa
+  #     - name: 'Get ipa from artifacts'
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: ipa
 
-      - name: 'Upload ipa'
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-        with:
-          appId: ${{ secrets.FIREBASE_IOS_APPID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: testers
-          file: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+  #     - name: 'Upload ipa'
+  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+  #       with:
+  #         appId: ${{ secrets.FIREBASE_IOS_APPID }}
+  #         token: ${{ secrets.FIREBASE_TOKEN }}
+  #         groups: testers
+  #         file: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
