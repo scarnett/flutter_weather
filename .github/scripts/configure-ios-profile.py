@@ -100,7 +100,8 @@ def find_profile(token):
         response = requests.get(url, params={'filter[name]': args.profileName}, headers=http_headers(token))
         jsonData = response.json()
         if 'data' in jsonData:
-            return jsonData['data'][0]
+            if len(jsonData['data']) > 0:
+                return jsonData['data'][0]
         else:
             print('find_profile bad response: {}'.format(jsonData))
     except Exception as e:
