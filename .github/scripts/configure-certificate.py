@@ -175,7 +175,10 @@ def create_profile(token):
             filePath = '{}/Library/MobileDevice/Provisioning Profiles/{}.mobileprovision'.format(args.homePath, profile['attributes']['uuid'])
             makeFile(filePath)
             with open(filePath, 'w+') as provisionFile:
-                provisionFile.write(base64.b64decode(profile['attributes']['profileContent']))
+                content = base64.b64decode(profile['attributes']['profileContent'])
+                provisionFile.write(content)
+                print('Wrote provisioning profile to {}'.format(filePath))
+                print(content)
 
             return profile
         else:
@@ -205,7 +208,10 @@ def download_certificate(token, profileId):
             filePath = './apps/mobile_flutter/ios/flutterWeather.cer' #TODO! cer path
             makeFile(filePath)
             with open(filePath, 'w+') as cerFile:
-                cerFile.write(base64.b64decode(certificates[0]['attributes']['certificateContent']))
+                content = base64.b64decode(certificates[0]['attributes']['certificateContent'])
+                cerFile.write(content)
+                print('Wrote certificate to {}'.format(filePath))
+                print(content)
 
             return certificates[0]
         else:
