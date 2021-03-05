@@ -1,11 +1,6 @@
 name: 'Deploy Beta to Firebase App Distribution'
 
-on:
-  push:
-    branches:
-      - feature-profile-automation
-
-# on: workflow_dispatch
+on: workflow_dispatch
 
 # on:
 #   push:
