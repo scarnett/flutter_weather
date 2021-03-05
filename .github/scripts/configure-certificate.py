@@ -276,7 +276,6 @@ def letsDoThis():
                         print('certificate downloaded')
                     else:
                         print('failed to download certificate')
-                pass
         else:
             print('failed to create jwt token')
     except Exception as err:
