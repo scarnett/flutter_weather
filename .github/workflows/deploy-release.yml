@@ -3,7 +3,7 @@ name: 'Deploy Release to App Stores'
 on:
   push:
     branches:
-      - feature-profile-automation
+      - main
 
 jobs:
   version:
@@ -180,19 +180,19 @@ jobs:
       - name: 'Compress app bundle'
         run: exec .github/scripts/compress-android-appbundle.sh
 
-      # - name: 'Create github artifact'
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     artifacts: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_ZIP }}'
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
-      #     commit: ${{ github.sha }}
+      - name: 'Create github artifact'
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_ZIP }}'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
+          commit: ${{ github.sha }}
 
-      # - name: 'Upload app bundle'
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: appbundle
-      #     path: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
+      - name: 'Upload app bundle'
+        uses: actions/upload-artifact@v2
+        with:
+          name: appbundle
+          path: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
 
   buildIos:
     name: 'Build iOS'
@@ -293,99 +293,99 @@ jobs:
       - name: 'Compress ipa'
         run: exec .github/scripts/compress-ios-ipa.sh
 
-      # - name: 'Create github artifact'
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     artifacts: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
-      #     commit: ${{ github.sha }}
+      - name: 'Create github artifact'
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
+          commit: ${{ github.sha }}
 
-      # - name: 'Upload ipa'
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: ipa
-      #     path: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+      - name: 'Upload ipa'
+        uses: actions/upload-artifact@v2
+        with:
+          name: ipa
+          path: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
 
-  # deployAndroid:
-  #   name: 'Deploy Android Release to Play Store'
-  #   needs: [buildAndroid]
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.aab' }}
-  #     FLUTTER_WEATHER_WHATS_NEW_FOLDER: ${{ './apps/mobile_flutter/dist/whatsnew' }}
-  #   steps:
-  #     - uses: actions/checkout@v2
+  deployAndroid:
+    name: 'Deploy Android Release to Play Store'
+    needs: [buildAndroid]
+    runs-on: ubuntu-latest
+    env:
+      FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.aab' }}
+      FLUTTER_WEATHER_WHATS_NEW_FOLDER: ${{ './apps/mobile_flutter/dist/whatsnew' }}
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: 'Get app bundle from artifacts'
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: appbundle
+      - name: 'Get app bundle from artifacts'
+        uses: actions/download-artifact@v2
+        with:
+          name: appbundle
 
-  #     - name: 'Release to internal track'
-  #       uses: r0adkll/upload-google-play@v1
-  #       with:
-  #         serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
-  #         packageName: io.flutter_weather.prod
-  #         releaseFiles: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
-  #         track: internal
-  #         whatsNewDirectory: '${{ env.FLUTTER_WEATHER_WHATS_NEW_FOLDER }}'
+      - name: 'Release to internal track'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
+          packageName: io.flutter_weather.prod
+          releaseFiles: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
+          track: internal
+          whatsNewDirectory: '${{ env.FLUTTER_WEATHER_WHATS_NEW_FOLDER }}'
 
-  # deployIos:
-  #   name: 'Deploy iOS Release to App Store'
-  #   needs: [buildIos]
-  #   runs-on: macos-latest
-  #   env:
-  #     FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
-  #     FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
-  #     FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
-  #   steps:
-  #     - uses: actions/checkout@v2
+  deployIos:
+    name: 'Deploy iOS Release to App Store'
+    needs: [buildIos]
+    runs-on: macos-latest
+    env:
+      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+      FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
+      FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: 'Get ipa from artifacts'
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: ipa
+      - name: 'Get ipa from artifacts'
+        uses: actions/download-artifact@v2
+        with:
+          name: ipa
 
-  #     - name: 'Upload ipa'
-  #       run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
+      - name: 'Upload ipa'
+        run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
 
-  # remoteConfig:
-  #   name: 'Update Remote Configuration'
-  #   needs: [deployAndroid, deployIos]
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-  #     FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-  #   steps:
-  #     - uses: actions/checkout@v2
+  remoteConfig:
+    name: 'Update Remote Configuration'
+    needs: [deployAndroid, deployIos]
+    runs-on: ubuntu-latest
+    env:
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: 'Get version.txt'
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: gitversion
+      - name: 'Get version.txt'
+        uses: actions/download-artifact@v2
+        with:
+          name: gitversion
 
-  #     - name: 'Read version'
-  #       id: version
-  #       uses: juliangruber/read-file-action@v1
-  #       with:
-  #         path: version.txt
+      - name: 'Read version'
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version.txt
 
-  #     - name: 'Download firebase remote configuration'
-  #       uses: w9jds/firebase-action@master
-  #       with:
-  #         args: remoteconfig:get -o firebase-remote-config.json
-  #       env:
-  #         FIREBASE_TOKEN: '${{ env.FIREBASE_TOKEN }}'
-  #         PROJECT_ID: '${{ env.FIREBASE_PROJECT_ID }}'
+      - name: 'Download firebase remote configuration'
+        uses: w9jds/firebase-action@master
+        with:
+          args: remoteconfig:get -o firebase-remote-config.json
+        env:
+          FIREBASE_TOKEN: '${{ env.FIREBASE_TOKEN }}'
+          PROJECT_ID: '${{ env.FIREBASE_PROJECT_ID }}'
 
-  #     - name: 'Update firebase remote configuration'
-  #       run: exec .github/scripts/update-remote-config.sh -v "${{ steps.version.outputs.content }}"
+      - name: 'Update firebase remote configuration'
+        run: exec .github/scripts/update-remote-config.sh -v "${{ steps.version.outputs.content }}"
         
-  #     - name: 'Deploy firebase remote configuration'
-  #       uses: w9jds/firebase-action@master
-  #       with:
-  #         args: deploy --only remoteconfig
-  #       env:
-  #         FIREBASE_TOKEN: '${{ env.FIREBASE_TOKEN }}'
-  #         PROJECT_ID: '${{ env.FIREBASE_PROJECT_ID }}'
+      - name: 'Deploy firebase remote configuration'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only remoteconfig
+        env:
+          FIREBASE_TOKEN: '${{ env.FIREBASE_TOKEN }}'
+          PROJECT_ID: '${{ env.FIREBASE_PROJECT_ID }}'
