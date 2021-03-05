@@ -5,6 +5,18 @@ from authlib.jose import jwt
 def parse_options():
     '''
     Parses the program options
+
+    Usage:
+        python configure-ios-profile.py \
+            --homePath "<path_to_home>" \
+            --keyId "<key_id>" \
+            --issuerId "<issuer_id>" \
+            --privateKey "<private_key>" \
+            --identifier "<identifier> \
+            --certificateId "<certificate_id>" \
+            --certificatePath "<certificate_path>" \
+            --profileName "<profile_name>" \
+            --profileType "<profile_type>"
     '''
 
     parser = argparse.ArgumentParser()
