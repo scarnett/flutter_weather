@@ -177,8 +177,7 @@ def create_profile(token):
             with open(filePath, 'w+') as provisionFile:
                 content = base64.b64decode(profile['attributes']['profileContent'])
                 provisionFile.write(content)
-                print('Wrote provisioning profile to {}'.format(filePath))
-                print(content)
+                print('created provisioning profile at {}; {}'.format(filePath, str(os.path.exists(filePath))))
 
             return profile
         else:
@@ -210,8 +209,7 @@ def download_certificate(token, profileId):
             with open(filePath, 'w+') as cerFile:
                 content = base64.b64decode(certificates[0]['attributes']['certificateContent'])
                 cerFile.write(content)
-                print('Wrote certificate to {}'.format(filePath))
-                print(content)
+                print('created certificate at {}; {}'.format(filePath, str(os.path.exists(filePath))))
 
             return certificates[0]
         else:
