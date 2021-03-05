@@ -264,22 +264,26 @@ def letsDoThis():
                     print('new profile created')
                     print('downloading certificate')
 
+                    """
                     certificate = download_certificate(token, newProfile['id'])
                     if certificate:
                         print('certificate downloaded')
                     else:
                         print('failed to download certificate')
+                    """
             # Distribution
             elif args.profileType == 'IOS_APP_STORE':
                 profile = find_profile(token)
                 if profile:
                     print('profile found')
 
+                    """
                     certificate = download_certificate(token, profile['id'])
                     if certificate:
                         print('certificate downloaded')
                     else:
                         print('failed to download certificate')
+                    """
         else:
             print('failed to create jwt token')
     except Exception as err:

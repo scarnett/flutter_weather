@@ -249,6 +249,9 @@ jobs:
       #   name: "Decode environment config"
       #   run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
       - 
+        name: "Decode certificate"
+        run: echo "${{ env.FLUTTER_WEATHER_CERTS_P12_DATA }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_CERTS_FILE_PATH }}"
+      - 
         name: "Configure certificate and provisioning profile"
         run: exec .github/scripts/configure-certificate.sh
       - 
