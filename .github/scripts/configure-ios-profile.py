@@ -185,21 +185,23 @@ def create_profile(token):
         jsonData = response.json()
         if 'data' in jsonData:
             profile = jsonData['data']
-
-            # Write the provisioning profile content to a file
-            filePath = '{}/Library/MobileDevice/Provisioning Profiles/{}.mobileprovision'.format(args.homePath, profile['attributes']['uuid'])
-            makeFile(filePath)
-            with open(filePath, 'w+') as provisionFile:
-                content = base64.b64decode(profile['attributes']['profileContent'])
-                provisionFile.write(content)
-                print('created provisioning profile at {}; {}'.format(filePath, str(os.path.exists(filePath))))
-
+            write_profile(profile)
             return profile
         else:
             print('create_profile bad response: {}'.format(jsonData))
     except Exception as e:
         print('create_profile error: {}'.format(e))
     return None
+
+
+def write_profile(profile):
+    # Write the provisioning profile content to a file
+    filePath = '{}/Library/MobileDevice/Provisioning Profiles/{}.mobileprovision'.format(args.homePath, profile['attributes']['uuid'])
+    makeFile(filePath)
+    with open(filePath, 'w+') as provisionFile:
+        content = base64.b64decode(profile['attributes']['profileContent'])
+        provisionFile.write(content)
+        print('created provisioning profile at {}; {}'.format(filePath, str(os.path.exists(filePath))))
 
 
 def download_certificate(token, profileId):
@@ -291,6 +293,7 @@ def letsDoThis():
                 profile = find_profile(token)
                 if profile:
                     print('profile downloaded')
+                    write_profile(profile)
 
                     """
                     certificate = download_certificate(token, profile['id'])
