@@ -172,7 +172,7 @@ def create_profile(token):
             profile = jsonData['data']
 
             # Write the provisioning profile content to a file
-            filePath = '{}/Library/MobileDevice/Provisioning Profiles/profile.mobileprovision'.format(args.homePath)
+            filePath = '{}/Library/MobileDevice/Provisioning Profiles/{}.mobileprovision'.format(args.homePath, profile['attributes']['uuid'])
             makeFile(filePath)
             with open(filePath, 'w+') as provisionFile:
                 provisionFile.write(base64.b64decode(profile['attributes']['profileContent']))
