@@ -7,6 +7,7 @@ security list-keychains -s "$FLUTTER_WEATHER_KEYCHAIN"
 security default-keychain -s "$FLUTTER_WEATHER_KEYCHAIN"
 security unlock-keychain -p "" "$FLUTTER_WEATHER_KEYCHAIN"
 security set-keychain-settings
+security list-keychains -d user -s "$FLUTTER_WEATHER_KEYCHAIN" $(security list-keychains -d user | sed s/\"//g)
 security list-keychains
 
 sudo security add-trusted-cert -d -r trustRoot -k "$FLUTTER_WEATHER_KEYCHAIN" "./apps/mobile_flutter/ios/flutterWeather.cer" #TODO! cer path
