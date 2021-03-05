@@ -11,7 +11,7 @@ source env/bin/activate
 pip install requests Authlib
 
 # Configures the provisioning profile
-python .github/scripts/configure-profile.py \
+python .github/scripts/configure-ios-profile.py \
   --homePath "$HOME" \
   --keyId "$FLUTTER_WEATHER_APPSTORE_KEY_ID" \
   --issuerId "$FLUTTER_WEATHER_APPSTORE_ISSUER_ID" \
