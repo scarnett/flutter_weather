@@ -2,22 +2,12 @@
 
 set -euo pipefail
 
-# Create a virtual environment for python
-pip install virtualenv
-python -m virtualenv env
-source env/bin/activate
+# sudo security add-trusted-cert -d -r trustRoot -k "$FLUTTER_WEATHER_KEYCHAIN" "./apps/mobile_flutter/ios/flutterWeather.cer" #TODO! cer path
+# security export -k "$FLUTTER_WEATHER_KEYCHAIN" -t all -f pkcs12 -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -o "$FLUTTER_WEATHER_CERTS_FILE_PATH"
 
-# Install libs
-pip install requests Authlib
-
-# Configures the certificate and provisioning profile
-python .github/scripts/configure-certificate.py \
-  --homePath "$HOME" \
-  --keyId "$FLUTTER_WEATHER_APPSTORE_KEY_ID" \
-  --issuerId "$FLUTTER_WEATHER_APPSTORE_ISSUER_ID" \
-  --privateKey "$FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY" \
-  --identifier "$FLUTTER_WEATHER_APPSTORE_IDENTIFIER" \
-  --certificateId "$FLUTTER_WEATHER_APPSTORE_CERTIFICATE_ID" \
-  --certificatePath "$FLUTTER_WEATHER_CERTS_FILE_PATH" \
-  --profileName "$FLUTTER_WEATHER_APPSTORE_PROFILE_NAME" \
-  --profileType "$FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE"
+echo "$FLUTTER_WEATHER_CERTS_FILE_PATH"
+echo "$FLUTTER_WEATHER_KEYCHAIN"
+echo "$FLUTTER_WEATHER_CERTS_PASSWORD"
+security import "$FLUTTER_WEATHER_CERTS_FILE_PATH" -k "$FLUTTER_WEATHER_KEYCHAIN" -P "$FLUTTER_WEATHER_CERTS_PASSWORD" -A
+security find-identity
+security set-key-partition-list -S apple-tool:,apple: -s -k "" "$FLUTTER_WEATHER_KEYCHAIN"

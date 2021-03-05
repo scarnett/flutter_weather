@@ -259,10 +259,10 @@ jobs:
         run: exec .github/scripts/configure-keychain.sh
       - 
         name: "Configure provisioning profile"
-        run: exec .github/scripts/configure-certificate.sh
+        run: exec .github/scripts/configure-profile.sh
       - 
-        name: "Import certificate"
-        run: exec .github/scripts/import-certificate.sh
+        name: "Import signing certificate"
+        run: exec .github/scripts/configure-certificate.sh
       # - 
       #   name: "Update provisioning profile specifiers in project.pbxproj"
       #   working-directory: "./apps/mobile_flutter/ios/Runner.xcodeproj"
