@@ -114,6 +114,8 @@ def find_profile(token):
         if 'data' in jsonData:
             if len(jsonData['data']) > 0:
                 return jsonData['data'][0]
+            else:
+                print('find_profile 0 profiles found: {}'.format(jsonData))
         else:
             print('find_profile bad response: {}'.format(jsonData))
     except Exception as e:
