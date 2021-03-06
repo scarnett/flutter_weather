@@ -5,16 +5,29 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_country_picker.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
-import 'package:flutter_weather/widgets/app_select_dialog.dart';
+import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
+import 'package:iso_countries/country.dart';
+
+class ForecastFormController {
+  Function(num page) animateToPage;
+
+  void dispose() {
+    animateToPage = null;
+  }
+}
 
 class ForecastForm extends StatelessWidget {
+  final ForecastFormController formController;
   final Forecast forecast;
   final List<Forecast> forecasts;
   final String saveButtonText;
   final String deleteButtonText;
+
   final Function(
     BuildContext context,
     FormBlocSuccess<String, String> state,
@@ -25,14 +38,20 @@ class ForecastForm extends StatelessWidget {
     FormBlocFailure<String, String> state,
   ) onFailure;
 
+  final Function(
+    num currentPage,
+  ) onPageChange;
+
   const ForecastForm({
     Key key,
+    this.formController,
     this.forecast,
     this.forecasts,
     this.saveButtonText,
     this.deleteButtonText,
     this.onSuccess,
     this.onFailure,
+    this.onPageChange,
   }) : super(key: key);
 
   @override
@@ -46,16 +65,19 @@ class ForecastForm extends StatelessWidget {
           forecasts: forecasts,
         ),
         child: ForecastPageForm(
+          formController: formController,
           forecast: forecast,
           saveButtonText: saveButtonText,
           deleteButtonText: deleteButtonText,
           onSuccess: onSuccess,
           onFailure: onFailure,
+          onPageChange: onPageChange,
         ),
       );
 }
 
 class ForecastPageForm extends StatefulWidget {
+  final ForecastFormController formController;
   final Forecast forecast;
   final String saveButtonText;
   final String deleteButtonText;
@@ -69,13 +91,19 @@ class ForecastPageForm extends StatefulWidget {
     FormBlocFailure<String, String> state,
   ) onFailure;
 
+  final Function(
+    num currentPage,
+  ) onPageChange;
+
   ForecastPageForm({
     Key key,
+    this.formController,
     this.forecast,
     this.saveButtonText,
     this.deleteButtonText,
     this.onSuccess,
     this.onFailure,
+    this.onPageChange,
   }) : super(key: key);
 
   @override
@@ -83,8 +111,30 @@ class ForecastPageForm extends StatefulWidget {
 }
 
 class _ForecastPageFormState extends State<ForecastPageForm> {
+  PageController _pageController;
   bool _submitting = false;
   bool _deleting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    ForecastFormController _formController = widget.formController;
+    if (_formController != null) {
+      _formController.animateToPage = _animateToPage;
+      // _onPageChange(0);
+    }
+
+    _pageController = PageController(keepPage: true)
+      ..addListener(() {
+        _onPageChange(_pageController.page);
+      });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(
@@ -97,46 +147,9 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             onSuccess: _onSuccess,
             onFailure: _onFailure,
           ),
-          BlocListener<AppBloc, AppState>(
-            listener: _blocListener,
-          ),
+          BlocListener<AppBloc, AppState>(listener: _blocListener),
         ],
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextFieldBlocBuilder(
-                textFieldBloc: context.watch<ForecastFormBloc>().cityName,
-                keyboardType: TextInputType.streetAddress,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context).city,
-                  prefixIcon: Icon(
-                    Icons.location_city,
-                    color: AppTheme.primaryColor,
-                  ),
-                ),
-                padding: const EdgeInsets.only(bottom: 0.0),
-              ),
-              TextFieldBlocBuilder(
-                textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
-                keyboardType: TextInputType.streetAddress,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context).postalCode,
-                  prefixIcon: Icon(
-                    Icons.place,
-                    color: AppTheme.primaryColor,
-                  ),
-                ),
-                padding: const EdgeInsets.only(bottom: 0.0),
-              ),
-              AppSelectDialogFieldBlocBuilder(
-                selectFieldBloc: context.watch<ForecastFormBloc>().countryCode,
-              ),
-              _buildButtons(),
-            ],
-          ),
-        ),
+        child: _buildContent(),
       );
 
   void _blocListener(
@@ -159,6 +172,68 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       }
     }
   }
+
+  Widget _buildContent() => PageView(
+        controller: _pageController,
+        physics: const AppPageViewScrollPhysics(),
+        children: [
+          _buildForm(),
+          ForecastCountryPicker(
+            selectedCountryCode:
+                context.watch<ForecastFormBloc>().countryCode.value,
+            onTap: _tapCountry,
+          ),
+        ],
+      );
+
+  Widget _buildForm() => SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextFieldBlocBuilder(
+              textFieldBloc: context.watch<ForecastFormBloc>().cityName,
+              keyboardType: TextInputType.streetAddress,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).city,
+                prefixIcon: Icon(
+                  Icons.location_city,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
+              padding: const EdgeInsets.only(bottom: 0.0),
+            ),
+            TextFieldBlocBuilder(
+              textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
+              keyboardType: TextInputType.streetAddress,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).postalCode,
+                prefixIcon: Icon(
+                  Icons.place,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
+              padding: const EdgeInsets.only(bottom: 0.0),
+            ),
+            TextFieldBlocBuilder(
+              key: Key('country'), // TODO!
+              textFieldBloc: context.watch<ForecastFormBloc>().countryCode,
+              keyboardType: TextInputType.text,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).country,
+                prefixIcon: Icon(
+                  Icons.language,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
+              padding: const EdgeInsets.only(bottom: 10.0),
+              onTap: () => animatePage(_pageController, page: 1),
+            ),
+            _buildButtons(),
+          ],
+        ),
+      );
 
   Widget _buildButtons() {
     AppState state = context.watch<AppBloc>().state;
@@ -233,7 +308,18 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
     setState(() => _submitting = false);
   }
 
+  void _onPageChange(
+    num currentPage,
+  ) {
+    widget.onPageChange(currentPage);
+  }
+
   void _tapSubmit() => context.read<ForecastFormBloc>().submit();
+
+  void _animateToPage(
+    num page,
+  ) =>
+      animatePage(_pageController, page: page);
 
   void _tapDelete() {
     Widget noButton = FlatButton(
@@ -263,6 +349,19 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
         ],
       ),
     );
+  }
+
+  void _tapCountry(
+    Country country,
+  ) {
+    if (country != null) {
+      context
+          .read<ForecastFormBloc>()
+          .countryCode
+          .updateInitialValue(country.countryCode);
+
+      animatePage(_pageController, page: 0);
+    }
   }
 
   void _tapConfirmDelete() =>
