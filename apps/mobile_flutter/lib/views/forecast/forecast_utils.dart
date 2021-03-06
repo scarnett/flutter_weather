@@ -223,7 +223,7 @@ String getTitle(
 bool canRefresh(
   AppState state,
 ) {
-  if (!hasForecasts(state.forecasts)) {
+  if (!forecastIndexExists(state.forecasts, state.selectedForecastIndex)) {
     return false;
   }
 
@@ -242,3 +242,14 @@ bool hasForecasts(
   List<Forecast> forecasts,
 ) =>
     (forecasts != null) && forecasts.isNotEmpty;
+
+bool forecastIndexExists(
+  List<Forecast> forecasts,
+  int index,
+) {
+  if (hasForecasts(forecasts) && forecasts.asMap().containsKey(index)) {
+    return true;
+  }
+
+  return false;
+}
