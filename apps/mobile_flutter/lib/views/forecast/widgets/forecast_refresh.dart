@@ -66,7 +66,8 @@ class _ForecastRefreshState extends State<ForecastRefresh>
       setState(() {
         if (canRefresh(state)) {
           _nextRefreshTime = getNow().toLocal();
-        } else if ((state.forecasts != null) && state.forecasts.isNotEmpty) {
+        } else if (forecastIndexExists(
+            state.forecasts, state.selectedForecastIndex)) {
           _nextRefreshTime = getNextUpdateTime(
               state.forecasts[state.selectedForecastIndex].lastUpdated);
         }
