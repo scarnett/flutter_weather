@@ -14,4 +14,5 @@ while getopts ":p:v:" opt; do
 done
 
 # Update some values in the file
-sudo python .github/scripts/update-remote-config.py -p "$platform" -v "$version"
+# sudo python .github/scripts/update-remote-config.py -p "$platform" -v "$version"
+sudo python .github/scripts/update-remote-config.py -v "$version"
