@@ -23,6 +23,7 @@ class AppLocalizations {
 
   static String get appTitle => 'Flutter Weather';
 
+  String get premium => addMessage('$appTitle Premium');
   String get settings => addMessage('Settings');
   String get upgrade => addMessage('Upgrade');
   String get buildInformation => addMessage('Build Information');
