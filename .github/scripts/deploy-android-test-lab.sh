@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-# ./gradlew app:assembleAndroidTest
-# ./gradlew app:assembleDebug -Ptarget=integration_test/views/lookup/lookup_view_test.dart
-
 # gcloud auth activate-service-account --key-file="$FIREBASE_SERVICE_ACCOUNT_MY_FLUTTER_WEATHER"
 gcloud auth activate-service-account --key-file="my-flutter-weather-firebase-adminsdk-et7se-414c9d939d.json"
 # gcloud --quiet config set project "$FIREBASE_PROJECT_ID"
