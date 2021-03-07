@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/premium/widgets/premium_clipper.dart';
+import 'package:flutter_weather/views/premium/widgets/premium_star.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class PremiumView extends StatelessWidget {
@@ -107,11 +108,20 @@ class _PremiumPageViewState extends State<PremiumPageView> {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     onPressed: () => null,
-                    child: Text(
-                      'Start Today!',
-                      style: TextStyle(
-                        color: AppTheme.primaryColor,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        PremiumStar(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Text(
+                            'Start Today!',
+                            style: TextStyle(
+                              color: AppTheme.primaryColor,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Text(
