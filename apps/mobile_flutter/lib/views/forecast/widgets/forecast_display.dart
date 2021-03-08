@@ -8,6 +8,7 @@ import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_wind_direction.dart';
+import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -27,6 +28,14 @@ class ForecastDisplay extends StatefulWidget {
 }
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
+  PageController _pageController;
+
+  @override
+  void initState() {
+    _pageController = PageController(keepPage: true);
+    super.initState();
+  }
+
   @override
   Widget build(
     BuildContext context,
@@ -51,7 +60,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               _buildCondition(currentDay),
               _buildCurrentHiLow(currentDay),
               _buildForecastDetails(currentDay),
-              _buildDays(days.getRange(1, 4).toList()), // Three day forecast
+              _buildDays(days.getRange(1, days.length).toList()),
               _buildLastUpdated(),
             ],
           ),
@@ -329,27 +338,92 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       return Container();
     }
 
-    TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: AppTheme.getBorderColor(
+              widget.bloc.state.themeMode,
+              colorTheme: widget.bloc.state.colorTheme,
+            ),
+            width: 1.0,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.only(
+        top: 20.0,
+        bottom: 20.0,
+      ),
+      child: Container(
+        width: double.infinity,
+        height: 60.0,
+        child: PageView(
+          controller: _pageController,
+          physics: const AppPageViewScrollPhysics(),
+          children: _buildDayForecasts(days.toList()),
+        ),
+      ),
+    );
+  }
 
-    int count = 0;
-    List<Widget> _days = <Widget>[];
+  List<Widget> _buildDayForecasts(
+    List<ForecastDay> days,
+  ) {
+    int index = 0;
+    List<Widget> forecasts = [];
 
     days.forEach((ForecastDay day) {
-      _days.add(
+      if (index % 3 == 0) {
+        int start = (index + 1);
+        int end = ((index + 1) + 3);
+        if (end > days.length) {
+          end = days.length;
+        }
+
+        forecasts.add(_buildDayForecast(days.getRange(start, end).toList()));
+      }
+
+      index++;
+    });
+
+    return forecasts;
+  }
+
+  Widget _buildDayForecast(
+    List<ForecastDay> days,
+  ) {
+    int count = 0;
+    TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
+    List<Widget> dayList = <Widget>[];
+
+    days.forEach((ForecastDay day) {
+      dayList.add(
         Container(
           padding:
               EdgeInsets.only(right: (count + 1 == days.length) ? 0.0 : 20.0),
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 2.0),
+                padding: const EdgeInsets.only(right: 4.0),
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
+                      padding: const EdgeInsets.only(bottom: 4.0),
                       child: Text(
                         formatDateTime(epochToDateTime(day.dt), 'EEE'),
                         style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: Text(
+                        getMonthDay(epochToDateTime(day.dt)),
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                              fontSize: 8.0,
+                              color: AppTheme.getFadedTextColor(
+                                colorTheme: widget.bloc.state.colorTheme,
+                              ),
+                            ),
                       ),
                     ),
                     AppTemperatureDisplay(
@@ -375,27 +449,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       count++;
     });
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: AppTheme.getBorderColor(
-              widget.bloc.state.themeMode,
-              colorTheme: widget.bloc.state.colorTheme,
-            ),
-            width: 1.0,
-          ),
-        ),
-      ),
-      padding: const EdgeInsets.only(
-        top: 20.0,
-        bottom: 20.0,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: _days,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: dayList,
     );
   }
 
