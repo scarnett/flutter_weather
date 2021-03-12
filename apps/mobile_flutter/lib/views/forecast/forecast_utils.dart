@@ -11,7 +11,7 @@ import 'package:weather_icons/weather_icons.dart';
 
 Uri getDailyApiUri(
   Map<String, dynamic> params, {
-  int count: 10,
+  int count: 7, // TODO! premium
 }) {
   if (!params.containsKey('cnt')) {
     params['cnt'] = count.toString();

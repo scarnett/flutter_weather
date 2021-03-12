@@ -3,6 +3,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_wind_direction.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
+import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class ForecastDisplay extends StatefulWidget {
@@ -29,10 +31,20 @@ class ForecastDisplay extends StatefulWidget {
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
   PageController _pageController;
+  ValueNotifier<int> _dayForecastsNotifier;
 
   @override
   void initState() {
-    _pageController = PageController(keepPage: true);
+    _pageController = PageController(keepPage: true)
+      ..addListener(() {
+        num currentPage = _pageController.page;
+
+        if (isInteger(currentPage)) {
+          _dayForecastsNotifier.value = currentPage.toInt();
+        }
+      });
+
+    _dayForecastsNotifier = ValueNotifier<int>(0);
     super.initState();
   }
 
@@ -60,7 +72,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               _buildCondition(currentDay),
               _buildCurrentHiLow(currentDay),
               _buildForecastDetails(currentDay),
-              _buildDays(days.getRange(1, days.length).toList()),
+              _buildDays(days.toList()),
+              _buildDayForecastsCircleIndicator(
+                widget.bloc.state,
+                days.toList(),
+              ),
               _buildLastUpdated(),
             ],
           ),
@@ -367,26 +383,61 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   List<Widget> _buildDayForecasts(
-    List<ForecastDay> days,
-  ) {
+    List<ForecastDay> days, {
+    int count: 3, // TODO! parameter?
+  }) {
     int index = 0;
     List<Widget> forecasts = [];
 
     days.forEach((ForecastDay day) {
-      if (index % 3 == 0) {
+      if (index % count == 0) {
         int start = (index + 1);
         int end = ((index + 1) + 3);
         if (end > days.length) {
           end = days.length;
         }
 
-        forecasts.add(_buildDayForecast(days.getRange(start, end).toList()));
+        List<ForecastDay> _days = days.getRange(start, end).toList();
+        if (_days.isNotEmpty) {
+          forecasts.add(_buildDayForecast(days.getRange(start, end).toList()));
+        }
       }
 
       index++;
     });
 
     return forecasts;
+  }
+
+  _buildDayForecastsCircleIndicator(
+    AppState state,
+    List<ForecastDay> days, {
+    int count: 3, // TODO! parameter?
+  }) =>
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: CirclePageIndicator(
+            size: 4.0,
+            dotColor: AppTheme.getHintColor(
+              state.themeMode,
+            ),
+            selectedDotColor:
+                state.colorTheme ? Colors.white : AppTheme.primaryColor,
+            selectedSize: 6.0,
+            itemCount: (days.length / count).round(),
+            currentPageNotifier: _dayForecastsNotifier,
+            onPageSelected: _onPageSelected,
+          ),
+        ),
+      );
+
+  void _onPageSelected(
+    int page,
+  ) {
+    _dayForecastsNotifier.value = page;
+    animatePage(_pageController, page: page);
   }
 
   Widget _buildDayForecast(
