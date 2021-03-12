@@ -17,10 +17,15 @@ Future<void> main() async {
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    await Sentry.captureException(
-      details.exception,
-      stackTrace: details.stack,
-    );
+    if (EnvConfig.SENTRY_DSN == null) {
+      print(details.exception);
+      print(details.stack);
+    } else {
+      await Sentry.captureException(
+        details.exception,
+        stackTrace: details.stack,
+      );
+    }
   };
 
   // DEV Environment Specific Configuration
