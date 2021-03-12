@@ -413,25 +413,37 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     AppState state,
     List<ForecastDay> days, {
     int count: 3, // TODO! parameter?
-  }) =>
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: CirclePageIndicator(
-            size: 4.0,
-            dotColor: AppTheme.getHintColor(
-              state.themeMode,
-            ),
-            selectedDotColor:
-                state.colorTheme ? Colors.white : AppTheme.primaryColor,
-            selectedSize: 6.0,
-            itemCount: (days.length / count).round(),
-            currentPageNotifier: _dayForecastsNotifier,
-            onPageSelected: _onPageSelected,
+  }) {
+    int pageCount = 0;
+
+    if (days == null) {
+      return Container();
+    } else {
+      pageCount = (days.length / count).round();
+      if (pageCount <= 1) {
+        return Container();
+      }
+    }
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: CirclePageIndicator(
+          size: 4.0,
+          dotColor: AppTheme.getHintColor(
+            state.themeMode,
           ),
+          selectedDotColor:
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
+          selectedSize: 6.0,
+          itemCount: pageCount,
+          currentPageNotifier: _dayForecastsNotifier,
+          onPageSelected: _onPageSelected,
         ),
-      );
+      ),
+    );
+  }
 
   void _onPageSelected(
     int page,
