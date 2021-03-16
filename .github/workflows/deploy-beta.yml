@@ -70,7 +70,7 @@ jobs:
       
       - name: 'Flutter format'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter format --set-exit-if-changed .'
+        run: 'flutter format .'
 
       - name: 'Flutter test'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
