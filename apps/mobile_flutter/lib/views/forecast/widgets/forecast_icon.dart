@@ -37,7 +37,7 @@ class _ForecastIconState extends State<ForecastIcon> {
 
     return Stack(
       children: <Widget>[
-        Positioned(
+        Positioned.fill(
           top: 1.0,
           left: 1.0,
           child: BoxedIcon(

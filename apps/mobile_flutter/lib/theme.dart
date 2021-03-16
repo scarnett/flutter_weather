@@ -11,6 +11,11 @@ class AppTheme {
   static Color get dangerColor => Colors.red[700];
   static Color get infoColor => Colors.lightBlue;
 
+  static Color getFadedTextColor({
+    bool colorTheme: false,
+  }) =>
+      colorTheme ? Colors.white.withOpacity(0.75) : Colors.grey[500];
+
   static Color getBorderColor(
     ThemeMode themeMode, {
     bool colorTheme: false,

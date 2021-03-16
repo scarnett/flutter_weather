@@ -194,10 +194,40 @@ def create_profile(token):
     return None
 
 
+def download_profiles(token):
+    '''
+    Downloads the provisioning profiles
+
+    Args:
+        token (string): The JWT token
+    '''
+
+    try:
+        url = 'https://api.appstoreconnect.apple.com/v1/profiles'
+        response = requests.get(url, headers=http_headers(token))
+        jsonData = response.json()
+        if 'data' in jsonData:
+            profiles = jsonData['data']
+            print('{} profiles found'.format(len(profiles)))
+
+            for profile in profiles:
+                write_profile(profile)
+        else:
+            print('download_profiles bad response: {}'.format(jsonData))
+    except Exception as e:
+        print('download_profiles error: {}'.format(e))
+
+
 def write_profile(profile):
-    # Write the provisioning profile content to a file
+    '''
+    Write the provisioning profile content to a file
+
+    Args:
+        profile (obj): The profile object
+    '''
+
     filePath = '{}/Library/MobileDevice/Provisioning Profiles/{}.mobileprovision'.format(args.homePath, profile['attributes']['uuid'])
-    makeFile(filePath)
+    make_file(filePath)
     with open(filePath, 'w+') as provisionFile:
         content = base64.b64decode(profile['attributes']['profileContent'])
         provisionFile.write(content)
@@ -222,7 +252,7 @@ def download_certificate(token, profileId):
 
             # Write the certificate content to a file
             filePath = './apps/mobile_flutter/ios/certs.p12' #TODO! cer path
-            makeFile(filePath)
+            make_file(filePath)
             with open(filePath, 'w+') as cerFile:
                 content = base64.b64decode(certificates[0]['attributes']['certificateContent'])
                 cerFile.write(content)
@@ -236,7 +266,7 @@ def download_certificate(token, profileId):
     return None
 
 
-def makeFile(fileName):
+def make_file(fileName):
     '''
     Creates a file and its parent folders if they don't already exist
     '''
@@ -249,7 +279,7 @@ def makeFile(fileName):
                 raise
 
 
-def letsDoThis():
+def lets_do_this():
     '''
     This kicks off the process of installing the provisioning profile
     and downloading the certificate.
@@ -312,4 +342,4 @@ def letsDoThis():
 args = parse_options()
 
 # Do it
-letsDoThis()
+lets_do_this()
