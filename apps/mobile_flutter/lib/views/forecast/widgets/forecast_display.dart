@@ -414,6 +414,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     List<ForecastDay> days, {
     int count: 3, // TODO! parameter?
   }) {
+    if (!widget.showThreeDayForecast) {
+      return Container();
+    }
+
     int pageCount = 0;
 
     if (days == null) {
