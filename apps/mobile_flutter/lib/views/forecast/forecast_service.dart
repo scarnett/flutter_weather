@@ -1,6 +1,7 @@
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry/sentry.dart';
 
 Future<http.Response> tryLookupForecast(
   Map<String, dynamic> lookupData,
@@ -33,5 +34,7 @@ Future<http.Response> tryLookupForecast(
     params['q'] = query;
   }
 
-  return http.get(getDailyApiUri(params).toString());
+  String url = getDailyApiUri(params).toString();
+  await Sentry.captureMessage(url);
+  return http.get(url);
 }
