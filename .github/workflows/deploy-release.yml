@@ -296,7 +296,7 @@ jobs:
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter clean'
 
-      - name: 'Flutter build'
+      - name: 'Flutter build ipa'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter build ios -t lib/main_prod.dart --release --verbose'
 
