@@ -8,7 +8,6 @@ import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
-import 'package:sentry/sentry.dart';
 
 part 'lookup_events.dart';
 part 'lookup_state.dart';
@@ -37,9 +36,6 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     );
 
     http.Response forecastResponse = await tryLookupForecast(event.lookupData);
-    await Sentry.captureMessage(
-        '${forecastResponse.body} - ${forecastResponse.statusCode}');
-
     if (forecastResponse.statusCode == 200) {
       yield state.copyWith(
         cityName: Nullable<String>(event.lookupData['cityName']),
