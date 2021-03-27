@@ -1,0 +1,4 @@
+enum LookupType {
+  DAILY,
+  HOURLY,
+}

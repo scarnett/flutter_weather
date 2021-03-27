@@ -1,37 +1,19 @@
-import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/lookup/lookup_enums.dart';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> tryLookupForecast(
-  Map<String, dynamic> lookupData,
-) async {
-  Map<String, dynamic> params = Map<String, dynamic>();
+  Map<String, dynamic> lookupData, {
+  LookupType lookupType: LookupType.DAILY,
+}) async {
+  Map<String, dynamic> params = buildLookupParams(lookupData);
 
-  if (lookupData.containsKey('postalCode') &&
-      !(lookupData['postalCode'] as String).isNullOrEmpty()) {
-    if (lookupData.containsKey('countryCode') &&
-        !(lookupData['countryCode'] as String).isNullOrEmpty()) {
-      params['zip'] =
-          '${lookupData['postalCode']},${lookupData['countryCode'].toLowerCase()}';
-    } else {
-      params['zip'] = lookupData['postalCode'];
-    }
-  } else if (lookupData.containsKey('cityName') &&
-      !(lookupData['cityName'] as String).isNullOrEmpty()) {
-    String query = lookupData['cityName'];
+  switch (lookupType) {
+    case LookupType.HOURLY:
+      return http.get(getHourlyApiUri(params).toString());
 
-    if (lookupData.containsKey('stateCode') &&
-        !(lookupData['stateCode'] as String).isNullOrEmpty()) {
-      query += ',${lookupData['stateCode']}';
-    }
-
-    if (lookupData.containsKey('countryCode') &&
-        !(lookupData['countryCode'] as String).isNullOrEmpty()) {
-      query += ',${lookupData['countryCode']}';
-    }
-
-    params['q'] = query;
+    case LookupType.DAILY:
+    default:
+      return http.get(getDailyApiUri(params).toString());
   }
-
-  return http.get(getDailyApiUri(params).toString());
 }

@@ -26,6 +26,57 @@ Uri getDailyApiUri(
   );
 }
 
+Uri getHourlyApiUri(
+  Map<String, dynamic> params, {
+  int count: 3,
+}) {
+  if (!params.containsKey('cnt')) {
+    params['cnt'] = count.toString();
+  }
+
+  params['appid'] = EnvConfig.OPENWEATHERMAP_API_KEY;
+
+  return Uri.https(
+    EnvConfig.OPENWEATHERMAP_API_URI,
+    EnvConfig.OPENWEATHERMAP_API_HOURLY_FORECAST_PATH,
+    params.cast<String, String>(),
+  );
+}
+
+Map<String, dynamic> buildLookupParams(
+  Map<String, dynamic> lookupData,
+) {
+  Map<String, dynamic> params = Map<String, dynamic>();
+
+  if (lookupData.containsKey('postalCode') &&
+      !(lookupData['postalCode'] as String).isNullOrEmpty()) {
+    if (lookupData.containsKey('countryCode') &&
+        !(lookupData['countryCode'] as String).isNullOrEmpty()) {
+      params['zip'] =
+          '${lookupData['postalCode']},${lookupData['countryCode'].toLowerCase()}';
+    } else {
+      params['zip'] = lookupData['postalCode'];
+    }
+  } else if (lookupData.containsKey('cityName') &&
+      !(lookupData['cityName'] as String).isNullOrEmpty()) {
+    String query = lookupData['cityName'];
+
+    if (lookupData.containsKey('stateCode') &&
+        !(lookupData['stateCode'] as String).isNullOrEmpty()) {
+      query += ',${lookupData['stateCode']}';
+    }
+
+    if (lookupData.containsKey('countryCode') &&
+        !(lookupData['countryCode'] as String).isNullOrEmpty()) {
+      query += ',${lookupData['countryCode']}';
+    }
+
+    params['q'] = query;
+  }
+
+  return params;
+}
+
 num getTemperature(
   num temperature,
   TemperatureUnit unit,
