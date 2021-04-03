@@ -14,6 +14,7 @@ class ForecastFormBloc extends FormBloc<String, String> {
   final TextFieldBloc cityName = TextFieldBloc(name: 'cityName');
   final TextFieldBloc postalCode = TextFieldBloc(name: 'postalCode');
   final TextFieldBloc countryCode = TextFieldBloc(name: 'countryCode');
+  final BooleanFieldBloc primary = BooleanFieldBloc(name: 'primary');
 
   ForecastFormBloc({
     BuildContext context,
@@ -29,6 +30,7 @@ class ForecastFormBloc extends FormBloc<String, String> {
         cityName,
         postalCode,
         countryCode,
+        primary,
       ],
     );
   }
@@ -53,6 +55,14 @@ class ForecastFormBloc extends FormBloc<String, String> {
           countryCode.updateInitialValue(isoCountry.name);
         }
       }
+
+      if (_forecasts.isNullOrZeroLength()) {
+        primary.updateInitialValue(true);
+      } else {
+        primary.updateInitialValue(_initialForecast.primary);
+      }
+    } else if (_forecasts.isNullOrZeroLength()) {
+      primary.updateInitialValue(true);
     }
 
     emitLoaded();

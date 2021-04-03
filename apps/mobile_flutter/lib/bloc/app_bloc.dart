@@ -154,6 +154,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       cityName: Nullable<String>(event.forecastData['cityName']),
       postalCode: Nullable<String>(event.forecastData['postalCode']),
       countryCode: Nullable<String>(event.forecastData['countryCode']),
+      primary: Nullable<bool>(event.forecastData['primary']),
       lastUpdated: getNow(),
     );
 
@@ -202,6 +203,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         cityName: Nullable<String>(event.forecast.cityName),
         postalCode: Nullable<String>(event.forecast.postalCode),
         countryCode: Nullable<String>(event.forecast.countryCode),
+        primary: Nullable<bool>(event.forecast.primary),
         lastUpdated: getNow(),
       );
 

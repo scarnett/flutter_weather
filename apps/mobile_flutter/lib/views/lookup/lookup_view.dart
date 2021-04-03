@@ -219,6 +219,7 @@ class _LookupPageViewState extends State<LookupPageView> {
       cityName: Nullable<String>(lookupState.cityName),
       postalCode: Nullable<String>(lookupState.postalCode),
       countryCode: Nullable<String>(lookupState.countryCode),
+      primary: Nullable<bool>(lookupState.primary),
       lastUpdated: getNow(),
     );
 
