@@ -223,6 +223,18 @@ class _LookupPageViewState extends State<LookupPageView> {
       lastUpdated: getNow(),
     );
 
+    if (lookupState.primary) {
+      List<Forecast> forecasts = context.read<AppBloc>().state.forecasts;
+      Forecast primaryForecast = forecasts.firstWhere(
+          (Forecast forecast) => forecast.primary,
+          orElse: () => null);
+
+      if (primaryForecast != null) {
+        // Remove the status from the current primary forecast
+        context.read<AppBloc>().add(RemovePrimaryStatus(primaryForecast));
+      }
+    }
+
     context.read<AppBloc>().add(AddForecast(forecast));
   }
 
