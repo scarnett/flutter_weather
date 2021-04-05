@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  background_fetch: '^0.7.0'
   bloc: '^6.0.3'
   cupertino_icons: '^1.0.0'
   equatable: '^1.2.5'
