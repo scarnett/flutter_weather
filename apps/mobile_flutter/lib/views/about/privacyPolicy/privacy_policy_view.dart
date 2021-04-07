@@ -30,7 +30,6 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
     BuildContext context,
   ) =>
       Scaffold(
-        resizeToAvoidBottomPadding: true,
         appBar: AppBar(
           title: Text(AppLocalizations.of(context).privacyPolicy),
           leading: IconButton(
