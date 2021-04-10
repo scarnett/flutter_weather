@@ -9,10 +9,10 @@ class FirebaseRemoteConfigService {
   }) : _remoteConfig = remoteConfig;
 
   static FirebaseRemoteConfigService _instance;
-  static Future<FirebaseRemoteConfigService> getInstance() async {
+  static FirebaseRemoteConfigService getInstance() {
     if (_instance == null) {
       _instance = FirebaseRemoteConfigService(
-        remoteConfig: await RemoteConfig.instance,
+        remoteConfig: RemoteConfig.instance,
       );
     }
 
@@ -22,7 +22,7 @@ class FirebaseRemoteConfigService {
   Future initialise() async {
     try {
       await _fetchAndActivate();
-    } on FetchThrottledException catch (exception, stackTrace) {
+    } on Exception catch (exception, stackTrace) {
       // Fetch throttled.
       print('Remote config fetch throttled: $exception');
       await Sentry.captureException(exception, stackTrace: stackTrace);
@@ -36,7 +36,7 @@ class FirebaseRemoteConfigService {
 
   Future _fetchAndActivate() async {
     await _remoteConfig.fetch();
-    await _remoteConfig.activateFetched();
+    await _remoteConfig.activate();
   }
 
   String get appVersion => _remoteConfig.getString('app_version');

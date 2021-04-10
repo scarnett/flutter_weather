@@ -13,11 +13,11 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onChange(
-    Cubit cubit,
+    BlocBase base,
     Change change,
   ) {
     // developer.log(change.toString(), name: 'AppBlocObserver');
-    super.onChange(cubit, change);
+    super.onChange(base, change);
   }
 
   @override
@@ -31,7 +31,7 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onError(
-    Cubit cubit,
+    BlocBase base,
     Object error,
     StackTrace stackTrace,
   ) {
@@ -44,6 +44,6 @@ class AppBlocObserver extends BlocObserver {
     );
     */
 
-    super.onError(cubit, error, stackTrace);
+    super.onError(base, error, stackTrace);
   }
 }

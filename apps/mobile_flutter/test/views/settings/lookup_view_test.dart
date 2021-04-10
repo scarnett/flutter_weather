@@ -9,9 +9,10 @@ import 'package:flutter_weather/views/lookup/lookup_view.dart';
 import 'package:mockito/mockito.dart';
 import '../../test_utils.dart';
 
-class MockAppBloc extends MockBloc<AppState> implements AppBloc {}
+class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
-class MockLookupBloc extends MockBloc<LookupState> implements LookupBloc {}
+class MockLookupBloc extends MockBloc<LookupEvent, LookupState>
+    implements LookupBloc {}
 
 void main() {
   ft.TestWidgetsFlutterBinding.ensureInitialized();

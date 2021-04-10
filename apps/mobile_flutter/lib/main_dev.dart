@@ -8,6 +8,7 @@ import 'package:flutter_weather/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/env_config.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
@@ -23,7 +24,10 @@ Future<void> main() async {
 
   // Bloc
   Bloc.observer = AppBlocObserver();
-  HydratedBloc.storage = await HydratedStorage.build();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getTemporaryDirectory(),
+  );
+
   // await HydratedBloc.storage.clear();
 
   // Error listening

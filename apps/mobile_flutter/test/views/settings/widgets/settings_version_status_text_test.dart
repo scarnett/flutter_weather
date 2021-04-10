@@ -7,7 +7,7 @@ import 'package:mockito/mockito.dart';
 import 'package:package_info/package_info.dart';
 import '../../../test_utils.dart';
 
-class MockAppBloc extends MockBloc<AppState> implements AppBloc {}
+class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
 void main() {
   ft.TestWidgetsFlutterBinding.ensureInitialized();

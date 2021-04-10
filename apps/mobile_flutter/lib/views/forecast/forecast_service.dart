@@ -33,5 +33,5 @@ Future<http.Response> tryLookupForecast(
     params['q'] = query;
   }
 
-  return http.get(getDailyApiUri(params).toString());
+  return http.get(getDailyApiUri(params));
 }
