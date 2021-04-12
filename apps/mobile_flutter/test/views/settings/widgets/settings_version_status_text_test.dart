@@ -30,7 +30,12 @@ void main() {
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: '1.0.0'),
+          packageInfo: PackageInfo(
+            version: '1.0.0',
+            appName: 'flutter_weather',
+            buildNumber: '1',
+            packageName: 'io.flutter_weather.tst',
+          ),
         ),
       ),
     );
@@ -47,7 +52,12 @@ void main() {
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: '1.0.0'),
+          packageInfo: PackageInfo(
+            version: '1.0.0',
+            appName: 'flutter_weather',
+            buildNumber: '1',
+            packageName: 'io.flutter_weather.tst',
+          ),
         ),
       ),
     );
@@ -64,7 +74,12 @@ void main() {
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: '1.0.1'),
+          packageInfo: PackageInfo(
+            version: '1.0.1',
+            appName: 'flutter_weather',
+            buildNumber: '1',
+            packageName: 'io.flutter_weather.tst',
+          ),
         ),
       ),
     );
@@ -81,7 +96,12 @@ void main() {
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: 'unknown'),
+          packageInfo: PackageInfo(
+            version: 'unknown',
+            appName: 'unknown',
+            buildNumber: 'unknown',
+            packageName: 'unknown',
+          ),
         ),
       ),
     );
