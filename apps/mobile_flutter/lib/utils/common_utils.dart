@@ -4,7 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 extension ObjectExtension on Object? {
   bool isNullOrEmpty() => (this == null) || (this == '');
 
-  bool isNullEmptyOrFalse() => (this == null) || (this == '') || !(this as bool);
+  bool isNullEmptyOrFalse() =>
+      (this == null) || (this == '') || !(this as bool);
 
   bool isNullEmptyZeroOrFalse() =>
       (this == null) || (this == '') || !(this as bool) || (this == 0);
@@ -52,7 +53,7 @@ bool isInteger(
     (value is int) || (value == value!.roundToDouble());
 
 launchURL(
-  String url,
+  String? url,
 ) async {
   if (url == null) {
     throw 'URL is null';

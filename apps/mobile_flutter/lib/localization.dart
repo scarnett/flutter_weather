@@ -33,6 +33,7 @@ class AppLocalizations {
   String get later => addMessage('Later');
   String get beta => addMessage('Beta');
   String get autoUpdate => addMessage('Auto Updates');
+  String get updatePeriod => addMessage('Update Period');
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');

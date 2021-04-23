@@ -32,6 +32,15 @@ class SettingsOpenSourceInfo extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
+              onTap: () => launchURL('https://flutter.dev/'),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: FlutterLogo(size: 50.0),
+              ),
+            ),
+          ),
+          Expanded(
+            child: InkWell(
               onTap: () => launchURL('https://opensource.org/'),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),

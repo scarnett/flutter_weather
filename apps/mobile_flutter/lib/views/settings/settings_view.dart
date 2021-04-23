@@ -7,6 +7,7 @@ import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -43,6 +44,9 @@ class SettingsPageView extends StatefulWidget {
 }
 
 class _SettingsPageViewState extends State<SettingsPageView> {
+  PageController? _pageController;
+  num _currentPage = 0;
+
   PackageInfo _packageInfo = PackageInfo(
     appName: 'unknown',
     packageName: 'unknown',
@@ -56,6 +60,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   void initState() {
     super.initState();
     _initPackageInfo();
+
+    _pageController = PageController(keepPage: true)
+      ..addListener(() {
+        _onPageChange(_pageController!.page ?? 0);
+      });
+  }
+
+  @override
+  void dispose() {
+    _pageController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -73,16 +88,36 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             title: Text(AppLocalizations.of(context)!.settings),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: _handleBack,
             ),
           ),
-          body: _buildContent(),
+          body: WillPopScope(
+            onWillPop: () => _willPopCallback(),
+            child: _buildContent(),
+          ),
         ),
       );
 
   Future<void> _initPackageInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
     setState(() => _packageInfo = info);
+  }
+
+  Future<void> _handleBack() async {
+    if (_currentPage > 0) {
+      animatePage(_pageController!, page: 0);
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<bool> _willPopCallback() async {
+    if (_currentPage > 0) {
+      animatePage(_pageController!, page: 0);
+      return Future.value(false);
+    }
+
+    return Future.value(true);
   }
 
   Widget _buildContent() {
@@ -105,9 +140,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     }
 
     return SafeArea(
-      child: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Column(children: children),
+      child: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Column(children: children),
+          ),
+          Text('Items Here'), // TODO!
+        ],
       ),
     );
   }
@@ -145,10 +187,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         Divider(),
         ListTile(
           title: Text(
-            'Update Period', // TODO!
+            AppLocalizations.of(context)!.updatePeriod,
             style: Theme.of(context).textTheme.subtitle1,
           ),
           trailing: Text('1 hour'), // TODO!
+          onTap: () => animatePage(_pageController!, page: 1),
         ),
       ]);
     }
@@ -273,9 +316,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             bloc: context.read<AppBloc>(),
             packageInfo: _packageInfo,
           ),
+          onTap: () => animatePage(_pageController!, page: 1),
         ),
         Divider(),
       ];
+
+  void _onPageChange(
+    num currentPage,
+  ) {
+    setState(() => _currentPage = currentPage);
+  }
 
   void _tapThemeMode(
     ThemeMode? themeMode,
