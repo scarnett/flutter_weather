@@ -125,6 +125,16 @@ nx run mobile_flutter:buildLauncherIcons
 nx run mobile_flutter:buildSplashScreens
 ```
 
+## Unit and Widget Tests
+```bash
+nx run mobile_flutter:test
+```
+
+## Integration Tests
+```
+nx run mobile_flutter:drive --test=views/lookup/lookup_view_test.dart
+```
+
 ## Credits
 Created by [@scarnett](https://github.com/scarnett/)
 

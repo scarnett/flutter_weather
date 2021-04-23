@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -85,6 +86,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
       );
 
   Widget _buildCountryFilter() => TextField(
+        key: Key(AppKeys.locationCountryFilterKey),
         keyboardType: TextInputType.streetAddress,
         decoration: InputDecoration(
           labelText: AppLocalizations.of(context).filterCountries,
@@ -115,6 +117,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
           final Country country = _filteredCountryList[index];
 
           return ListTile(
+            key: Key(country.countryCode),
             title: Text(
               country.name,
               style: Theme.of(context).textTheme.headline5.copyWith(
