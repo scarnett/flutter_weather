@@ -7,12 +7,19 @@ class AppSectionHeader extends StatefulWidget {
   final String text;
   final bool borderTop;
   final bool borderBottom;
+  final List<Widget> options;
+  final EdgeInsets padding;
 
   AppSectionHeader({
     @required this.bloc,
     @required this.text,
-    this.borderTop = false,
-    this.borderBottom = true,
+    this.borderTop: false,
+    this.borderBottom: false,
+    this.options,
+    this.padding: const EdgeInsets.symmetric(
+      horizontal: 16.0,
+      vertical: 16.0,
+    ),
   });
 
   @override
@@ -44,21 +51,28 @@ class _AppSectionHeaderState extends State<AppSectionHeader> {
             ),
           ),
         ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15.0,
-          vertical: 10.0,
-        ),
-        child: _buildText(),
+        padding: widget.padding,
+        child: _buildContent(),
       );
 
-  Widget _buildText() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildContent() => Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Text(
-            widget.text,
-            style: Theme.of(context).textTheme.headline6,
+          Expanded(
+            child: Text(
+              widget.text,
+              style: Theme.of(context).textTheme.headline6,
+            ),
           ),
+          _buildOptions(),
         ],
       );
+
+  Widget _buildOptions() {
+    if ((widget.options == null) || widget.options.isEmpty) {
+      return Container();
+    }
+
+    return Container(child: Row(children: widget.options));
+  }
 }

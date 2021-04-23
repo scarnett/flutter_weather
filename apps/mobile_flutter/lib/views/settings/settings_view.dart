@@ -7,10 +7,10 @@ import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
@@ -50,6 +50,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     buildNumber: 'unknown',
   );
 
+  bool autoUpdate = true;
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +87,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
   Widget _buildContent() {
     List<Widget> children = []
+      ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
 
@@ -95,7 +98,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     children..addAll(_buildBuildInfoSection());
 
     if (EnvConfig.GITHUB_URL != null) {
-      children..add(_buildOpenSourceSection());
+      children
+        ..add(SettingsOpenSourceInfo(
+          themeMode: context.read<AppBloc>().state.themeMode,
+        ));
     }
 
     return SafeArea(
@@ -104,6 +110,50 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         child: Column(children: children),
       ),
     );
+  }
+
+  List<Widget> _buildAutoUpdatePeriodSection() {
+    List<Widget> widgets = <Widget>[];
+    widgets.addAll(
+      [
+        AppSectionHeader(
+          bloc: context.read<AppBloc>(),
+          text: AppLocalizations.of(context).autoUpdate,
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 4.0,
+            top: 16.0,
+            bottom: 16.0,
+          ),
+          options: [
+            SizedBox(
+              height: 16.0,
+              child: Switch(
+                onChanged: (bool value) {
+                  setState(() => autoUpdate = value);
+                },
+                value: autoUpdate,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    if (autoUpdate) {
+      widgets.addAll([
+        Divider(),
+        ListTile(
+          title: Text(
+            'Update Period', // TODO!
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          trailing: Text('1 hour'), // TODO!
+        ),
+      ]);
+    }
+
+    return widgets;
   }
 
   List<Widget> _buildThemeModeSection() {
@@ -226,40 +276,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ),
         Divider(),
       ];
-
-  Widget _buildOpenSourceSection() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(
-            child: InkWell(
-              onTap: () => launchURL(EnvConfig.GITHUB_URL),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Image.asset(
-                  (context.read<AppBloc>().state.themeMode == ThemeMode.light)
-                      ? 'assets/images/github_dark.png'
-                      : 'assets/images/github_light.png',
-                  width: 50.0,
-                  height: 50.0,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () => launchURL('https://opensource.org/'),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Image.asset(
-                  'assets/images/osi.png',
-                  width: 50.0,
-                  height: 50.0,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
 
   void _tapThemeMode(
     ThemeMode themeMode,

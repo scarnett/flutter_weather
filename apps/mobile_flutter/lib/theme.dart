@@ -24,7 +24,7 @@ class AppTheme {
           ? Colors.white.withOpacity(0.15)
           : colorTheme
               ? Colors.white.withOpacity(0.35)
-              : secondaryColor.withOpacity(0.15);
+              : secondaryColor.withOpacity(0.1);
 
   static Color getHintColor(
     ThemeMode themeMode,
@@ -83,7 +83,7 @@ ThemeData appLightThemeData = ThemeData(
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.light),
-    space: 0.0,
+    space: 1.0,
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: AppTheme.primaryColor,
@@ -169,7 +169,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.dark),
-    space: 0.0,
+    space: 1.0,
   ),
   iconTheme: IconThemeData(
     color: Colors.white,
