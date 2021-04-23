@@ -9,6 +9,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -163,6 +164,17 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     forecastData['countryCode'] = (country == null)
         ? EnvConfig.DEFAULT_COUNTRY_CODE
         : country.countryCode;
+
+    if (forecastData['primary']) {
+      Forecast primaryForecast = appState.forecasts.firstWhere(
+          (Forecast forecast) => forecast.primary,
+          orElse: () => null);
+
+      if (primaryForecast != null) {
+        // Remove the status from the current primary forecast
+        context.read<AppBloc>().add(RemovePrimaryStatus(primaryForecast));
+      }
+    }
 
     context
         .read<AppBloc>()

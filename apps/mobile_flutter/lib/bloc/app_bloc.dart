@@ -43,6 +43,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapAddForecastToStates(event);
     } else if (event is UpdateForecast) {
       yield* _mapUpdateForecastToStates(event);
+    } else if (event is RemovePrimaryStatus) {
+      yield* _mapRemovePrimaryStatusToStates(event);
     } else if (event is RefreshForecast) {
       yield* _mapRefreshForecastToStates(event);
     } else if (event is DeleteForecast) {
@@ -154,6 +156,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       cityName: Nullable<String>(event.forecastData['cityName']),
       postalCode: Nullable<String>(event.forecastData['postalCode']),
       countryCode: Nullable<String>(event.forecastData['countryCode']),
+      primary: Nullable<bool>(event.forecastData['primary']),
       lastUpdated: getNow(),
     );
 
@@ -167,6 +170,24 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       forecasts[state.selectedForecastIndex],
       state.temperatureUnit,
     ));
+  }
+
+  Stream<AppState> _mapRemovePrimaryStatusToStates(
+    RemovePrimaryStatus event,
+  ) async* {
+    List<Forecast> forecasts =
+        ((state.forecasts == null) ? [] : List<Forecast>.from(state.forecasts));
+
+    int forecastIndex = state.forecasts
+        .indexWhere((Forecast forecast) => forecast.id == event.forecast.id);
+
+    forecasts[forecastIndex] = event.forecast.copyWith(
+      primary: Nullable<bool>(false),
+    );
+
+    yield state.copyWith(
+      forecasts: forecasts,
+    );
   }
 
   Stream<AppState> _mapRefreshForecastToStates(
@@ -202,6 +223,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         cityName: Nullable<String>(event.forecast.cityName),
         postalCode: Nullable<String>(event.forecast.postalCode),
         countryCode: Nullable<String>(event.forecast.countryCode),
+        primary: Nullable<bool>(event.forecast.primary),
         lastUpdated: getNow(),
       );
 

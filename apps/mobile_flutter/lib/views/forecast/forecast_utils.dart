@@ -9,9 +9,9 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-Uri getApiUri(
+Uri getDailyApiUri(
   Map<String, dynamic> params, {
-  int count: 10,
+  int count: 7, // TODO! premium
 }) {
   if (!params.containsKey('cnt')) {
     params['cnt'] = count.toString();
@@ -21,7 +21,7 @@ Uri getApiUri(
 
   return Uri.https(
     EnvConfig.OPENWEATHERMAP_API_URI,
-    EnvConfig.OPENWEATHERMAP_API_DAILY_PATH,
+    EnvConfig.OPENWEATHERMAP_API_DAILY_FORECAST_PATH,
     params.cast<String, String>(),
   );
 }

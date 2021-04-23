@@ -11,7 +11,6 @@ import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_country_picker.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
-import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:iso_countries/country.dart';
 
 class ForecastFormController {
@@ -181,7 +180,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
 
   Widget _buildContent() => PageView(
         controller: _pageController,
-        physics: const AppPageViewScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           _buildForm(),
           ForecastCountryPicker(
@@ -237,6 +236,17 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
               ),
               padding: const EdgeInsets.only(bottom: 10.0),
               onTap: () => animatePage(_pageController, page: 1),
+            ),
+            SwitchFieldBlocBuilder(
+              booleanFieldBloc: context.watch<ForecastFormBloc>().primary,
+              body: GestureDetector(
+                onTap: _tapPrimaryFieldText,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(AppLocalizations.of(context).primaryForecast),
+                ),
+              ),
+              padding: const EdgeInsets.all(0.0),
             ),
             _buildButtons(),
           ],
@@ -372,6 +382,12 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
 
       animatePage(_pageController, page: 0);
     }
+  }
+
+  void _tapPrimaryFieldText() {
+    // ignore: close_sinks
+    BooleanFieldBloc primaryField = context.read<ForecastFormBloc>().primary;
+    primaryField.updateInitialValue(!primaryField.value);
   }
 
   void _tapConfirmDelete() =>

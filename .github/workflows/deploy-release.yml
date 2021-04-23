@@ -1,9 +1,11 @@
 name: 'Deploy Release to App Stores'
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
+
+# on:
+#   push:
+#     branches:
+#       - main
 
 jobs:
   version:
@@ -61,6 +63,14 @@ jobs:
       - name: 'Flutter clean'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter clean'
+      
+      - name: 'Flutter analyze'
+        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+        run: 'flutter analyze .'
+      
+      # - name: 'Flutter format'
+      #   working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+      #   run: 'flutter format .'
 
       - name: 'Flutter test'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
@@ -286,7 +296,7 @@ jobs:
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter clean'
 
-      - name: 'Flutter build'
+      - name: 'Flutter build ipa'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter build ios -t lib/main_prod.dart --release --verbose'
 

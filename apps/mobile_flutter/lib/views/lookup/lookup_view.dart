@@ -14,6 +14,7 @@ import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
+import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:flutter_weather/views/lookup/lookup_utils.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -48,6 +49,8 @@ class LookupPageView extends StatefulWidget {
 }
 
 class _LookupPageViewState extends State<LookupPageView> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   ForecastFormController _formController;
   num _currentPage = 0;
 
@@ -67,8 +70,11 @@ class _LookupPageViewState extends State<LookupPageView> {
   Widget build(
     BuildContext context,
   ) =>
-      BlocListener<AppBloc, AppState>(
-        listener: _blocListener,
+      MultiBlocListener(
+        listeners: [
+          BlocListener<AppBloc, AppState>(listener: _appBlocListener),
+          BlocListener<LookupBloc, LookupState>(listener: _lookupBlocListener),
+        ],
         child: BlocBuilder<LookupBloc, LookupState>(
           builder: (
             BuildContext context,
@@ -86,6 +92,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                   ? appDarkThemeData
                   : appLightThemeData,
               child: Scaffold(
+                key: _scaffoldKey,
                 extendBody: true,
                 appBar: AppBar(
                   title: Text(
@@ -108,7 +115,7 @@ class _LookupPageViewState extends State<LookupPageView> {
         ),
       );
 
-  void _blocListener(
+  void _appBlocListener(
     BuildContext context,
     AppState state,
   ) {
@@ -117,6 +124,26 @@ class _LookupPageViewState extends State<LookupPageView> {
         case CRUDStatus.CREATED:
           closeKeyboard(context);
           Navigator.of(context).pop();
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
+  void _lookupBlocListener(
+    BuildContext context,
+    LookupState state,
+  ) {
+    if (state.status != null) {
+      AppLocalizations i18n = AppLocalizations.of(context);
+
+      switch (state.status) {
+        case LookupStatus.FORECAST_NOT_FOUND:
+          closeKeyboard(context);
+          _scaffoldKey.currentState
+              .showSnackBar(SnackBar(content: Text(i18n.lookupFailure)));
           break;
 
         default:
@@ -149,7 +176,7 @@ class _LookupPageViewState extends State<LookupPageView> {
             ForecastDisplay(
               bloc: context.read<AppBloc>(),
               forecast: lookupForecast,
-              showThreeDayForecast: false,
+              showThreeDayForecast: true,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 30.0),
@@ -195,8 +222,21 @@ class _LookupPageViewState extends State<LookupPageView> {
       cityName: Nullable<String>(lookupState.cityName),
       postalCode: Nullable<String>(lookupState.postalCode),
       countryCode: Nullable<String>(lookupState.countryCode),
+      primary: Nullable<bool>(lookupState.primary),
       lastUpdated: getNow(),
     );
+
+    if (lookupState.primary) {
+      List<Forecast> forecasts = context.read<AppBloc>().state.forecasts;
+      Forecast primaryForecast = forecasts.firstWhere(
+          (Forecast forecast) => forecast.primary,
+          orElse: () => null);
+
+      if (primaryForecast != null) {
+        // Remove the status from the current primary forecast
+        context.read<AppBloc>().add(RemovePrimaryStatus(primaryForecast));
+      }
+    }
 
     context.read<AppBloc>().add(AddForecast(forecast));
   }

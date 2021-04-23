@@ -85,6 +85,17 @@ class UpdateForecast extends AppEvent {
   List<Object> get props => [forecastId, forecastData];
 }
 
+class RemovePrimaryStatus extends AppEvent {
+  final Forecast forecast;
+
+  const RemovePrimaryStatus(
+    this.forecast,
+  );
+
+  @override
+  List<Object> get props => [forecast];
+}
+
 class RefreshForecast extends AppEvent {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;

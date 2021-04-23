@@ -275,24 +275,31 @@ class _ForecastPageViewState extends State<ForecastView> {
 
   _buildCircleIndicator(
     AppState state,
-  ) =>
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: CirclePageIndicator(
-            dotColor: AppTheme.getHintColor(
-              state.themeMode,
-            ),
-            selectedDotColor:
-                state.colorTheme ? Colors.white : AppTheme.primaryColor,
-            selectedSize: 10.0,
-            itemCount: (state.forecasts == null) ? 0 : state.forecasts.length,
-            currentPageNotifier: _currentForecastNotifier,
-            onPageSelected: _onPageSelected,
+  ) {
+    if ((state.forecasts == null) ||
+        state.forecasts.isEmpty ||
+        (state.forecasts.length <= 1)) {
+      return Container();
+    }
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: CirclePageIndicator(
+          dotColor: AppTheme.getHintColor(
+            state.themeMode,
           ),
+          selectedDotColor:
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
+          selectedSize: 10.0,
+          itemCount: state.forecasts.length,
+          currentPageNotifier: _currentForecastNotifier,
+          onPageSelected: _onPageSelected,
         ),
-      );
+      ),
+    );
+  }
 
   void _onPageSelected(
     int page,
