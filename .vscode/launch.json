@@ -5,7 +5,7 @@
       "name": "Flutter_Weather_DEV",
       "type": "dart",
       "request": "launch",
-      "program": "apps/mobile_flutter/lib/main.dart",
+      "program": "apps/mobile_flutter/lib/main_dev.dart",
       "args": [
         "--flavor",
         "dev"
