@@ -33,7 +33,9 @@ dependencies:
   path_provider: '^2.0.1'
   sentry: '^5.0.0'
   sentry_flutter: '^5.0.0'
-  store_redirect: '^1.0.2'
+  store_redirect:
+    git:
+      url: https://github.com/Danesz/store_redirect
   timer_builder: '^2.0.0'
   url_launcher: '^6.0.3'
   uuid: '^3.0.3'
