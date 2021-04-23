@@ -10,7 +10,7 @@ import 'package:flutter_weather/views/forecast/forecast_view.dart';
 
 class WeatherApp extends StatelessWidget {
   WeatherApp({
-    Key key,
+    Key? key,
   }) : super(key: key) {
     // Set the orientation to portrait only
     SystemChrome.setPreferredOrientations([
@@ -38,7 +38,7 @@ class FlutterWeatherAppView extends StatefulWidget {
 class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  ThemeData _themeData;
+  ThemeData? _themeData;
 
   @override
   Widget build(
@@ -77,17 +77,17 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
         if (state.activeForecastId != null) {
           _themeData = appLightThemeData;
         } else {
-          _themeData = state.colorTheme ? appColorThemeData : appLightThemeData;
+          _themeData = state.colorTheme! ? appColorThemeData : appLightThemeData;
         }
       });
 
-  ThemeData _getTheme(
+  ThemeData? _getTheme(
     AppState state,
   ) {
     if (_themeData != null) {
       return _themeData;
     }
 
-    return state.colorTheme ? appColorThemeData : appLightThemeData;
+    return state.colorTheme! ? appColorThemeData : appLightThemeData;
   }
 }

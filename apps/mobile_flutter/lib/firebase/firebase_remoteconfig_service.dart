@@ -2,14 +2,14 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:sentry/sentry.dart';
 
 class FirebaseRemoteConfigService {
-  final RemoteConfig _remoteConfig;
+  final RemoteConfig? _remoteConfig;
 
   FirebaseRemoteConfigService({
-    RemoteConfig remoteConfig,
+    RemoteConfig? remoteConfig,
   }) : _remoteConfig = remoteConfig;
 
-  static FirebaseRemoteConfigService _instance;
-  static FirebaseRemoteConfigService getInstance() {
+  static FirebaseRemoteConfigService? _instance;
+  static FirebaseRemoteConfigService? getInstance() {
     if (_instance == null) {
       _instance = FirebaseRemoteConfigService(
         remoteConfig: RemoteConfig.instance,
@@ -35,9 +35,9 @@ class FirebaseRemoteConfigService {
   }
 
   Future _fetchAndActivate() async {
-    await _remoteConfig.fetch();
-    await _remoteConfig.activate();
+    await _remoteConfig!.fetch();
+    await _remoteConfig!.activate();
   }
 
-  String get appVersion => _remoteConfig.getString('app_version');
+  String get appVersion => _remoteConfig!.getString('app_version');
 }

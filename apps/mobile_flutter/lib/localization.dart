@@ -13,7 +13,7 @@ class AppLocalizations {
     this.locale,
   );
 
-  static AppLocalizations of(
+  static AppLocalizations? of(
     BuildContext context,
   ) =>
       Localizations.of<AppLocalizations>(
@@ -96,7 +96,7 @@ class AppLocalizations {
       );
 
   String getLastUpdatedAt(
-    String date,
+    String? date,
   ) =>
       addMessage(
         'Last updated at $date',
@@ -105,7 +105,7 @@ class AppLocalizations {
       );
 
   String getLastUpdatedOn(
-    String date,
+    String? date,
   ) =>
       addMessage(
         'Last updated on $date',
@@ -131,13 +131,13 @@ class AppLocalizations {
 
   addMessage(
     String message, {
-    String name,
-    List<Object> args,
+    String? name,
+    List<Object?>? args,
   }) =>
       Intl.message(
         message,
         name: (name == null) ? toCamelCase(message) : name,
-        args: args,
+        args: args as List<Object>?,
         locale: locale.toString(),
       );
 }

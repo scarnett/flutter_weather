@@ -7,13 +7,13 @@ class AppChekboxTile extends StatelessWidget {
   final AppBloc bloc;
   final String title;
   final bool checked;
-  final Function(bool) onTap;
+  final Function(bool?)? onTap;
 
   const AppChekboxTile({
-    Key key,
-    this.bloc,
-    this.title,
-    this.checked,
+    Key? key,
+    required this.bloc,
+    required this.title,
+    required this.checked,
     this.onTap,
   })  : assert(bloc != null),
         assert(title != null),

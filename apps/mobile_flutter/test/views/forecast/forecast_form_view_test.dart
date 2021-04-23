@@ -12,7 +12,7 @@ class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 void main() {
   ft.TestWidgetsFlutterBinding.ensureInitialized();
 
-  AppBloc _bloc;
+  late AppBloc _bloc;
 
   ft.setUpAll(() {
     _bloc = MockAppBloc();

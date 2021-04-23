@@ -10,8 +10,8 @@ class AppDayNightSwitch extends StatefulWidget {
   final IconData inactiveIcon;
 
   AppDayNightSwitch({
-    Key key,
-    @required this.bloc,
+    Key? key,
+    required this.bloc,
     this.activeIcon: Icons.nightlight_round,
     this.inactiveIcon: Icons.wb_sunny,
   }) : super(key: key);
@@ -33,18 +33,18 @@ class _AppDayNightSwitchState extends State<AppDayNightSwitch> {
         padding: 1.0,
         value: (widget.bloc.state.themeMode == ThemeMode.dark),
         activeToggleColor: AppTheme.primaryColor,
-        inactiveToggleColor: widget.bloc.state.colorTheme
+        inactiveToggleColor: widget.bloc.state.colorTheme!
             ? Colors.white
             : AppTheme.secondaryColor,
         activeSwitchBorder: Border.all(
-          color: Colors.deepPurple[500],
+          color: Colors.deepPurple[500]!,
           width: 2.0,
         ),
         inactiveSwitchBorder: Border.all(
-          color: widget.bloc.state.colorTheme ? Colors.white : Colors.grey[300],
+          color: widget.bloc.state.colorTheme! ? Colors.white : Colors.grey[300]!,
           width: 2.0,
         ),
-        activeColor: AppTheme.secondaryColor,
+        activeColor: AppTheme.secondaryColor!,
         inactiveColor: Colors.white.withOpacity(0.5),
         activeIcon: Icon(
           widget.activeIcon,

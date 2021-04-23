@@ -4,13 +4,13 @@ part of 'app_bloc.dart';
 class AppState extends Equatable {
   final String appVersion;
   final ThemeMode themeMode;
-  final bool colorTheme;
+  final bool? colorTheme;
   final TemperatureUnit temperatureUnit;
-  final int selectedForecastIndex;
+  final int? selectedForecastIndex;
   final List<Forecast> forecasts;
-  final String activeForecastId;
-  final RefreshStatus refreshStatus;
-  final CRUDStatus crudStatus;
+  final String? activeForecastId;
+  final RefreshStatus? refreshStatus;
+  final CRUDStatus? crudStatus;
 
   AppState({
     this.appVersion: '1.0.0',
@@ -39,16 +39,16 @@ class AppState extends Equatable {
   const AppState.initial() : this._();
 
   AppState copyWith({
-    String appVersion,
-    ThemeMode themeMode,
-    bool colorTheme,
-    TemperatureUnit temperatureUnit,
-    int selectedForecastIndex,
-    Nullable<String> selectedCountry,
-    List<Forecast> forecasts,
-    Nullable<String> activeForecastId,
-    Nullable<RefreshStatus> refreshStatus,
-    Nullable<CRUDStatus> crudStatus,
+    String? appVersion,
+    ThemeMode? themeMode,
+    bool? colorTheme,
+    TemperatureUnit? temperatureUnit,
+    int? selectedForecastIndex,
+    Nullable<String>? selectedCountry,
+    List<Forecast>? forecasts,
+    Nullable<String?>? activeForecastId,
+    Nullable<RefreshStatus?>? refreshStatus,
+    Nullable<CRUDStatus?>? crudStatus,
   }) =>
       AppState._(
         appVersion: appVersion ?? this.appVersion,
@@ -67,7 +67,7 @@ class AppState extends Equatable {
       );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         appVersion,
         themeMode,
         colorTheme,

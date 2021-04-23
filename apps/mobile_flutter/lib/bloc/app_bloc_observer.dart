@@ -5,7 +5,7 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onEvent(
     Bloc bloc,
-    Object event,
+    Object? event,
   ) {
     // developer.log(event.toString(), name: 'AppBlocObserver');
     super.onEvent(bloc, event);

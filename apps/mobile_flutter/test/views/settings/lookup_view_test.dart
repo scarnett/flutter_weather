@@ -17,8 +17,8 @@ class MockLookupBloc extends MockBloc<LookupEvent, LookupState>
 void main() {
   ft.TestWidgetsFlutterBinding.ensureInitialized();
 
-  AppBloc _appBloc;
-  LookupBloc _lookupBloc;
+  late AppBloc _appBloc;
+  late LookupBloc _lookupBloc;
 
   ft.setUpAll(() {
     _appBloc = MockAppBloc();

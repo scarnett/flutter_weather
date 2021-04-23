@@ -7,8 +7,8 @@ class SettingsOpenSourceInfo extends StatelessWidget {
   final ThemeMode themeMode;
 
   const SettingsOpenSourceInfo({
-    Key key,
-    @required this.themeMode,
+    Key? key,
+    required this.themeMode,
   }) : super(key: key);
 
   @override

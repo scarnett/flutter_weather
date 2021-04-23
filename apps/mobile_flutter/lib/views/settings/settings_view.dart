@@ -23,7 +23,7 @@ class SettingsView extends StatelessWidget {
       MaterialPageRoute<void>(builder: (_) => SettingsView());
 
   const SettingsView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -35,7 +35,7 @@ class SettingsView extends StatelessWidget {
 
 class SettingsPageView extends StatefulWidget {
   SettingsPageView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -66,11 +66,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         themeMode: context.read<AppBloc>().state.themeMode,
         colorTheme: context.read<AppBloc>().state.colorTheme,
         systemNavigationBarIconBrightness:
-            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
+            context.read<AppBloc>().state.colorTheme! ? Brightness.dark : null,
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).settings),
+            title: Text(AppLocalizations.of(context)!.settings),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
@@ -118,7 +118,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context).autoUpdate,
+          text: AppLocalizations.of(context)!.autoUpdate,
           padding: const EdgeInsets.only(
             left: 16.0,
             right: 4.0,
@@ -163,11 +163,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context).themeMode,
+          text: AppLocalizations.of(context)!.themeMode,
         ),
         AppRadioTile<ThemeMode>(
           bloc: context.read<AppBloc>(),
-          title: AppLocalizations.of(context).light,
+          title: AppLocalizations.of(context)!.light,
           value: ThemeMode.light,
           groupValue: _themeMode,
           onTap: _tapThemeMode,
@@ -182,8 +182,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         [
           AppChekboxTile(
             bloc: context.read<AppBloc>(),
-            title: AppLocalizations.of(context).colorized,
-            checked: context.read<AppBloc>().state.colorTheme,
+            title: AppLocalizations.of(context)!.colorized,
+            checked: context.read<AppBloc>().state.colorTheme!,
             onTap: _tapColorized,
           ),
           Divider(),
@@ -194,7 +194,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     widgets.add(
       AppRadioTile<ThemeMode>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).dark,
+        title: AppLocalizations.of(context)!.dark,
         value: ThemeMode.dark,
         groupValue: _themeMode,
         onTap: _tapThemeMode,
@@ -211,11 +211,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     return [
       AppSectionHeader(
         bloc: context.read<AppBloc>(),
-        text: AppLocalizations.of(context).temperatureUnit,
+        text: AppLocalizations.of(context)!.temperatureUnit,
       ),
       AppRadioTile<TemperatureUnit>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).celsius,
+        title: AppLocalizations.of(context)!.celsius,
         value: TemperatureUnit.celsius,
         groupValue: _temperatureUnit,
         onTap: _tapTemperatureUnit,
@@ -223,7 +223,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       Divider(),
       AppRadioTile<TemperatureUnit>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).fahrenheit,
+        title: AppLocalizations.of(context)!.fahrenheit,
         value: TemperatureUnit.fahrenheit,
         groupValue: _temperatureUnit,
         onTap: _tapTemperatureUnit,
@@ -231,7 +231,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       Divider(),
       AppRadioTile<TemperatureUnit>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).kelvin,
+        title: AppLocalizations.of(context)!.kelvin,
         value: TemperatureUnit.kelvin,
         groupValue: _temperatureUnit,
         onTap: _tapTemperatureUnit,
@@ -242,12 +242,12 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   List<Widget> _buildAboutSection() => [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context).about,
+          text: AppLocalizations.of(context)!.about,
         ),
         ListTile(
           title: RichText(
             text: TextSpan(
-              text: AppLocalizations.of(context).privacyPolicy,
+              text: AppLocalizations.of(context)!.privacyPolicy,
               style: TextStyle(
                 color: AppTheme.primaryColor,
                 decoration: TextDecoration.underline,
@@ -262,7 +262,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   List<Widget> _buildBuildInfoSection() => [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context).buildInformation,
+          text: AppLocalizations.of(context)!.buildInformation,
         ),
         ListTile(
           title: Text(
@@ -278,17 +278,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ];
 
   void _tapThemeMode(
-    ThemeMode themeMode,
+    ThemeMode? themeMode,
   ) =>
       context.read<AppBloc>().add(SetThemeMode(themeMode));
 
   void _tapColorized(
-    bool checked,
+    bool? checked,
   ) =>
       context.read<AppBloc>().add(SetColorTheme(checked));
 
   void _tapTemperatureUnit(
-    TemperatureUnit temperatureUnit,
+    TemperatureUnit? temperatureUnit,
   ) =>
       context.read<AppBloc>().add(SetTemperatureUnit(temperatureUnit));
 

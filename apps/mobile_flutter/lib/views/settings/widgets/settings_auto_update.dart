@@ -5,8 +5,8 @@ class SettingsAutoUpdate extends StatelessWidget {
   final ThemeMode themeMode;
 
   const SettingsAutoUpdate({
-    Key key,
-    @required this.themeMode,
+    Key? key,
+    required this.themeMode,
   }) : super(key: key);
 
   @override

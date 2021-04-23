@@ -62,7 +62,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     GetCurrentAppVersion event,
   ) async* {
     final FirebaseRemoteConfigService instance =
-        await FirebaseRemoteConfigService.getInstance();
+        await FirebaseRemoteConfigService.getInstance()!;
 
     instance.initialise();
 
@@ -93,7 +93,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     ToggleColorTheme event,
   ) =>
       state.copyWith(
-        colorTheme: !state.colorTheme,
+        colorTheme: !state.colorTheme!,
       );
 
   AppState _mapSetColorThemeToStates(
@@ -151,23 +151,23 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     Forecast forecast = state.forecasts
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
-    forecasts[state.selectedForecastIndex] = forecast.copyWith(
+    forecasts[state.selectedForecastIndex!] = forecast.copyWith(
       id: event.forecastId,
-      cityName: Nullable<String>(event.forecastData['cityName']),
-      postalCode: Nullable<String>(event.forecastData['postalCode']),
-      countryCode: Nullable<String>(event.forecastData['countryCode']),
-      primary: Nullable<bool>(event.forecastData['primary']),
+      cityName: Nullable<String?>(event.forecastData['cityName']),
+      postalCode: Nullable<String?>(event.forecastData['postalCode']),
+      countryCode: Nullable<String?>(event.forecastData['countryCode']),
+      primary: Nullable<bool?>(event.forecastData['primary']),
       lastUpdated: getNow(),
     );
 
     yield state.copyWith(
-      activeForecastId: Nullable<String>(null),
+      activeForecastId: Nullable<String?>(null),
       forecasts: forecasts,
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATED),
     );
 
     add(RefreshForecast(
-      forecasts[state.selectedForecastIndex],
+      forecasts[state.selectedForecastIndex!],
       state.temperatureUnit,
     ));
   }
@@ -197,7 +197,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       refreshStatus: Nullable<RefreshStatus>(RefreshStatus.REFRESHING),
     );
 
-    Map<String, String> lookupData = {
+    Map<String, String?> lookupData = {
       'cityName': event.forecast.cityName,
       'postalCode': event.forecast.postalCode,
       'countryCode': event.forecast.countryCode,
@@ -220,16 +220,16 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       Forecast _forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
       forecasts[forecastIndex] = _forecast.copyWith(
         id: event.forecast.id,
-        cityName: Nullable<String>(event.forecast.cityName),
-        postalCode: Nullable<String>(event.forecast.postalCode),
-        countryCode: Nullable<String>(event.forecast.countryCode),
-        primary: Nullable<bool>(event.forecast.primary),
+        cityName: Nullable<String?>(event.forecast.cityName),
+        postalCode: Nullable<String?>(event.forecast.postalCode),
+        countryCode: Nullable<String?>(event.forecast.countryCode),
+        primary: Nullable<bool?>(event.forecast.primary),
         lastUpdated: getNow(),
       );
 
       yield state.copyWith(
         forecasts: forecasts,
-        refreshStatus: Nullable<RefreshStatus>(null),
+        refreshStatus: Nullable<RefreshStatus?>(null),
       );
     } else {
       // TODO! snackbar error
@@ -249,11 +249,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     List<Forecast> _forecasts = state.forecasts..removeAt(_forecastIndex);
 
     yield state.copyWith(
-      activeForecastId: Nullable<String>(null),
+      activeForecastId: Nullable<String?>(null),
       colorTheme: hasForecasts(_forecasts) ? state.colorTheme : false,
       forecasts: _forecasts,
-      selectedForecastIndex: (state.selectedForecastIndex > 0)
-          ? (state.selectedForecastIndex - 1)
+      selectedForecastIndex: (state.selectedForecastIndex! > 0)
+          ? (state.selectedForecastIndex! - 1)
           : 0,
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETED),
     );
@@ -262,20 +262,20 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   AppState _mapClearCRUDStatusToStates(
     ClearCRUDStatus event,
   ) =>
-      state.copyWith(crudStatus: Nullable<CRUDStatus>(null));
+      state.copyWith(crudStatus: Nullable<CRUDStatus?>(null));
 
   AppState _mapSetActiveForecastIdToState(
     SetActiveForecastId event,
   ) =>
       state.copyWith(
-        activeForecastId: Nullable<String>(event.forecastId),
+        activeForecastId: Nullable<String?>(event.forecastId),
       );
 
   AppState _mapClearActiveForecastIdToState(
     ClearActiveForecastId event,
   ) =>
       state.copyWith(
-        activeForecastId: Nullable<String>(null),
+        activeForecastId: Nullable<String?>(null),
       );
 
   @override

@@ -4,13 +4,14 @@ publish_to: 'none'
 version: 99.99.99
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  flutter: 2.0.5
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  background_fetch: '^0.7.2'
+  background_fetch: '^1.0.0-nullsafety.2'
   bloc: '^7.0.0'
   cupertino_icons: '^1.0.2'
   equatable: '^2.0.0'
@@ -37,20 +38,30 @@ dependencies:
   url_launcher: '^6.0.3'
   uuid: '^3.0.3'
   version: '^2.0.0'
-  weather_icons: '^2.0.2'
+  weather_icons: '^3.0.0-nullsafety.0'
   webview_flutter: '^2.0.4'
+  collection: ^1.15.0-nullsafety.4
 
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
+
   flutter_test:
     sdk: flutter
 
   test: '^1.15.7'
   bloc_test: '^8.0.0'
-  build_runner: '^1.12.2'
   flutter_launcher_icons: '^0.9.0'
-  flutter_native_splash: '^1.1.7+1'
+  flutter_native_splash: '^1.1.8+4'
   injectable_generator: '^1.2.2'
+  integration_test: '^1.0.2+3'
   mockito: '^5.0.3'
+
+dependency_overrides:
+  archive: ^3.1.2
+  args: ^2.0.0
+  convert: ^3.0.0
+  crypto: ^3.0.1
 
 flutter:
   uses-material-design: true

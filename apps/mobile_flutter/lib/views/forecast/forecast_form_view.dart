@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/env_config.dart';
 import 'package:flutter_weather/localization.dart';
@@ -20,7 +22,7 @@ class ForecastFormView extends StatelessWidget {
       MaterialPageRoute<void>(builder: (_) => ForecastFormView());
 
   const ForecastFormView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class ForecastFormView extends StatelessWidget {
 
 class ForecastPageView extends StatefulWidget {
   ForecastPageView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -40,7 +42,7 @@ class ForecastPageView extends StatefulWidget {
 }
 
 class _ForecastFormViewState extends State<ForecastPageView> {
-  ForecastFormController _formController;
+  ForecastFormController? _formController;
   num _currentPage = 0;
 
   @override
@@ -51,7 +53,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
 
   @override
   void dispose() {
-    _formController.dispose();
+    _formController!.dispose();
     super.dispose();
   }
 
@@ -112,7 +114,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     AppState state,
   ) async {
     if (_currentPage > 0) {
-      _formController.animateToPage(0);
+      _formController!.animateToPage!(0);
       return Future.value(false);
     }
 
@@ -125,12 +127,13 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) =>
       SafeArea(
         child: ForecastForm(
+          buttonKey: Key(AppKeys.saveForecastButtonKey),
           formController: _formController,
-          saveButtonText: AppLocalizations.of(context).save,
-          deleteButtonText: AppLocalizations.of(context).delete,
+          saveButtonText: AppLocalizations.of(context)!.save,
+          deleteButtonText: AppLocalizations.of(context)!.delete,
           forecast: state.forecasts.isNullOrZeroLength()
               ? null
-              : state.forecasts[state.selectedForecastIndex],
+              : state.forecasts[state.selectedForecastIndex!],
           forecasts: state.forecasts,
           onSuccess: _onSuccess,
           onFailure: _onFailure,
@@ -140,7 +143,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
 
   _tapBack() {
     if (_currentPage > 0) {
-      _formController.animateToPage(0);
+      _formController!.animateToPage!(0);
     } else {
       context.read<AppBloc>().add(ClearActiveForecastId());
       Navigator.of(context).pop();
@@ -155,18 +158,16 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     Map<String, dynamic> forecastData = formState.toJson();
 
     final AppState appState = context.read<AppBloc>().state;
-    final Country country = (await IsoCountries.iso_countries).firstWhere(
-        (Country _country) => _country.name == forecastData['countryCode'],
-        orElse: () => null);
+    final Country? country = (await IsoCountries.iso_countries).firstWhereOrNull(
+        (Country _country) => _country.name == forecastData['countryCode']);
 
     forecastData['countryCode'] = (country == null)
         ? EnvConfig.DEFAULT_COUNTRY_CODE
         : country.countryCode;
 
     if (forecastData['primary']) {
-      Forecast primaryForecast = appState.forecasts.firstWhere(
-          (Forecast forecast) => forecast.primary,
-          orElse: () => null);
+      Forecast? primaryForecast = appState.forecasts.firstWhereOrNull(
+          (Forecast forecast) => forecast.primary!);
 
       if (primaryForecast != null) {
         // Remove the status from the current primary forecast
@@ -185,7 +186,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) {
     closeKeyboard(context);
     Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text(state.failureResponse)));
+        .showSnackBar(SnackBar(content: Text(state.failureResponse!)));
   }
 
   void _onPageChange(

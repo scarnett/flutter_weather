@@ -9,7 +9,7 @@ class PrivacyPolicyView extends StatefulWidget {
       MaterialPageRoute<void>(builder: (_) => PrivacyPolicyView());
 
   PrivacyPolicyView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
   ) =>
       Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).privacyPolicy),
+          title: Text(AppLocalizations.of(context)!.privacyPolicy),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),

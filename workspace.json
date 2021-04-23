@@ -93,7 +93,7 @@
         "drive": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "flutter drive",
+            "command": "flutter drive --driver=test_driver/integration_test.dart --target=integration_test/{args.test} --flavor tst",
             "cwd": "apps/mobile_flutter"
           }
         },

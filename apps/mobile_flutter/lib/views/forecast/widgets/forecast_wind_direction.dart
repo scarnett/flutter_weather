@@ -6,9 +6,9 @@ import 'package:flutter_weather/bloc/bloc.dart';
 class ForecastWindDirection extends StatefulWidget {
   final IconData icon;
   final double size;
-  final Color color;
+  final Color? color;
   final Color shadowColor;
-  final num degree;
+  final num? degree;
 
   ForecastWindDirection({
     this.icon: Icons.navigation,
@@ -28,9 +28,9 @@ class _ForecastWindDirectionState extends State<ForecastWindDirection> {
     BuildContext context,
   ) {
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
-        !context.watch<AppBloc>().state.colorTheme) {
+        !context.watch<AppBloc>().state.colorTheme!) {
       return _rotate(
-        widget.degree,
+        widget.degree!,
         Icon(
           Icons.navigation,
           color: widget.color,
@@ -47,7 +47,7 @@ class _ForecastWindDirectionState extends State<ForecastWindDirection> {
             top: 1.0,
             left: 1.0,
             child: _rotate(
-              widget.degree,
+              widget.degree!,
               Icon(
                 Icons.navigation,
                 color: widget.shadowColor,
@@ -56,7 +56,7 @@ class _ForecastWindDirectionState extends State<ForecastWindDirection> {
             ),
           ),
           _rotate(
-            widget.degree,
+            widget.degree!,
             Icon(
               Icons.navigation,
               color: widget.color,
