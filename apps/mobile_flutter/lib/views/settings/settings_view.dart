@@ -10,8 +10,13 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
-import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart'
+    as forecastUtils;
+import 'package:flutter_weather/views/settings/settings_utils.dart'
+    as settingsUtils;
+import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
@@ -85,7 +90,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.settings),
+            title: Text(settingsUtils.getTitle(context, _currentPage)),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: _handleBack,
@@ -148,7 +153,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             physics: ClampingScrollPhysics(),
             child: Column(children: children),
           ),
-          Text('Items Here'), // TODO!
+          SettingsUpdatePeriodPicker(
+            selectedPeriod: context.read<AppBloc>().state.updatePeriod,
+            onTap: _tapUpdatePeriod,
+          ),
         ],
       ),
     );
@@ -190,7 +198,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             AppLocalizations.of(context)!.updatePeriod,
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          trailing: Text('1 hour'), // TODO!
+          trailing: Text(context.read<AppBloc>().state.updatePeriod.text!),
           onTap: () => animatePage(_pageController!, page: 1),
         ),
       ]);
@@ -220,7 +228,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     );
 
     if ((_themeMode == ThemeMode.light) &&
-        hasForecasts(context.read<AppBloc>().state.forecasts)) {
+        forecastUtils.hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
           AppChekboxTile(
@@ -325,6 +333,13 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     num currentPage,
   ) {
     setState(() => _currentPage = currentPage);
+  }
+
+  void _tapUpdatePeriod(
+    UpdatePeriod period,
+  ) {
+    context.read<AppBloc>().add(SetUpdatePeriod(period));
+    animatePage(_pageController!, page: 0);
   }
 
   void _tapThemeMode(

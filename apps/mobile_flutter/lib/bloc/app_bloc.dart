@@ -9,6 +9,7 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
@@ -29,6 +30,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapGetCurrentAppVersionToStates(event);
     } else if (event is ToggleThemeMode) {
       yield _mapToggleThemeModeToStates(event);
+    } else if (event is SetUpdatePeriod) {
+      yield _mapSetUpdatePeriodToStates(event);
     } else if (event is SetThemeMode) {
       yield _mapSetThemeModeToStates(event);
     } else if (event is ToggleColorTheme) {
@@ -79,6 +82,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             ? ThemeMode.light
             : ThemeMode.dark,
         colorTheme: false,
+      );
+
+  AppState _mapSetUpdatePeriodToStates(
+    SetUpdatePeriod event,
+  ) =>
+      state.copyWith(
+        updatePeriod: event.updatePeriod,
       );
 
   AppState _mapSetThemeModeToStates(
