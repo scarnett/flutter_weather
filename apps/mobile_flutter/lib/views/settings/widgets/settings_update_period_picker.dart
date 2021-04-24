@@ -90,9 +90,9 @@ class _SettingsUpdatePeriodPickerState
           final UpdatePeriod period = _periodList![index];
 
           return ListTile(
-            key: Key('period_${period.id}'),
+            key: Key('period_${period.info!['id']}'),
             title: Text(
-              period.text!,
+              period.info!['text'],
               style: Theme.of(context).textTheme.headline5!.copyWith(
                     color: _getPeriodColor(period),
                   ),
@@ -114,7 +114,7 @@ class _SettingsUpdatePeriodPickerState
   Color? _getPeriodColor(
     UpdatePeriod period,
   ) {
-    if (widget.selectedPeriod?.id == period.id) {
+    if (widget.selectedPeriod?.info!['id'] == period.info!['id']) {
       return AppTheme.primaryColor;
     }
 

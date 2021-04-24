@@ -1,3 +1,4 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 
 class WeatherApp extends StatelessWidget {
   WeatherApp({
@@ -41,6 +43,12 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   ThemeData? _themeData;
 
   @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  @override
   Widget build(
     BuildContext context,
   ) =>
@@ -54,7 +62,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
             listener: _blocListener,
             child: MaterialApp(
               title: AppLocalizations.appTitle,
-              theme: _getTheme(state),
+              theme: _themeData,
               darkTheme: appDarkThemeData,
               themeMode: state.themeMode,
               debugShowCheckedModeBanner: AppConfig.isDebug(context),
@@ -69,6 +77,33 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
         ),
       );
 
+  Future<void> initPlatformState() async {
+    AppState state = context.read<AppBloc>().state;
+    UpdatePeriod? updatePeriod = state.updatePeriod;
+    if (updatePeriod != null) {
+      int status = await BackgroundFetch.configure(
+          BackgroundFetchConfig(
+            minimumFetchInterval: updatePeriod.info!['minutes'],
+            stopOnTerminate: false,
+            enableHeadless: true,
+            requiresBatteryNotLow: false,
+            requiresCharging: false,
+            requiresStorageNotLow: false,
+            requiresDeviceIdle: false,
+            requiredNetworkType: NetworkType.NONE,
+          ), (String taskId) async {
+        // Event received
+        // TODO! Fetch forecasts
+        BackgroundFetch.finish(taskId);
+      }, (String taskId) async {
+        // Task timed out
+        BackgroundFetch.finish(taskId);
+      });
+    }
+
+    if (!mounted) return;
+  }
+
   void _blocListener(
     BuildContext context,
     AppState state,
@@ -77,17 +112,8 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
         if (state.activeForecastId != null) {
           _themeData = appLightThemeData;
         } else {
-          _themeData = state.colorTheme! ? appColorThemeData : appLightThemeData;
+          _themeData =
+              state.colorTheme! ? appColorThemeData : appLightThemeData;
         }
       });
-
-  ThemeData? _getTheme(
-    AppState state,
-  ) {
-    if (_themeData != null) {
-      return _themeData;
-    }
-
-    return state.colorTheme! ? appColorThemeData : appLightThemeData;
-  }
 }

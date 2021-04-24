@@ -198,7 +198,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             AppLocalizations.of(context)!.updatePeriod,
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          trailing: Text(context.read<AppBloc>().state.updatePeriod!.text!),
+          trailing:
+              Text(context.read<AppBloc>().state.updatePeriod!.info!['text']),
           onTap: () => animatePage(_pageController!, page: 1),
         ),
       ]);

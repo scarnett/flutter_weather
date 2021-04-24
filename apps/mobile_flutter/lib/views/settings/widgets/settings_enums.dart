@@ -7,44 +7,42 @@ enum UpdatePeriod {
 }
 
 extension UpdatePeriodExtension on UpdatePeriod {
-  String? get id {
+  Map<String, dynamic>? get info {
     switch (this) {
       case UpdatePeriod.HOUR1:
-        return '1hr';
+        return {
+          'id': '1hr',
+          'text': '1 hour', // TODO!
+          'minutes': 60,
+        };
 
       case UpdatePeriod.HOUR2:
-        return '2hrs';
+        return {
+          'id': '2hrs',
+          'text': '2 hours', // TODO!
+          'minutes': 120,
+        };
 
       case UpdatePeriod.HOUR3:
-        return '3hrs';
+        return {
+          'id': '3hrs',
+          'text': '3 hours', // TODO!
+          'minutes': 180,
+        };
 
       case UpdatePeriod.HOUR4:
-        return '4hrs';
+        return {
+          'id': '4hrs',
+          'text': '4 hours', // TODO!
+          'minutes': 240,
+        };
 
       case UpdatePeriod.HOUR5:
-        return '5hrs';
-
-      default:
-        return null;
-    }
-  }
-
-  String? get text {
-    switch (this) {
-      case UpdatePeriod.HOUR1:
-        return '1 hour'; // TODO!
-
-      case UpdatePeriod.HOUR2:
-        return '2 hours'; // TODO!
-
-      case UpdatePeriod.HOUR3:
-        return '3 hours'; // TODO!
-
-      case UpdatePeriod.HOUR4:
-        return '4 hours'; // TODO!
-
-      case UpdatePeriod.HOUR5:
-        return '5 hours'; // TODO!
+        return {
+          'id': '5hrs',
+          'text': '5 hours', // TODO!
+          'minutes': 300,
+        };
 
       default:
         return null;
