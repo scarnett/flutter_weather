@@ -59,8 +59,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     buildNumber: 'unknown',
   );
 
-  bool autoUpdate = true;
-
   @override
   void initState() {
     super.initState();
@@ -155,7 +153,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           ),
           SettingsUpdatePeriodPicker(
             selectedPeriod: context.read<AppBloc>().state.updatePeriod,
-            onTap: _tapUpdatePeriod,
+            onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
           ),
         ],
       ),
@@ -163,6 +161,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   List<Widget> _buildAutoUpdatePeriodSection() {
+    UpdatePeriod? updatePeriod = context.read<AppBloc>().state.updatePeriod;
     List<Widget> widgets = <Widget>[];
     widgets.addAll(
       [
@@ -179,10 +178,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             SizedBox(
               height: 16.0,
               child: Switch(
-                onChanged: (bool value) {
-                  setState(() => autoUpdate = value);
-                },
-                value: autoUpdate,
+                onChanged: (bool value) => _tapUpdatePeriod(
+                  value ? UpdatePeriod.HOUR2 : null,
+                  redirect: false,
+                ),
+                value: (updatePeriod != null),
               ),
             ),
           ],
@@ -190,7 +190,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ],
     );
 
-    if (autoUpdate) {
+    if (updatePeriod != null) {
       widgets.addAll([
         Divider(),
         ListTile(
@@ -198,7 +198,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             AppLocalizations.of(context)!.updatePeriod,
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          trailing: Text(context.read<AppBloc>().state.updatePeriod.text!),
+          trailing: Text(context.read<AppBloc>().state.updatePeriod!.text!),
           onTap: () => animatePage(_pageController!, page: 1),
         ),
       ]);
@@ -336,10 +336,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   void _tapUpdatePeriod(
-    UpdatePeriod period,
-  ) {
-    context.read<AppBloc>().add(SetUpdatePeriod(period));
-    animatePage(_pageController!, page: 0);
+    UpdatePeriod? period, {
+    bool redirect: true,
+  }) {
+    context.read<AppBloc>().add(SetUpdatePeriod(updatePeriod: period));
+
+    if (redirect) {
+      animatePage(_pageController!, page: 0);
+    }
   }
 
   void _tapThemeMode(

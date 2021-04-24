@@ -24,9 +24,9 @@ class ToggleThemeMode extends AppEvent {
 class SetUpdatePeriod extends AppEvent {
   final UpdatePeriod? updatePeriod;
 
-  const SetUpdatePeriod(
+  const SetUpdatePeriod({
     this.updatePeriod,
-  );
+  });
 
   @override
   List<Object?> get props => [updatePeriod];

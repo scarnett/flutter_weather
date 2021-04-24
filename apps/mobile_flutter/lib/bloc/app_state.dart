@@ -3,7 +3,7 @@ part of 'app_bloc.dart';
 @immutable
 class AppState extends Equatable {
   final String appVersion;
-  final UpdatePeriod updatePeriod;
+  final UpdatePeriod? updatePeriod;
   final ThemeMode themeMode;
   final bool? colorTheme;
   final TemperatureUnit temperatureUnit;
@@ -43,7 +43,7 @@ class AppState extends Equatable {
 
   AppState copyWith({
     String? appVersion,
-    UpdatePeriod? updatePeriod,
+    Nullable<UpdatePeriod?>? updatePeriod,
     ThemeMode? themeMode,
     bool? colorTheme,
     TemperatureUnit? temperatureUnit,
@@ -56,7 +56,8 @@ class AppState extends Equatable {
   }) =>
       AppState._(
         appVersion: appVersion ?? this.appVersion,
-        updatePeriod: updatePeriod ?? this.updatePeriod,
+        updatePeriod:
+            (updatePeriod == null) ? this.updatePeriod : updatePeriod.value,
         themeMode: themeMode ?? this.themeMode,
         colorTheme: colorTheme ?? this.colorTheme,
         temperatureUnit: temperatureUnit ?? this.temperatureUnit,

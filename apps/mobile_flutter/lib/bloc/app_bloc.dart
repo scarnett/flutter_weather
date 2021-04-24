@@ -65,7 +65,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     GetCurrentAppVersion event,
   ) async* {
     final FirebaseRemoteConfigService instance =
-        await FirebaseRemoteConfigService.getInstance()!;
+        FirebaseRemoteConfigService.getInstance()!;
 
     instance.initialise();
 
@@ -88,7 +88,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     SetUpdatePeriod event,
   ) =>
       state.copyWith(
-        updatePeriod: event.updatePeriod,
+        updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
       );
 
   AppState _mapSetThemeModeToStates(
@@ -135,10 +135,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
 
     // TODO! sort
-    List<Forecast> forecasts = ((state.forecasts == null)
-        ? []
-        : List<Forecast>.from(state.forecasts)) // Clone the existing state list
-      ..add(event.forecast);
+    List<Forecast> forecasts =
+        List<Forecast>.from(state.forecasts) // Clone the existing state list
+          ..add(event.forecast);
 
     yield state.copyWith(
       forecasts: forecasts,
@@ -155,9 +154,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATING),
     );
 
-    List<Forecast> forecasts =
-        ((state.forecasts == null) ? [] : List<Forecast>.from(state.forecasts));
-
+    List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
     Forecast forecast = state.forecasts
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
@@ -185,9 +182,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   Stream<AppState> _mapRemovePrimaryStatusToStates(
     RemovePrimaryStatus event,
   ) async* {
-    List<Forecast> forecasts =
-        ((state.forecasts == null) ? [] : List<Forecast>.from(state.forecasts));
-
+    List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
     int forecastIndex = state.forecasts
         .indexWhere((Forecast forecast) => forecast.id == event.forecast.id);
 
@@ -215,10 +210,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     http.Response forecastResponse = await tryLookupForecast(lookupData);
     if (forecastResponse.statusCode == 200) {
-      List<Forecast> forecasts = ((state.forecasts == null)
-          ? []
-          : List<Forecast>.from(state.forecasts));
-
+      List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
       int forecastIndex = forecasts.indexWhere(
         (Forecast forecast) => forecast.postalCode == event.forecast.postalCode,
       );
