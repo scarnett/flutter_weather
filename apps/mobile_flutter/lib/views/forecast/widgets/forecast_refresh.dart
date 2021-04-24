@@ -64,7 +64,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
       setState(() => _nextRefreshTime = getNextUpdateTime(getNow().toLocal()));
     } else {
       setState(() {
-        if (canRefresh(state)) {
+        if (canRefresh(state, index: state.selectedForecastIndex!)) {
           _nextRefreshTime = getNow().toLocal();
         } else if (forecastIndexExists(
             state.forecasts, state.selectedForecastIndex)) {
@@ -84,7 +84,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
   Widget _buildRefreshIcon(
     AppState state,
   ) =>
-      canRefresh(state)
+      canRefresh(state, index: state.selectedForecastIndex!)
           ? Tooltip(
               message: AppLocalizations.of(context)!.refreshForecast,
               child: Material(

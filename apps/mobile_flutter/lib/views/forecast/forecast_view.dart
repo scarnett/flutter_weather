@@ -252,7 +252,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       return null;
     }
 
-    if (canRefresh(state)) {
+    if (canRefresh(state, index: state.selectedForecastIndex!)) {
       return RefreshIndicator(
         color: AppTheme.primaryColor,
         onRefresh: () => _pullRefresh(state),

@@ -221,15 +221,24 @@ String getTitle(
 }
 
 bool canRefresh(
-  AppState state,
-) {
-  if (!forecastIndexExists(state.forecasts, state.selectedForecastIndex)) {
-    return false;
+  AppState state, {
+  int? index,
+  Forecast? forecast,
+}) {
+  if (index != null) {
+    if (!forecastIndexExists(state.forecasts, index)) {
+      return false;
+    }
+
+    Forecast selectedForecast = state.forecasts[index];
+    return (selectedForecast.lastUpdated == null) ||
+        getNextUpdateTime(selectedForecast.lastUpdated!).isBefore(getNow());
+  } else if (forecast != null) {
+    return (forecast.lastUpdated == null) ||
+        getNextUpdateTime(forecast.lastUpdated!).isBefore(getNow());
   }
 
-  Forecast selectedForecast = state.forecasts[state.selectedForecastIndex!];
-  return (selectedForecast.lastUpdated == null) ||
-      getNextUpdateTime(selectedForecast.lastUpdated!).isBefore(getNow());
+  return false;
 }
 
 DateTime getNextUpdateTime(
