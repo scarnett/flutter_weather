@@ -8,7 +8,8 @@
       "program": "apps/mobile_flutter/lib/main_dev.dart",
       "args": [
         "--flavor",
-        "dev"
+        "dev",
+        "--no-sound-null-safety"
       ]
     },
     {
@@ -20,6 +21,13 @@
         "--flavor",
         "prod"
       ]
-    }
+    },
+    {
+      "name": "Flutter_Weather_iOS",
+      "type": "dart",
+      "request": "launch",
+      "program": "apps/mobile_flutter/lib/main_dev.dart",
+      "args": []
+    },
   ]
 }

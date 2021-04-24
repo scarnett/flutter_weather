@@ -1,19 +1,24 @@
 buildscript {
+    ext.kotlin_version = '1.4.10'
     ext {
-        compileSdkVersion = 29
-        targetSdkVersion = 29
-        kotlinVersion = '1.4.10'
+        compileSdkVersion = 30
+        targetSdkVersion = 30
+        appCompatVersion = '1.1.0'
     }
 
     repositories {
         google()
         jcenter()
+        maven {
+            url 'http://download.flutter.io'
+        }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.4'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
     }
 }
 
@@ -21,6 +26,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "${project(':background_fetch').projectDir}/libs"
+        }
     }
 }
 

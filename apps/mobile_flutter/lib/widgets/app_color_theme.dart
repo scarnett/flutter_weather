@@ -9,8 +9,8 @@ class AppColorThemeToggle extends StatefulWidget {
   final AppBloc bloc;
 
   AppColorThemeToggle({
-    Key key,
-    @required this.bloc,
+    Key? key,
+    required this.bloc,
   }) : super(key: key);
 
   @override
@@ -28,9 +28,9 @@ class _AppColorThemeToggleState extends State<AppColorThemeToggle> {
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: Tooltip(
-                message: widget.bloc.state.colorTheme
-                    ? AppLocalizations.of(context).colorThemeDisable
-                    : AppLocalizations.of(context).colorThemeEnable,
+                message: widget.bloc.state.colorTheme!
+                    ? AppLocalizations.of(context)!.colorThemeDisable
+                    : AppLocalizations.of(context)!.colorThemeEnable,
                 child: Material(
                   type: MaterialType.transparency,
                   child: Container(
@@ -40,7 +40,7 @@ class _AppColorThemeToggleState extends State<AppColorThemeToggle> {
                       borderRadius: BorderRadius.circular(40.0),
                       child: Icon(
                         Icons.brightness_7,
-                        color: widget.bloc.state.colorTheme
+                        color: widget.bloc.state.colorTheme!
                             ? Colors.white
                             : AppTheme.getHintColor(
                                 widget.bloc.state.themeMode),

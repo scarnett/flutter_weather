@@ -27,7 +27,7 @@ You will need to create a file called **env_config.dart** in the **lib** folder 
 class EnvConfig {
   static const String OPENWEATHERMAP_API_KEY = '<your_openweather_api_key>';
   static const String OPENWEATHERMAP_API_URI = 'api.openweathermap.org';
-  static const String OPENWEATHERMAP_API_DAILY_PATH = '/data/2.5/forecast/daily';
+  static const String OPENWEATHERMAP_API_DAILY_FORECAST_PATH = '/data/2.5/forecast/daily';
   static const int REFRESH_TIMEOUT = 300000; // 5 minutes
   static const String DEFAULT_COUNTRY_CODE = 'us';
   static const String SUPPORTED_LOCALES = 'en';
@@ -123,6 +123,16 @@ nx run mobile_flutter:buildLauncherIcons
 
 ```bash
 nx run mobile_flutter:buildSplashScreens
+```
+
+## Unit and Widget Tests
+```bash
+nx run mobile_flutter:test
+```
+
+## Integration Tests
+```
+nx run mobile_flutter:drive --test=views/lookup/lookup_view_test.dart
 ```
 
 ## Credits

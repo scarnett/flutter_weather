@@ -7,30 +7,35 @@ import 'package:mockito/mockito.dart';
 import 'package:package_info/package_info.dart';
 import '../../../test_utils.dart';
 
-class MockAppBloc extends MockBloc<AppState> implements AppBloc {}
+class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
 void main() {
   ft.TestWidgetsFlutterBinding.ensureInitialized();
 
-  AppBloc _bloc;
+  AppBloc? _bloc;
 
   ft.setUpAll(() {
     _bloc = MockAppBloc();
   });
 
   ft.tearDownAll(() {
-    _bloc.close();
+    _bloc!.close();
   });
 
   ft.testWidgets('Should have \'Latest\' version text',
       (ft.WidgetTester tester) async {
-    when(_bloc.state).thenReturn(AppState());
+    when(_bloc!.state).thenReturn(AppState());
 
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: '1.0.0'),
+          packageInfo: PackageInfo(
+            version: '1.0.0',
+            appName: 'flutter_weather',
+            buildNumber: '1',
+            packageName: 'io.flutter_weather.tst',
+          ),
         ),
       ),
     );
@@ -41,13 +46,18 @@ void main() {
 
   ft.testWidgets('Should have \'Update Available\' version text',
       (ft.WidgetTester tester) async {
-    when(_bloc.state).thenReturn(AppState().copyWith(appVersion: '1.0.1'));
+    when(_bloc!.state).thenReturn(AppState().copyWith(appVersion: '1.0.1'));
 
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: '1.0.0'),
+          packageInfo: PackageInfo(
+            version: '1.0.0',
+            appName: 'flutter_weather',
+            buildNumber: '1',
+            packageName: 'io.flutter_weather.tst',
+          ),
         ),
       ),
     );
@@ -58,13 +68,18 @@ void main() {
 
   ft.testWidgets('Should have \'Beta\' version text',
       (ft.WidgetTester tester) async {
-    when(_bloc.state).thenReturn(AppState().copyWith(appVersion: '1.0.0'));
+    when(_bloc!.state).thenReturn(AppState().copyWith(appVersion: '1.0.0'));
 
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: '1.0.1'),
+          packageInfo: PackageInfo(
+            version: '1.0.1',
+            appName: 'flutter_weather',
+            buildNumber: '1',
+            packageName: 'io.flutter_weather.tst',
+          ),
         ),
       ),
     );
@@ -75,13 +90,18 @@ void main() {
 
   ft.testWidgets('Should have EMPTY version text',
       (ft.WidgetTester tester) async {
-    when(_bloc.state).thenReturn(AppState());
+    when(_bloc!.state).thenReturn(AppState());
 
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
           bloc: _bloc,
-          packageInfo: PackageInfo(version: 'unknown'),
+          packageInfo: PackageInfo(
+            version: 'unknown',
+            appName: 'unknown',
+            buildNumber: 'unknown',
+            packageName: 'unknown',
+          ),
         ),
       ),
     );

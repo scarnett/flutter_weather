@@ -35,6 +35,7 @@ if (keystorePropertiesFile.exists()) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -55,6 +56,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     defaultConfig {
@@ -90,6 +92,15 @@ android {
             manifestPlaceholders.appLabelSuffix = ' - DEV'
         }
 
+        tst {
+            dimension 'flavor-type'
+            applicationId 'io.flutter_weather.prod'
+            versionCode flutterVersionCode.toInteger()
+            versionName flutterVersionName
+            manifestPlaceholders.appLabel = flutterAppLabel
+            manifestPlaceholders.appLabelSuffix = ' - TEST'
+        }
+
         prod {
             dimension 'flavor-type'
             applicationId 'io.flutter_weather.prod'
@@ -106,8 +117,14 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.billingclient:billing:3.0.2'
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test:core-ktx:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

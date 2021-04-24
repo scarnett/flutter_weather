@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-extension ObjectExtension on Object {
+extension ObjectExtension on Object? {
   bool isNullOrEmpty() => (this == null) || (this == '');
 
-  bool isNullEmptyOrFalse() => (this == null) || (this == '') || !this;
+  bool isNullEmptyOrFalse() =>
+      (this == null) || (this == '') || !(this as bool);
 
   bool isNullEmptyZeroOrFalse() =>
-      (this == null) || (this == '') || !this || (this == 0);
+      (this == null) || (this == '') || !(this as bool) || (this == 0);
 }
 
-extension ListExtension on List {
-  bool isNullOrZeroLength() => (this == null) || (this.length == 0);
+extension ListExtension on List? {
+  bool isNullOrZeroLength() => (this == null) || (this!.length == 0);
 }
 
 String toCamelCase(
@@ -22,7 +23,7 @@ String toCamelCase(
         RegExp(
             r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+'),
         (Match match) =>
-            '${match[0][0].toUpperCase()}${match[0].substring(1).toLowerCase()}',
+            '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}',
       )
       .replaceAll(
         RegExp(r'(_|-|\s)+'),
@@ -47,12 +48,12 @@ List<Shadow> commonTextShadow({
     ];
 
 bool isInteger(
-  num value,
+  num? value,
 ) =>
-    (value is int) || (value == value.roundToDouble());
+    (value is int) || (value == value!.roundToDouble());
 
 launchURL(
-  String url,
+  String? url,
 ) async {
   if (url == null) {
     throw 'URL is null';
@@ -72,7 +73,7 @@ animatePage(
   Curve curve: Curves.linear,
 }) {
   pageController.animateToPage(
-    page,
+    page as int,
     duration: Duration(milliseconds: duration),
     curve: curve,
   );

@@ -68,9 +68,9 @@ jobs:
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter analyze .'
       
-      - name: 'Flutter format'
-        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter format --set-exit-if-changed .'
+      # - name: 'Flutter format'
+      #   working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+      #   run: 'flutter format .'
 
       - name: 'Flutter test'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
@@ -185,7 +185,7 @@ jobs:
 
       - name: 'Flutter build apk'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build apk -t lib/main_prod.dart --flavor prod --release --verbose'
+        run: 'flutter build apk -t lib/main_prod.dart --flavor prod --release --verbose --no-sound-null-safety'
 
       - name: 'Compress apk'
         run: exec .github/scripts/compress-android-apk.sh
@@ -297,9 +297,9 @@ jobs:
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter clean'
 
-      - name: 'Flutter build'
+      - name: 'Flutter build ipa'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build ios -t lib/main_prod.dart --release --verbose'
+        run: 'flutter build ios -t lib/main_prod.dart --release --verbose --no-sound-null-safety'
 
       - name: 'Compress ipa'
         run: exec .github/scripts/compress-ios-ipa.sh

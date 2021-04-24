@@ -1,8 +1,8 @@
 import 'package:flutter_weather/localization.dart';
 
-String getTitle(
-  AppLocalizations localization,
-  num currentPage,
+String? getTitle(
+  AppLocalizations? localization,
+  num? currentPage,
 ) {
   if (localization == null) {
     return null;

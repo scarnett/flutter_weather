@@ -13,7 +13,7 @@ class AppLocalizations {
     this.locale,
   );
 
-  static AppLocalizations of(
+  static AppLocalizations? of(
     BuildContext context,
   ) =>
       Localizations.of<AppLocalizations>(
@@ -34,6 +34,8 @@ class AppLocalizations {
   String get updateNow => addMessage('Update Now');
   String get later => addMessage('Later');
   String get beta => addMessage('Beta');
+  String get autoUpdate => addMessage('Auto Updates');
+  String get updatePeriod => addMessage('Update Period');
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
@@ -73,6 +75,7 @@ class AppLocalizations {
   String get city => addMessage('City');
   String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');
+  String get primaryForecast => addMessage('Primary Forecast');
   String get save => addMessage('Save');
   String get delete => addMessage('Delete');
   String get cancel => addMessage('Cancel');
@@ -96,7 +99,7 @@ class AppLocalizations {
       );
 
   String getLastUpdatedAt(
-    String date,
+    String? date,
   ) =>
       addMessage(
         'Last updated at $date',
@@ -105,7 +108,7 @@ class AppLocalizations {
       );
 
   String getLastUpdatedOn(
-    String date,
+    String? date,
   ) =>
       addMessage(
         'Last updated on $date',
@@ -131,13 +134,13 @@ class AppLocalizations {
 
   addMessage(
     String message, {
-    String name,
-    List<Object> args,
+    String? name,
+    List<Object?>? args,
   }) =>
       Intl.message(
         message,
         name: (name == null) ? toCamelCase(message) : name,
-        args: args,
+        args: args as List<Object>?,
         locale: locale.toString(),
       );
 }

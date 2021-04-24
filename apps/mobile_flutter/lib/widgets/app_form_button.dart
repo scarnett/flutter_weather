@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppFormButton extends StatelessWidget {
-  final Function onTap;
-  final String text;
-  final Widget icon;
-  final Color buttonColor;
-  final Color textColor;
+  final Function? onTap;
+  final String? text;
+  final Widget? icon;
+  final Color? buttonColor;
+  final Color? textColor;
 
   AppFormButton({
-    Key key,
+    Key? key,
     this.onTap,
     this.text,
     this.icon,
@@ -35,7 +35,7 @@ class AppFormButton extends StatelessWidget {
         child: (icon == null)
             ? (text == null)
                 ? Container()
-                : Text(text,
+                : Text(text!,
                     style: TextStyle(
                       fontSize: 16.0,
                       color: textColor,
@@ -50,13 +50,13 @@ class AppFormButton extends StatelessWidget {
                       child: icon),
                   (text == null)
                       ? Container()
-                      : Text(text,
+                      : Text(text!,
                           style: TextStyle(
                             fontSize: 16.0,
                             color: textColor,
                           )),
                 ],
               ),
-        onPressed: onTap,
+        onPressed: onTap as void Function()?,
       );
 }

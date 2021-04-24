@@ -6,11 +6,12 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 
 class WeatherApp extends StatelessWidget {
   WeatherApp({
-    Key key,
+    Key? key,
   }) : super(key: key) {
     // Set the orientation to portrait only
     SystemChrome.setPreferredOrientations([
@@ -38,7 +39,14 @@ class FlutterWeatherAppView extends StatefulWidget {
 class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  ThemeData _themeData;
+  ThemeData? _themeData;
+
+  @override
+  void initState() {
+    super.initState();
+    initBackgroundFetch(context);
+    if (!mounted) return;
+  }
 
   @override
   Widget build(
@@ -54,7 +62,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
             listener: _blocListener,
             child: MaterialApp(
               title: AppLocalizations.appTitle,
-              theme: _getTheme(state),
+              theme: _themeData,
               darkTheme: appDarkThemeData,
               themeMode: state.themeMode,
               debugShowCheckedModeBanner: AppConfig.isDebug(context),
@@ -77,17 +85,8 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
         if (state.activeForecastId != null) {
           _themeData = appLightThemeData;
         } else {
-          _themeData = state.colorTheme ? appColorThemeData : appLightThemeData;
+          _themeData =
+              state.colorTheme! ? appColorThemeData : appLightThemeData;
         }
       });
-
-  ThemeData _getTheme(
-    AppState state,
-  ) {
-    if (_themeData != null) {
-      return _themeData;
-    }
-
-    return state.colorTheme ? appColorThemeData : appLightThemeData;
-  }
 }
