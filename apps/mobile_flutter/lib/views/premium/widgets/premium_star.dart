@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class PremiumStar extends StatefulWidget {
   final Color color;
-  final double iconSize;
+  final double? iconSize;
   final double pulseSize;
   final double speed;
 
@@ -20,9 +20,9 @@ class PremiumStar extends StatefulWidget {
 
 class _ForecastIconState extends State<PremiumStar>
     with TickerProviderStateMixin {
-  AnimationController _rotateController;
-  AnimationController _sizeController;
-  Tween<double> _sizeTween;
+  late AnimationController _rotateController;
+  late AnimationController _sizeController;
+  late Tween<double> _sizeTween;
 
   @override
   void initState() {
@@ -32,8 +32,8 @@ class _ForecastIconState extends State<PremiumStar>
 
   @override
   void dispose() {
-    _rotateController?.dispose();
-    _sizeController?.dispose();
+    _rotateController.dispose();
+    _sizeController.dispose();
     super.dispose();
   }
 
@@ -58,7 +58,7 @@ class _ForecastIconState extends State<PremiumStar>
         ),
         builder: (
           BuildContext context,
-          Widget _widget,
+          Widget? _widget,
         ) =>
             Transform.rotate(
           angle: (_rotateController.value * widget.speed),

@@ -66,7 +66,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
   }
 
   Widget _buildPremiumButton() => Tooltip(
-        message: AppLocalizations.of(context).upgrade,
+        message: AppLocalizations.of(context)!.upgrade,
         child: Material(
           type: MaterialType.transparency,
           child: Container(

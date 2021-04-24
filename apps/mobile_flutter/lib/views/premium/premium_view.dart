@@ -12,7 +12,7 @@ class PremiumView extends StatelessWidget {
       MaterialPageRoute<void>(builder: (_) => PremiumView());
 
   const PremiumView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class PremiumView extends StatelessWidget {
 
 class PremiumPageView extends StatefulWidget {
   PremiumPageView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -40,7 +40,7 @@ class _PremiumPageViewState extends State<PremiumPageView> {
         themeMode: context.read<AppBloc>().state.themeMode,
         colorTheme: context.read<AppBloc>().state.colorTheme,
         systemNavigationBarIconBrightness:
-            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
+            context.read<AppBloc>().state.colorTheme! ? Brightness.dark : null,
         child: Scaffold(
           extendBody: true,
           extendBodyBehindAppBar: true,
@@ -97,7 +97,7 @@ class _PremiumPageViewState extends State<PremiumPageView> {
                       'Refresh your forecasts anytime, get hourly and weekly forecasts, ad fee and more...', // TODO!
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText2
+                          .bodyText2!
                           .copyWith(height: 1.5),
                       textAlign: TextAlign.center,
                     ),
@@ -128,7 +128,7 @@ class _PremiumPageViewState extends State<PremiumPageView> {
                     '\$1.00 per year', // TODO!
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText2
+                        .bodyText2!
                         .copyWith(fontSize: 10.0),
                     textAlign: TextAlign.center,
                   ),

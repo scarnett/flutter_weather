@@ -6,7 +6,7 @@ import 'package:flutter_weather/views/premium/widgets/premium_star.dart';
 
 class AppPremiumTrigger extends StatefulWidget {
   const AppPremiumTrigger({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   _AppPremiumTrigger createState() => _AppPremiumTrigger();
@@ -17,7 +17,7 @@ class _AppPremiumTrigger extends State<AppPremiumTrigger> {
 
   @override
   void initState() {
-    _colorTheme = context.read<AppBloc>().state.colorTheme;
+    _colorTheme = context.read<AppBloc>().state.colorTheme!;
     super.initState();
   }
 
