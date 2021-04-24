@@ -10,7 +10,13 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
-import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart'
+    as forecastUtils;
+import 'package:flutter_weather/views/settings/settings_utils.dart'
+    as settingsUtils;
+import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
@@ -23,7 +29,7 @@ class SettingsView extends StatelessWidget {
       MaterialPageRoute<void>(builder: (_) => SettingsView());
 
   const SettingsView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -35,7 +41,7 @@ class SettingsView extends StatelessWidget {
 
 class SettingsPageView extends StatefulWidget {
   SettingsPageView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -43,6 +49,9 @@ class SettingsPageView extends StatefulWidget {
 }
 
 class _SettingsPageViewState extends State<SettingsPageView> {
+  PageController? _pageController;
+  num _currentPage = 0;
+
   PackageInfo _packageInfo = PackageInfo(
     appName: 'unknown',
     packageName: 'unknown',
@@ -54,6 +63,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   void initState() {
     super.initState();
     _initPackageInfo();
+
+    _pageController = PageController(keepPage: true)
+      ..addListener(() {
+        _onPageChange(_pageController!.page ?? 0);
+      });
+  }
+
+  @override
+  void dispose() {
+    _pageController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -64,17 +84,20 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         themeMode: context.read<AppBloc>().state.themeMode,
         colorTheme: context.read<AppBloc>().state.colorTheme,
         systemNavigationBarIconBrightness:
-            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
+            context.read<AppBloc>().state.colorTheme! ? Brightness.dark : null,
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).settings),
+            title: Text(settingsUtils.getTitle(context, _currentPage)),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: _handleBack,
             ),
           ),
-          body: _buildContent(),
+          body: WillPopScope(
+            onWillPop: () => _willPopCallback(),
+            child: _buildContent(),
+          ),
         ),
       );
 
@@ -83,8 +106,26 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     setState(() => _packageInfo = info);
   }
 
+  Future<void> _handleBack() async {
+    if (_currentPage > 0) {
+      animatePage(_pageController!, page: 0);
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<bool> _willPopCallback() async {
+    if (_currentPage > 0) {
+      animatePage(_pageController!, page: 0);
+      return Future.value(false);
+    }
+
+    return Future.value(true);
+  }
+
   Widget _buildContent() {
     List<Widget> children = []
+      ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
 
@@ -95,15 +136,76 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     children..addAll(_buildBuildInfoSection());
 
     if (EnvConfig.GITHUB_URL != null) {
-      children..add(_buildOpenSourceSection());
+      children
+        ..add(SettingsOpenSourceInfo(
+          themeMode: context.read<AppBloc>().state.themeMode,
+        ));
     }
 
     return SafeArea(
-      child: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Column(children: children),
+      child: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Column(children: children),
+          ),
+          SettingsUpdatePeriodPicker(
+            selectedPeriod: context.read<AppBloc>().state.updatePeriod,
+            onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
+          ),
+        ],
       ),
     );
+  }
+
+  List<Widget> _buildAutoUpdatePeriodSection() {
+    UpdatePeriod? updatePeriod = context.read<AppBloc>().state.updatePeriod;
+    List<Widget> widgets = <Widget>[];
+    widgets.addAll(
+      [
+        AppSectionHeader(
+          bloc: context.read<AppBloc>(),
+          text: AppLocalizations.of(context)!.autoUpdate,
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 4.0,
+            top: 16.0,
+            bottom: 16.0,
+          ),
+          options: [
+            SizedBox(
+              height: 16.0,
+              child: Switch(
+                onChanged: (bool value) => _tapUpdatePeriod(
+                  value ? UpdatePeriod.HOUR2 : null,
+                  redirect: false,
+                ),
+                value: (updatePeriod != null),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    if (updatePeriod != null) {
+      widgets.addAll([
+        Divider(),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.updatePeriod,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          trailing:
+              Text(context.read<AppBloc>().state.updatePeriod!.info!['text']),
+          onTap: () => animatePage(_pageController!, page: 1),
+        ),
+      ]);
+    }
+
+    return widgets;
   }
 
   List<Widget> _buildThemeModeSection() {
@@ -113,11 +215,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context).themeMode,
+          text: AppLocalizations.of(context)!.themeMode,
         ),
         AppRadioTile<ThemeMode>(
           bloc: context.read<AppBloc>(),
-          title: AppLocalizations.of(context).light,
+          title: AppLocalizations.of(context)!.light,
           value: ThemeMode.light,
           groupValue: _themeMode,
           onTap: _tapThemeMode,
@@ -127,13 +229,13 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     );
 
     if ((_themeMode == ThemeMode.light) &&
-        hasForecasts(context.read<AppBloc>().state.forecasts)) {
+        forecastUtils.hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
           AppChekboxTile(
             bloc: context.read<AppBloc>(),
-            title: AppLocalizations.of(context).colorized,
-            checked: context.read<AppBloc>().state.colorTheme,
+            title: AppLocalizations.of(context)!.colorized,
+            checked: context.read<AppBloc>().state.colorTheme!,
             onTap: _tapColorized,
           ),
           Divider(),
@@ -144,7 +246,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     widgets.add(
       AppRadioTile<ThemeMode>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).dark,
+        title: AppLocalizations.of(context)!.dark,
         value: ThemeMode.dark,
         groupValue: _themeMode,
         onTap: _tapThemeMode,
@@ -161,11 +263,11 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     return [
       AppSectionHeader(
         bloc: context.read<AppBloc>(),
-        text: AppLocalizations.of(context).temperatureUnit,
+        text: AppLocalizations.of(context)!.temperatureUnit,
       ),
       AppRadioTile<TemperatureUnit>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).celsius,
+        title: AppLocalizations.of(context)!.celsius,
         value: TemperatureUnit.celsius,
         groupValue: _temperatureUnit,
         onTap: _tapTemperatureUnit,
@@ -173,7 +275,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       Divider(),
       AppRadioTile<TemperatureUnit>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).fahrenheit,
+        title: AppLocalizations.of(context)!.fahrenheit,
         value: TemperatureUnit.fahrenheit,
         groupValue: _temperatureUnit,
         onTap: _tapTemperatureUnit,
@@ -181,7 +283,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       Divider(),
       AppRadioTile<TemperatureUnit>(
         bloc: context.read<AppBloc>(),
-        title: AppLocalizations.of(context).kelvin,
+        title: AppLocalizations.of(context)!.kelvin,
         value: TemperatureUnit.kelvin,
         groupValue: _temperatureUnit,
         onTap: _tapTemperatureUnit,
@@ -192,12 +294,12 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   List<Widget> _buildAboutSection() => [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context).about,
+          text: AppLocalizations.of(context)!.about,
         ),
         ListTile(
           title: RichText(
             text: TextSpan(
-              text: AppLocalizations.of(context).privacyPolicy,
+              text: AppLocalizations.of(context)!.privacyPolicy,
               style: TextStyle(
                 color: AppTheme.primaryColor,
                 decoration: TextDecoration.underline,
@@ -212,7 +314,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   List<Widget> _buildBuildInfoSection() => [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context).buildInformation,
+          text: AppLocalizations.of(context)!.buildInformation,
         ),
         ListTile(
           title: Text(
@@ -223,56 +325,40 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             bloc: context.read<AppBloc>(),
             packageInfo: _packageInfo,
           ),
+          onTap: () => animatePage(_pageController!, page: 1),
         ),
         Divider(),
       ];
 
-  Widget _buildOpenSourceSection() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(
-            child: InkWell(
-              onTap: () => launchURL(EnvConfig.GITHUB_URL),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Image.asset(
-                  (context.read<AppBloc>().state.themeMode == ThemeMode.light)
-                      ? 'assets/images/github_dark.png'
-                      : 'assets/images/github_light.png',
-                  width: 50.0,
-                  height: 50.0,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () => launchURL('https://opensource.org/'),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Image.asset(
-                  'assets/images/osi.png',
-                  width: 50.0,
-                  height: 50.0,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
+  void _onPageChange(
+    num currentPage,
+  ) {
+    setState(() => _currentPage = currentPage);
+  }
+
+  void _tapUpdatePeriod(
+    UpdatePeriod? period, {
+    bool redirect: true,
+  }) {
+    context.read<AppBloc>().add(SetUpdatePeriod(updatePeriod: period));
+
+    if (redirect) {
+      animatePage(_pageController!, page: 0);
+    }
+  }
 
   void _tapThemeMode(
-    ThemeMode themeMode,
+    ThemeMode? themeMode,
   ) =>
       context.read<AppBloc>().add(SetThemeMode(themeMode));
 
   void _tapColorized(
-    bool checked,
+    bool? checked,
   ) =>
       context.read<AppBloc>().add(SetColorTheme(checked));
 
   void _tapTemperatureUnit(
-    TemperatureUnit temperatureUnit,
+    TemperatureUnit? temperatureUnit,
   ) =>
       context.read<AppBloc>().add(SetTemperatureUnit(temperatureUnit));
 

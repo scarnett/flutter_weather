@@ -19,5 +19,5 @@ Finder findText(
   String text,
 ) =>
     find.byWidgetPredicate(
-      (Widget widget) => (widget is Text) && widget.data.startsWith(text),
+      (Widget widget) => (widget is Text) && widget.data!.startsWith(text),
     );

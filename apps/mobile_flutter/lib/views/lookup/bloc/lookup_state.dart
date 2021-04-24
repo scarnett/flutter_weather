@@ -2,12 +2,12 @@ part of 'lookup_bloc.dart';
 
 @immutable
 class LookupState extends Equatable {
-  final String cityName;
-  final String postalCode;
-  final String countryCode;
-  final bool primary;
-  final Forecast lookupForecast;
-  final LookupStatus status;
+  final String? cityName;
+  final String? postalCode;
+  final String? countryCode;
+  final bool? primary;
+  final Forecast? lookupForecast;
+  final LookupStatus? status;
 
   LookupState({
     this.cityName,
@@ -32,12 +32,12 @@ class LookupState extends Equatable {
   const LookupState.clear() : this._();
 
   LookupState copyWith({
-    Nullable<String> cityName,
-    Nullable<String> postalCode,
-    Nullable<String> countryCode,
-    Nullable<bool> primary,
-    Nullable<Forecast> lookupForecast,
-    Nullable<LookupStatus> status,
+    Nullable<String?>? cityName,
+    Nullable<String?>? postalCode,
+    Nullable<String?>? countryCode,
+    Nullable<bool?>? primary,
+    Nullable<Forecast?>? lookupForecast,
+    Nullable<LookupStatus?>? status,
   }) =>
       LookupState._(
         cityName: (cityName == null) ? this.cityName : cityName.value,
@@ -52,7 +52,7 @@ class LookupState extends Equatable {
       );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         cityName,
         postalCode,
         countryCode,

@@ -3,12 +3,12 @@ import 'package:flutter/physics.dart';
 
 class AppPageViewScrollPhysics extends ScrollPhysics {
   const AppPageViewScrollPhysics({
-    ScrollPhysics parent,
+    ScrollPhysics? parent,
   }) : super(parent: parent);
 
   @override
   AppPageViewScrollPhysics applyTo(
-    ScrollPhysics ancestor,
+    ScrollPhysics? ancestor,
   ) =>
       AppPageViewScrollPhysics(parent: buildParent(ancestor));
 

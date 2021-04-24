@@ -9,7 +9,7 @@ class MockAppLocalizations extends Mock implements AppLocalizations {
 }
 
 void main() {
-  AppLocalizations _localizations;
+  late AppLocalizations _localizations;
 
   setUp(() {
     _localizations = MockAppLocalizations();

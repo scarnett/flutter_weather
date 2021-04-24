@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ class LookupView extends StatelessWidget {
   static Route route() => MaterialPageRoute<void>(builder: (_) => LookupView());
 
   const LookupView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -41,7 +42,7 @@ class LookupView extends StatelessWidget {
 
 class LookupPageView extends StatefulWidget {
   LookupPageView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -51,7 +52,7 @@ class LookupPageView extends StatefulWidget {
 class _LookupPageViewState extends State<LookupPageView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  ForecastFormController _formController;
+  ForecastFormController? _formController;
   num _currentPage = 0;
 
   @override
@@ -62,7 +63,7 @@ class _LookupPageViewState extends State<LookupPageView> {
 
   @override
   void dispose() {
-    _formController.dispose();
+    _formController!.dispose();
     super.dispose();
   }
 
@@ -84,7 +85,7 @@ class _LookupPageViewState extends State<LookupPageView> {
             themeMode: context.watch<AppBloc>().state.themeMode,
             colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
             systemNavigationBarIconBrightness:
-                context.watch<AppBloc>().state.colorTheme
+                context.watch<AppBloc>().state.colorTheme!
                     ? Brightness.dark
                     : null,
             child: Theme(
@@ -96,7 +97,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                 extendBody: true,
                 appBar: AppBar(
                   title: Text(
-                    getTitle(AppLocalizations.of(context), _currentPage),
+                    getTitle(AppLocalizations.of(context), _currentPage)!,
                   ),
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back),
@@ -137,13 +138,13 @@ class _LookupPageViewState extends State<LookupPageView> {
     LookupState state,
   ) {
     if (state.status != null) {
-      AppLocalizations i18n = AppLocalizations.of(context);
+      AppLocalizations? i18n = AppLocalizations.of(context);
 
       switch (state.status) {
         case LookupStatus.FORECAST_NOT_FOUND:
           closeKeyboard(context);
-          _scaffoldKey.currentState
-              .showSnackBar(SnackBar(content: Text(i18n.lookupFailure)));
+          _scaffoldKey.currentState!
+              .showSnackBar(SnackBar(content: Text(i18n!.lookupFailure)));
           break;
 
         default:
@@ -156,7 +157,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     LookupState state,
   ) {
     if (_currentPage > 0) {
-      _formController.animateToPage(0);
+      _formController!.animateToPage!(0);
       return Future.value(false);
     } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
@@ -167,7 +168,7 @@ class _LookupPageViewState extends State<LookupPageView> {
   }
 
   Widget _buildContent() {
-    Forecast lookupForecast = context.read<LookupBloc>().state.lookupForecast;
+    Forecast? lookupForecast = context.read<LookupBloc>().state.lookupForecast;
     if (lookupForecast != null) {
       return SingleChildScrollView(
         physics: ClampingScrollPhysics(),
@@ -182,7 +183,7 @@ class _LookupPageViewState extends State<LookupPageView> {
               padding: const EdgeInsets.only(top: 30.0),
               child: AppFormButton(
                 key: Key(AppKeys.addThisForecastKey),
-                text: AppLocalizations.of(context).addThisForecast,
+                text: AppLocalizations.of(context)!.addThisForecast,
                 icon: Icon(Icons.add, size: 16.0),
                 onTap: _tapAddLocation,
               ),
@@ -195,7 +196,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     return ForecastForm(
       buttonKey: Key(AppKeys.locationLookupButtonKey),
       formController: _formController,
-      saveButtonText: AppLocalizations.of(context).lookup,
+      saveButtonText: AppLocalizations.of(context)!.lookup,
       forecasts: context.read<AppBloc>().state.forecasts,
       onSuccess: _onSuccess,
       onFailure: _onFailure,
@@ -207,7 +208,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     LookupState state,
   ) {
     if (_currentPage > 0) {
-      _formController.animateToPage(0);
+      _formController!.animateToPage!(0);
     } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
     } else {
@@ -217,20 +218,19 @@ class _LookupPageViewState extends State<LookupPageView> {
 
   void _tapAddLocation() {
     LookupState lookupState = context.read<LookupBloc>().state;
-    Forecast forecast = lookupState.lookupForecast.copyWith(
+    Forecast forecast = lookupState.lookupForecast!.copyWith(
       id: Uuid().v4(),
-      cityName: Nullable<String>(lookupState.cityName),
-      postalCode: Nullable<String>(lookupState.postalCode),
-      countryCode: Nullable<String>(lookupState.countryCode),
-      primary: Nullable<bool>(lookupState.primary),
+      cityName: Nullable<String?>(lookupState.cityName),
+      postalCode: Nullable<String?>(lookupState.postalCode),
+      countryCode: Nullable<String?>(lookupState.countryCode),
+      primary: Nullable<bool?>(lookupState.primary),
       lastUpdated: getNow(),
     );
 
-    if (lookupState.primary) {
+    if (lookupState.primary!) {
       List<Forecast> forecasts = context.read<AppBloc>().state.forecasts;
-      Forecast primaryForecast = forecasts.firstWhere(
-          (Forecast forecast) => forecast.primary,
-          orElse: () => null);
+      Forecast? primaryForecast = forecasts.firstWhereOrNull(
+          (Forecast forecast) => forecast.primary!);
 
       if (primaryForecast != null) {
         // Remove the status from the current primary forecast
@@ -247,9 +247,8 @@ class _LookupPageViewState extends State<LookupPageView> {
   ) async {
     Map<String, dynamic> lookupData = state.toJson();
     if (lookupData.containsKey('countryCode')) {
-      final Country country = (await IsoCountries.iso_countries).firstWhere(
-          (Country _country) => _country.name == lookupData['countryCode'],
-          orElse: () => null);
+      final Country? country = (await IsoCountries.iso_countries).firstWhereOrNull(
+          (Country _country) => _country.name == lookupData['countryCode']);
 
       lookupData['countryCode'] = (country == null)
           ? EnvConfig.DEFAULT_COUNTRY_CODE
@@ -268,7 +267,7 @@ class _LookupPageViewState extends State<LookupPageView> {
   ) {
     closeKeyboard(context);
     Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text(state.failureResponse)));
+        .showSnackBar(SnackBar(content: Text(state.failureResponse!)));
   }
 
   void _onPageChange(

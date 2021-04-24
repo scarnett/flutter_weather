@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppUiOverlayStyle extends StatefulWidget {
-  final Widget child;
-  final ThemeMode themeMode;
-  final bool colorTheme;
-  final Color systemNavigationBarColor;
-  final Brightness systemNavigationBarIconBrightness;
+  final Widget? child;
+  final ThemeMode? themeMode;
+  final bool? colorTheme;
+  final Color? systemNavigationBarColor;
+  final Brightness? systemNavigationBarIconBrightness;
 
   AppUiOverlayStyle({
     this.child,
@@ -30,25 +30,25 @@ class _AppUiOverlayStyleState extends State<AppUiOverlayStyle> {
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarBrightness:
-              (widget.themeMode == ThemeMode.light) && !widget.colorTheme
+              (widget.themeMode == ThemeMode.light) && !widget.colorTheme!
                   ? Brightness.light
                   : Brightness.dark,
           statusBarIconBrightness:
-              (widget.themeMode == ThemeMode.light) && !widget.colorTheme
+              (widget.themeMode == ThemeMode.light) && !widget.colorTheme!
                   ? Brightness.dark
                   : Brightness.light,
           systemNavigationBarColor:
-              widget.colorTheme && (widget.systemNavigationBarColor != null)
+              widget.colorTheme! && (widget.systemNavigationBarColor != null)
                   ? widget.systemNavigationBarColor
                   : Theme.of(context).scaffoldBackgroundColor,
           systemNavigationBarIconBrightness:
               (widget.systemNavigationBarIconBrightness != null)
                   ? widget.systemNavigationBarIconBrightness
-                  : (widget.themeMode == ThemeMode.light) && !widget.colorTheme
+                  : (widget.themeMode == ThemeMode.light) && !widget.colorTheme!
                       ? Brightness.dark
                       : Brightness.light,
           systemNavigationBarDividerColor: Colors.transparent,
         ),
-        child: widget.child,
+        child: widget.child!,
       );
 }

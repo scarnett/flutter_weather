@@ -12,8 +12,8 @@ class AppUpdateDialog extends StatefulWidget {
   final String appVersion;
 
   AppUpdateDialog({
-    @required this.packageInfo,
-    @required this.appVersion,
+    required this.packageInfo,
+    required this.appVersion,
   });
 
   @override
@@ -27,19 +27,19 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
   ) {
     if (Platform.isIOS) {
       return CupertinoAlertDialog(
-        title: Text(AppLocalizations.of(context).updateAvailable),
-        content: Text(AppLocalizations.of(context).getUpdateAvailableText(
+        title: Text(AppLocalizations.of(context)!.updateAvailable),
+        content: Text(AppLocalizations.of(context)!.getUpdateAvailableText(
           AppLocalizations.appTitle,
           widget.packageInfo.version,
           widget.appVersion,
         )),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text(AppLocalizations.of(context).updateNow),
+            child: Text(AppLocalizations.of(context)!.updateNow),
             onPressed: _tapOpenAppStore,
           ),
           CupertinoDialogAction(
-            child: Text(AppLocalizations.of(context).later),
+            child: Text(AppLocalizations.of(context)!.later),
             onPressed: _tapLater,
           ),
         ],
@@ -47,19 +47,19 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
     }
 
     return AlertDialog(
-      title: Text(AppLocalizations.of(context).updateAvailable),
-      content: Text(AppLocalizations.of(context).getUpdateAvailableText(
+      title: Text(AppLocalizations.of(context)!.updateAvailable),
+      content: Text(AppLocalizations.of(context)!.getUpdateAvailableText(
         AppLocalizations.appTitle,
         widget.packageInfo.version,
         widget.appVersion,
       )),
       actions: <Widget>[
         AppFormButton(
-          text: AppLocalizations.of(context).updateNow,
+          text: AppLocalizations.of(context)!.updateNow,
           onTap: _tapOpenPlayStore,
         ),
         AppFormButton(
-          text: AppLocalizations.of(context).later,
+          text: AppLocalizations.of(context)!.later,
           textColor: AppTheme.disabledColor,
           buttonColor: Colors.transparent,
           onTap: _tapLater,

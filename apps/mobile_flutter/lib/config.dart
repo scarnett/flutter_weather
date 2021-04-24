@@ -11,11 +11,11 @@ class AppConfig extends InheritedWidget {
   final Flavor flavor;
 
   AppConfig({
-    @required this.flavor,
-    @required Widget child,
+    required this.flavor,
+    required Widget child,
   }) : super(child: child);
 
-  static AppConfig of(
+  static AppConfig? of(
     BuildContext context,
   ) =>
       context.dependOnInheritedWidgetOfExactType(aspect: AppConfig);
@@ -23,7 +23,7 @@ class AppConfig extends InheritedWidget {
   static bool isDebug(
     BuildContext context,
   ) {
-    Flavor flavor = AppConfig.of(context).flavor;
+    Flavor flavor = AppConfig.of(context)!.flavor;
     switch (flavor) {
       case Flavor.dev:
         return true;
@@ -40,7 +40,7 @@ class AppConfig extends InheritedWidget {
   static bool isRelease(
     BuildContext context,
   ) {
-    Flavor flavor = AppConfig.of(context).flavor;
+    Flavor flavor = AppConfig.of(context)!.flavor;
     switch (flavor) {
       case Flavor.prod:
         return true;

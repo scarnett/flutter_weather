@@ -27,24 +27,24 @@ Uri getDailyApiUri(
 }
 
 num getTemperature(
-  num temperature,
+  num? temperature,
   TemperatureUnit unit,
 ) {
   switch (unit) {
     case TemperatureUnit.fahrenheit:
-      return (temperature * (9 / 5) - 459.67).round();
+      return (temperature! * (9 / 5) - 459.67).round();
 
     case TemperatureUnit.celsius:
-      return (temperature - 273.15).round();
+      return (temperature! - 273.15).round();
 
     case TemperatureUnit.kelvin:
     default:
-      return temperature.round();
+      return temperature!.round();
   }
 }
 
-Color getTemperatureColor(
-  num temperature,
+Color? getTemperatureColor(
+  num? temperature,
 ) {
   num _temperature = getTemperature(temperature, TemperatureUnit.fahrenheit);
   if (_temperature > 100) {
@@ -80,20 +80,20 @@ Color getTemperatureColor(
   return Colors.blueGrey[50];
 }
 
-Animatable<Color> buildForecastColorSequence(
+Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {
-  List<TweenSequenceItem<Color>> colors = List<TweenSequenceItem<Color>>();
+  List<TweenSequenceItem<Color?>> colors = <TweenSequenceItem<Color>>[];
 
-  if ((forecastList != null) && forecastList.isNotEmpty) {
+  if (forecastList.isNotEmpty) {
     forecastList.asMap().forEach((int index, Forecast forecast) {
-      Color nextColor;
-      Color thisColor = getTemperatureColor(forecast.list.first.temp.day);
+      Color? nextColor;
+      Color? thisColor = getTemperatureColor(forecast.list!.first.temp!.day);
 
       int nextForecastIndex = (index + 1);
       if (nextForecastIndex < forecastList.length) {
         Forecast nextForecast = forecastList[nextForecastIndex];
-        nextColor = getTemperatureColor(nextForecast.list.first.temp.day);
+        nextColor = getTemperatureColor(nextForecast.list!.first.temp!.day);
       } else {
         nextColor = thisColor;
       }
@@ -108,11 +108,11 @@ Animatable<Color> buildForecastColorSequence(
     });
   }
 
-  if ((colors == null) || colors.isEmpty) {
+  if (colors.isEmpty) {
     return null;
   }
 
-  return TweenSequence<Color>(colors);
+  return TweenSequence<Color?>(colors);
 }
 
 String getLocationText(
@@ -121,18 +121,18 @@ String getLocationText(
   String text = '';
 
   if (!forecast.postalCode.isNullOrEmpty()) {
-    text += '${forecast.postalCode.toUpperCase()}, ';
+    text += '${forecast.postalCode!.toUpperCase()}, ';
   }
 
   if (!forecast.countryCode.isNullOrEmpty()) {
-    text += '${forecast.countryCode.toUpperCase()}';
+    text += '${forecast.countryCode!.toUpperCase()}';
   }
 
   return text.trim();
 }
 
 String getUnitSymbol(
-  TemperatureUnit unit,
+  TemperatureUnit? unit,
 ) {
   switch (unit) {
     case TemperatureUnit.fahrenheit:
@@ -151,7 +151,7 @@ String getUnitSymbol(
 
 // @see https://openweathermap.org/weather-conditions
 IconData getForecastIconData(
-  String iconCode,
+  String? iconCode,
 ) {
   switch (iconCode) {
     case '01d':
@@ -213,24 +213,32 @@ String getTitle(
   BuildContext context,
   num _currentPage,
 ) {
-  if ((_currentPage != null) && (_currentPage.toInt() == 1)) {
-    return AppLocalizations.of(context).country;
+  if (_currentPage.toInt() == 1) {
+    return AppLocalizations.of(context)!.country;
   }
 
-  return AppLocalizations.of(context).editForecast;
+  return AppLocalizations.of(context)!.editForecast;
 }
 
 bool canRefresh(
-  AppState state,
-) {
-  if (!forecastIndexExists(state.forecasts, state.selectedForecastIndex)) {
-    return false;
+  AppState state, {
+  int? index,
+  Forecast? forecast,
+}) {
+  if (index != null) {
+    if (!forecastIndexExists(state.forecasts, index)) {
+      return false;
+    }
+
+    Forecast selectedForecast = state.forecasts[index];
+    return (selectedForecast.lastUpdated == null) ||
+        getNextUpdateTime(selectedForecast.lastUpdated!).isBefore(getNow());
+  } else if (forecast != null) {
+    return (forecast.lastUpdated == null) ||
+        getNextUpdateTime(forecast.lastUpdated!).isBefore(getNow());
   }
 
-  Forecast selectedForecast = state.forecasts[state.selectedForecastIndex];
-  return (selectedForecast == null) ||
-      (selectedForecast.lastUpdated == null) ||
-      getNextUpdateTime(selectedForecast.lastUpdated).isBefore(getNow());
+  return false;
 }
 
 DateTime getNextUpdateTime(
@@ -239,13 +247,13 @@ DateTime getNextUpdateTime(
     dateTime.add(Duration(milliseconds: EnvConfig.REFRESH_TIMEOUT));
 
 bool hasForecasts(
-  List<Forecast> forecasts,
+  List<Forecast>? forecasts,
 ) =>
     (forecasts != null) && forecasts.isNotEmpty;
 
 bool forecastIndexExists(
   List<Forecast> forecasts,
-  int index,
+  int? index,
 ) {
   if (hasForecasts(forecasts) && forecasts.asMap().containsKey(index)) {
     return true;

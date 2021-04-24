@@ -7,12 +7,12 @@ import 'package:flutter_weather/views/forecast/forecast_form_view.dart';
 import 'package:mockito/mockito.dart';
 import '../../test_utils.dart';
 
-class MockAppBloc extends MockBloc<AppState> implements AppBloc {}
+class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
 void main() {
   ft.TestWidgetsFlutterBinding.ensureInitialized();
 
-  AppBloc _bloc;
+  late AppBloc _bloc;
 
   ft.setUpAll(() {
     _bloc = MockAppBloc();

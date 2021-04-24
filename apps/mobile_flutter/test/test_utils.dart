@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/localization.dart';
 
 Widget buildFrame({
-  @required WidgetBuilder buildContent,
+  required WidgetBuilder buildContent,
 }) =>
     MaterialApp(
       localizationsDelegates: [
