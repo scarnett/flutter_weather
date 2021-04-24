@@ -185,7 +185,7 @@ jobs:
 
       - name: 'Flutter build app bundle'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose'
+        run: 'flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose --no-sound-null-safety'
 
       - name: 'Compress app bundle'
         run: exec .github/scripts/compress-android-appbundle.sh
@@ -298,7 +298,7 @@ jobs:
 
       - name: 'Flutter build ipa'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build ios -t lib/main_prod.dart --release --verbose'
+        run: 'flutter build ios -t lib/main_prod.dart --release --verbose --no-sound-null-safety'
 
       - name: 'Compress ipa'
         run: exec .github/scripts/compress-ios-ipa.sh

@@ -2,18 +2,18 @@ import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:version/version.dart';
 
 String scrubVersion(
-  String version,
+  String? version,
 ) {
   if (version.isNullOrEmpty()) {
     return '';
   }
 
-  String scrubbedVersion = version.replaceAll(RegExp(r'[^0-9.+]'), '');
+  String scrubbedVersion = version!.replaceAll(RegExp(r'[^0-9.+]'), '');
   return scrubbedVersion;
 }
 
-Version getAppVersion(
-  String appVersion,
+Version? getAppVersion(
+  String? appVersion,
 ) {
   if (appVersion.isNullOrEmpty()) {
     return null;
@@ -32,8 +32,8 @@ Version getAppVersion(
 }
 
 bool needsAppUpdate(
-  String appVersion,
-  String packageVersion,
+  String? appVersion,
+  String? packageVersion,
 ) {
   if (appVersion.isNullOrEmpty() || packageVersion.isNullOrEmpty()) {
     return true;

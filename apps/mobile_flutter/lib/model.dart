@@ -21,7 +21,7 @@ extension TemperatureUnitExtension on TemperatureUnit {
 }
 
 TemperatureUnit getTemperatureUnit(
-  String temperatureUnit,
+  String? temperatureUnit,
 ) {
   switch (temperatureUnit) {
     case 'TemperatureUnit.kelvin':

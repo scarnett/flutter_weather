@@ -7,19 +7,17 @@ class AppRadioTile<T> extends StatelessWidget {
   final AppBloc bloc;
   final String title;
   final T value;
-  final T groupValue;
-  final Function(T) onTap;
+  final T? groupValue;
+  final Function(T?)? onTap;
 
   const AppRadioTile({
-    Key key,
-    this.bloc,
-    this.title,
-    this.value,
+    Key? key,
+    required this.bloc,
+    required this.title,
+    required this.value,
     this.groupValue,
     this.onTap,
-  })  : assert(bloc != null),
-        assert(title != null),
-        assert(value != null),
+  })  : assert(value != null),
         super(key: key);
 
   @override

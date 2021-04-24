@@ -9,7 +9,7 @@ class ForecastDetailsView extends StatelessWidget {
       MaterialPageRoute<void>(builder: (_) => ForecastDetailsView());
 
   const ForecastDetailsView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -21,7 +21,7 @@ class ForecastDetailsView extends StatelessWidget {
 
 class ForecastPageView extends StatefulWidget {
   ForecastPageView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

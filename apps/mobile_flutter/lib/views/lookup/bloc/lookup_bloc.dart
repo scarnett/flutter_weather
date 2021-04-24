@@ -32,15 +32,16 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     LookupForecast event,
   ) async* {
     yield state.copyWith(
-      status: Nullable<LookupStatus>(null),
+      status: Nullable<LookupStatus?>(null),
     );
 
     http.Response forecastResponse = await tryLookupForecast(event.lookupData);
     if (forecastResponse.statusCode == 200) {
       yield state.copyWith(
-        cityName: Nullable<String>(event.lookupData['cityName']),
-        postalCode: Nullable<String>(event.lookupData['postalCode']),
-        countryCode: Nullable<String>(event.lookupData['countryCode']),
+        cityName: Nullable<String?>(event.lookupData['cityName']),
+        postalCode: Nullable<String?>(event.lookupData['postalCode']),
+        countryCode: Nullable<String?>(event.lookupData['countryCode']),
+        primary: Nullable<bool?>(event.lookupData['primary']),
         lookupForecast: Nullable<Forecast>(
             Forecast.fromJson(jsonDecode(forecastResponse.body))),
         status: Nullable<LookupStatus>(LookupStatus.FORECAST_FOUND),
@@ -56,7 +57,7 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     ClearLookupForecast event,
   ) async* {
     yield state.copyWith(
-      lookupForecast: Nullable<Forecast>(null),
+      lookupForecast: Nullable<Forecast?>(null),
     );
   }
 }

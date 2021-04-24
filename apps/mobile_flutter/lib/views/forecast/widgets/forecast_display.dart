@@ -22,8 +22,8 @@ class ForecastDisplay extends StatefulWidget {
   final bool showSixDayForecast;
 
   ForecastDisplay({
-    @required this.bloc,
-    @required this.forecast,
+    required this.bloc,
+    required this.forecast,
     this.hourlyEnabled: true,
     this.showSixDayForecast: true,
   });
@@ -33,17 +33,17 @@ class ForecastDisplay extends StatefulWidget {
 }
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
-  PageController _pageController;
-  ValueNotifier<int> _dayForecastsNotifier;
+  PageController? _pageController;
+  late ValueNotifier<int> _dayForecastsNotifier;
 
   @override
   void initState() {
     _pageController = PageController(keepPage: true)
       ..addListener(() {
-        num currentPage = _pageController.page;
+        num? currentPage = _pageController!.page;
 
         if (isInteger(currentPage)) {
-          _dayForecastsNotifier.value = currentPage.toInt();
+          _dayForecastsNotifier.value = currentPage!.toInt();
         }
       });
 
@@ -55,7 +55,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget build(
     BuildContext context,
   ) {
-    List<ForecastDay> days = widget.forecast.list;
+    List<ForecastDay> days = widget.forecast.list!;
     ForecastDay currentDay = days.first;
 
     return Align(
@@ -105,7 +105,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         child: Column(
           children: <Widget>[
             Text(
-              widget.forecast.city.name.toUpperCase(),
+              widget.forecast.city!.name!.toUpperCase(),
               style: Theme.of(context).textTheme.headline3,
             ),
             Text(
@@ -120,7 +120,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     ForecastDay currentDay,
   ) {
     TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
-    ForecastDayWeather currentWeater = currentDay.weather.first;
+    ForecastDayWeather currentWeater = currentDay.weather!.first;
 
     return Container(
       padding: const EdgeInsets.only(bottom: 20.0),
@@ -133,14 +133,14 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             children: [
               AppTemperatureDisplay(
                 temperature:
-                    getTemperature(currentDay.temp.day, temperatureUnit)
+                    getTemperature(currentDay.temp!.day, temperatureUnit)
                         .toString(),
                 style: Theme.of(context).textTheme.headline1,
                 unit: temperatureUnit,
               ),
               AppTemperatureDisplay(
-                temperature: AppLocalizations.of(context).getFeelsLike(
-                    getTemperature(currentDay.feelsLike.day, temperatureUnit)
+                temperature: AppLocalizations.of(context)!.getFeelsLike(
+                    getTemperature(currentDay.feelsLike!.day, temperatureUnit)
                         .toString()),
                 style: Theme.of(context).textTheme.headline5,
                 unit: temperatureUnit,
@@ -160,8 +160,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       Container(
         padding: const EdgeInsets.only(bottom: 20.0),
         child: Text(
-          currentDay.weather.first.description.toUpperCase(),
-          style: Theme.of(context).textTheme.headline4.copyWith(
+          currentDay.weather!.first.description!.toUpperCase(),
+          style: Theme.of(context).textTheme.headline4!.copyWith(
                 fontWeight: FontWeight.w300,
               ),
         ),
@@ -196,17 +196,17 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: Text(
-                    AppLocalizations.of(context).hi.toUpperCase(),
+                    AppLocalizations.of(context)!.hi.toUpperCase(),
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
                 AppTemperatureDisplay(
                   temperature:
-                      getTemperature(currentDay.temp.max, temperatureUnit)
+                      getTemperature(currentDay.temp!.max, temperatureUnit)
                           .toString(),
                   style: Theme.of(context)
                       .textTheme
-                      .headline3
+                      .headline3!
                       .copyWith(height: 0.85),
                   unit: temperatureUnit,
                   unitSizeFactor: 2.5,
@@ -223,17 +223,17 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: Text(
-                    AppLocalizations.of(context).low.toUpperCase(),
+                    AppLocalizations.of(context)!.low.toUpperCase(),
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
                 AppTemperatureDisplay(
                   temperature:
-                      getTemperature(currentDay.temp.min, temperatureUnit)
+                      getTemperature(currentDay.temp!.min, temperatureUnit)
                           .toString(),
                   style: Theme.of(context)
                       .textTheme
-                      .headline3
+                      .headline3!
                       .copyWith(height: 0.85),
                   unit: temperatureUnit,
                   unitSizeFactor: 2.5,
@@ -264,15 +264,16 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: Text(
-                          AppLocalizations.of(context).wind,
-                          style: Theme.of(context).textTheme.headline5.copyWith(
-                                fontSize: 10.0,
-                              ),
+                          AppLocalizations.of(context)!.wind,
+                          style:
+                              Theme.of(context).textTheme.headline5!.copyWith(
+                                    fontSize: 10.0,
+                                  ),
                         ),
                       ),
                       Text(
                         currentDay.speed.toString(),
-                        style: Theme.of(context).textTheme.headline4.copyWith(
+                        style: Theme.of(context).textTheme.headline4!.copyWith(
                               fontSize: 16.0,
                             ),
                       ),
@@ -298,15 +299,16 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: Text(
-                          AppLocalizations.of(context).pressure,
-                          style: Theme.of(context).textTheme.headline5.copyWith(
-                                fontSize: 10.0,
-                              ),
+                          AppLocalizations.of(context)!.pressure,
+                          style:
+                              Theme.of(context).textTheme.headline5!.copyWith(
+                                    fontSize: 10.0,
+                                  ),
                         ),
                       ),
                       Text(
                         currentDay.pressure.toString(),
-                        style: Theme.of(context).textTheme.headline4.copyWith(
+                        style: Theme.of(context).textTheme.headline4!.copyWith(
                               fontSize: 16.0,
                             ),
                       ),
@@ -332,15 +334,16 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: Text(
-                          AppLocalizations.of(context).humidity,
-                          style: Theme.of(context).textTheme.headline5.copyWith(
-                                fontSize: 10.0,
-                              ),
+                          AppLocalizations.of(context)!.humidity,
+                          style:
+                              Theme.of(context).textTheme.headline5!.copyWith(
+                                    fontSize: 10.0,
+                                  ),
                         ),
                       ),
                       Text(
                         currentDay.humidity.toString(),
-                        style: Theme.of(context).textTheme.headline4.copyWith(
+                        style: Theme.of(context).textTheme.headline4!.copyWith(
                               fontSize: 16.0,
                             ),
                       ),
@@ -454,7 +457,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             state.themeMode,
           ),
           selectedDotColor:
-              state.colorTheme ? Colors.white : AppTheme.primaryColor,
+              state.colorTheme! ? Colors.white : AppTheme.primaryColor,
           selectedSize: 6.0,
           itemCount: pageCount,
           currentPageNotifier: _dayForecastsNotifier,
@@ -468,7 +471,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     int page,
   ) {
     _dayForecastsNotifier.value = page;
-    animatePage(_pageController, page: page);
+    animatePage(_pageController!, page: page);
   }
 
   Widget _buildDayForecast(
@@ -492,25 +495,26 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4.0),
                       child: Text(
-                        formatDateTime(epochToDateTime(day.dt), 'EEE'),
+                        formatDateTime(epochToDateTime(day.dt!), 'EEE')!,
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
-                        getMonthDay(epochToDateTime(day.dt)),
-                        style: Theme.of(context).textTheme.headline5.copyWith(
+                        getMonthDay(epochToDateTime(day.dt!)),
+                        style: Theme.of(context).textTheme.headline5!.copyWith(
                               fontSize: 8.0,
                               color: AppTheme.getFadedTextColor(
-                                colorTheme: widget.bloc.state.colorTheme,
+                                colorTheme: widget.bloc.state.colorTheme!,
                               ),
                             ),
                       ),
                     ),
                     AppTemperatureDisplay(
-                      temperature: getTemperature(day.temp.max, temperatureUnit)
-                          .toString(),
+                      temperature:
+                          getTemperature(day.temp!.max, temperatureUnit)
+                              .toString(),
                       style: Theme.of(context).textTheme.headline4,
                       unit: temperatureUnit,
                       unitSizeFactor: 2,
@@ -520,7 +524,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               ),
               ForecastIcon(
                 size: 24.0,
-                icon: getForecastIconData(day.weather.first.icon),
+                icon: getForecastIconData(day.weather!.first.icon),
                 shadowColor: Colors.black26,
               ),
             ],
@@ -543,7 +547,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       return Container();
     }
 
-    DateTime lastUpdated = widget.forecast.lastUpdated;
+    DateTime? lastUpdated = widget.forecast.lastUpdated;
     if (lastUpdated == null) {
       return Container();
     }
@@ -551,10 +555,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     String formattedLastUpdated;
 
     if (lastUpdated.isToday()) {
-      formattedLastUpdated = AppLocalizations.of(context)
+      formattedLastUpdated = AppLocalizations.of(context)!
           .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a'));
     } else {
-      formattedLastUpdated = AppLocalizations.of(context).getLastUpdatedOn(
+      formattedLastUpdated = AppLocalizations.of(context)!.getLastUpdatedOn(
           formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a'));
     }
 
@@ -568,7 +572,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
   void _tapForecastDetails() {
     Forecast forecast =
-        widget.bloc.state.forecasts[widget.bloc.state.selectedForecastIndex];
+        widget.bloc.state.forecasts[widget.bloc.state.selectedForecastIndex!];
 
     if (forecast != null) {
       widget.bloc.add(SetActiveForecastId(forecast.id));

@@ -9,6 +9,7 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
@@ -29,6 +30,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapGetCurrentAppVersionToStates(event);
     } else if (event is ToggleThemeMode) {
       yield _mapToggleThemeModeToStates(event);
+    } else if (event is SetUpdatePeriod) {
+      yield _mapSetUpdatePeriodToStates(event);
     } else if (event is SetThemeMode) {
       yield _mapSetThemeModeToStates(event);
     } else if (event is ToggleColorTheme) {
@@ -43,6 +46,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapAddForecastToStates(event);
     } else if (event is UpdateForecast) {
       yield* _mapUpdateForecastToStates(event);
+    } else if (event is RemovePrimaryStatus) {
+      yield* _mapRemovePrimaryStatusToStates(event);
     } else if (event is RefreshForecast) {
       yield* _mapRefreshForecastToStates(event);
     } else if (event is DeleteForecast) {
@@ -60,7 +65,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     GetCurrentAppVersion event,
   ) async* {
     final FirebaseRemoteConfigService instance =
-        await FirebaseRemoteConfigService.getInstance();
+        FirebaseRemoteConfigService.getInstance()!;
 
     instance.initialise();
 
@@ -79,6 +84,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         colorTheme: false,
       );
 
+  AppState _mapSetUpdatePeriodToStates(
+    SetUpdatePeriod event,
+  ) =>
+      state.copyWith(
+        updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
+      );
+
   AppState _mapSetThemeModeToStates(
     SetThemeMode event,
   ) =>
@@ -91,7 +103,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     ToggleColorTheme event,
   ) =>
       state.copyWith(
-        colorTheme: !state.colorTheme,
+        colorTheme: !state.colorTheme!,
       );
 
   AppState _mapSetColorThemeToStates(
@@ -123,10 +135,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
 
     // TODO! sort
-    List<Forecast> forecasts = ((state.forecasts == null)
-        ? []
-        : List<Forecast>.from(state.forecasts)) // Clone the existing state list
-      ..add(event.forecast);
+    List<Forecast> forecasts =
+        List<Forecast>.from(state.forecasts) // Clone the existing state list
+          ..add(event.forecast);
 
     yield state.copyWith(
       forecasts: forecasts,
@@ -143,30 +154,45 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATING),
     );
 
-    List<Forecast> forecasts =
-        ((state.forecasts == null) ? [] : List<Forecast>.from(state.forecasts));
-
+    List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
     Forecast forecast = state.forecasts
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
-    forecasts[state.selectedForecastIndex] = forecast.copyWith(
+    forecasts[state.selectedForecastIndex!] = forecast.copyWith(
       id: event.forecastId,
-      cityName: Nullable<String>(event.forecastData['cityName']),
-      postalCode: Nullable<String>(event.forecastData['postalCode']),
-      countryCode: Nullable<String>(event.forecastData['countryCode']),
+      cityName: Nullable<String?>(event.forecastData['cityName']),
+      postalCode: Nullable<String?>(event.forecastData['postalCode']),
+      countryCode: Nullable<String?>(event.forecastData['countryCode']),
+      primary: Nullable<bool?>(event.forecastData['primary']),
       lastUpdated: getNow(),
     );
 
     yield state.copyWith(
-      activeForecastId: Nullable<String>(null),
+      activeForecastId: Nullable<String?>(null),
       forecasts: forecasts,
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATED),
     );
 
     add(RefreshForecast(
-      forecasts[state.selectedForecastIndex],
+      forecasts[state.selectedForecastIndex!],
       state.temperatureUnit,
     ));
+  }
+
+  Stream<AppState> _mapRemovePrimaryStatusToStates(
+    RemovePrimaryStatus event,
+  ) async* {
+    List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
+    int forecastIndex = state.forecasts
+        .indexWhere((Forecast forecast) => forecast.id == event.forecast.id);
+
+    forecasts[forecastIndex] = event.forecast.copyWith(
+      primary: Nullable<bool>(false),
+    );
+
+    yield state.copyWith(
+      forecasts: forecasts,
+    );
   }
 
   Stream<AppState> _mapRefreshForecastToStates(
@@ -176,7 +202,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       refreshStatus: Nullable<RefreshStatus>(RefreshStatus.REFRESHING),
     );
 
-    Map<String, String> lookupData = {
+    Map<String, String?> lookupData = {
       'cityName': event.forecast.cityName,
       'postalCode': event.forecast.postalCode,
       'countryCode': event.forecast.countryCode,
@@ -184,10 +210,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     http.Response forecastResponse = await tryLookupForecast(lookupData);
     if (forecastResponse.statusCode == 200) {
-      List<Forecast> forecasts = ((state.forecasts == null)
-          ? []
-          : List<Forecast>.from(state.forecasts));
-
+      List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
       int forecastIndex = forecasts.indexWhere(
         (Forecast forecast) => forecast.postalCode == event.forecast.postalCode,
       );
@@ -199,15 +222,16 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       Forecast _forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
       forecasts[forecastIndex] = _forecast.copyWith(
         id: event.forecast.id,
-        cityName: Nullable<String>(event.forecast.cityName),
-        postalCode: Nullable<String>(event.forecast.postalCode),
-        countryCode: Nullable<String>(event.forecast.countryCode),
+        cityName: Nullable<String?>(event.forecast.cityName),
+        postalCode: Nullable<String?>(event.forecast.postalCode),
+        countryCode: Nullable<String?>(event.forecast.countryCode),
+        primary: Nullable<bool?>(event.forecast.primary),
         lastUpdated: getNow(),
       );
 
       yield state.copyWith(
         forecasts: forecasts,
-        refreshStatus: Nullable<RefreshStatus>(null),
+        refreshStatus: Nullable<RefreshStatus?>(null),
       );
     } else {
       // TODO! snackbar error
@@ -227,11 +251,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     List<Forecast> _forecasts = state.forecasts..removeAt(_forecastIndex);
 
     yield state.copyWith(
-      activeForecastId: Nullable<String>(null),
+      activeForecastId: Nullable<String?>(null),
       colorTheme: hasForecasts(_forecasts) ? state.colorTheme : false,
       forecasts: _forecasts,
-      selectedForecastIndex: (state.selectedForecastIndex > 0)
-          ? (state.selectedForecastIndex - 1)
+      selectedForecastIndex: (state.selectedForecastIndex! > 0)
+          ? (state.selectedForecastIndex! - 1)
           : 0,
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETED),
     );
@@ -240,20 +264,20 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   AppState _mapClearCRUDStatusToStates(
     ClearCRUDStatus event,
   ) =>
-      state.copyWith(crudStatus: Nullable<CRUDStatus>(null));
+      state.copyWith(crudStatus: Nullable<CRUDStatus?>(null));
 
   AppState _mapSetActiveForecastIdToState(
     SetActiveForecastId event,
   ) =>
       state.copyWith(
-        activeForecastId: Nullable<String>(event.forecastId),
+        activeForecastId: Nullable<String?>(event.forecastId),
       );
 
   AppState _mapClearActiveForecastIdToState(
     ClearActiveForecastId event,
   ) =>
       state.copyWith(
-        activeForecastId: Nullable<String>(null),
+        activeForecastId: Nullable<String?>(null),
       );
 
   @override

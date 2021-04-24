@@ -10,10 +10,10 @@ Future<http.Response> tryLookupForecast(
 
   switch (lookupType) {
     case LookupType.HOURLY:
-      return http.get(getHourlyApiUri(params).toString());
+      return http.get(getHourlyApiUri(params));
 
     case LookupType.DAILY:
     default:
-      return http.get(getDailyApiUri(params).toString());
+      return http.get(getDailyApiUri(params));
   }
 }

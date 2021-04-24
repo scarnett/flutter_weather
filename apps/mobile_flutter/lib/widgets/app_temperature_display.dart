@@ -5,12 +5,12 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 
 class AppTemperatureDisplay extends StatefulWidget {
   final String temperature;
-  final TextStyle style;
-  final TemperatureUnit unit;
+  final TextStyle? style;
+  final TemperatureUnit? unit;
   final num unitSizeFactor;
 
   AppTemperatureDisplay({
-    @required this.temperature,
+    required this.temperature,
     this.style,
     this.unit,
     this.unitSizeFactor: 3.5,
@@ -38,8 +38,8 @@ class _AppTemperatureDisplayState extends State<AppTemperatureDisplay> {
             alignment: Alignment.topLeft,
             child: Text(
               getUnitSymbol(widget.unit),
-              style: widget.style.copyWith(
-                fontSize: (widget.style.fontSize / widget.unitSizeFactor),
+              style: widget.style!.copyWith(
+                fontSize: (widget.style!.fontSize! / widget.unitSizeFactor),
               ),
             ),
           ),

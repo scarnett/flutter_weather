@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -12,14 +13,14 @@ import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 
 class ForecastCountryPicker extends StatefulWidget {
-  final String selectedCountryCode;
+  final String? selectedCountryCode;
 
   final Function(
     Country country,
-  ) onTap;
+  )? onTap;
 
   ForecastCountryPicker({
-    Key key,
+    Key? key,
     this.selectedCountryCode,
     this.onTap,
   }) : super(key: key);
@@ -29,8 +30,8 @@ class ForecastCountryPicker extends StatefulWidget {
 }
 
 class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
-  List<Country> _countryList;
-  List<Country> _filteredCountryList;
+  List<Country>? _countryList;
+  List<Country>? _filteredCountryList;
 
   @override
   void initState() {
@@ -46,7 +47,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
         themeMode: context.watch<AppBloc>().state.themeMode,
         colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
         systemNavigationBarIconBrightness:
-            context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
+            context.watch<AppBloc>().state.colorTheme! ? Brightness.dark : null,
         child: Theme(
           data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
               ? appDarkThemeData
@@ -59,7 +60,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
       );
 
   Future<void> _prepareCountries() async {
-    List<Country> countries;
+    List<Country>? countries;
 
     try {
       countries = await IsoCountries.iso_countries_for_locale('en-en'); // TODO
@@ -85,9 +86,10 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
       );
 
   Widget _buildCountryFilter() => TextField(
+        key: Key(AppKeys.locationCountryFilterKey),
         keyboardType: TextInputType.streetAddress,
         decoration: InputDecoration(
-          labelText: AppLocalizations.of(context).filterCountries,
+          labelText: AppLocalizations.of(context)!.filterCountries,
           prefixIcon: Icon(
             Icons.filter_alt,
             color: AppTheme.primaryColor,
@@ -95,7 +97,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
         ),
         onChanged: (String criteria) {
           setState(() {
-            _filteredCountryList = _countryList
+            _filteredCountryList = _countryList!
                 .where((Country country) => (country.name
                         .toLowerCase()
                         .contains(criteria.toLowerCase()) ||
@@ -112,18 +114,19 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
           BuildContext context,
           int index,
         ) {
-          final Country country = _filteredCountryList[index];
+          final Country country = _filteredCountryList![index];
 
           return ListTile(
+            key: Key(country.countryCode),
             title: Text(
               country.name,
-              style: Theme.of(context).textTheme.headline5.copyWith(
+              style: Theme.of(context).textTheme.headline5!.copyWith(
                     color: _getCountryColor(country),
                   ),
             ),
             subtitle: Text(
               country.countryCode,
-              style: Theme.of(context).textTheme.subtitle2.copyWith(
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     fontWeight: FontWeight.w400,
                   ),
             ),
@@ -132,17 +135,17 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
         },
         separatorBuilder: (context, index) => Divider(),
         itemCount:
-            (_filteredCountryList != null) ? _filteredCountryList.length : 0,
+            (_filteredCountryList != null) ? _filteredCountryList!.length : 0,
       );
 
   void _tapCountry(
     Country country,
   ) async {
     closeKeyboard(context);
-    widget.onTap(country);
+    widget.onTap!(country);
   }
 
-  Color _getCountryColor(
+  Color? _getCountryColor(
     Country country,
   ) {
     if (widget.selectedCountryCode == country.countryCode) {
