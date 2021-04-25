@@ -6,7 +6,10 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsPushNotificationPicker extends StatefulWidget {
@@ -28,8 +31,6 @@ class SettingsPushNotificationPicker extends StatefulWidget {
 
 class _SettingsPushNotificationPickerState
     extends State<SettingsPushNotificationPicker> {
-  List<PushNotification>? _notificationList;
-
   @override
   void initState() {
     super.initState();
@@ -42,9 +43,9 @@ class _SettingsPushNotificationPickerState
   ) =>
       AppUiOverlayStyle(
         themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
+        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
-            context.watch<AppBloc>().state.colorTheme! ? Brightness.dark : null,
+            context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Theme(
           data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
               ? appDarkThemeData
@@ -70,38 +71,115 @@ class _SettingsPushNotificationPickerState
     if (!mounted) {
       return;
     }
-
-    setState(() {
-      _notificationList = notifications;
-    });
   }
 
   Widget _buildBody() => Column(
         children: <Widget>[
-          Expanded(child: _buildListOfNotificationss()),
+          Expanded(child: _buildListOfNotifications()),
         ],
       );
 
-  Widget _buildListOfNotificationss() => ListView.separated(
-        itemBuilder: (
-          BuildContext context,
-          int index,
-        ) {
-          final PushNotification notification = _notificationList![index];
+  Widget _buildListOfNotifications() => ListView(
+        children: [
+          ..._buildListOfNotificationTile(PushNotification.OFF),
+          ..._buildListOfNotificationTile(
+            PushNotification.CURRENT_LOCATION,
+            showDivider: false,
+          ),
+          ..._buildListOfForecasts(),
+        ],
+      );
 
-          return ListTile(
-            key: Key('notification_${notification.info!['id']}'),
-            title: Text(
-              notification.info!['text'],
-              style: Theme.of(context).textTheme.headline5!.copyWith(
-                    color: _getNotificationColor(notification),
-                  ),
+  List<Widget> _buildListOfForecasts() {
+    List<Widget> children = <Widget>[];
+    children.add(
+      AppSectionHeader(
+        bloc: context.read<AppBloc>(),
+        text: PushNotification.SAVED_LOCATION.info!['text'],
+      ),
+    );
+
+    List<Forecast> forecasts = context.watch<AppBloc>().state.forecasts;
+    for (int i = 0; i < forecasts.length; i++) {
+      Forecast forecast = forecasts[i];
+      if (forecast.cityName.isNullOrEmpty()) {
+        children.addAll(
+          _buildListOfNotificationTile(
+            PushNotification.SAVED_LOCATION,
+            id: forecasts[i].id,
+            text: getLocationText(forecasts[i]),
+            showDivider: ((i + 1) < forecasts.length),
+          ),
+        );
+      } else {
+        children.addAll(
+          _buildListOfNotificationTile(
+            PushNotification.SAVED_LOCATION,
+            id: forecasts[i].id,
+            text: forecast.cityName,
+            subText: getLocationText(forecasts[i]),
+            showDivider: ((i + 1) < forecasts.length),
+          ),
+        );
+      }
+    }
+
+    return children;
+  }
+
+  List<Widget> _buildListOfNotificationTile(
+    PushNotification notification, {
+    String? id,
+    String? text,
+    String? subText,
+    bool showDivider: true,
+  }) {
+    String _id = 'notification_${id ?? notification.info!['id']}';
+    List<Widget> children = <Widget>[];
+
+    if (subText != null) {
+      children.add(
+        ListTile(
+          key: Key(_id),
+          title: _notificationTitleText(
+              _id, text ?? notification.info!['text'], notification),
+          subtitle: Text(
+            subText,
+            style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                  fontWeight: FontWeight.w400,
+                ),
+          ),
+          onTap: () => _tapPushNotification(notification),
+        ),
+      );
+    } else {
+      children.add(
+        ListTile(
+          key: Key(_id),
+          title: _notificationTitleText(
+              _id, text ?? notification.info!['text'], notification),
+          onTap: () => _tapPushNotification(notification),
+        ),
+      );
+    }
+
+    if (showDivider) {
+      children.add(Divider());
+    }
+
+    return children;
+  }
+
+  Widget _notificationTitleText(
+    String id,
+    String text,
+    PushNotification notification,
+  ) =>
+      Text(
+        text,
+        style: Theme.of(context).textTheme.headline5!.copyWith(
+              color: _getNotificationColor(notification),
             ),
-            onTap: () => _tapPushNotification(notification),
-          );
-        },
-        separatorBuilder: (context, index) => Divider(),
-        itemCount: (_notificationList != null) ? _notificationList!.length : 0,
       );
 
   void _tapPushNotification(
