@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -63,9 +63,9 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) =>
       AppUiOverlayStyle(
         themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
+        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
-            (context.watch<AppBloc>().state.colorTheme ?? false)
+            (context.watch<AppBloc>().state.colorTheme)
                 ? Brightness.dark
                 : null,
         child: Scaffold(
@@ -158,16 +158,17 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     Map<String, dynamic> forecastData = formState.toJson();
 
     final AppState appState = context.read<AppBloc>().state;
-    final Country? country = (await IsoCountries.iso_countries).firstWhereOrNull(
-        (Country _country) => _country.name == forecastData['countryCode']);
+    final Country? country = (await IsoCountries.iso_countries)
+        .firstWhereOrNull(
+            (Country _country) => _country.name == forecastData['countryCode']);
 
     forecastData['countryCode'] = (country == null)
-        ? EnvConfig.DEFAULT_COUNTRY_CODE
+        ? AppConfig.instance.defaultCountryCode
         : country.countryCode;
 
     if (forecastData['primary']) {
-      Forecast? primaryForecast = appState.forecasts.firstWhereOrNull(
-          (Forecast forecast) => forecast.primary!);
+      Forecast? primaryForecast = appState.forecasts
+          .firstWhereOrNull((Forecast forecast) => forecast.primary!);
 
       if (primaryForecast != null) {
         // Remove the status from the current primary forecast

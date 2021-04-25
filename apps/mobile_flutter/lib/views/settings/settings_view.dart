@@ -3,9 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
@@ -84,7 +84,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         themeMode: context.read<AppBloc>().state.themeMode,
         colorTheme: context.read<AppBloc>().state.colorTheme,
         systemNavigationBarIconBrightness:
-            context.read<AppBloc>().state.colorTheme! ? Brightness.dark : null,
+            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
           extendBody: true,
           appBar: AppBar(
@@ -129,18 +129,15 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
 
-    if (EnvConfig.PRIVACY_POLICY_URL != null) {
+    if (AppConfig.instance.privacyPolicyUrl != null) {
       children..addAll(_buildAboutSection());
     }
 
     children..addAll(_buildBuildInfoSection());
-
-    if (EnvConfig.GITHUB_URL != null) {
-      children
-        ..add(SettingsOpenSourceInfo(
-          themeMode: context.read<AppBloc>().state.themeMode,
-        ));
-    }
+    children
+      ..add(SettingsOpenSourceInfo(
+        themeMode: context.read<AppBloc>().state.themeMode,
+      ));
 
     return SafeArea(
       child: PageView(
@@ -235,7 +232,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           AppChekboxTile(
             bloc: context.read<AppBloc>(),
             title: AppLocalizations.of(context)!.colorized,
-            checked: context.read<AppBloc>().state.colorTheme!,
+            checked: context.read<AppBloc>().state.colorTheme,
             onTap: _tapColorized,
           ),
           Divider(),

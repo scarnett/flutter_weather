@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -40,7 +40,7 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
         body: Stack(
           children: <Widget>[
             WebView(
-              initialUrl: EnvConfig.PRIVACY_POLICY_URL,
+              initialUrl: AppConfig.instance.privacyPolicyUrl,
               onWebViewCreated: _onWebViewCreated,
             ),
           ],

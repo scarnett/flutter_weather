@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -26,12 +27,11 @@ class SettingsVersionStatusText extends StatelessWidget {
     Version? _latestVersion;
 
     try {
-      String _appVersion = bloc!.state.appVersion;
-      if (_appVersion.isNullOrEmpty()) {
+      if (AppConfig.instance.appVersion.isNullOrEmpty()) {
         return Text('');
       }
 
-      _latestVersion = getAppVersion(_appVersion);
+      _latestVersion = getAppVersion(AppConfig.instance.appVersion);
 
       if (packageInfo.version == 'unknown') {
         return Text('');
@@ -78,7 +78,7 @@ class SettingsVersionStatusText extends StatelessWidget {
         barrierDismissible: true,
         builder: (BuildContext context) => AppUpdateDialog(
           packageInfo: packageInfo,
-          appVersion: bloc!.state.appVersion,
+          appVersion: AppConfig.instance.appVersion!,
         ),
       );
 }

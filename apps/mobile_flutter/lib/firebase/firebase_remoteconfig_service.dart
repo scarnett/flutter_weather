@@ -19,7 +19,7 @@ class FirebaseRemoteConfigService {
     return _instance;
   }
 
-  Future initialise() async {
+  Future initialize() async {
     try {
       await _fetchAndActivate();
     } on Exception catch (exception, stackTrace) {
@@ -40,4 +40,27 @@ class FirebaseRemoteConfigService {
   }
 
   String get appVersion => _remoteConfig!.getString('app_version');
+  String get openweathermapApiKey =>
+      _remoteConfig!.getString('openweathermap_api_key');
+
+  String get openweathermapApiUri =>
+      _remoteConfig!.getString('openweathermap_api_uri');
+
+  String get openweathermapApiDailyForecastPath =>
+      _remoteConfig!.getString('openweathermap_api_daily_forecast_path');
+
+  String get openweathermapApiHourlyForecastPath =>
+      _remoteConfig!.getString('openweathermap_api_hourly_forecast_path');
+
+  int get refreshTimeout => _remoteConfig!.getInt('refresh_timeout');
+
+  String get defaultCountryCode =>
+      _remoteConfig!.getString('default_country_code');
+
+  String get supportedLocales => _remoteConfig!.getString('supported_locales');
+  String? get privacyPolicyUrl =>
+      _remoteConfig!.getString('privacy_policy_url');
+
+  String? get githubUrl => _remoteConfig!.getString('github_url');
+  String? get sentryDsn => _remoteConfig!.getString('sentry_dsn');
 }

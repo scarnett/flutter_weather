@@ -1,7 +1,6 @@
 # Environment
 environment_config.yaml
 .env
-lib/env_config.dart
 
 # Miscellaneous
 *.class

@@ -2,10 +2,9 @@ part of 'app_bloc.dart';
 
 @immutable
 class AppState extends Equatable {
-  final String appVersion;
   final UpdatePeriod? updatePeriod;
   final ThemeMode themeMode;
-  final bool? colorTheme;
+  final bool colorTheme;
   final TemperatureUnit temperatureUnit;
   final int? selectedForecastIndex;
   final List<Forecast> forecasts;
@@ -14,7 +13,6 @@ class AppState extends Equatable {
   final CRUDStatus? crudStatus;
 
   AppState({
-    this.appVersion: '1.0.0',
     this.updatePeriod: UpdatePeriod.HOUR2,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
@@ -27,7 +25,6 @@ class AppState extends Equatable {
   });
 
   const AppState._({
-    this.appVersion: '1.0.0',
     this.updatePeriod: UpdatePeriod.HOUR2,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
@@ -42,7 +39,6 @@ class AppState extends Equatable {
   const AppState.initial() : this._();
 
   AppState copyWith({
-    String? appVersion,
     Nullable<UpdatePeriod?>? updatePeriod,
     ThemeMode? themeMode,
     bool? colorTheme,
@@ -55,7 +51,6 @@ class AppState extends Equatable {
     Nullable<CRUDStatus?>? crudStatus,
   }) =>
       AppState._(
-        appVersion: appVersion ?? this.appVersion,
         updatePeriod:
             (updatePeriod == null) ? this.updatePeriod : updatePeriod.value,
         themeMode: themeMode ?? this.themeMode,
@@ -74,7 +69,6 @@ class AppState extends Equatable {
 
   @override
   List<Object?> get props => [
-        appVersion,
         updatePeriod,
         themeMode,
         colorTheme,
@@ -88,9 +82,8 @@ class AppState extends Equatable {
 
   @override
   String toString() =>
-      'AppState{appVersion: $appVersion, updatePeriod: $updatePeriod, ' +
-      'themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit, ' +
+      'AppState{updatePeriod: $updatePeriod, themeMode: $themeMode, ' +
+      'colorTheme: $colorTheme, temperatureUnit: $temperatureUnit, ' +
       'selectedForecastIndex: $selectedForecastIndex, ' +
       'forecasts: $forecasts, activeForecastId: $activeForecastId, ' +
       'refreshStatus: $refreshStatus, crudStatus: $crudStatus}';
