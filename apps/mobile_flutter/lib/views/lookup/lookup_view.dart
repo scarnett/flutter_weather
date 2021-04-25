@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -83,9 +83,9 @@ class _LookupPageViewState extends State<LookupPageView> {
           ) =>
               AppUiOverlayStyle(
             themeMode: context.watch<AppBloc>().state.themeMode,
-            colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
+            colorTheme: (context.watch<AppBloc>().state.colorTheme),
             systemNavigationBarIconBrightness:
-                context.watch<AppBloc>().state.colorTheme!
+                context.watch<AppBloc>().state.colorTheme
                     ? Brightness.dark
                     : null,
             child: Theme(
@@ -229,8 +229,8 @@ class _LookupPageViewState extends State<LookupPageView> {
 
     if (lookupState.primary!) {
       List<Forecast> forecasts = context.read<AppBloc>().state.forecasts;
-      Forecast? primaryForecast = forecasts.firstWhereOrNull(
-          (Forecast forecast) => forecast.primary!);
+      Forecast? primaryForecast =
+          forecasts.firstWhereOrNull((Forecast forecast) => forecast.primary!);
 
       if (primaryForecast != null) {
         // Remove the status from the current primary forecast
@@ -247,11 +247,12 @@ class _LookupPageViewState extends State<LookupPageView> {
   ) async {
     Map<String, dynamic> lookupData = state.toJson();
     if (lookupData.containsKey('countryCode')) {
-      final Country? country = (await IsoCountries.iso_countries).firstWhereOrNull(
-          (Country _country) => _country.name == lookupData['countryCode']);
+      final Country? country = (await IsoCountries.iso_countries)
+          .firstWhereOrNull(
+              (Country _country) => _country.name == lookupData['countryCode']);
 
       lookupData['countryCode'] = (country == null)
-          ? EnvConfig.DEFAULT_COUNTRY_CODE
+          ? AppConfig.instance.defaultCountryCode
           : country.countryCode;
     }
 

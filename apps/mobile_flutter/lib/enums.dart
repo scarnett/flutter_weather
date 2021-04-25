@@ -1,3 +1,9 @@
+enum Flavor {
+  dev,
+  tst,
+  prod,
+}
+
 enum TemperatureUnit {
   kelvin,
   celsius,

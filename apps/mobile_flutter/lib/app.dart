@@ -25,8 +25,7 @@ class WeatherApp extends StatelessWidget {
     BuildContext context,
   ) =>
       BlocProvider(
-        create: (BuildContext context) =>
-            AppBloc()..add(GetCurrentAppVersion()),
+        create: (BuildContext context) => AppBloc(),
         child: FlutterWeatherAppView(),
       );
 }
@@ -39,7 +38,7 @@ class FlutterWeatherAppView extends StatefulWidget {
 class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  ThemeData? _themeData;
+  ThemeData? _themeData = appLightThemeData;
 
   @override
   void initState() {
@@ -65,7 +64,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
               theme: _themeData,
               darkTheme: appDarkThemeData,
               themeMode: state.themeMode,
-              debugShowCheckedModeBanner: AppConfig.isDebug(context),
+              debugShowCheckedModeBanner: AppConfig.isDebug(),
               localizationsDelegates: [
                 AppLocalizationsDelegate(),
                 FallbackCupertinoLocalisationsDelegate(),
@@ -85,8 +84,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
         if (state.activeForecastId != null) {
           _themeData = appLightThemeData;
         } else {
-          _themeData =
-              state.colorTheme! ? appColorThemeData : appLightThemeData;
+          _themeData = state.colorTheme ? appColorThemeData : appLightThemeData;
         }
       });
 }

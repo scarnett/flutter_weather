@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -145,6 +145,8 @@ class AppLocalizations {
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  AppLocalizationsDelegate();
+
   @override
   Future<AppLocalizations> load(
     Locale locale,
@@ -161,7 +163,9 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   bool isSupported(
     Locale locale,
   ) =>
-      locale.languageCode.toLowerCase().contains(EnvConfig.SUPPORTED_LOCALES);
+      locale.languageCode
+          .toLowerCase()
+          .contains(AppConfig.instance.supportedLocales!);
 }
 
 class FallbackCupertinoLocalisationsDelegate

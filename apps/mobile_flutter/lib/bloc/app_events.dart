@@ -7,8 +7,8 @@ abstract class AppEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class GetCurrentAppVersion extends AppEvent {
-  const GetCurrentAppVersion();
+class GetRemoteConfig extends AppEvent {
+  const GetRemoteConfig();
 
   @override
   List<Object> get props => [];

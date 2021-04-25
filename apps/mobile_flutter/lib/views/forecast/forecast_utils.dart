@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -17,11 +17,11 @@ Uri getDailyApiUri(
     params['cnt'] = count.toString();
   }
 
-  params['appid'] = EnvConfig.OPENWEATHERMAP_API_KEY;
+  params['appid'] = AppConfig.instance.openweathermapApiKey;
 
   return Uri.https(
-    EnvConfig.OPENWEATHERMAP_API_URI,
-    EnvConfig.OPENWEATHERMAP_API_DAILY_FORECAST_PATH,
+    AppConfig.instance.openweathermapApiUri!,
+    AppConfig.instance.openweathermapApiDailyForecastPath!,
     params.cast<String, String>(),
   );
 }
@@ -244,7 +244,9 @@ bool canRefresh(
 DateTime getNextUpdateTime(
   DateTime dateTime,
 ) =>
-    dateTime.add(Duration(milliseconds: EnvConfig.REFRESH_TIMEOUT));
+    dateTime.add(Duration(
+      milliseconds: AppConfig.instance.refreshTimeout!,
+    ));
 
 bool hasForecasts(
   List<Forecast>? forecasts,
