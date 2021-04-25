@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
-import 'package:flutter_weather/model.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -26,9 +25,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   Stream<AppState> mapEventToState(
     AppEvent event,
   ) async* {
-    if (event is GetCurrentAppVersion) {
-      yield* _mapGetCurrentAppVersionToStates(event);
-    } else if (event is ToggleThemeMode) {
+    if (event is ToggleThemeMode) {
       yield _mapToggleThemeModeToStates(event);
     } else if (event is SetUpdatePeriod) {
       yield _mapSetUpdatePeriodToStates(event);
@@ -61,19 +58,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     }
   }
 
-  Stream<AppState> _mapGetCurrentAppVersionToStates(
-    GetCurrentAppVersion event,
-  ) async* {
-    final FirebaseRemoteConfigService instance =
-        FirebaseRemoteConfigService.getInstance()!;
-
-    instance.initialise();
-
-    yield state.copyWith(
-      appVersion: instance.appVersion,
-    );
-  }
-
   AppState _mapToggleThemeModeToStates(
     ToggleThemeMode event,
   ) =>
@@ -103,7 +87,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     ToggleColorTheme event,
   ) =>
       state.copyWith(
-        colorTheme: !state.colorTheme!,
+        colorTheme: !state.colorTheme,
       );
 
   AppState _mapSetColorThemeToStates(

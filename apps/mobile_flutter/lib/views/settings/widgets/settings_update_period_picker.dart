@@ -42,9 +42,9 @@ class _SettingsUpdatePeriodPickerState
   ) =>
       AppUiOverlayStyle(
         themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
+        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
-            context.watch<AppBloc>().state.colorTheme! ? Brightness.dark : null,
+            context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Theme(
           data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
               ? appDarkThemeData
