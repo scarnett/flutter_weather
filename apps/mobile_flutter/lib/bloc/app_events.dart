@@ -32,6 +32,17 @@ class SetUpdatePeriod extends AppEvent {
   List<Object?> get props => [updatePeriod];
 }
 
+class SetPushNotification extends AppEvent {
+  final PushNotification? pushNotification;
+
+  const SetPushNotification({
+    this.pushNotification,
+  });
+
+  @override
+  List<Object?> get props => [pushNotification];
+}
+
 class SetThemeMode extends AppEvent {
   final ThemeMode? themeMode;
 

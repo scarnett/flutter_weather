@@ -32,6 +32,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapToggleThemeModeToStates(event);
     } else if (event is SetUpdatePeriod) {
       yield _mapSetUpdatePeriodToStates(event);
+    } else if (event is SetPushNotification) {
+      yield _mapSetPushNotificationToStates(event);
     } else if (event is SetThemeMode) {
       yield _mapSetThemeModeToStates(event);
     } else if (event is ToggleColorTheme) {
@@ -89,6 +91,18 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) =>
       state.copyWith(
         updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
+        pushNotification: (event.updatePeriod == null)
+            ? Nullable<PushNotification?>(null)
+            : (state.pushNotification == null)
+                ? Nullable<PushNotification?>(PushNotification.OFF)
+                : Nullable<PushNotification?>(state.pushNotification),
+      );
+
+  AppState _mapSetPushNotificationToStates(
+    SetPushNotification event,
+  ) =>
+      state.copyWith(
+        pushNotification: Nullable<PushNotification?>(event.pushNotification),
       );
 
   AppState _mapSetThemeModeToStates(

@@ -4,6 +4,7 @@ part of 'app_bloc.dart';
 class AppState extends Equatable {
   final String appVersion;
   final UpdatePeriod? updatePeriod;
+  final PushNotification? pushNotification;
   final ThemeMode themeMode;
   final bool? colorTheme;
   final TemperatureUnit temperatureUnit;
@@ -16,6 +17,7 @@ class AppState extends Equatable {
   AppState({
     this.appVersion: '1.0.0',
     this.updatePeriod: UpdatePeriod.HOUR2,
+    this.pushNotification: PushNotification.OFF,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
@@ -29,6 +31,7 @@ class AppState extends Equatable {
   const AppState._({
     this.appVersion: '1.0.0',
     this.updatePeriod: UpdatePeriod.HOUR2,
+    this.pushNotification: PushNotification.OFF,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
@@ -44,6 +47,7 @@ class AppState extends Equatable {
   AppState copyWith({
     String? appVersion,
     Nullable<UpdatePeriod?>? updatePeriod,
+    Nullable<PushNotification?>? pushNotification,
     ThemeMode? themeMode,
     bool? colorTheme,
     TemperatureUnit? temperatureUnit,
@@ -58,6 +62,9 @@ class AppState extends Equatable {
         appVersion: appVersion ?? this.appVersion,
         updatePeriod:
             (updatePeriod == null) ? this.updatePeriod : updatePeriod.value,
+        pushNotification: (pushNotification == null)
+            ? this.pushNotification
+            : pushNotification.value,
         themeMode: themeMode ?? this.themeMode,
         colorTheme: colorTheme ?? this.colorTheme,
         temperatureUnit: temperatureUnit ?? this.temperatureUnit,
@@ -76,6 +83,7 @@ class AppState extends Equatable {
   List<Object?> get props => [
         appVersion,
         updatePeriod,
+        pushNotification,
         themeMode,
         colorTheme,
         temperatureUnit,
@@ -89,8 +97,8 @@ class AppState extends Equatable {
   @override
   String toString() =>
       'AppState{appVersion: $appVersion, updatePeriod: $updatePeriod, ' +
-      'themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit, ' +
+      'pushNotification: $pushNotification, themeMode: $themeMode, ' +
+      'colorTheme: $colorTheme, temperatureUnit: $temperatureUnit, ' +
       'selectedForecastIndex: $selectedForecastIndex, ' +
       'forecasts: $forecasts, activeForecastId: $activeForecastId, ' +
       'refreshStatus: $refreshStatus, crudStatus: $crudStatus}';

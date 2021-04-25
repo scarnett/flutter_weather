@@ -16,6 +16,7 @@ import 'package:flutter_weather/views/settings/settings_utils.dart'
     as settingsUtils;
 import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
@@ -155,6 +156,12 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             selectedPeriod: context.read<AppBloc>().state.updatePeriod,
             onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
           ),
+          SettingsPushNotificationPicker(
+            selectedNotification:
+                context.read<AppBloc>().state.pushNotification,
+            onTap: (PushNotification notification) =>
+                _tapPushNotification(notification),
+          ),
         ],
       ),
     );
@@ -201,6 +208,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           trailing:
               Text(context.read<AppBloc>().state.updatePeriod!.info!['text']),
           onTap: () => animatePage(_pageController!, page: 1),
+        ),
+        Divider(),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.pushNotification,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          trailing: Text(
+              context.read<AppBloc>().state.pushNotification?.info!['text']),
+          onTap: () => animatePage(_pageController!, page: 2),
         ),
       ]);
     }
@@ -341,6 +358,19 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     bool redirect: true,
   }) {
     context.read<AppBloc>().add(SetUpdatePeriod(updatePeriod: period));
+
+    if (redirect) {
+      animatePage(_pageController!, page: 0);
+    }
+  }
+
+  void _tapPushNotification(
+    PushNotification? notification, {
+    bool redirect: true,
+  }) {
+    context
+        .read<AppBloc>()
+        .add(SetPushNotification(pushNotification: notification));
 
     if (redirect) {
       animatePage(_pageController!, page: 0);
