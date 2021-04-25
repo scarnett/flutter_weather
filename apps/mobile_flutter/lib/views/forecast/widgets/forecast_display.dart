@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -457,7 +457,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             state.themeMode,
           ),
           selectedDotColor:
-              state.colorTheme! ? Colors.white : AppTheme.primaryColor,
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 6.0,
           itemCount: pageCount,
           currentPageNotifier: _dayForecastsNotifier,
@@ -506,7 +506,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         style: Theme.of(context).textTheme.headline5!.copyWith(
                               fontSize: 8.0,
                               color: AppTheme.getFadedTextColor(
-                                colorTheme: widget.bloc.state.colorTheme!,
+                                colorTheme: widget.bloc.state.colorTheme,
                               ),
                             ),
                       ),

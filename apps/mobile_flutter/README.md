@@ -20,22 +20,21 @@
   </tbody>
 </table>
 
-## Environment Configuration
-You will need to create a file called **env_config.dart** in the **lib** folder with the following:
+## Firebase Remote Configuration
 
-```dart
-class EnvConfig {
-  static const String OPENWEATHERMAP_API_KEY = '<your_openweather_api_key>';
-  static const String OPENWEATHERMAP_API_URI = 'api.openweathermap.org';
-  static const String OPENWEATHERMAP_API_DAILY_FORECAST_PATH = '/data/2.5/forecast/daily';
-  static const int REFRESH_TIMEOUT = 300000; // 5 minutes
-  static const String DEFAULT_COUNTRY_CODE = 'us';
-  static const String SUPPORTED_LOCALES = 'en';
-  static const String PRIVACY_POLICY_URL = '<your_privacy_policy_url_or_null>';
-  static const String GITHUB_URL = '<your_github_url_or_null>';
-  static const String SENTRY_DSN = '<your_sentry_dsn_or_null>';
-}
-```
+| Name                                    | Value                      | Optional |
+|-----------------------------------------|----------------------------|----------|
+| app_version                             | 1.0.0                      | No       |
+| openweathermap_api_key                  | <your_openweather_api_key> | No       |
+| openweathermap_api_uri                  | api.openweathermap.com     | No       |
+| openweathermap_api_daily_forecast_path  | /data/2.5/forecast/daily   | No       |
+| openweathermap_api_hourly_forecast_path | /data/2.5/forecast/hourly  | No       |
+| refresh_timeout                         | 300000                     | No       |
+| default_country_code                    | us                         | No       |
+| supported_locales                       | en                         | No       |
+| privacy_policy_url                      |                            | Yes      |
+| github_url                              |                            | Yes      |
+| sentry_dsn                              |                            | Yes      |
 
 ## Android Configuration
 

@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -92,7 +92,7 @@ class _ForecastPageViewState extends State<ForecastView> {
         }
       });
 
-    if (state.colorTheme!) {
+    if (state.colorTheme) {
       _pageBackground = buildForecastColorSequence(state.forecasts);
     }
 
@@ -129,7 +129,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       context.read<AppBloc>().add(ClearCRUDStatus());
     }
 
-    if (state.colorTheme!) {
+    if (state.colorTheme) {
       _pageBackground = buildForecastColorSequence(state.forecasts);
     }
 
@@ -156,7 +156,7 @@ class _ForecastPageViewState extends State<ForecastView> {
   Widget _buildBody(
     AppState state,
   ) =>
-      state.colorTheme!
+      state.colorTheme
           ? _buildForecastColorContent(state)
           : _buildLightDarkContent(state);
 
@@ -288,7 +288,7 @@ class _ForecastPageViewState extends State<ForecastView> {
             state.themeMode,
           ),
           selectedDotColor:
-              state.colorTheme! ? Colors.white : AppTheme.primaryColor,
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 10.0,
           itemCount: state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier as ValueNotifier<int>,
