@@ -14,14 +14,17 @@ import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsPushNotificationPicker extends StatefulWidget {
   final PushNotification? selectedNotification;
+  final Map<String, dynamic>? selectedNotificationExtras;
 
   final Function(
     PushNotification notification,
+    Map<String, dynamic>? extras,
   ) onTap;
 
   SettingsPushNotificationPicker({
     Key? key,
     this.selectedNotification,
+    this.selectedNotificationExtras,
     required this.onTap,
   }) : super(key: key);
 
@@ -91,6 +94,11 @@ class _SettingsPushNotificationPickerState
       );
 
   List<Widget> _buildListOfForecasts() {
+    List<Forecast> forecasts = context.watch<AppBloc>().state.forecasts;
+    if (forecasts.isNullOrZeroLength()) {
+      return <Widget>[];
+    }
+
     List<Widget> children = <Widget>[];
     children.add(
       AppSectionHeader(
@@ -99,29 +107,16 @@ class _SettingsPushNotificationPickerState
       ),
     );
 
-    List<Forecast> forecasts = context.watch<AppBloc>().state.forecasts;
     for (int i = 0; i < forecasts.length; i++) {
       Forecast forecast = forecasts[i];
-      if (forecast.cityName.isNullOrEmpty()) {
-        children.addAll(
-          _buildListOfNotificationTile(
-            PushNotification.SAVED_LOCATION,
-            id: forecasts[i].id,
-            text: getLocationText(forecasts[i]),
-            showDivider: ((i + 1) < forecasts.length),
-          ),
-        );
-      } else {
-        children.addAll(
-          _buildListOfNotificationTile(
-            PushNotification.SAVED_LOCATION,
-            id: forecasts[i].id,
-            text: forecast.cityName,
-            subText: getLocationText(forecasts[i]),
-            showDivider: ((i + 1) < forecasts.length),
-          ),
-        );
-      }
+      children.addAll(
+        _buildListOfNotificationTile(
+          PushNotification.SAVED_LOCATION,
+          id: forecasts[i].id,
+          text: getLocationText(forecast),
+          showDivider: ((i + 1) < forecasts.length),
+        ),
+      );
     }
 
     return children;
@@ -131,37 +126,31 @@ class _SettingsPushNotificationPickerState
     PushNotification notification, {
     String? id,
     String? text,
-    String? subText,
     bool showDivider: true,
   }) {
-    String _id = 'notification_${id ?? notification.info!['id']}';
+    String _id = id ?? notification.info!['id'];
     List<Widget> children = <Widget>[];
 
-    if (subText != null) {
-      children.add(
-        ListTile(
-          key: Key(_id),
-          title: _notificationTitleText(
-              _id, text ?? notification.info!['text'], notification),
-          subtitle: Text(
-            subText,
-            style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                  fontWeight: FontWeight.w400,
-                ),
-          ),
-          onTap: () => _tapPushNotification(notification),
-        ),
-      );
-    } else {
-      children.add(
-        ListTile(
-          key: Key(_id),
-          title: _notificationTitleText(
-              _id, text ?? notification.info!['text'], notification),
-          onTap: () => _tapPushNotification(notification),
-        ),
-      );
+    Map<String, dynamic> notificationExtras = {};
+    if (notification == PushNotification.SAVED_LOCATION) {
+      notificationExtras['objectId'] = id;
+      notificationExtras['objectText'] = text;
     }
+
+    children.add(
+      ListTile(
+        key: Key(_id),
+        title: _notificationTitleText(
+          _id,
+          text ?? notification.info!['text'],
+          notification,
+        ),
+        onTap: () => _tapPushNotification(
+          notification,
+          extras: notificationExtras,
+        ),
+      ),
+    );
 
     if (showDivider) {
       children.add(Divider());
@@ -178,22 +167,33 @@ class _SettingsPushNotificationPickerState
       Text(
         text,
         style: Theme.of(context).textTheme.headline5!.copyWith(
-              color: _getNotificationColor(notification),
+              color: _getNotificationColor(notification, objectId: id),
             ),
       );
 
   void _tapPushNotification(
-    PushNotification notification,
-  ) async {
+    PushNotification notification, {
+    Map<String, dynamic>? extras,
+  }) async {
     closeKeyboard(context);
-    widget.onTap(notification);
+    widget.onTap(notification, extras);
   }
 
   Color? _getNotificationColor(
-    PushNotification notification,
-  ) {
+    PushNotification notification, {
+    String? objectId,
+  }) {
     if (widget.selectedNotification?.info!['id'] == notification.info!['id']) {
-      return AppTheme.primaryColor;
+      if (widget.selectedNotification?.info!['extra'] != null) {
+        List<String>? extras = widget.selectedNotification?.info!['extra'];
+        if ((extras != null) &&
+            widget.selectedNotificationExtras!.containsKey('objectId') &&
+            (widget.selectedNotificationExtras?['objectId'] == objectId)) {
+          return AppTheme.primaryColor;
+        }
+      } else {
+        return AppTheme.primaryColor;
+      }
     }
 
     return null;

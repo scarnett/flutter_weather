@@ -34,13 +34,18 @@ class SetUpdatePeriod extends AppEvent {
 
 class SetPushNotification extends AppEvent {
   final PushNotification? pushNotification;
+  final Map<String, dynamic>? pushNotificationExtras;
 
   const SetPushNotification({
     this.pushNotification,
+    this.pushNotificationExtras,
   });
 
   @override
-  List<Object?> get props => [pushNotification];
+  List<Object?> get props => [
+        pushNotification,
+        pushNotificationExtras,
+      ];
 }
 
 class SetThemeMode extends AppEvent {

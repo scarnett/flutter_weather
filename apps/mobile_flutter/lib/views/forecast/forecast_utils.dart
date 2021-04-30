@@ -120,6 +120,10 @@ String getLocationText(
 ) {
   String text = '';
 
+  if (!forecast.cityName.isNullOrEmpty()) {
+    text += '${forecast.cityName}, ';
+  }
+
   if (!forecast.postalCode.isNullOrEmpty()) {
     text += '${forecast.postalCode!.toUpperCase()}, ';
   }

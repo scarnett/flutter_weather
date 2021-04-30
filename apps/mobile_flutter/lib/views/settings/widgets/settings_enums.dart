@@ -68,7 +68,7 @@ extension PushNotificationExtension on PushNotification {
       case PushNotification.SAVED_LOCATION:
         return {
           'id': 'saved_location',
-          'text': 'Saved Location', // TODO!
+          'text': 'Saved Locations', // TODO!
         };
 
       case PushNotification.OFF:
@@ -77,6 +77,32 @@ extension PushNotificationExtension on PushNotification {
           'id': 'off',
           'text': 'Off', // TODO!
         };
+    }
+  }
+
+  String? get text {
+    switch (this) {
+      case PushNotification.SAVED_LOCATION:
+        return this.info!['extra']['objectText'];
+
+      case PushNotification.CURRENT_LOCATION:
+      case PushNotification.OFF:
+        return this.info!['text'];
+
+      default:
+        return null;
+    }
+  }
+
+  String? getExtraValue(String param) {
+    switch (this) {
+      case PushNotification.SAVED_LOCATION:
+        return this.info?['extra'][param];
+
+      case PushNotification.CURRENT_LOCATION:
+      case PushNotification.OFF:
+      default:
+        return null;
     }
   }
 }

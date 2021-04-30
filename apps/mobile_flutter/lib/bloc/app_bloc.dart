@@ -87,6 +87,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) =>
       state.copyWith(
         pushNotification: Nullable<PushNotification?>(event.pushNotification),
+        pushNotificationExtras:
+            Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
       );
 
   AppState _mapSetThemeModeToStates(

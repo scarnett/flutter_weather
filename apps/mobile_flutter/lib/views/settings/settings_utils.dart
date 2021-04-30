@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 
 String getTitle(
   BuildContext context,
@@ -12,4 +13,21 @@ String getTitle(
   }
 
   return AppLocalizations.of(context)!.settings;
+}
+
+String? getPushNotificationText(
+  PushNotification? notification, {
+  Map<String, dynamic>? extras,
+}) {
+  switch (notification) {
+    case PushNotification.SAVED_LOCATION:
+      return extras?['objectText'];
+
+    case PushNotification.CURRENT_LOCATION:
+    case PushNotification.OFF:
+      return notification?.info!['text'];
+
+    default:
+      return null;
+  }
 }

@@ -125,6 +125,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   Widget _buildContent() {
+    AppState state = context.read<AppBloc>().state;
     List<Widget> children = []
       ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildThemeModeSection())
@@ -137,7 +138,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     children..addAll(_buildBuildInfoSection());
     children
       ..add(SettingsOpenSourceInfo(
-        themeMode: context.read<AppBloc>().state.themeMode,
+        themeMode: state.themeMode,
       ));
 
     return SafeArea(
@@ -150,14 +151,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             child: Column(children: children),
           ),
           SettingsUpdatePeriodPicker(
-            selectedPeriod: context.read<AppBloc>().state.updatePeriod,
+            selectedPeriod: state.updatePeriod,
             onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
           ),
           SettingsPushNotificationPicker(
-            selectedNotification:
-                context.read<AppBloc>().state.pushNotification,
-            onTap: (PushNotification notification) =>
-                _tapPushNotification(notification),
+            selectedNotification: state.pushNotification,
+            selectedNotificationExtras: state.pushNotificationExtras,
+            onTap: (
+              PushNotification notification,
+              Map<String, dynamic>? extras,
+            ) =>
+                _tapPushNotification(notification, extras: extras),
           ),
         ],
       ),
@@ -213,7 +217,12 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             style: Theme.of(context).textTheme.subtitle1,
           ),
           trailing: Text(
-              context.read<AppBloc>().state.pushNotification?.info!['text']),
+            settingsUtils.getPushNotificationText(
+                  context.read<AppBloc>().state.pushNotification,
+                  extras: context.read<AppBloc>().state.pushNotificationExtras,
+                ) ??
+                '',
+          ),
           onTap: () => animatePage(_pageController!, page: 2),
         ),
       ]);
@@ -363,11 +372,15 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
   void _tapPushNotification(
     PushNotification? notification, {
+    Map<String, dynamic>? extras,
     bool redirect: true,
   }) {
-    context
-        .read<AppBloc>()
-        .add(SetPushNotification(pushNotification: notification));
+    context.read<AppBloc>().add(
+          SetPushNotification(
+            pushNotification: notification,
+            pushNotificationExtras: extras,
+          ),
+        );
 
     if (redirect) {
       animatePage(_pageController!, page: 0);
