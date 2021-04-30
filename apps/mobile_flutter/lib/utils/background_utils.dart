@@ -30,6 +30,8 @@ Future<void> initBackgroundFetch(
         }
       }
 
+      // TODO! Handle push notification here
+
       BackgroundFetch.finish(taskId);
     }, (String taskId) async {
       BackgroundFetch.finish(taskId);
