@@ -23,14 +23,25 @@ Future<void> initBackgroundFetch(
           requiresDeviceIdle: false,
           requiredNetworkType: NetworkType.NONE,
         ), (String taskId) async {
+      String? notificationForecastId;
+
+      if ((bloc.state.pushNotification != null) &&
+          (bloc.state.pushNotification == PushNotification.SAVED_LOCATION)) {
+        notificationForecastId = bloc.state.pushNotificationExtras?['objectId'];
+      }
+
       // Fetch forecasts
       for (Forecast forecast in bloc.state.forecasts) {
         if (canRefresh(bloc.state, forecast: forecast)) {
-          bloc.add(RefreshForecast(forecast, bloc.state.temperatureUnit));
+          bool push = (notificationForecastId == forecast.id);
+
+          bloc.add(RefreshForecast(
+            forecast,
+            bloc.state.temperatureUnit,
+            push: push,
+          ));
         }
       }
-
-      // TODO! Handle push notification here
 
       BackgroundFetch.finish(taskId);
     }, (String taskId) async {

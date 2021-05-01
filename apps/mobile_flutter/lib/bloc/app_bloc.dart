@@ -233,6 +233,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         forecasts: forecasts,
         refreshStatus: Nullable<RefreshStatus?>(null),
       );
+
+      // TODO! push forecast here
     } else {
       // TODO! snackbar error
     }
