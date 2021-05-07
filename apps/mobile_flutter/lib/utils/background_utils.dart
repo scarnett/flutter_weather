@@ -1,16 +1,36 @@
-import 'package:background_fetch/background_fetch.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
-import 'package:flutter_weather/views/forecast/forecast_utils.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'dart:convert';
 
-Future<void> initBackgroundFetch(
-  BuildContext context,
+import 'package:background_fetch/background_fetch.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> initBackgroundFetchHeadlessTask(
+  HeadlessTask task,
 ) async {
-  AppBloc bloc = context.read<AppBloc>();
-  UpdatePeriod? updatePeriod = bloc.state.updatePeriod;
+  String taskId = task.taskId;
+
+  if (task.timeout) {
+    BackgroundFetch.finish(taskId);
+    return;
+  }
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  if (taskId == 'flutter_background_fetch') {
+    BackgroundFetch.scheduleTask(
+      TaskConfig(
+        taskId: 'io.flutter_weather.notification',
+        delay: 5000,
+        periodic: false,
+        forceAlarmManager: false,
+        stopOnTerminate: false,
+        enableHeadless: true,
+      ),
+    );
+  }
+
+  UpdatePeriod? updatePeriod = getPeriod(prefs.getString('updatePeriod'));
   if (updatePeriod != null) {
     await BackgroundFetch.configure(
         BackgroundFetchConfig(
@@ -24,24 +44,18 @@ Future<void> initBackgroundFetch(
           requiredNetworkType: NetworkType.NONE,
         ), (String taskId) async {
       String? notificationForecastId;
+      PushNotification? pushNotification =
+          getPushNotification(prefs.getString('pushNotification'));
 
-      if ((bloc.state.pushNotification != null) &&
-          (bloc.state.pushNotification == PushNotification.SAVED_LOCATION)) {
-        notificationForecastId = bloc.state.pushNotificationExtras?['objectId'];
+      if ((pushNotification != null) &&
+          (pushNotification == PushNotification.SAVED_LOCATION)) {
+        Map<String, dynamic>? pushNotificationExtras =
+            json.decode(prefs.getString('pushNotificationExtras')!);
+
+        notificationForecastId = pushNotificationExtras?['objectId'];
       }
 
-      // Fetch forecasts
-      for (Forecast forecast in bloc.state.forecasts) {
-        if (canRefresh(bloc.state, forecast: forecast)) {
-          bool push = (notificationForecastId == forecast.id);
-
-          bloc.add(RefreshForecast(
-            forecast,
-            bloc.state.temperatureUnit,
-            push: push,
-          ));
-        }
-      }
+      // TODO! push notification here - notificationForecastId
 
       BackgroundFetch.finish(taskId);
     }, (String taskId) async {

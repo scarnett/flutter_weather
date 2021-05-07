@@ -1,6 +1,34 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
+
+UpdatePeriod? getPeriod(
+  String? id,
+) {
+  if (id != null) {
+    for (UpdatePeriod period in UpdatePeriod.values) {
+      if (period.info?['id'] == id) {
+        return period;
+      }
+    }
+  }
+
+  return null;
+}
+
+PushNotification? getPushNotification(
+  String? id,
+) {
+  if (id != null) {
+    for (PushNotification notification in PushNotification.values) {
+      if (notification.info?['id'] == id) {
+        return notification;
+      }
+    }
+  }
+
+  return null;
+}
 
 String getTitle(
   BuildContext context,

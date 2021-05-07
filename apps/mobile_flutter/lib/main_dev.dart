@@ -4,10 +4,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app.dart';
+import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
+import 'package:flutter_weather/notifications/notification_helper.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -34,6 +36,12 @@ Future<void> main() async {
   );
 
   // await HydratedBloc.storage.clear();
+
+  // Preferences
+  await AppPrefs().init();
+
+  // Local notifications
+  await initLocalNotifications();
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {

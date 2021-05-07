@@ -12,9 +12,9 @@ import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart'
     as forecastUtils;
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart'
     as settingsUtils;
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
@@ -136,10 +136,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     }
 
     children..addAll(_buildBuildInfoSection());
-    children
-      ..add(SettingsOpenSourceInfo(
-        themeMode: state.themeMode,
-      ));
+    children..add(SettingsOpenSourceInfo(themeMode: state.themeMode));
 
     return SafeArea(
       child: PageView(
@@ -158,7 +155,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             selectedNotification: state.pushNotification,
             selectedNotificationExtras: state.pushNotificationExtras,
             onTap: (
-              PushNotification notification,
+              PushNotification? notification,
               Map<String, dynamic>? extras,
             ) =>
                 _tapPushNotification(notification, extras: extras),
@@ -175,7 +172,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context)!.autoUpdate,
+          text: AppLocalizations.of(context)!.autoUpdates,
           padding: const EdgeInsets.only(
             left: 16.0,
             right: 4.0,
@@ -186,10 +183,12 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             SizedBox(
               height: 16.0,
               child: Switch(
-                onChanged: (bool value) => _tapUpdatePeriod(
-                  value ? UpdatePeriod.HOUR2 : null,
-                  redirect: false,
-                ),
+                onChanged: (bool value) {
+                  return _tapUpdatePeriod(
+                    value ? UpdatePeriod.HOUR2 : null,
+                    redirect: false,
+                  );
+                },
                 value: (updatePeriod != null),
               ),
             ),

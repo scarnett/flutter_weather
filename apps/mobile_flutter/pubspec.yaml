@@ -13,6 +13,7 @@ dependencies:
 
   background_fetch: '^1.0.0-nullsafety.2'
   bloc: '^7.0.0'
+  collection: '^1.15.0-nullsafety.4'
   cupertino_icons: '^1.0.2'
   equatable: '^2.0.0'
   firebase_core: '^1.0.4'
@@ -24,6 +25,7 @@ dependencies:
       url: https://github.com/WahdanZ/form_bloc
       ref: ns-mirgrate
       path: packages/flutter_form_bloc
+  flutter_local_notifications: '^5.0.0+1'
   flutter_switch: '^0.3.0'
   http: '^0.13.1'
   hydrated_bloc: '^7.0.0'
@@ -31,9 +33,9 @@ dependencies:
   package_info: '^2.0.0'
   page_view_indicators: '^2.0.0'
   path_provider: '^2.0.1'
-  flutter_local_notifications: '^5.0.0+1'
   sentry: '^5.0.0'
   sentry_flutter: '^5.0.0'
+  shared_preferences: '^2.0.5'
   store_redirect:
     git:
       url: https://github.com/Danesz/store_redirect
@@ -43,7 +45,6 @@ dependencies:
   version: '^2.0.0'
   weather_icons: '^3.0.0-nullsafety.0'
   webview_flutter: '^2.0.4'
-  collection: ^1.15.0-nullsafety.4
 
 dev_dependencies:
   flutter_driver:

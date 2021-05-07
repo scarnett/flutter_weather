@@ -1,3 +1,4 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +44,10 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   @override
   void initState() {
     super.initState();
-    initBackgroundFetch(context);
+
+    BackgroundFetch.registerHeadlessTask(
+        (HeadlessTask task) => initBackgroundFetchHeadlessTask(task));
+
     if (!mounted) return;
   }
 

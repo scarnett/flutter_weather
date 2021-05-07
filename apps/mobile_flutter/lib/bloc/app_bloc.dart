@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/notifications/notification_helper.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
@@ -72,24 +74,39 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   AppState _mapSetUpdatePeriodToStates(
     SetUpdatePeriod event,
-  ) =>
-      state.copyWith(
-        updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
-        pushNotification: (event.updatePeriod == null)
-            ? Nullable<PushNotification?>(null)
-            : (state.pushNotification == null)
-                ? Nullable<PushNotification?>(PushNotification.OFF)
-                : Nullable<PushNotification?>(state.pushNotification),
-      );
+  ) {
+    AppPrefs prefs = AppPrefs();
+    prefs.updatePeriod = event.updatePeriod;
+
+    if (event.updatePeriod == null) {
+      prefs.pushNotification = null;
+    } else if (state.pushNotification == null) {
+      prefs.pushNotification = PushNotification.OFF;
+    }
+
+    return state.copyWith(
+      updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
+      pushNotification: (event.updatePeriod == null)
+          ? Nullable<PushNotification?>(null)
+          : (state.pushNotification == null)
+              ? Nullable<PushNotification?>(PushNotification.OFF)
+              : Nullable<PushNotification?>(state.pushNotification),
+    );
+  }
 
   AppState _mapSetPushNotificationToStates(
     SetPushNotification event,
-  ) =>
-      state.copyWith(
-        pushNotification: Nullable<PushNotification?>(event.pushNotification),
-        pushNotificationExtras:
-            Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
-      );
+  ) {
+    AppPrefs prefs = AppPrefs();
+    prefs.pushNotification = event.pushNotification;
+    prefs.pushNotificationExtras = event.pushNotificationExtras;
+
+    return state.copyWith(
+      pushNotification: Nullable<PushNotification?>(event.pushNotification),
+      pushNotificationExtras:
+          Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
+    );
+  }
 
   AppState _mapSetThemeModeToStates(
     SetThemeMode event,
@@ -219,8 +236,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         // TODO! snackbar error
       }
 
-      Forecast _forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
-      forecasts[forecastIndex] = _forecast.copyWith(
+      Forecast forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
+      forecasts[forecastIndex] = forecast.copyWith(
         id: event.forecast.id,
         cityName: Nullable<String?>(event.forecast.cityName),
         postalCode: Nullable<String?>(event.forecast.postalCode),
@@ -234,7 +251,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         refreshStatus: Nullable<RefreshStatus?>(null),
       );
 
-      // TODO! push forecast here
+      if (event.push) {
+        pushLocalForecastNotification(forecast);
+      }
     } else {
       // TODO! snackbar error
     }

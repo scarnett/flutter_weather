@@ -8,7 +8,7 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
@@ -17,7 +17,7 @@ class SettingsPushNotificationPicker extends StatefulWidget {
   final Map<String, dynamic>? selectedNotificationExtras;
 
   final Function(
-    PushNotification notification,
+    PushNotification? notification,
     Map<String, dynamic>? extras,
   ) onTap;
 

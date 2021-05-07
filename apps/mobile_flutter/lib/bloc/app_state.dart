@@ -15,8 +15,8 @@ class AppState extends Equatable {
   final CRUDStatus? crudStatus;
 
   AppState({
-    this.updatePeriod: UpdatePeriod.HOUR2,
-    this.pushNotification: PushNotification.OFF,
+    this.updatePeriod,
+    this.pushNotification,
     this.pushNotificationExtras,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
@@ -29,8 +29,8 @@ class AppState extends Equatable {
   });
 
   const AppState._({
-    this.updatePeriod: UpdatePeriod.HOUR2,
-    this.pushNotification: PushNotification.OFF,
+    this.updatePeriod,
+    this.pushNotification,
     this.pushNotificationExtras,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
