@@ -1,4 +1,3 @@
-import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 
 class WeatherApp extends StatelessWidget {
@@ -40,16 +38,6 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   ThemeData? _themeData = appLightThemeData;
-
-  @override
-  void initState() {
-    super.initState();
-
-    BackgroundFetch.registerHeadlessTask(
-        (HeadlessTask task) => initBackgroundFetchHeadlessTask(task));
-
-    if (!mounted) return;
-  }
 
   @override
   Widget build(

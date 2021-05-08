@@ -67,11 +67,15 @@ Future<void> initLocalNotifications() async {
 Future<void> pushLocalForecastNotification(
   Forecast forecast,
 ) async {
+  String channelName = 'Forecast Test'; // TODO! getLocationText(forecast)
+  String channelDescription =
+      'Hello World!'; // TODO! forecast.list![0].weather![0].description!
+
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-    '0',
-    getLocationText(forecast),
-    forecast.list![0].weather![0].description!, // TODO
+    'flutterWeatherForecast',
+    channelName,
+    channelDescription,
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
@@ -85,8 +89,8 @@ Future<void> pushLocalForecastNotification(
 
   await flutterLocalNotificationsPlugin.show(
     0,
-    getLocationText(forecast),
-    forecast.list![0].weather![0].description!, // TODO
+    channelName,
+    channelDescription,
     platformChannelSpecifics,
     payload: 'notification_tapped',
   );

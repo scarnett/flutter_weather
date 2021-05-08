@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:background_fetch/background_fetch.dart';
+import 'package:flutter_weather/notifications/notification_helper.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +17,6 @@ Future<void> initBackgroundFetchHeadlessTask(
     return;
   }
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
   if (taskId == 'flutter_background_fetch') {
     BackgroundFetch.scheduleTask(
       TaskConfig(
@@ -30,6 +30,7 @@ Future<void> initBackgroundFetchHeadlessTask(
     );
   }
 
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   UpdatePeriod? updatePeriod = getPeriod(prefs.getString('updatePeriod'));
   if (updatePeriod != null) {
     await BackgroundFetch.configure(
@@ -43,7 +44,6 @@ Future<void> initBackgroundFetchHeadlessTask(
           requiresDeviceIdle: false,
           requiredNetworkType: NetworkType.NONE,
         ), (String taskId) async {
-      String? notificationForecastId;
       PushNotification? pushNotification =
           getPushNotification(prefs.getString('pushNotification'));
 
@@ -52,10 +52,13 @@ Future<void> initBackgroundFetchHeadlessTask(
         Map<String, dynamic>? pushNotificationExtras =
             json.decode(prefs.getString('pushNotificationExtras')!);
 
-        notificationForecastId = pushNotificationExtras?['objectId'];
+        String? notificationForecastId = pushNotificationExtras?['objectId'];
+        // TODO! push notification here - notificationForecastId
+        pushLocalForecastNotification(Forecast());
+      } else {
+        // TODO! push to current location
+        pushLocalForecastNotification(Forecast());
       }
-
-      // TODO! push notification here - notificationForecastId
 
       BackgroundFetch.finish(taskId);
     }, (String taskId) async {
