@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 enum UpdatePeriod {
   HOUR1,
   HOUR2,

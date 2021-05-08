@@ -34,7 +34,7 @@ Future<void> initBackgroundFetchHeadlessTask(
   if (updatePeriod != null) {
     await BackgroundFetch.configure(
         BackgroundFetchConfig(
-          minimumFetchInterval: updatePeriod.info!['minutes'],
+          minimumFetchInterval: 15, // TODO! updatePeriod.info!['minutes'],
           stopOnTerminate: false,
           enableHeadless: true,
           requiresBatteryNotLow: false,

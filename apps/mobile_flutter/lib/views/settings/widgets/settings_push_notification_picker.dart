@@ -184,11 +184,8 @@ class _SettingsPushNotificationPickerState
     String? objectId,
   }) {
     if (widget.selectedNotification?.info!['id'] == notification.info!['id']) {
-      if (widget.selectedNotification?.info!['extra'] != null) {
-        List<String>? extras = widget.selectedNotification?.info!['extra'];
-        if ((extras != null) &&
-            widget.selectedNotificationExtras!.containsKey('objectId') &&
-            (widget.selectedNotificationExtras?['objectId'] == objectId)) {
+      if (widget.selectedNotificationExtras!.containsKey('objectId')) {
+        if (widget.selectedNotificationExtras?['objectId'] == objectId) {
           return AppTheme.primaryColor;
         }
       } else {

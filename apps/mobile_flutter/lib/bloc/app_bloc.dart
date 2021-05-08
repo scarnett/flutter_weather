@@ -11,6 +11,7 @@ import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
@@ -303,14 +304,19 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   @override
   AppState fromJson(
-    Map<String, dynamic> json,
+    Map<String, dynamic> jsonData,
   ) =>
       AppState(
-        themeMode: getThemeMode(json['themeMode']),
-        colorTheme: json['colorTheme'],
-        temperatureUnit: getTemperatureUnit(json['temperatureUnit']),
-        forecasts: Forecast.fromJsonList(json['forecasts']),
-        selectedForecastIndex: json['selectedForecastIndex'],
+        updatePeriod: getPeriod(jsonData['updatePeriod']),
+        pushNotification: getPushNotification(jsonData['pushNotification']),
+        pushNotificationExtras: (jsonData['pushNotificationExtras'] != null)
+            ? json.decode(jsonData['pushNotificationExtras'])
+            : null,
+        themeMode: getThemeMode(jsonData['themeMode']),
+        colorTheme: jsonData['colorTheme'],
+        temperatureUnit: getTemperatureUnit(jsonData['temperatureUnit']),
+        forecasts: Forecast.fromJsonList(jsonData['forecasts']),
+        selectedForecastIndex: jsonData['selectedForecastIndex'],
       );
 
   @override
@@ -318,6 +324,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     AppState state,
   ) =>
       {
+        'updatePeriod': state.updatePeriod?.info?['id'],
+        'pushNotification': state.pushNotification?.info?['id'],
+        'pushNotificationExtras': state.pushNotificationExtras != null
+            ? json.encode(state.pushNotificationExtras)
+            : null,
         'themeMode': state.themeMode.toString(),
         'colorTheme': state.colorTheme,
         'temperatureUnit': state.temperatureUnit.toString(),
