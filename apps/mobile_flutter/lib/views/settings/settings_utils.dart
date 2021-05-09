@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 
 UpdatePeriod? getPeriod(
@@ -49,7 +50,13 @@ String? getPushNotificationText(
 }) {
   switch (notification) {
     case PushNotification.SAVED_LOCATION:
-      return extras?['objectText'];
+      if (extras != null) {
+        if (extras.containsKey('forecast')) {
+          return getLocationText(extras['forecast']);
+        }
+      }
+
+      return null;
 
     case PushNotification.CURRENT_LOCATION:
     case PushNotification.OFF:

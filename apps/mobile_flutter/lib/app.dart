@@ -6,6 +6,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 
 class WeatherApp extends StatelessWidget {
@@ -38,6 +39,12 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   ThemeData? _themeData = appLightThemeData;
+
+  @override
+  void initState() {
+    super.initState();
+    initBackgroundFetch();
+  }
 
   @override
   Widget build(

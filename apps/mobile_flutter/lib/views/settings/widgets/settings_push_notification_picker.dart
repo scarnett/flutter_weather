@@ -108,12 +108,10 @@ class _SettingsPushNotificationPickerState
     );
 
     for (int i = 0; i < forecasts.length; i++) {
-      Forecast forecast = forecasts[i];
       children.addAll(
         _buildListOfNotificationTile(
           PushNotification.SAVED_LOCATION,
-          id: forecasts[i].id,
-          text: getLocationText(forecast),
+          forecast: forecasts[i],
           showDivider: ((i + 1) < forecasts.length),
         ),
       );
@@ -124,17 +122,15 @@ class _SettingsPushNotificationPickerState
 
   List<Widget> _buildListOfNotificationTile(
     PushNotification notification, {
-    String? id,
-    String? text,
+    Forecast? forecast,
     bool showDivider: true,
   }) {
-    String _id = id ?? notification.info!['id'];
+    String _id = forecast?.id ?? notification.info!['id'];
     List<Widget> children = <Widget>[];
 
     Map<String, dynamic> notificationExtras = {};
     if (notification == PushNotification.SAVED_LOCATION) {
-      notificationExtras['objectId'] = id;
-      notificationExtras['objectText'] = text;
+      notificationExtras['forecast'] = forecast;
     }
 
     children.add(
@@ -142,7 +138,9 @@ class _SettingsPushNotificationPickerState
         key: Key(_id),
         title: _notificationTitleText(
           _id,
-          text ?? notification.info!['text'],
+          (forecast != null)
+              ? getLocationText(forecast)
+              : notification.info!['text'],
           notification,
         ),
         onTap: () => _tapPushNotification(
@@ -185,8 +183,8 @@ class _SettingsPushNotificationPickerState
   }) {
     if (widget.selectedNotification?.info!['id'] == notification.info!['id']) {
       if ((widget.selectedNotificationExtras != null) &&
-          widget.selectedNotificationExtras!.containsKey('objectId')) {
-        if (widget.selectedNotificationExtras?['objectId'] == objectId) {
+          widget.selectedNotificationExtras!.containsKey('forecast')) {
+        if (widget.selectedNotificationExtras?['forecast'].id == objectId) {
           return AppTheme.primaryColor;
         }
       } else {
