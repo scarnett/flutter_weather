@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_weather/app_prefs.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/notifications/notification_helper.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> initBackgroundFetchHeadlessTask(
@@ -64,7 +67,17 @@ Future<void> initBackgroundFetch() async {
                 Forecast forecast =
                     Forecast.fromJson(pushNotificationExtras['forecast']);
 
-                pushLocalForecastNotification(forecast);
+                ForecastCityCoord coord = forecast.city!.coord!;
+                http.Response forecastResponse =
+                    await fetchCurrentForecastByCoords(
+                  longitude: coord.lon!,
+                  latitude: coord.lat!,
+                );
+
+                pushCurrentForecastNotification(
+                  Forecast.fromJson(jsonDecode(forecastResponse.body)),
+                  getTemperatureUnit(prefs.getString('temperatureUnit')),
+                );
               }
 
               break;

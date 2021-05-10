@@ -22,19 +22,20 @@
 
 ## Firebase Remote Configuration
 
-| Name                                    | Value                      | Optional |
-|-----------------------------------------|----------------------------|----------|
-| app_version                             | 1.0.0                      | No       |
-| openweathermap_api_key                  | <your_openweather_api_key> | No       |
-| openweathermap_api_uri                  | api.openweathermap.com     | No       |
-| openweathermap_api_daily_forecast_path  | /data/2.5/forecast/daily   | No       |
-| openweathermap_api_hourly_forecast_path | /data/2.5/forecast/hourly  | No       |
-| refresh_timeout                         | 300000                     | No       |
-| default_country_code                    | us                         | No       |
-| supported_locales                       | en                         | No       |
-| privacy_policy_url                      |                            | Yes      |
-| github_url                              |                            | Yes      |
-| sentry_dsn                              |                            | Yes      |
+| Name                                     | Value                      | Optional |
+|------------------------------------------|----------------------------|----------|
+| app_version                              | 1.0.0                      | No       |
+| openweathermap_api_key                   | <your_openweather_api_key> | No       |
+| openweathermap_api_uri                   | api.openweathermap.com     | No       |
+| openweathermap_api_current_forecast_path | /data/2.5/weather          | No       |
+| openweathermap_api_daily_forecast_path   | /data/2.5/forecast/daily   | No       |
+| openweathermap_api_hourly_forecast_path  | /data/2.5/forecast/hourly  | No       |
+| refresh_timeout                          | 300000                     | No       |
+| default_country_code                     | us                         | No       |
+| supported_locales                        | en                         | No       |
+| privacy_policy_url                       |                            | Yes      |
+| github_url                               |                            | Yes      |
+| sentry_dsn                               | <your_sentry_dsn>          | Yes      |
 
 ## Android Configuration
 

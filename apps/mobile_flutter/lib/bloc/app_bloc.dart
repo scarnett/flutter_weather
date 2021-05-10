@@ -1,9 +1,9 @@
 import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
-import 'package:flutter_weather/notifications/notification_helper.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -133,10 +133,14 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   AppState _mapSetTemperatureUnitToStates(
     SetTemperatureUnit event,
-  ) =>
-      state.copyWith(
-        temperatureUnit: event.temperatureUnit,
-      );
+  ) {
+    AppPrefs prefs = AppPrefs();
+    prefs.temperatureUnit = event.temperatureUnit;
+
+    return state.copyWith(
+      temperatureUnit: event.temperatureUnit,
+    );
+  }
 
   AppState _mapSelectedForecastIndexToStates(
     SelectedForecastIndex event,
@@ -251,10 +255,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         forecasts: forecasts,
         refreshStatus: Nullable<RefreshStatus?>(null),
       );
-
-      if (event.push) {
-        pushLocalForecastNotification(forecast);
-      }
     } else {
       // TODO! snackbar error
     }

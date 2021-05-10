@@ -63,12 +63,14 @@ Future<void> main() async {
   AppConfig config = AppConfig(
     flavor: Flavor.dev,
     appVersion: remoteConfig.appVersion,
-    openweathermapApiKey: remoteConfig.openweathermapApiKey,
-    openweathermapApiUri: remoteConfig.openweathermapApiUri,
-    openweathermapApiDailyForecastPath:
-        remoteConfig.openweathermapApiDailyForecastPath,
-    openweathermapApiHourlyForecastPath:
-        remoteConfig.openweathermapApiHourlyForecastPath,
+    openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
+    openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
+    openWeatherMapApiCurrentForecastPath:
+        remoteConfig.openWeatherMapApiCurrentForecastPath,
+    openWeatherMapApiDailyForecastPath:
+        remoteConfig.openWeatherMapApiDailyForecastPath,
+    openWeatherMapApiHourlyForecastPath:
+        remoteConfig.openWeatherMapApiHourlyForecastPath,
     refreshTimeout: remoteConfig.refreshTimeout,
     defaultCountryCode: remoteConfig.defaultCountryCode,
     supportedLocales: remoteConfig.supportedLocales,

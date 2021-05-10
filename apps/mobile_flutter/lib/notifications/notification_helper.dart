@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/notifications/notification_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -64,11 +65,21 @@ Future<void> initLocalNotifications() async {
   await requestIOSPermissions();
 }
 
-Future<void> pushLocalForecastNotification(
+Future<void> pushCurrentForecastNotification(
   Forecast forecast,
+  TemperatureUnit temperatureUnit,
 ) async {
   String channelName = getLocationText(forecast);
-  String channelDescription = forecast.list![0].weather![0].description!;
+  String channelDescription =
+      getLocationCurrentForecastText(forecast, temperatureUnit);
+
+  final BigTextStyleInformation bigTextStyleInfo = BigTextStyleInformation(
+    channelDescription,
+    contentTitle: channelName,
+    htmlFormatContentTitle: true,
+    summaryText: channelDescription,
+    htmlFormatSummaryText: true,
+  );
 
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
@@ -78,6 +89,7 @@ Future<void> pushLocalForecastNotification(
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
+    styleInformation: bigTextStyleInfo,
   );
 
   IOSNotificationDetails iOSPlatformChannelSpecifics = IOSNotificationDetails();

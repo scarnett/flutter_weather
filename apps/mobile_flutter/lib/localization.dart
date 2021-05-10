@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +139,7 @@ class AppLocalizations {
   }) =>
       Intl.message(
         message,
-        name: (name == null) ? toCamelCase(message) : name,
+        name: (name == null) ? message.camelCase() : name,
         args: args as List<Object>?,
         locale: locale.toString(),
       );

@@ -9,6 +9,19 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+Uri getCurrentApiUri(
+  Map<String, dynamic> params,
+) {
+  params['cnt'] = '1';
+  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
+
+  return Uri.https(
+    AppConfig.instance.openWeatherMapApiUri!,
+    AppConfig.instance.openWeatherMapApiDailyForecastPath!,
+    params.cast<String, String>(),
+  );
+}
+
 Uri getDailyApiUri(
   Map<String, dynamic> params, {
   int count: 7, // TODO! premium
@@ -17,11 +30,11 @@ Uri getDailyApiUri(
     params['cnt'] = count.toString();
   }
 
-  params['appid'] = AppConfig.instance.openweathermapApiKey;
+  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
 
   return Uri.https(
-    AppConfig.instance.openweathermapApiUri!,
-    AppConfig.instance.openweathermapApiDailyForecastPath!,
+    AppConfig.instance.openWeatherMapApiUri!,
+    AppConfig.instance.openWeatherMapApiDailyForecastPath!,
     params.cast<String, String>(),
   );
 }
@@ -122,6 +135,8 @@ String getLocationText(
 
   if (!forecast.cityName.isNullOrEmpty()) {
     text += '${forecast.cityName}, ';
+  } else if ((forecast.city != null) && !forecast.city!.name.isNullOrEmpty()) {
+    text += '${forecast.city!.name}, ';
   }
 
   if (!forecast.postalCode.isNullOrEmpty()) {
@@ -129,7 +144,43 @@ String getLocationText(
   }
 
   if (!forecast.countryCode.isNullOrEmpty()) {
-    text += '${forecast.countryCode!.toUpperCase()}';
+    text += forecast.countryCode!.toUpperCase();
+  } else if ((forecast.city != null) &&
+      !forecast.city!.country.isNullOrEmpty()) {
+    text += forecast.city!.country!.toUpperCase();
+  }
+
+  String trimmedText = text.trim();
+  if (trimmedText.endsWith(',')) {
+    trimmedText = trimmedText.substring(0, (trimmedText.length - 1));
+  }
+
+  return trimmedText;
+}
+
+String getLocationCurrentForecastText(
+  Forecast forecast,
+  TemperatureUnit temperatureUnit,
+) {
+  String text = '';
+
+  if ((forecast.list != null) && (forecast.list!.length > 0)) {
+    ForecastDay currentDay = forecast.list!.first;
+    text += currentDay.weather!.first.description!.capitalize();
+
+    num currentTemp =
+        getTemperature(currentDay.feelsLike!.day, temperatureUnit);
+
+    num highTemp = getTemperature(currentDay.temp!.max, temperatureUnit);
+
+    num lowTemp = getTemperature(currentDay.temp!.min, temperatureUnit);
+
+    // TODO! i18n
+    // TODO Custom message depending on temperature and conditions
+    text += '. The current temperature is ' +
+        '$currentTemp${temperatureUnit.unitSymbol}. The high for today is ' +
+        '$highTemp${temperatureUnit.unitSymbol} with a low of ' +
+        '$lowTemp${temperatureUnit.unitSymbol}.';
   }
 
   return text.trim();
@@ -153,7 +204,7 @@ String getUnitSymbol(
   }
 }
 
-// @see https://openweathermap.org/weather-conditions
+// @see https://openWeatherMap.org/weather-conditions
 IconData getForecastIconData(
   String? iconCode,
 ) {

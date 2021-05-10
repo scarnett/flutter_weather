@@ -126,19 +126,16 @@ class RemovePrimaryStatus extends AppEvent {
 class RefreshForecast extends AppEvent {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
-  final bool push;
 
   const RefreshForecast(
     this.forecast,
-    this.temperatureUnit, {
-    this.push: false,
-  });
+    this.temperatureUnit,
+  );
 
   @override
   List<Object> get props => [
         forecast,
         temperatureUnit,
-        push,
       ];
 }
 

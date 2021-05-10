@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ const String appStateKey = 'appState';
 const String updatePeriodKey = 'updatePeriod';
 const String pushNotificationKey = 'pushNotification';
 const String pushNotificationExtrasKey = 'pushNotificationExtras';
+const String temperatureUnitKey = 'temperatureUnit';
 
 class AppPrefs {
   static late SharedPreferences _sharedPrefs;
@@ -70,5 +72,14 @@ class AppPrefs {
   ) {
     _sharedPrefs.setString(
         pushNotificationExtrasKey, json.encode(pushNotificationExtras));
+  }
+
+  TemperatureUnit get temperatureUnit =>
+      getTemperatureUnit(_sharedPrefs.getString(temperatureUnitKey));
+
+  set temperatureUnit(
+    TemperatureUnit? temperatureUnit,
+  ) {
+    _sharedPrefs.setString(temperatureUnitKey, temperatureUnit.toString());
   }
 }
