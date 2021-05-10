@@ -186,7 +186,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     FormBlocFailure<String, String> state,
   ) {
     closeKeyboard(context);
-    Scaffold.of(context)
+    ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(state.failureResponse!)));
   }
 

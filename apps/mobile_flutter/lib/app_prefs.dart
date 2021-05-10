@@ -4,6 +4,7 @@ import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const String appStateKey = 'appState';
 const String updatePeriodKey = 'updatePeriod';
 const String pushNotificationKey = 'pushNotification';
 const String pushNotificationExtrasKey = 'pushNotificationExtras';
@@ -17,6 +18,14 @@ class AppPrefs {
 
   Future<void> init() async {
     _sharedPrefs = await SharedPreferences.getInstance();
+  }
+
+  int get appState => _sharedPrefs.getInt(appStateKey) ?? 0;
+
+  set appState(
+    int? appState,
+  ) {
+    _sharedPrefs.setInt(appStateKey, appState ?? 0);
   }
 
   UpdatePeriod? get updatePeriod =>

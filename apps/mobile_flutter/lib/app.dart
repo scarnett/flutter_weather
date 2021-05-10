@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
@@ -35,7 +36,8 @@ class FlutterWeatherAppView extends StatefulWidget {
   _FlutterWeatherAppViewState createState() => _FlutterWeatherAppViewState();
 }
 
-class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
+class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
+    with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   ThemeData? _themeData = appLightThemeData;
@@ -43,7 +45,14 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     initBackgroundFetch();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -74,6 +83,22 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
           ),
         ),
       );
+
+  @override
+  void didChangeAppLifecycleState(
+    AppLifecycleState state,
+  ) {
+    AppPrefs prefs = AppPrefs();
+    prefs.appState = state.index;
+
+    // switch (state) {
+    //   case AppLifecycleState.resumed:
+    //   case AppLifecycleState.inactive:
+    //   case AppLifecycleState.paused:
+    //   case AppLifecycleState.detached:
+    //     break;
+    // }
+  }
 
   void _blocListener(
     BuildContext context,

@@ -108,17 +108,17 @@ class _ForecastPageViewState extends State<ForecastView> {
 
       switch (state.crudStatus) {
         case CRUDStatus.CREATED:
-          _scaffoldKey.currentState!
+          ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(i18n!.forecastAdded)));
           break;
 
         case CRUDStatus.UPDATED:
-          _scaffoldKey.currentState!
+          ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(i18n!.forecastUpdated)));
           break;
 
         case CRUDStatus.DELETED:
-          _scaffoldKey.currentState!
+          ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(i18n!.forecastDeleted)));
           break;
 
@@ -314,7 +314,7 @@ class _ForecastPageViewState extends State<ForecastView> {
           ));
 
   void _tapAddLocation() {
-    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     Navigator.push(context, LookupView.route());
   }
 }

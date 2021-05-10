@@ -143,7 +143,7 @@ class _LookupPageViewState extends State<LookupPageView> {
       switch (state.status) {
         case LookupStatus.FORECAST_NOT_FOUND:
           closeKeyboard(context);
-          _scaffoldKey.currentState!
+          ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(i18n!.lookupFailure)));
           break;
 
@@ -267,7 +267,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     FormBlocFailure<String, String> state,
   ) {
     closeKeyboard(context);
-    Scaffold.of(context)
+    ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(state.failureResponse!)));
   }
 

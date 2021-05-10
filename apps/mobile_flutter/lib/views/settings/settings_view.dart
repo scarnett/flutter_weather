@@ -254,7 +254,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         forecastUtils.hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
-          AppChekboxTile(
+          AppCheckboxTile(
             bloc: context.read<AppBloc>(),
             title: AppLocalizations.of(context)!.colorized,
             checked: context.read<AppBloc>().state.colorTheme,

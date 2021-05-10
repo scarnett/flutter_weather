@@ -68,39 +68,15 @@ DateTime? fromIso8601String(String? date) {
   return DateTime.parse(date).toUtc();
 }
 
-String? formatEpoch(
-  int epoch,
-  String format, {
-  isUtc: false,
-}) {
-  if (epoch == null) {
-    return null;
-  }
-
-  DateTime date = DateTime.fromMillisecondsSinceEpoch(epoch, isUtc: isUtc);
-  return formatDateTime(date, format);
-}
-
 String? formatDateTime(
-  DateTime date,
-  String format,
+  DateTime? date,
+  String? format,
 ) {
   if ((date == null) || (format == null)) {
     return null;
   }
 
   return DateFormat(format).format(date);
-}
-
-String? formatDateStr(
-  String dateStr,
-  String format,
-) {
-  if (dateStr == null) {
-    return null;
-  }
-
-  return formatDateTime(DateTime.parse(dateStr), format);
 }
 
 String? getDateFormat(
@@ -127,17 +103,6 @@ DateTime epochToDateTime(
 ) {
   DateTime date = DateTime.fromMillisecondsSinceEpoch(epoch * 1000);
   return date;
-}
-
-int dayDiff(
-  DateTime date1,
-  DateTime date2,
-) {
-  if ((date1 != null) && (date1 != null)) {
-    return date2.difference(date1).inDays;
-  }
-
-  return 0;
 }
 
 String getMonthDay(

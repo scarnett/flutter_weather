@@ -345,7 +345,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       animatePage(_pageController!, page: page);
 
   void _tapDelete() {
-    Widget noButton = FlatButton(
+    Widget noButton = TextButton(
       child: Text(
         AppLocalizations.of(context)!.no,
         style: TextStyle(color: AppTheme.primaryColor),
@@ -353,7 +353,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       onPressed: () => Navigator.of(context).pop(),
     );
 
-    Widget yesButton = FlatButton(
+    Widget yesButton = TextButton(
       child: Text(
         AppLocalizations.of(context)!.yes,
         style: TextStyle(color: AppTheme.dangerColor),
@@ -375,7 +375,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   }
 
   void _tapCountry(
-    Country country,
+    Country? country,
   ) {
     if (country != null) {
       context

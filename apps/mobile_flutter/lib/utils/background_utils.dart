@@ -1,4 +1,5 @@
 import 'package:background_fetch/background_fetch.dart';
+import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/notifications/notification_helper.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 
@@ -62,7 +63,14 @@ Future<void> initBackgroundFetch() async {
         requiredNetworkType: NetworkType.ANY,
       ), (String taskId) async {
     print('[BackgroundFetch] Event received $taskId');
-    // pushLocalForecastNotification(Forecast()); // TODO!
+
+    AppPrefs prefs = AppPrefs();
+
+    // Dont push notifications if the app is in the foreground
+    if (prefs.appState > 0) {
+      pushLocalForecastNotification(Forecast()); // TODO!
+    }
+
     BackgroundFetch.finish(taskId);
   }, (String taskId) async {
     print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
