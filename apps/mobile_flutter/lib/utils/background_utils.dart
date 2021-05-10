@@ -43,7 +43,7 @@ Future<void> initBackgroundFetch() async {
   if (updatePeriod != null) {
     await BackgroundFetch.configure(
         BackgroundFetchConfig(
-          minimumFetchInterval: 15, // TODO! updatePeriod.info['minutes']
+          minimumFetchInterval: updatePeriod.info!['minutes'],
           stopOnTerminate: false,
           enableHeadless: true,
           requiresBatteryNotLow: false,
@@ -85,7 +85,7 @@ Future<void> initBackgroundFetch() async {
               break;
 
             case PushNotification.CURRENT_LOCATION:
-              // Get current location here
+              // TODO! current location here
               break;
 
             default:
