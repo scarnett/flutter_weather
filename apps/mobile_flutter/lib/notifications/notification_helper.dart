@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_weather/notifications/notification_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:rxdart/subjects.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -66,9 +67,8 @@ Future<void> initLocalNotifications() async {
 Future<void> pushLocalForecastNotification(
   Forecast forecast,
 ) async {
-  String channelName = 'Forecast Test'; // TODO! getLocationText(forecast)
-  String channelDescription =
-      'Hello World!'; // TODO! forecast.list![0].weather![0].description!
+  String channelName = getLocationText(forecast);
+  String channelDescription = forecast.list![0].weather![0].description!;
 
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(

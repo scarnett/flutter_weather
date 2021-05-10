@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 
@@ -52,7 +53,7 @@ String? getPushNotificationText(
     case PushNotification.SAVED_LOCATION:
       if (extras != null) {
         if (extras.containsKey('forecast')) {
-          return getLocationText(extras['forecast']);
+          return getLocationText(Forecast.fromJson(extras['forecast']));
         }
       }
 

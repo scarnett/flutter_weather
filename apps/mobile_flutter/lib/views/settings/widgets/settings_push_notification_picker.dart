@@ -129,8 +129,11 @@ class _SettingsPushNotificationPickerState
     List<Widget> children = <Widget>[];
 
     Map<String, dynamic> notificationExtras = {};
-    if (notification == PushNotification.SAVED_LOCATION) {
-      notificationExtras['forecast'] = forecast;
+    if ((notification == PushNotification.SAVED_LOCATION) &&
+        (forecast != null)) {
+      Map<String, dynamic> forecastData = forecast.toJson();
+      forecastData.remove('list');
+      notificationExtras['forecast'] = forecastData;
     }
 
     children.add(
@@ -184,7 +187,7 @@ class _SettingsPushNotificationPickerState
     if (widget.selectedNotification?.info!['id'] == notification.info!['id']) {
       if ((widget.selectedNotificationExtras != null) &&
           widget.selectedNotificationExtras!.containsKey('forecast')) {
-        if (widget.selectedNotificationExtras?['forecast'].id == objectId) {
+        if (widget.selectedNotificationExtras?['forecast']['id'] == objectId) {
           return AppTheme.primaryColor;
         }
       } else {

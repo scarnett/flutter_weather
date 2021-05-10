@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/notifications/notification_helper.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> initBackgroundFetchHeadlessTask(
   HeadlessTask task,
@@ -25,33 +30,10 @@ Future<void> initBackgroundFetchHeadlessTask(
       ),
     );
   }
-
-  // TODO!
-  pushLocalForecastNotification(Forecast());
-
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // UpdatePeriod? updatePeriod = getPeriod(prefs.getString('updatePeriod'));
-  // if (updatePeriod != null) {
-  //   PushNotification? pushNotification =
-  //       getPushNotification(prefs.getString('pushNotification'));
-
-  //   if ((pushNotification != null) &&
-  //       (pushNotification == PushNotification.SAVED_LOCATION)) {
-  //     Map<String, dynamic>? pushNotificationExtras =
-  //         json.decode(prefs.getString('pushNotificationExtras')!);
-
-  //     String? notificationForecastId = pushNotificationExtras?['objectId'];
-  //     // TODO! push notification here - notificationForecastId
-  //     pushLocalForecastNotification(Forecast());
-  //   } else {
-  //     // TODO! push to current location
-  //     pushLocalForecastNotification(Forecast());
-  //   }
-  // }
 }
 
 Future<void> initBackgroundFetch() async {
-  int status = await BackgroundFetch.configure(
+  await BackgroundFetch.configure(
       BackgroundFetchConfig(
         minimumFetchInterval: 15, // TODO!
         stopOnTerminate: false,
@@ -62,20 +44,43 @@ Future<void> initBackgroundFetch() async {
         requiresDeviceIdle: false,
         requiredNetworkType: NetworkType.ANY,
       ), (String taskId) async {
-    print('[BackgroundFetch] Event received $taskId');
-
     AppPrefs prefs = AppPrefs();
 
     // Dont push notifications if the app is in the foreground
     if (prefs.appState > 0) {
-      pushLocalForecastNotification(Forecast()); // TODO!
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UpdatePeriod? updatePeriod = getPeriod(prefs.getString('updatePeriod'));
+      if (updatePeriod != null) {
+        PushNotification? pushNotification =
+            getPushNotification(prefs.getString('pushNotification'));
+
+        if (pushNotification != null) {
+          switch (pushNotification) {
+            case PushNotification.SAVED_LOCATION:
+              Map<String, dynamic>? pushNotificationExtras =
+                  json.decode(prefs.getString('pushNotificationExtras')!);
+
+              if (pushNotificationExtras != null) {
+                Forecast forecast =
+                    Forecast.fromJson(pushNotificationExtras['forecast']);
+
+                pushLocalForecastNotification(forecast);
+              }
+
+              break;
+
+            case PushNotification.CURRENT_LOCATION:
+              break;
+
+            default:
+              break;
+          }
+        }
+      }
     }
 
     BackgroundFetch.finish(taskId);
   }, (String taskId) async {
-    print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
     BackgroundFetch.finish(taskId);
   });
-
-  print('[BackgroundFetch] configure success: $status');
 }
