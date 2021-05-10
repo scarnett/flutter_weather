@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -31,7 +32,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     if (event is ToggleThemeMode) {
       yield _mapToggleThemeModeToStates(event);
     } else if (event is SetUpdatePeriod) {
-      yield _mapSetUpdatePeriodToStates(event);
+      yield* _mapSetUpdatePeriodToStates(event);
     } else if (event is SetPushNotification) {
       yield _mapSetPushNotificationToStates(event);
     } else if (event is SetThemeMode) {
@@ -73,19 +74,27 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         colorTheme: false,
       );
 
-  AppState _mapSetUpdatePeriodToStates(
+  Stream<AppState> _mapSetUpdatePeriodToStates(
     SetUpdatePeriod event,
-  ) {
+  ) async* {
     AppPrefs prefs = AppPrefs();
     prefs.updatePeriod = event.updatePeriod;
 
     if (event.updatePeriod == null) {
       prefs.pushNotification = null;
+
+      // Stop background fetch
+      await stopBackgroundFetch();
     } else if (state.pushNotification == null) {
       prefs.pushNotification = PushNotification.OFF;
     }
 
-    return state.copyWith(
+    if ((prefs.pushNotification != null) &&
+        (prefs.pushNotification != PushNotification.OFF)) {
+      restartBackgroundFetch();
+    }
+
+    yield state.copyWith(
       updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
       pushNotification: (event.updatePeriod == null)
           ? Nullable<PushNotification?>(null)
@@ -101,6 +110,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     AppPrefs prefs = AppPrefs();
     prefs.pushNotification = event.pushNotification;
     prefs.pushNotificationExtras = event.pushNotificationExtras;
+
+    if ((prefs.pushNotification != null) &&
+        (prefs.pushNotification != PushNotification.OFF)) {
+      restartBackgroundFetch();
+    }
 
     return state.copyWith(
       pushNotification: Nullable<PushNotification?>(event.pushNotification),
