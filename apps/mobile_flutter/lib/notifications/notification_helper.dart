@@ -22,7 +22,7 @@ Future<void> initLocalNotifications() async {
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
   AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('notification_icon');
+      AndroidInitializationSettings('app_icon');
 
   IOSInitializationSettings initializationSettingsIOS =
       IOSInitializationSettings(
@@ -77,8 +77,6 @@ Future<void> pushCurrentForecastNotification(
     channelDescription,
     contentTitle: channelName,
     htmlFormatContentTitle: true,
-    summaryText: channelDescription,
-    htmlFormatSummaryText: true,
   );
 
   AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -90,6 +88,7 @@ Future<void> pushCurrentForecastNotification(
     priority: Priority.high,
     ticker: 'ticker',
     styleInformation: bigTextStyleInfo,
+    icon: 'app_icon',
   );
 
   IOSNotificationDetails iOSPlatformChannelSpecifics = IOSNotificationDetails();
