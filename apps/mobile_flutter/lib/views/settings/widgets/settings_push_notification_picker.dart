@@ -17,6 +17,7 @@ import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry/sentry.dart';
 
 class SettingsPushNotificationPicker extends StatefulWidget {
   final PushNotification? selectedNotification;
@@ -40,6 +41,8 @@ class SettingsPushNotificationPicker extends StatefulWidget {
 
 class _SettingsPushNotificationPickerState
     extends State<SettingsPushNotificationPicker> {
+  bool processing = false;
+
   @override
   void initState() {
     super.initState();
@@ -156,6 +159,7 @@ class _SettingsPushNotificationPickerState
                       ),
                     ),
               ),
+        trailing: _notificationTrailingWidget(notification),
         onTap: () => _tapPushNotification(notification, forecast: forecast),
       ),
     );
@@ -179,6 +183,29 @@ class _SettingsPushNotificationPickerState
             ),
       );
 
+  Widget? _notificationTrailingWidget(
+    PushNotification notification,
+  ) {
+    switch (notification) {
+      case PushNotification.CURRENT_LOCATION:
+        if (processing) {
+          return SizedBox(
+            height: 20.0,
+            width: 20.0,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.0,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          );
+        }
+
+        return null;
+
+      default:
+        return null;
+    }
+  }
+
   void _tapPushNotification(
     PushNotification notification, {
     Forecast? forecast,
@@ -201,29 +228,39 @@ class _SettingsPushNotificationPickerState
         break;
 
       case PushNotification.CURRENT_LOCATION:
+        setState(() => processing = true);
+
         Position? position = await getPosition();
         if (position != null) {
-          http.Response forecastResponse = await fetchCurrentForecastByCoords(
-            longitude: position.longitude,
-            latitude: position.latitude,
-          );
+          try {
+            http.Response forecastResponse = await fetchCurrentForecastByCoords(
+              longitude: position.longitude,
+              latitude: position.latitude,
+            );
 
-          if (forecastResponse.statusCode == 200) {
-            // TODO! check for forecastResponse errors
+            if (forecastResponse.statusCode == 200) {
+              // TODO! check for api errors
 
-            Forecast forecast =
-                Forecast.fromJson(jsonDecode(forecastResponse.body));
+              Forecast forecast =
+                  Forecast.fromJson(jsonDecode(forecastResponse.body));
 
-            notificationExtras = {
-              'location': {
-                'name': getLocationText(forecast),
-                'longitude': forecast.city?.coord?.lon,
-                'latitude': forecast.city?.coord?.lat,
-              },
-            };
+              notificationExtras = {
+                'location': {
+                  'name': getLocationText(forecast),
+                  'longitude': forecast.city?.coord?.lon,
+                  'latitude': forecast.city?.coord?.lat,
+                },
+              };
+            }
+          } on Exception catch (exception, stackTrace) {
+            await Sentry.captureException(exception, stackTrace: stackTrace);
+
+            // TODO! snackbar
+            // TODO! set notificationExtras
           }
         }
 
+        setState(() => processing = false);
         break;
 
       default:

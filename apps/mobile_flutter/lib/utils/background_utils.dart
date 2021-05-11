@@ -9,6 +9,7 @@ import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String backgroundFetchTaskId = 'io.flutter_weather.notification';
@@ -70,20 +71,25 @@ Future<void> initBackgroundFetch() async {
                 Map<String, dynamic> forecastInfo =
                     pushNotificationExtras['location'];
 
-                http.Response forecastResponse =
-                    await fetchCurrentForecastByCoords(
-                  longitude: forecastInfo['longitude'],
-                  latitude: forecastInfo['latitude'],
-                );
-
-                if (forecastResponse.statusCode == 200) {
-                  // TODO! check for forecastResponse errors
-
-                  pushCurrentForecastNotification(
-                    Forecast.fromJson(jsonDecode(forecastResponse.body)),
-                    getTemperatureUnit(
-                        sharedPrefs.getString('temperatureUnit')),
+                try {
+                  http.Response forecastResponse =
+                      await fetchCurrentForecastByCoords(
+                    longitude: forecastInfo['longitude'],
+                    latitude: forecastInfo['latitude'],
                   );
+
+                  if (forecastResponse.statusCode == 200) {
+                    // TODO! check for api errors
+
+                    pushCurrentForecastNotification(
+                      Forecast.fromJson(jsonDecode(forecastResponse.body)),
+                      getTemperatureUnit(
+                          sharedPrefs.getString('temperatureUnit')),
+                    );
+                  }
+                } on Exception catch (exception, stackTrace) {
+                  await Sentry.captureException(exception,
+                      stackTrace: stackTrace);
                 }
               }
 

@@ -18,6 +18,7 @@ import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:sentry/sentry.dart';
 
 part 'app_events.dart';
 part 'app_state.dart';
@@ -286,38 +287,49 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       'countryCode': event.forecast.countryCode,
     };
 
-    http.Response forecastResponse = await tryLookupForecast(lookupData);
-    if (forecastResponse.statusCode == 200) {
-      // TODO! check for forecastResponse errors
+    try {
+      http.Response forecastResponse = await tryLookupForecast(lookupData);
+      if (forecastResponse.statusCode == 200) {
+        // TODO! check for api errors
 
-      List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
-      int forecastIndex = forecasts.indexWhere(
-        (Forecast forecast) => forecast.postalCode == event.forecast.postalCode,
-      );
+        List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
+        int forecastIndex = forecasts.indexWhere(
+          (Forecast forecast) =>
+              forecast.postalCode == event.forecast.postalCode,
+        );
 
-      if (forecastIndex == -1) {
+        if (forecastIndex == -1) {
+          ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
+              content:
+                  Text(AppLocalizations.of(event.context)!.refreshFailure)));
+
+          yield state;
+        } else {
+          Forecast forecast =
+              Forecast.fromJson(jsonDecode(forecastResponse.body));
+          forecasts[forecastIndex] = forecast.copyWith(
+            id: event.forecast.id,
+            cityName: Nullable<String?>(event.forecast.cityName),
+            postalCode: Nullable<String?>(event.forecast.postalCode),
+            countryCode: Nullable<String?>(event.forecast.countryCode),
+            primary: Nullable<bool?>(event.forecast.primary),
+            lastUpdated: getNow(),
+          );
+
+          yield state.copyWith(
+            forecasts: forecasts,
+            refreshStatus: Nullable<RefreshStatus?>(null),
+          );
+        }
+      } else {
         ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
             content: Text(AppLocalizations.of(event.context)!.refreshFailure)));
 
         yield state;
-      } else {
-        Forecast forecast =
-            Forecast.fromJson(jsonDecode(forecastResponse.body));
-        forecasts[forecastIndex] = forecast.copyWith(
-          id: event.forecast.id,
-          cityName: Nullable<String?>(event.forecast.cityName),
-          postalCode: Nullable<String?>(event.forecast.postalCode),
-          countryCode: Nullable<String?>(event.forecast.countryCode),
-          primary: Nullable<bool?>(event.forecast.primary),
-          lastUpdated: getNow(),
-        );
-
-        yield state.copyWith(
-          forecasts: forecasts,
-          refreshStatus: Nullable<RefreshStatus?>(null),
-        );
       }
-    } else {
+    } on Exception catch (exception, stackTrace) {
+      await Sentry.captureException(exception, stackTrace: stackTrace);
+
       ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
           content: Text(AppLocalizations.of(event.context)!.refreshFailure)));
 
