@@ -54,6 +54,9 @@ class AppLocalizations {
   String get editForecast => addMessage('Edit Forecast');
   String get deleteForecast => addMessage('Delete Forecast');
   String get refreshForecast => addMessage('Refresh Forecast');
+  String get refreshFailure => addMessage(
+      'There was an error refreshing this forecast. Please try again.');
+
   String get forecastAdded => addMessage('Forecast Added');
   String get forecastUpdated => addMessage('Forecast Updated');
   String get forecastDeleted => addMessage('Forecast Deleted');

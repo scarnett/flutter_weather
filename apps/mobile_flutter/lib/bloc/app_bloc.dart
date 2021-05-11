@@ -248,10 +248,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATED),
     );
 
-    add(RefreshForecast(
-      forecasts[state.selectedForecastIndex!],
-      state.temperatureUnit,
-    ));
+    add(
+      RefreshForecast(
+        event.context,
+        forecasts[state.selectedForecastIndex!],
+        state.temperatureUnit,
+      ),
+    );
   }
 
   Stream<AppState> _mapRemovePrimaryStatusToStates(
@@ -291,25 +294,32 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       );
 
       if (forecastIndex == -1) {
-        // TODO! snackbar error
+        ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(event.context)!.refreshFailure)));
+
+        yield state;
+      } else {
+        Forecast forecast =
+            Forecast.fromJson(jsonDecode(forecastResponse.body));
+        forecasts[forecastIndex] = forecast.copyWith(
+          id: event.forecast.id,
+          cityName: Nullable<String?>(event.forecast.cityName),
+          postalCode: Nullable<String?>(event.forecast.postalCode),
+          countryCode: Nullable<String?>(event.forecast.countryCode),
+          primary: Nullable<bool?>(event.forecast.primary),
+          lastUpdated: getNow(),
+        );
+
+        yield state.copyWith(
+          forecasts: forecasts,
+          refreshStatus: Nullable<RefreshStatus?>(null),
+        );
       }
-
-      Forecast forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
-      forecasts[forecastIndex] = forecast.copyWith(
-        id: event.forecast.id,
-        cityName: Nullable<String?>(event.forecast.cityName),
-        postalCode: Nullable<String?>(event.forecast.postalCode),
-        countryCode: Nullable<String?>(event.forecast.countryCode),
-        primary: Nullable<bool?>(event.forecast.primary),
-        lastUpdated: getNow(),
-      );
-
-      yield state.copyWith(
-        forecasts: forecasts,
-        refreshStatus: Nullable<RefreshStatus?>(null),
-      );
     } else {
-      // TODO! snackbar error
+      ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(event.context)!.refreshFailure)));
+
+      yield state;
     }
   }
 

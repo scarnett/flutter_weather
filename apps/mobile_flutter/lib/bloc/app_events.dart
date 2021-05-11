@@ -106,10 +106,12 @@ class AddForecast extends AppEvent {
 }
 
 class UpdateForecast extends AppEvent {
+  final BuildContext context;
   final String? forecastId;
   final Map<String, dynamic> forecastData;
 
   const UpdateForecast(
+    this.context,
     this.forecastId,
     this.forecastData,
   );
@@ -130,10 +132,12 @@ class RemovePrimaryStatus extends AppEvent {
 }
 
 class RefreshForecast extends AppEvent {
+  final BuildContext context;
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
 
   const RefreshForecast(
+    this.context,
     this.forecast,
     this.temperatureUnit,
   );

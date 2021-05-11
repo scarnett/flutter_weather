@@ -178,7 +178,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
 
     context
         .read<AppBloc>()
-        .add(UpdateForecast(appState.activeForecastId, forecastData));
+        .add(UpdateForecast(context, appState.activeForecastId, forecastData));
   }
 
   void _onFailure(

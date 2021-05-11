@@ -308,10 +308,13 @@ class _ForecastPageViewState extends State<ForecastView> {
   Future<void> _pullRefresh(
     AppState state,
   ) async =>
-      context.read<AppBloc>().add(RefreshForecast(
-            state.forecasts[state.selectedForecastIndex!],
-            state.temperatureUnit,
-          ));
+      context.read<AppBloc>().add(
+            RefreshForecast(
+              context,
+              state.forecasts[state.selectedForecastIndex!],
+              state.temperatureUnit,
+            ),
+          );
 
   void _tapAddLocation() {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();

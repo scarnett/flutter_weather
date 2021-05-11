@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,8 +114,11 @@ class _ForecastRefreshState extends State<ForecastRefresh>
   void _tapRefresh(
     AppState state,
   ) =>
-      context.read<AppBloc>().add(RefreshForecast(
-            state.forecasts[state.selectedForecastIndex!],
-            context.read<AppBloc>().state.temperatureUnit,
-          ));
+      context.read<AppBloc>().add(
+            RefreshForecast(
+              context,
+              state.forecasts[state.selectedForecastIndex!],
+              context.read<AppBloc>().state.temperatureUnit,
+            ),
+          );
 }
