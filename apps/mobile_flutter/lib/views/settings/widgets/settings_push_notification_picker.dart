@@ -208,16 +208,20 @@ class _SettingsPushNotificationPickerState
             latitude: position.latitude,
           );
 
-          Forecast forecast =
-              Forecast.fromJson(jsonDecode(forecastResponse.body));
+          if (forecastResponse.statusCode == 200) {
+            // TODO! check for forecastResponse errors
 
-          notificationExtras = {
-            'location': {
-              'name': getLocationText(forecast),
-              'longitude': forecast.city?.coord?.lon,
-              'latitude': forecast.city?.coord?.lat,
-            },
-          };
+            Forecast forecast =
+                Forecast.fromJson(jsonDecode(forecastResponse.body));
+
+            notificationExtras = {
+              'location': {
+                'name': getLocationText(forecast),
+                'longitude': forecast.city?.coord?.lon,
+                'latitude': forecast.city?.coord?.lat,
+              },
+            };
+          }
         }
 
         break;

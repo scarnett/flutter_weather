@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/enums.dart';
@@ -37,6 +38,8 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
 
     http.Response forecastResponse = await tryLookupForecast(event.lookupData);
     if (forecastResponse.statusCode == 200) {
+      // TODO! check for forecastResponse errors
+
       yield state.copyWith(
         cityName: Nullable<String?>(event.lookupData['cityName']),
         postalCode: Nullable<String?>(event.lookupData['postalCode']),

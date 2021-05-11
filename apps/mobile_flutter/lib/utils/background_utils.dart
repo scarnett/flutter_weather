@@ -76,10 +76,15 @@ Future<void> initBackgroundFetch() async {
                   latitude: forecastInfo['latitude'],
                 );
 
-                pushCurrentForecastNotification(
-                  Forecast.fromJson(jsonDecode(forecastResponse.body)),
-                  getTemperatureUnit(sharedPrefs.getString('temperatureUnit')),
-                );
+                if (forecastResponse.statusCode == 200) {
+                  // TODO! check for forecastResponse errors
+
+                  pushCurrentForecastNotification(
+                    Forecast.fromJson(jsonDecode(forecastResponse.body)),
+                    getTemperatureUnit(
+                        sharedPrefs.getString('temperatureUnit')),
+                  );
+                }
               }
 
               break;

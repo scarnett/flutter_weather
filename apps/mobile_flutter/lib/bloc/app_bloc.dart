@@ -288,6 +288,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     http.Response forecastResponse = await tryLookupForecast(lookupData);
     if (forecastResponse.statusCode == 200) {
+      // TODO! check for forecastResponse errors
+
       List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
       int forecastIndex = forecasts.indexWhere(
         (Forecast forecast) => forecast.postalCode == event.forecast.postalCode,
