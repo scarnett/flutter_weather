@@ -27,6 +27,7 @@ dependencies:
       path: packages/flutter_form_bloc
   flutter_local_notifications: '^5.0.0+1'
   flutter_switch: '^0.3.0'
+  geolocator: '^7.0.3'
   http: '^0.13.1'
   hydrated_bloc: '^7.0.0'
   iso_countries: '^2.0.1'
