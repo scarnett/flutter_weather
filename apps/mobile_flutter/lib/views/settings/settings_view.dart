@@ -131,7 +131,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
 
-    if (AppConfig.instance.privacyPolicyUrl != null) {
+    if (AppConfig.instance.privacyPolicyUrl != '') {
       children..addAll(_buildAboutSection());
     }
 
@@ -351,7 +351,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             bloc: context.read<AppBloc>(),
             packageInfo: _packageInfo,
           ),
-          onTap: () => animatePage(_pageController!, page: 1),
         ),
         Divider(),
       ];
