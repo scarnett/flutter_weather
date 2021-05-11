@@ -23,9 +23,11 @@ class ToggleThemeMode extends AppEvent {
 
 class SetUpdatePeriod extends AppEvent {
   final UpdatePeriod? updatePeriod;
+  final Function? callback;
 
   const SetUpdatePeriod({
     this.updatePeriod,
+    this.callback,
   });
 
   @override
@@ -33,12 +35,16 @@ class SetUpdatePeriod extends AppEvent {
 }
 
 class SetPushNotification extends AppEvent {
+  final BuildContext context;
   final PushNotification? pushNotification;
   final Map<String, dynamic>? pushNotificationExtras;
+  final Function? callback;
 
   const SetPushNotification({
+    required this.context,
     this.pushNotification,
     this.pushNotificationExtras,
+    this.callback,
   });
 
   @override

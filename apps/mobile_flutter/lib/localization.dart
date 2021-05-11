@@ -88,6 +88,8 @@ class AppLocalizations {
 
   String get selectCountry => addMessage('Select a country');
   String get filterCountries => addMessage('Filter Countries');
+  String get locationPermissionDenied =>
+      addMessage('Location permission denied');
 
   String getFeelsLike(
     String temp,

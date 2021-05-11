@@ -362,11 +362,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     UpdatePeriod? period, {
     bool redirect: true,
   }) {
-    context.read<AppBloc>().add(SetUpdatePeriod(updatePeriod: period));
-
-    if (redirect) {
-      animatePage(_pageController!, page: 0);
-    }
+    context.read<AppBloc>().add(
+          SetUpdatePeriod(
+            updatePeriod: period,
+            callback: () {
+              if (redirect) {
+                animatePage(_pageController!, page: 0);
+              }
+            },
+          ),
+        );
   }
 
   void _tapPushNotification(
@@ -376,14 +381,16 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }) {
     context.read<AppBloc>().add(
           SetPushNotification(
+            context: context,
             pushNotification: notification,
             pushNotificationExtras: extras,
+            callback: () {
+              if (redirect) {
+                animatePage(_pageController!, page: 0);
+              }
+            },
           ),
         );
-
-    if (redirect) {
-      animatePage(_pageController!, page: 0);
-    }
   }
 
   void _tapThemeMode(

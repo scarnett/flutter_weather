@@ -4,10 +4,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -34,7 +36,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     } else if (event is SetUpdatePeriod) {
       yield* _mapSetUpdatePeriodToStates(event);
     } else if (event is SetPushNotification) {
-      yield _mapSetPushNotificationToStates(event);
+      yield* _mapSetPushNotificationToStates(event);
     } else if (event is SetThemeMode) {
       yield _mapSetThemeModeToStates(event);
     } else if (event is ToggleColorTheme) {
@@ -102,18 +104,54 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
               ? Nullable<PushNotification?>(PushNotification.OFF)
               : Nullable<PushNotification?>(state.pushNotification),
     );
+
+    if (event.callback != null) {
+      event.callback!();
+    }
   }
 
-  AppState _mapSetPushNotificationToStates(
+  Stream<AppState> _mapSetPushNotificationToStates(
     SetPushNotification event,
-  ) {
+  ) async* {
     AppPrefs prefs = AppPrefs();
     prefs.pushNotification = event.pushNotification;
     prefs.pushNotificationExtras = event.pushNotificationExtras;
 
     if ((prefs.pushNotification != null) &&
         (prefs.pushNotification != PushNotification.OFF)) {
-      restartBackgroundFetch();
+      bool accessGranted = true;
+
+      if (prefs.pushNotification == PushNotification.CURRENT_LOCATION) {
+        accessGranted = await requestLocationPermission();
+        if (accessGranted) {
+          await restartBackgroundFetch();
+          yield _updatePushNotificationState(event);
+        } else {
+          ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(event.context)!
+                  .locationPermissionDenied)));
+
+          if (state.pushNotification == PushNotification.CURRENT_LOCATION) {
+            yield state.copyWith(
+              pushNotification:
+                  Nullable<PushNotification?>(PushNotification.OFF),
+              pushNotificationExtras: Nullable<Map<String, dynamic>?>(null),
+            );
+          }
+        }
+      } else {
+        yield _updatePushNotificationState(event);
+      }
+    } else {
+      yield _updatePushNotificationState(event);
+    }
+  }
+
+  AppState _updatePushNotificationState(
+    SetPushNotification event,
+  ) {
+    if (event.callback != null) {
+      event.callback!();
     }
 
     return state.copyWith(

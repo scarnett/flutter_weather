@@ -172,7 +172,6 @@ String getLocationCurrentForecastText(
         getTemperature(currentDay.feelsLike!.day, temperatureUnit);
 
     num highTemp = getTemperature(currentDay.temp!.max, temperatureUnit);
-
     num lowTemp = getTemperature(currentDay.temp!.min, temperatureUnit);
 
     // TODO! i18n
