@@ -4,10 +4,12 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/notifications/notification_helper.dart';
+import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,7 +87,20 @@ Future<void> initBackgroundFetch() async {
               break;
 
             case PushNotification.CURRENT_LOCATION:
-              // TODO! current location here
+              Position? position = await getPosition();
+              if (position != null) {
+                http.Response forecastResponse =
+                    await fetchCurrentForecastByCoords(
+                  longitude: position.longitude,
+                  latitude: position.latitude,
+                );
+
+                pushCurrentForecastNotification(
+                  Forecast.fromJson(jsonDecode(forecastResponse.body)),
+                  getTemperatureUnit(sharedPrefs.getString('temperatureUnit')),
+                );
+              }
+
               break;
 
             default:

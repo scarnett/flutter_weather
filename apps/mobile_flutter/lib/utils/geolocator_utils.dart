@@ -17,8 +17,8 @@ Future<bool> requestLocationPermission() async {
   return Future.value(true);
 }
 
-Future<Position> getPosition() async {
-  if (await requestLocationPermission()) {
+Future<Position?> getPosition() async {
+  if (!await requestLocationPermission()) {
     return Future.value(null);
   }
 

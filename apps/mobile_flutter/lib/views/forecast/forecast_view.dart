@@ -9,10 +9,12 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
 import 'package:flutter_weather/views/lookup/lookup_view.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -88,7 +90,22 @@ class _ForecastPageViewState extends State<ForecastView> {
 
           context
               .read<AppBloc>()
-              .add(SelectedForecastIndex(_currentPage!.toInt()));
+              .add(SelectedForecastIndex(_currentForecastNotifier.value!));
+
+          // If auto update is enabled then run the refresh
+          Forecast forecast = state.forecasts[_currentForecastNotifier.value!];
+          DateTime? lastUpdated = forecast.lastUpdated;
+          if ((lastUpdated == null) ||
+              DateTime.now().isAfter(lastUpdated.add(
+                  Duration(minutes: state.updatePeriod?.info!['minutes'])))) {
+            context.read<AppBloc>().add(
+                  RefreshForecast(
+                    context,
+                    state.forecasts[state.selectedForecastIndex!],
+                    state.temperatureUnit,
+                  ),
+                );
+          }
         }
       });
 
