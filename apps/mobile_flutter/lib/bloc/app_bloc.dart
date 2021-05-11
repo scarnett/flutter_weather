@@ -124,8 +124,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       if (prefs.pushNotification == PushNotification.CURRENT_LOCATION) {
         accessGranted = await requestLocationPermission();
         if (accessGranted) {
-          await restartBackgroundFetch();
-          yield _updatePushNotificationState(event);
+          yield* _updatePushNotificationState(event);
         } else {
           ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
               content: Text(AppLocalizations.of(event.context)!
@@ -140,21 +139,23 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           }
         }
       } else {
-        yield _updatePushNotificationState(event);
+        yield* _updatePushNotificationState(event);
       }
     } else {
-      yield _updatePushNotificationState(event);
+      yield* _updatePushNotificationState(event);
     }
   }
 
-  AppState _updatePushNotificationState(
+  Stream<AppState> _updatePushNotificationState(
     SetPushNotification event,
-  ) {
+  ) async* {
+    await restartBackgroundFetch();
+
     if (event.callback != null) {
       event.callback!();
     }
 
-    return state.copyWith(
+    yield state.copyWith(
       pushNotification: Nullable<PushNotification?>(event.pushNotification),
       pushNotificationExtras:
           Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
