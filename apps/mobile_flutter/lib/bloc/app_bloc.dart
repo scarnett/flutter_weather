@@ -10,6 +10,7 @@ import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -109,6 +110,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     if (event.callback != null) {
       event.callback!();
     }
+
+    showSnackbar(
+      event.context,
+      AppLocalizations.of(event.context)!.updatePeriodUpdated,
+    );
   }
 
   Stream<AppState> _mapSetPushNotificationToStates(
@@ -127,9 +133,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         if (accessGranted) {
           yield* _updatePushNotificationState(event);
         } else {
-          ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(event.context)!
-                  .locationPermissionDenied)));
+          showSnackbar(
+            event.context,
+            AppLocalizations.of(event.context)!.locationPermissionDenied,
+          );
 
           if (state.pushNotification == PushNotification.CURRENT_LOCATION) {
             yield state.copyWith(
@@ -160,6 +167,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       pushNotification: Nullable<PushNotification?>(event.pushNotification),
       pushNotificationExtras:
           Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
+    );
+
+    showSnackbar(
+      event.context,
+      AppLocalizations.of(event.context)!.pushNotificationUpdated,
     );
   }
 
@@ -299,9 +311,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         );
 
         if (forecastIndex == -1) {
-          ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
-              content:
-                  Text(AppLocalizations.of(event.context)!.refreshFailure)));
+          showSnackbar(
+            event.context,
+            AppLocalizations.of(event.context)!.refreshFailure,
+          );
 
           yield state;
         } else {
@@ -322,16 +335,20 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           );
         }
       } else {
-        ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
-            content: Text(AppLocalizations.of(event.context)!.refreshFailure)));
+        showSnackbar(
+          event.context,
+          AppLocalizations.of(event.context)!.refreshFailure,
+        );
 
         yield state;
       }
     } on Exception catch (exception, stackTrace) {
       await Sentry.captureException(exception, stackTrace: stackTrace);
 
-      ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(event.context)!.refreshFailure)));
+      showSnackbar(
+        event.context,
+        AppLocalizations.of(event.context)!.refreshFailure,
+      );
 
       yield state;
     }

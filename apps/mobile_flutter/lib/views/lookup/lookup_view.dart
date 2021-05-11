@@ -11,6 +11,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
@@ -143,8 +144,7 @@ class _LookupPageViewState extends State<LookupPageView> {
       switch (state.status) {
         case LookupStatus.FORECAST_NOT_FOUND:
           closeKeyboard(context);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(i18n!.lookupFailure)));
+          showSnackbar(context, i18n!.lookupFailure);
           break;
 
         default:
@@ -267,8 +267,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     FormBlocFailure<String, String> state,
   ) {
     closeKeyboard(context);
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(state.failureResponse!)));
+    showSnackbar(context, state.failureResponse!);
   }
 
   void _onPageChange(

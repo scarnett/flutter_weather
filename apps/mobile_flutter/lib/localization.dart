@@ -35,7 +35,13 @@ class AppLocalizations {
   String get beta => addMessage('Beta');
   String get autoUpdates => addMessage('Auto Updates');
   String get updatePeriod => addMessage('Update Period');
+  String get updatePeriodUpdated =>
+      addMessage('Your update period settings were updated successfully.');
+
   String get pushNotification => addMessage('Push Notification');
+  String get pushNotificationUpdated =>
+      addMessage('Your push notification settings were updated successfully.');
+
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
@@ -57,6 +63,9 @@ class AppLocalizations {
   String get refreshFailure => addMessage(
       'There was an error refreshing this forecast. Please try again.');
 
+  String get locationFailure => addMessage(
+      'There was an error getting your current location. Please try again.');
+
   String get forecastAdded => addMessage('Forecast Added');
   String get forecastUpdated => addMessage('Forecast Updated');
   String get forecastDeleted => addMessage('Forecast Deleted');
@@ -65,6 +74,7 @@ class AppLocalizations {
 
   String get forecastBadForecastInput =>
       addMessage('Please enter the city or postal code');
+
   String get forecastAlreadyExists => addMessage('Forecast already exists');
   String get forecastCityAlreadyExists =>
       addMessage('A forecast for this city already exists.');

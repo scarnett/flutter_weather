@@ -364,6 +364,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }) {
     context.read<AppBloc>().add(
           SetUpdatePeriod(
+            context: context,
             updatePeriod: period,
             callback: () {
               if (redirect) {

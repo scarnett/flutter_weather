@@ -6,9 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -42,6 +44,7 @@ class SettingsPushNotificationPicker extends StatefulWidget {
 class _SettingsPushNotificationPickerState
     extends State<SettingsPushNotificationPicker> {
   bool processing = false;
+  bool error = false;
 
   @override
   void initState() {
@@ -197,6 +200,12 @@ class _SettingsPushNotificationPickerState
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           );
+        } else if (error) {
+          return SizedBox(
+            height: 20.0,
+            width: 20.0,
+            child: Icon(Icons.error, color: AppTheme.dangerColor),
+          );
         }
 
         return null;
@@ -252,11 +261,17 @@ class _SettingsPushNotificationPickerState
                 },
               };
             }
-          } on Exception catch (exception, stackTrace) {
-            await Sentry.captureException(exception, stackTrace: stackTrace);
 
-            // TODO! snackbar
-            // TODO! set notificationExtras
+            setState(() => error = false);
+          } on Exception catch (exception, stackTrace) {
+            setState(() => error = true);
+            await Sentry.captureException(exception, stackTrace: stackTrace);
+            notificationExtras = widget.selectedNotificationExtras;
+
+            showSnackbar(
+              context,
+              AppLocalizations.of(context)!.locationFailure,
+            );
           }
         }
 
@@ -268,7 +283,10 @@ class _SettingsPushNotificationPickerState
     }
 
     closeKeyboard(context);
-    widget.onTap(notification, notificationExtras);
+
+    if (!processing && !error) {
+      widget.onTap(notification, notificationExtras);
+    }
   }
 
   Color? _getNotificationColor(

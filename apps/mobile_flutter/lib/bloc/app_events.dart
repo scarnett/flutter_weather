@@ -22,10 +22,12 @@ class ToggleThemeMode extends AppEvent {
 }
 
 class SetUpdatePeriod extends AppEvent {
+  final BuildContext context;
   final UpdatePeriod? updatePeriod;
   final Function? callback;
 
   const SetUpdatePeriod({
+    required this.context,
     this.updatePeriod,
     this.callback,
   });

@@ -9,6 +9,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
@@ -125,18 +126,15 @@ class _ForecastPageViewState extends State<ForecastView> {
 
       switch (state.crudStatus) {
         case CRUDStatus.CREATED:
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(i18n!.forecastAdded)));
+          showSnackbar(context, i18n!.forecastAdded);
           break;
 
         case CRUDStatus.UPDATED:
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(i18n!.forecastUpdated)));
+          showSnackbar(context, i18n!.forecastUpdated);
           break;
 
         case CRUDStatus.DELETED:
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(i18n!.forecastDeleted)));
+          showSnackbar(context, i18n!.forecastDeleted);
           break;
 
         default:
