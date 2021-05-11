@@ -97,8 +97,8 @@ class _ForecastPageViewState extends State<ForecastView> {
           Forecast forecast = state.forecasts[_currentForecastNotifier.value!];
           DateTime? lastUpdated = forecast.lastUpdated;
           if ((lastUpdated == null) ||
-              DateTime.now().isAfter(lastUpdated.add(
-                  Duration(minutes: state.updatePeriod?.info!['minutes'])))) {
+              DateTime.now().isAfter(lastUpdated.add(Duration(
+                  minutes: state.updatePeriod?.getInfo()!['minutes'])))) {
             context.read<AppBloc>().add(
                   RefreshForecast(
                     context,

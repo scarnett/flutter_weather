@@ -35,10 +35,19 @@ class AppLocalizations {
   String get beta => addMessage('Beta');
   String get autoUpdates => addMessage('Auto Updates');
   String get updatePeriod => addMessage('Update Period');
+  String get updatePeriod1hr => addMessage('1 hour');
+  String get updatePeriod2hr => addMessage('2 hours');
+  String get updatePeriod3hr => addMessage('3 hours');
+  String get updatePeriod4hr => addMessage('4 hours');
+  String get updatePeriod5hr => addMessage('5 hours');
   String get updatePeriodUpdated =>
       addMessage('Your update period settings were updated successfully.');
 
   String get pushNotification => addMessage('Push Notification');
+  String get pushNotificationOff => addMessage('Off');
+  String get pushNotificationSaved => addMessage('Saved Locations');
+  String get pushNotificationCurrent => addMessage('Current Location');
+  String get pushNotificationCurrentTap => addMessage('Tap to update');
   String get pushNotificationUpdated =>
       addMessage('Your push notification settings were updated successfully.');
 

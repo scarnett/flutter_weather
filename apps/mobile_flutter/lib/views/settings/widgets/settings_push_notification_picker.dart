@@ -115,7 +115,8 @@ class _SettingsPushNotificationPickerState
     children.add(
       AppSectionHeader(
         bloc: context.read<AppBloc>(),
-        text: PushNotification.SAVED_LOCATION.info!['text'],
+        text:
+            PushNotification.SAVED_LOCATION.getInfo(context: context)!['text'],
       ),
     );
 
@@ -137,8 +138,11 @@ class _SettingsPushNotificationPickerState
     Forecast? forecast,
     bool showDivider: true,
   }) {
-    String _id = forecast?.id ?? notification.info!['id'];
-    String? subText = notification.info!['subText'];
+    Map<String, dynamic>? notificationInfo =
+        notification.getInfo(context: context);
+
+    String _id = forecast?.id ?? notificationInfo!['id'];
+    String? subText = notificationInfo!['subText'];
     List<Widget> children = <Widget>[];
 
     children.add(
@@ -148,7 +152,7 @@ class _SettingsPushNotificationPickerState
           _id,
           (forecast != null)
               ? getLocationText(forecast)
-              : notification.info!['text'],
+              : notificationInfo['text'],
           notification,
         ),
         subtitle: (subText == null)
@@ -293,7 +297,8 @@ class _SettingsPushNotificationPickerState
     PushNotification notification, {
     String? objectId,
   }) {
-    if (widget.selectedNotification?.info!['id'] == notification.info!['id']) {
+    if (widget.selectedNotification?.getInfo()!['id'] ==
+        notification.getInfo()!['id']) {
       if ((widget.selectedNotificationExtras != null) &&
           widget.selectedNotificationExtras!.containsKey('location')) {
         String? forecastId =

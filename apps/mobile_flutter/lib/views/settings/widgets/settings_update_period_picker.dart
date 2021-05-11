@@ -88,11 +88,12 @@ class _SettingsUpdatePeriodPickerState
           int index,
         ) {
           final UpdatePeriod period = _periodList![index];
+          Map<String, dynamic> periodInfo = period.getInfo(context: context)!;
 
           return ListTile(
-            key: Key('period_${period.info!['id']}'),
+            key: Key('period_${periodInfo['id']}'),
             title: Text(
-              period.info!['text'],
+              periodInfo['text'],
               style: Theme.of(context).textTheme.headline5!.copyWith(
                     color: _getPeriodColor(period),
                   ),
@@ -114,7 +115,7 @@ class _SettingsUpdatePeriodPickerState
   Color? _getPeriodColor(
     UpdatePeriod period,
   ) {
-    if (widget.selectedPeriod?.info!['id'] == period.info!['id']) {
+    if (widget.selectedPeriod?.getInfo()!['id'] == period.getInfo()!['id']) {
       return AppTheme.primaryColor;
     }
 

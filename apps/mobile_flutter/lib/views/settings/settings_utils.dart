@@ -2,12 +2,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 
-UpdatePeriod? getPeriod(
+UpdatePeriod? getPeriod({
+  BuildContext? context,
   String? id,
-) {
+}) {
   if (id != null) {
     for (UpdatePeriod period in UpdatePeriod.values) {
-      if (period.info?['id'] == id) {
+      if (period.getInfo(context: context)?['id'] == id) {
         return period;
       }
     }
@@ -21,7 +22,7 @@ PushNotification? getPushNotification(
 ) {
   if (id != null) {
     for (PushNotification notification in PushNotification.values) {
-      if (notification.info?['id'] == id) {
+      if (notification.getInfo()?['id'] == id) {
         return notification;
       }
     }
@@ -44,6 +45,7 @@ String getTitle(
 }
 
 String? getPushNotificationText(
+  BuildContext context,
   PushNotification? notification, {
   Map<String, dynamic>? extras,
 }) {
@@ -59,7 +61,7 @@ String? getPushNotificationText(
       return null;
 
     case PushNotification.OFF:
-      return notification?.info!['text'];
+      return notification?.getInfo(context: context)!['text'];
 
     default:
       return null;

@@ -401,7 +401,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     Map<String, dynamic> jsonData,
   ) =>
       AppState(
-        updatePeriod: getPeriod(jsonData['updatePeriod']),
+        updatePeriod: getPeriod(id: jsonData['updatePeriod']),
         pushNotification: getPushNotification(jsonData['pushNotification']),
         pushNotificationExtras: (jsonData['pushNotificationExtras'] != null)
             ? json.decode(jsonData['pushNotificationExtras'])
@@ -418,8 +418,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     AppState state,
   ) =>
       {
-        'updatePeriod': state.updatePeriod?.info?['id'],
-        'pushNotification': state.pushNotification?.info?['id'],
+        'updatePeriod': state.updatePeriod?.getInfo()?['id'],
+        'pushNotification': state.pushNotification?.getInfo()?['id'],
         'pushNotificationExtras': state.pushNotificationExtras != null
             ? json.encode(state.pushNotificationExtras)
             : null,

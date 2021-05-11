@@ -40,11 +40,13 @@ Future<void> initBackgroundFetchHeadlessTask(
 
 Future<void> initBackgroundFetch() async {
   SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-  UpdatePeriod? updatePeriod = getPeriod(sharedPrefs.getString('updatePeriod'));
+  UpdatePeriod? updatePeriod =
+      getPeriod(id: sharedPrefs.getString('updatePeriod'));
+
   if (updatePeriod != null) {
     await BackgroundFetch.configure(
         BackgroundFetchConfig(
-          minimumFetchInterval: updatePeriod.info!['minutes'],
+          minimumFetchInterval: updatePeriod.getInfo()!['minutes'],
           stopOnTerminate: false,
           enableHeadless: true,
           requiresBatteryNotLow: false,

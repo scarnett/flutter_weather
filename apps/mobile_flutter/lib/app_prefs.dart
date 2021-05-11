@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
@@ -30,8 +31,14 @@ class AppPrefs {
     _sharedPrefs.setInt(appStateKey, appState ?? 0);
   }
 
-  UpdatePeriod? get updatePeriod =>
-      getPeriod(_sharedPrefs.getString(updatePeriodKey)) ?? null;
+  UpdatePeriod? getUpdatePeriod(
+    BuildContext context,
+  ) =>
+      getPeriod(
+        context: context,
+        id: _sharedPrefs.getString(updatePeriodKey),
+      ) ??
+      null;
 
   set updatePeriod(
     UpdatePeriod? updatePeriod,
@@ -39,7 +46,7 @@ class AppPrefs {
     if (updatePeriod == null) {
       _sharedPrefs.remove(updatePeriodKey);
     } else {
-      _sharedPrefs.setString(updatePeriodKey, updatePeriod.info!['id']);
+      _sharedPrefs.setString(updatePeriodKey, updatePeriod.getInfo()!['id']);
     }
   }
 
@@ -52,7 +59,8 @@ class AppPrefs {
     if (pushNotification == null) {
       _sharedPrefs.remove(pushNotificationKey);
     } else {
-      _sharedPrefs.setString(pushNotificationKey, pushNotification.info!['id']);
+      _sharedPrefs.setString(
+          pushNotificationKey, pushNotification.getInfo()!['id']);
     }
   }
 
