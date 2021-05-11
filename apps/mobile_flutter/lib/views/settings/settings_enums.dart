@@ -63,6 +63,7 @@ extension PushNotificationExtension on PushNotification {
         return {
           'id': 'current_location',
           'text': 'Current Location', // TODO! i18n
+          'subText': 'Tap to update', // TODO! i18n
         };
 
       case PushNotification.SAVED_LOCATION:

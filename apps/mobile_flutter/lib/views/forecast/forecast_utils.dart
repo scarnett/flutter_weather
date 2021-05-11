@@ -129,8 +129,9 @@ Animatable<Color?>? buildForecastColorSequence(
 }
 
 String getLocationText(
-  Forecast forecast,
-) {
+  Forecast forecast, {
+  bool includePostalCode: true,
+}) {
   String text = '';
 
   if (!forecast.cityName.isNullOrEmpty()) {
@@ -139,7 +140,7 @@ String getLocationText(
     text += '${forecast.city!.name}, ';
   }
 
-  if (!forecast.postalCode.isNullOrEmpty()) {
+  if (includePostalCode && !forecast.postalCode.isNullOrEmpty()) {
     text += '${forecast.postalCode!.toUpperCase()}, ';
   }
 

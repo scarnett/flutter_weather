@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,11 +8,15 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class SettingsPushNotificationPicker extends StatefulWidget {
   final PushNotification? selectedNotification;
@@ -126,15 +132,8 @@ class _SettingsPushNotificationPickerState
     bool showDivider: true,
   }) {
     String _id = forecast?.id ?? notification.info!['id'];
+    String? subText = notification.info!['subText'];
     List<Widget> children = <Widget>[];
-
-    Map<String, dynamic> notificationExtras = {};
-    if ((notification == PushNotification.SAVED_LOCATION) &&
-        (forecast != null)) {
-      Map<String, dynamic> forecastData = forecast.toJson();
-      forecastData.remove('list');
-      notificationExtras['forecast'] = forecastData;
-    }
 
     children.add(
       ListTile(
@@ -146,10 +145,18 @@ class _SettingsPushNotificationPickerState
               : notification.info!['text'],
           notification,
         ),
-        onTap: () => _tapPushNotification(
-          notification,
-          extras: notificationExtras,
-        ),
+        subtitle: (subText == null)
+            ? null
+            : Text(
+                subText,
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      fontSize: 12.0,
+                      color: AppTheme.getFadedTextColor(
+                        colorTheme: context.watch<AppBloc>().state.colorTheme,
+                      ),
+                    ),
+              ),
+        onTap: () => _tapPushNotification(notification, forecast: forecast),
       ),
     );
 
@@ -174,10 +181,53 @@ class _SettingsPushNotificationPickerState
 
   void _tapPushNotification(
     PushNotification notification, {
-    Map<String, dynamic>? extras,
+    Forecast? forecast,
   }) async {
+    Map<String, dynamic>? notificationExtras;
+
+    switch (notification) {
+      case PushNotification.SAVED_LOCATION:
+        if (forecast != null) {
+          notificationExtras = {
+            'location': {
+              'id': forecast.id,
+              'name': getLocationText(forecast),
+              'longitude': forecast.city?.coord?.lon,
+              'latitude': forecast.city?.coord?.lat,
+            },
+          };
+        }
+
+        break;
+
+      case PushNotification.CURRENT_LOCATION:
+        Position? position = await getPosition();
+        if (position != null) {
+          http.Response forecastResponse = await fetchCurrentForecastByCoords(
+            longitude: position.longitude,
+            latitude: position.latitude,
+          );
+
+          Forecast forecast =
+              Forecast.fromJson(jsonDecode(forecastResponse.body));
+
+          notificationExtras = {
+            'location': {
+              'name': getLocationText(forecast),
+              'longitude': forecast.city?.coord?.lon,
+              'latitude': forecast.city?.coord?.lat,
+            },
+          };
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
     closeKeyboard(context);
-    widget.onTap(notification, extras);
+    widget.onTap(notification, notificationExtras);
   }
 
   Color? _getNotificationColor(
@@ -186,8 +236,11 @@ class _SettingsPushNotificationPickerState
   }) {
     if (widget.selectedNotification?.info!['id'] == notification.info!['id']) {
       if ((widget.selectedNotificationExtras != null) &&
-          widget.selectedNotificationExtras!.containsKey('forecast')) {
-        if (widget.selectedNotificationExtras?['forecast']['id'] == objectId) {
+          widget.selectedNotificationExtras!.containsKey('location')) {
+        String? forecastId =
+            widget.selectedNotificationExtras?['location']['id'];
+
+        if ((forecastId == null) || (forecastId == objectId)) {
           return AppTheme.primaryColor;
         }
       } else {

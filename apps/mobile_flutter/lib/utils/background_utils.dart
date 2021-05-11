@@ -4,12 +4,10 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/notifications/notification_helper.dart';
-import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,35 +62,18 @@ Future<void> initBackgroundFetch() async {
         if (pushNotification != null) {
           switch (pushNotification) {
             case PushNotification.SAVED_LOCATION:
+            case PushNotification.CURRENT_LOCATION:
               Map<String, dynamic>? pushNotificationExtras =
                   json.decode(sharedPrefs.getString('pushNotificationExtras')!);
 
               if (pushNotificationExtras != null) {
-                Forecast forecast =
-                    Forecast.fromJson(pushNotificationExtras['forecast']);
+                Map<String, dynamic> forecastInfo =
+                    pushNotificationExtras['location'];
 
-                ForecastCityCoord coord = forecast.city!.coord!;
                 http.Response forecastResponse =
                     await fetchCurrentForecastByCoords(
-                  longitude: coord.lon!,
-                  latitude: coord.lat!,
-                );
-
-                pushCurrentForecastNotification(
-                  Forecast.fromJson(jsonDecode(forecastResponse.body)),
-                  getTemperatureUnit(sharedPrefs.getString('temperatureUnit')),
-                );
-              }
-
-              break;
-
-            case PushNotification.CURRENT_LOCATION:
-              Position? position = await getPosition();
-              if (position != null) {
-                http.Response forecastResponse =
-                    await fetchCurrentForecastByCoords(
-                  longitude: position.longitude,
-                  latitude: position.latitude,
+                  longitude: forecastInfo['longitude'],
+                  latitude: forecastInfo['latitude'],
                 );
 
                 pushCurrentForecastNotification(
