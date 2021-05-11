@@ -62,20 +62,20 @@ extension PushNotificationExtension on PushNotification {
       case PushNotification.CURRENT_LOCATION:
         return {
           'id': 'current_location',
-          'text': 'Current Location', // TODO!
+          'text': 'Current Location', // TODO! i18n
         };
 
       case PushNotification.SAVED_LOCATION:
         return {
           'id': 'saved_location',
-          'text': 'Saved Locations', // TODO!
+          'text': 'Saved Locations', // TODO! i18n
         };
 
       case PushNotification.OFF:
       default:
         return {
           'id': 'off',
-          'text': 'Off', // TODO!
+          'text': 'Off', // TODO! i18n
         };
     }
   }
