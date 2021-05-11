@@ -167,7 +167,9 @@ class _SettingsPushNotificationPickerState
                     ),
               ),
         trailing: _notificationTrailingWidget(notification),
-        onTap: () => _tapPushNotification(notification, forecast: forecast),
+        onTap: processing
+            ? null
+            : () => _tapPushNotification(notification, forecast: forecast),
       ),
     );
 
