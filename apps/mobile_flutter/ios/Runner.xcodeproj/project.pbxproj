@@ -218,9 +218,11 @@
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -404,7 +406,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = FLUTTER_WEATHER_BUNDLE_ID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "FLUTTER_WEATHER_PROVISIONING_PROFILE";
+				PROVISIONING_PROFILE_SPECIFIER = FLUTTER_WEATHER_PROVISIONING_PROFILE;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -539,7 +541,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = FLUTTER_WEATHER_BUNDLE_ID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "FLUTTER_WEATHER_PROVISIONING_PROFILE";
+				PROVISIONING_PROFILE_SPECIFIER = FLUTTER_WEATHER_PROVISIONING_PROFILE;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -569,7 +571,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = FLUTTER_WEATHER_BUNDLE_ID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "FLUTTER_WEATHER_PROVISIONING_PROFILE";
+				PROVISIONING_PROFILE_SPECIFIER = FLUTTER_WEATHER_PROVISIONING_PROFILE;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

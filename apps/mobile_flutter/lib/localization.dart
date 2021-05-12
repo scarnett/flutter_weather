@@ -123,7 +123,7 @@ class AppLocalizations {
       );
 
   String getLastUpdatedAt(
-    String? date,
+    String date,
   ) =>
       addMessage(
         'Last updated at $date',
@@ -132,7 +132,7 @@ class AppLocalizations {
       );
 
   String getLastUpdatedOn(
-    String? date,
+    String date,
   ) =>
       addMessage(
         'Last updated on $date',
@@ -159,12 +159,12 @@ class AppLocalizations {
   addMessage(
     String message, {
     String? name,
-    List<Object?>? args,
+    List<Object>? args,
   }) =>
       Intl.message(
         message,
         name: (name == null) ? message.camelCase() : name,
-        args: args as List<Object>?,
+        args: args,
         locale: locale.toString(),
       );
 }

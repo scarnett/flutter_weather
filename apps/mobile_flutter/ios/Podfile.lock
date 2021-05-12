@@ -1,4 +1,6 @@
 PODS:
+  - background_fetch (1.0.0-nullsafety.2):
+    - Flutter
   - Firebase/CoreOnly (7.3.0):
     - FirebaseCore (= 7.3.0)
   - Firebase/Crashlytics (7.3.0):
@@ -7,19 +9,18 @@ PODS:
   - Firebase/RemoteConfig (7.3.0):
     - Firebase/CoreOnly
     - FirebaseRemoteConfig (~> 7.3.0)
-  - firebase_core (0.7.0):
+  - firebase_core (1.0.4):
     - Firebase/CoreOnly (= 7.3.0)
     - Flutter
-  - firebase_core_web (0.1.0):
-    - Flutter
-  - firebase_crashlytics (0.4.0-1):
+  - firebase_crashlytics (2.0.1):
     - Firebase/Crashlytics (= 7.3.0)
     - firebase_core
-  - firebase_remote_config (0.6.0):
+    - Flutter
+  - firebase_remote_config (0.10.0-dev.1):
     - Firebase/RemoteConfig (= 7.3.0)
     - firebase_core
     - Flutter
-  - FirebaseABTesting (7.8.0):
+  - FirebaseABTesting (7.10.0):
     - FirebaseCore (~> 7.0)
   - FirebaseCore (7.3.0):
     - FirebaseCoreDiagnostics (~> 7.0)
@@ -36,7 +37,7 @@ PODS:
     - GoogleDataTransport (~> 8.0)
     - nanopb (~> 2.30906.0)
     - PromisesObjC (~> 1.2)
-  - FirebaseInstallations (7.8.0):
+  - FirebaseInstallations (7.10.0):
     - FirebaseCore (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
@@ -50,6 +51,10 @@ PODS:
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
+  - flutter_local_notifications (0.0.1):
+    - Flutter
+  - geolocator (6.2.0):
+    - Flutter
   - GoogleDataTransport (8.1.0):
     - nanopb (~> 2.30906.0)
   - GoogleUtilities/Environment (7.3.1):
@@ -59,6 +64,8 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.3.1)"
   - GoogleUtilities/UserDefaults (7.3.1):
     - GoogleUtilities/Logger
+  - integration_test (0.0.1):
+    - Flutter
   - iso_countries (0.0.1):
     - Flutter
   - nanopb (2.30906.0):
@@ -68,56 +75,47 @@ PODS:
   - nanopb/encode (2.30906.0)
   - package_info (0.0.1):
     - Flutter
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - path_provider_linux (0.0.1):
-    - Flutter
-  - path_provider_macos (0.0.1):
-    - Flutter
-  - path_provider_windows (0.0.1):
+  - "permission_handler (5.1.0+2)":
     - Flutter
   - PromisesObjC (1.2.12)
-  - Sentry (6.1.4):
-    - Sentry/Core (= 6.1.4)
-  - Sentry/Core (6.1.4)
+  - Sentry (6.2.1):
+    - Sentry/Core (= 6.2.1)
+  - Sentry/Core (6.2.1)
   - sentry_flutter (0.0.1):
     - Flutter
-    - Sentry (~> 6.1.4)
+    - Sentry (~> 6.2.1)
+  - shared_preferences (0.0.1):
+    - Flutter
   - store_redirect (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
-    - Flutter
-  - url_launcher_linux (0.0.1):
-    - Flutter
-  - url_launcher_macos (0.0.1):
-    - Flutter
-  - url_launcher_web (0.0.1):
-    - Flutter
-  - url_launcher_windows (0.0.1):
     - Flutter
   - webview_flutter (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - geolocator (from `.symlinks/plugins/geolocator/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - iso_countries (from `.symlinks/plugins/iso_countries/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
-  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
-  - path_provider_windows (from `.symlinks/plugins/path_provider_windows/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - store_redirect (from `.symlinks/plugins/store_redirect/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - url_launcher_linux (from `.symlinks/plugins/url_launcher_linux/ios`)
-  - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
-  - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
-  - url_launcher_windows (from `.symlinks/plugins/url_launcher_windows/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
@@ -136,10 +134,10 @@ SPEC REPOS:
     - Sentry
 
 EXTERNAL SOURCES:
+  background_fetch:
+    :path: ".symlinks/plugins/background_fetch/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
-  firebase_core_web:
-    :path: ".symlinks/plugins/firebase_core_web/ios"
   firebase_crashlytics:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
   firebase_remote_config:
@@ -148,69 +146,66 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  geolocator:
+    :path: ".symlinks/plugins/geolocator/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   iso_countries:
     :path: ".symlinks/plugins/iso_countries/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  path_provider_linux:
-    :path: ".symlinks/plugins/path_provider_linux/ios"
-  path_provider_macos:
-    :path: ".symlinks/plugins/path_provider_macos/ios"
-  path_provider_windows:
-    :path: ".symlinks/plugins/path_provider_windows/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
   store_redirect:
     :path: ".symlinks/plugins/store_redirect/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
-  url_launcher_linux:
-    :path: ".symlinks/plugins/url_launcher_linux/ios"
-  url_launcher_macos:
-    :path: ".symlinks/plugins/url_launcher_macos/ios"
-  url_launcher_web:
-    :path: ".symlinks/plugins/url_launcher_web/ios"
-  url_launcher_windows:
-    :path: ".symlinks/plugins/url_launcher_windows/ios"
   webview_flutter:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  background_fetch: 67b227578932e795dbe3ea6d3f7c006e45f3ce66
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
-  firebase_core: 91b27774a52f41f8b58484a75edf71197ac01c59
-  firebase_core_web: 2223a33d6da33b048d7fd598f2ead160af0b6020
-  firebase_crashlytics: e6ecb908f6249ce3757d18a812819a41495bf1cb
-  firebase_remote_config: 1c56b7b8caa840aa2e9432e66bf606d10f492fc9
-  FirebaseABTesting: 44acbfc9db915bca8f111ebae342da6fd4f1cc55
+  firebase_core: 4be162b452c4af1f8257dc7a55003ceacec028ac
+  firebase_crashlytics: 8e7b4f61dccbe21a2b07b10005f680afded8a9a6
+  firebase_remote_config: 27549c35b37a632c8a7c5415356204427346c064
+  FirebaseABTesting: 457bc058cf6de8bcffc6fd9a2a4c933b24bfc264
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350
   FirebaseCrashlytics: d31325312c92e2cb2f0386d589b9aa44e303d99b
-  FirebaseInstallations: 7f7ed0e7e27fb51f57291e1876e2ddb1524126c1
+  FirebaseInstallations: bf2ec8dbf36ff4c91af6b9a003d15855757680c1
   FirebaseRemoteConfig: 826fad8bec5ce1912ef97a124d6ec0ce4dcf6ec1
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
   GoogleUtilities: e1d9ed4e544fc32a93e00e721400cbc3f377200d
+  integration_test: 5ed24a436eb7ec17b6a13046e9bf7ca4a404e59e
   iso_countries: eb09d40f388e4c65e291e0bb36a701dfe7de6c74
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
-  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
-  path_provider_windows: a2b81600c677ac1959367280991971cb9a1edb3b
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
-  sentry_flutter: 8b2b2e1c0101ef562106b5d272d3c0c741512c01
+  Sentry: 9b922b396b0e0bca8516a10e36b0ea3ebea5faf7
+  sentry_flutter: 5b3c6d717db5b7482504a313c831b318297d4d37
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   store_redirect: 2977747cf81689a39bd62c248c2deacb7a0d131e
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  url_launcher_linux: ac237cb7a8058736e4aae38bdbcc748a4b394cc0
-  url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
-  url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
-  url_launcher_windows: 683d7c283894db8d1914d3ab2223b20cc1ad95d5
-  webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
+  webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
 
-PODFILE CHECKSUM: 021e6b5fad12fdfc297f72bbb115cab3d404646e
+PODFILE CHECKSUM: cfe7f277304c2a4003795594ffbe2545a1c254ca
 
 COCOAPODS: 1.10.1
