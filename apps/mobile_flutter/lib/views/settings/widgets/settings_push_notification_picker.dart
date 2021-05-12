@@ -147,7 +147,7 @@ class _SettingsPushNotificationPickerState
 
     children.add(
       ListTile(
-        key: Key(_id),
+        key: Key('notification_$_id'),
         title: _notificationTitleText(
           _id,
           (forecast != null)
@@ -161,8 +161,8 @@ class _SettingsPushNotificationPickerState
                 subText,
                 style: Theme.of(context).textTheme.headline5!.copyWith(
                       fontSize: 12.0,
-                      color: AppTheme.getFadedTextColor(
-                        colorTheme: context.watch<AppBloc>().state.colorTheme,
+                      color: AppTheme.getHintColor(
+                        context.watch<AppBloc>().state.themeMode,
                       ),
                     ),
               ),
@@ -187,7 +187,7 @@ class _SettingsPushNotificationPickerState
   ) =>
       Text(
         text,
-        style: Theme.of(context).textTheme.headline5!.copyWith(
+        style: Theme.of(context).textTheme.subtitle1!.copyWith(
               color: _getNotificationColor(notification, objectId: id),
             ),
       );

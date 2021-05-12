@@ -40,8 +40,6 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
     with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  ThemeData? _themeData = appLightThemeData;
-
   @override
   void initState() {
     super.initState();
@@ -65,21 +63,18 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
             BuildContext context,
             AppState state,
           ) =>
-              BlocListener<AppBloc, AppState>(
-            listener: _blocListener,
-            child: MaterialApp(
-              title: AppLocalizations.appTitle,
-              theme: _themeData,
-              darkTheme: appDarkThemeData,
-              themeMode: state.themeMode,
-              debugShowCheckedModeBanner: AppConfig.isDebug(),
-              localizationsDelegates: [
-                AppLocalizationsDelegate(),
-                FallbackCupertinoLocalisationsDelegate(),
-              ],
-              navigatorKey: _navigatorKey,
-              home: ForecastView(),
-            ),
+              MaterialApp(
+            title: AppLocalizations.appTitle,
+            theme: _getThemeData(state),
+            darkTheme: appDarkThemeData,
+            themeMode: state.themeMode,
+            debugShowCheckedModeBanner: AppConfig.isDebug(),
+            localizationsDelegates: [
+              AppLocalizationsDelegate(),
+              FallbackCupertinoLocalisationsDelegate(),
+            ],
+            navigatorKey: _navigatorKey,
+            home: ForecastView(),
           ),
         ),
       );
@@ -100,15 +95,13 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
     // }
   }
 
-  void _blocListener(
-    BuildContext context,
+  ThemeData? _getThemeData(
     AppState state,
-  ) =>
-      setState(() {
-        if (state.activeForecastId != null) {
-          _themeData = appLightThemeData;
-        } else {
-          _themeData = state.colorTheme ? appColorThemeData : appLightThemeData;
-        }
-      });
+  ) {
+    if (state.activeForecastId != null) {
+      return appLightThemeData;
+    }
+
+    return state.colorTheme ? appColorThemeData : appLightThemeData;
+  }
 }

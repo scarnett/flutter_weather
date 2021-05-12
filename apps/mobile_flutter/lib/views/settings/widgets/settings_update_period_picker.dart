@@ -94,7 +94,7 @@ class _SettingsUpdatePeriodPickerState
             key: Key('period_${periodInfo['id']}'),
             title: Text(
               periodInfo['text'],
-              style: Theme.of(context).textTheme.headline5!.copyWith(
+              style: Theme.of(context).textTheme.subtitle1!.copyWith(
                     color: _getPeriodColor(period),
                   ),
             ),

@@ -205,11 +205,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             AppLocalizations.of(context)!.updatePeriod,
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          trailing: Text(context
-              .read<AppBloc>()
-              .state
-              .updatePeriod!
-              .getInfo(context: context)!['text']),
+          trailing: Text(
+            context
+                .read<AppBloc>()
+                .state
+                .updatePeriod!
+                .getInfo(context: context)!['text'],
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
           onTap: () => animatePage(_pageController!, page: 1),
         ),
         Divider(),
@@ -225,6 +228,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
                   extras: context.read<AppBloc>().state.pushNotificationExtras,
                 ) ??
                 '',
+            style: Theme.of(context).textTheme.subtitle1,
           ),
           onTap: () => animatePage(_pageController!, page: 2),
         ),
