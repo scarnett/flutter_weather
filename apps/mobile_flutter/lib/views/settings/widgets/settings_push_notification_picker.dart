@@ -203,7 +203,7 @@ class _SettingsPushNotificationPickerState
             width: 20.0,
             child: CircularProgressIndicator(
               strokeWidth: 2.0,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor!),
             ),
           );
         } else if (error) {
