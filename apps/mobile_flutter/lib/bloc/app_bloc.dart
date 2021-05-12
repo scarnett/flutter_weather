@@ -246,7 +246,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     Forecast forecast = state.forecasts
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
-    forecasts[state.selectedForecastIndex!] = forecast.copyWith(
+    forecasts[state.selectedForecastIndex] = forecast.copyWith(
       id: event.forecastId,
       cityName: Nullable<String?>(event.forecastData['cityName']),
       postalCode: Nullable<String?>(event.forecastData['postalCode']),
@@ -264,7 +264,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     add(
       RefreshForecast(
         event.context,
-        forecasts[state.selectedForecastIndex!],
+        forecasts[state.selectedForecastIndex],
         state.temperatureUnit,
       ),
     );
@@ -370,8 +370,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       activeForecastId: Nullable<String?>(null),
       colorTheme: hasForecasts(_forecasts) ? state.colorTheme : false,
       forecasts: _forecasts,
-      selectedForecastIndex: (state.selectedForecastIndex! > 0)
-          ? (state.selectedForecastIndex! - 1)
+      selectedForecastIndex: (state.selectedForecastIndex > 0)
+          ? (state.selectedForecastIndex - 1)
           : 0,
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETED),
     );

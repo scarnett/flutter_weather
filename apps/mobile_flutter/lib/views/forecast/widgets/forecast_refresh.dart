@@ -65,12 +65,12 @@ class _ForecastRefreshState extends State<ForecastRefresh>
       setState(() => _nextRefreshTime = getNextUpdateTime(getNow().toLocal()));
     } else {
       setState(() {
-        if (canRefresh(state, index: state.selectedForecastIndex!)) {
+        if (canRefresh(state, index: state.selectedForecastIndex)) {
           _nextRefreshTime = getNow().toLocal();
         } else if (forecastIndexExists(
             state.forecasts, state.selectedForecastIndex)) {
           _nextRefreshTime = getNextUpdateTime(
-              state.forecasts[state.selectedForecastIndex!].lastUpdated!);
+              state.forecasts[state.selectedForecastIndex].lastUpdated!);
         }
       });
     }
@@ -85,7 +85,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
   Widget _buildRefreshIcon(
     AppState state,
   ) =>
-      canRefresh(state, index: state.selectedForecastIndex!)
+      canRefresh(state, index: state.selectedForecastIndex)
           ? Tooltip(
               message: AppLocalizations.of(context)!.refreshForecast,
               child: Material(
@@ -117,7 +117,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
       context.read<AppBloc>().add(
             RefreshForecast(
               context,
-              state.forecasts[state.selectedForecastIndex!],
+              state.forecasts[state.selectedForecastIndex],
               context.read<AppBloc>().state.temperatureUnit,
             ),
           );

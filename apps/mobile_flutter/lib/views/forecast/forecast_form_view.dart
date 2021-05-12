@@ -134,7 +134,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
           deleteButtonText: AppLocalizations.of(context)!.delete,
           forecast: state.forecasts.isNullOrZeroLength()
               ? null
-              : state.forecasts[state.selectedForecastIndex!],
+              : state.forecasts[state.selectedForecastIndex],
           forecasts: state.forecasts,
           onSuccess: _onSuccess,
           onFailure: _onFailure,

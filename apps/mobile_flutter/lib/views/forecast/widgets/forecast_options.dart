@@ -85,8 +85,8 @@ class _ForecastOptionsState extends State<ForecastOptions> {
   void _tapEdit(
     AppState state,
   ) {
-    if (state.forecasts.length > state.selectedForecastIndex!) {
-      Forecast? forecast = state.forecasts[state.selectedForecastIndex!];
+    if (state.forecasts.length > state.selectedForecastIndex) {
+      Forecast? forecast = state.forecasts[state.selectedForecastIndex];
       context.read<AppBloc>().add(SetActiveForecastId(forecast.id));
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       Navigator.push(context, ForecastFormView.route());

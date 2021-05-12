@@ -38,7 +38,7 @@ class _ForecastPageViewState extends State<ForecastView> {
 
   PageController? _pageController;
   Animatable<Color?>? _pageBackground;
-  late ValueNotifier<int?> _currentForecastNotifier;
+  late ValueNotifier<int> _currentForecastNotifier;
   num? _currentPage = 0;
   bool? _colorTheme = false;
 
@@ -81,7 +81,7 @@ class _ForecastPageViewState extends State<ForecastView> {
     AppState state = context.read<AppBloc>().state;
     _colorTheme = state.colorTheme;
     _pageController = PageController(
-      initialPage: state.selectedForecastIndex!,
+      initialPage: state.selectedForecastIndex,
       keepPage: true,
     )..addListener(() {
         _currentPage = _pageController!.page;
@@ -91,10 +91,10 @@ class _ForecastPageViewState extends State<ForecastView> {
 
           context
               .read<AppBloc>()
-              .add(SelectedForecastIndex(_currentForecastNotifier.value!));
+              .add(SelectedForecastIndex(_currentForecastNotifier.value));
 
           // If auto update is enabled then run the refresh
-          Forecast forecast = state.forecasts[_currentForecastNotifier.value!];
+          Forecast forecast = state.forecasts[_currentForecastNotifier.value];
           DateTime? lastUpdated = forecast.lastUpdated;
           if ((lastUpdated == null) ||
               DateTime.now().isAfter(lastUpdated.add(Duration(
@@ -102,7 +102,7 @@ class _ForecastPageViewState extends State<ForecastView> {
             context.read<AppBloc>().add(
                   RefreshForecast(
                     context,
-                    state.forecasts[state.selectedForecastIndex!],
+                    state.forecasts[state.selectedForecastIndex],
                     state.temperatureUnit,
                   ),
                 );
@@ -114,7 +114,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       _pageBackground = buildForecastColorSequence(state.forecasts);
     }
 
-    _currentForecastNotifier = ValueNotifier<int?>(state.selectedForecastIndex);
+    _currentForecastNotifier = ValueNotifier<int>(state.selectedForecastIndex);
   }
 
   void _blocListener(
@@ -209,23 +209,23 @@ class _ForecastPageViewState extends State<ForecastView> {
           num? currentPage = _currentPage;
           if (isInteger(currentPage)) {
             if (state.selectedForecastIndex != currentPage!.toInt()) {
-              currentPage = state.selectedForecastIndex!.toDouble();
+              currentPage = state.selectedForecastIndex.toDouble();
             }
           }
 
           final double _forecastColorValue =
               (_pageController!.hasClients && state.forecasts.isNotEmpty)
                   ? (currentPage! / state.forecasts.length)
-                  : (state.selectedForecastIndex!.toDouble() /
+                  : (state.selectedForecastIndex.toDouble() /
                       state.forecasts.length);
 
-          Color _forecastColor = (_pageBackground == null)
+          Color? _forecastColor = (_pageBackground == null)
               ? Colors.transparent
               : _pageBackground!.evaluate(
                   AlwaysStoppedAnimation(_forecastColorValue),
-                )!;
+                );
 
-          Color _forecastDarkenedColor = _forecastColor.darken(0.25);
+          Color _forecastDarkenedColor = _forecastColor!.darken(0.25);
 
           return AppUiOverlayStyle(
             themeMode: state.themeMode,
@@ -267,7 +267,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       return null;
     }
 
-    if (canRefresh(state, index: state.selectedForecastIndex!)) {
+    if (canRefresh(state, index: state.selectedForecastIndex)) {
       return RefreshIndicator(
         color: AppTheme.primaryColor,
         onRefresh: () => _pullRefresh(state),
@@ -306,7 +306,7 @@ class _ForecastPageViewState extends State<ForecastView> {
               state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 10.0,
           itemCount: state.forecasts.length,
-          currentPageNotifier: _currentForecastNotifier as ValueNotifier<int>,
+          currentPageNotifier: _currentForecastNotifier,
           onPageSelected: _onPageSelected,
         ),
       ),
@@ -326,7 +326,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       context.read<AppBloc>().add(
             RefreshForecast(
               context,
-              state.forecasts[state.selectedForecastIndex!],
+              state.forecasts[state.selectedForecastIndex],
               state.temperatureUnit,
             ),
           );

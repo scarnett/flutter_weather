@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
@@ -56,12 +55,12 @@ num getTemperature(
   }
 }
 
-Color? getTemperatureColor(
+Color getTemperatureColor(
   num? temperature,
 ) {
   num _temperature = getTemperature(temperature, TemperatureUnit.fahrenheit);
   if (_temperature > 100) {
-    return Colors.red[900];
+    return Colors.red[900]!;
   } else if ((_temperature > 90) && (_temperature <= 100)) {
     return Colors.red;
   } else if ((_temperature > 80) && (_temperature <= 90)) {
@@ -87,16 +86,16 @@ Color? getTemperatureColor(
   } else if ((_temperature > -20) && (_temperature <= -10)) {
     return Colors.deepPurple;
   } else if ((_temperature > -30) && (_temperature <= -20)) {
-    return Colors.deepPurple[100];
+    return Colors.deepPurple[100]!;
   }
 
-  return Colors.blueGrey[50];
+  return Colors.blueGrey[50]!;
 }
 
 Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {
-  List<TweenSequenceItem<Color?>> colors = <TweenSequenceItem<Color>>[];
+  List<TweenSequenceItem<Color?>> colors = <TweenSequenceItem<Color?>>[];
 
   if (forecastList.isNotEmpty) {
     forecastList.asMap().forEach((int index, Forecast forecast) {

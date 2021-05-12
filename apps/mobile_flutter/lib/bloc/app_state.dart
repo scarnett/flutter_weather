@@ -8,7 +8,7 @@ class AppState extends Equatable {
   final ThemeMode themeMode;
   final bool colorTheme;
   final TemperatureUnit temperatureUnit;
-  final int? selectedForecastIndex;
+  final int selectedForecastIndex;
   final List<Forecast> forecasts;
   final String? activeForecastId;
   final RefreshStatus? refreshStatus;
