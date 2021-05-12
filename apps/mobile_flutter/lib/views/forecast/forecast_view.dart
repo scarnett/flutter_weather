@@ -102,7 +102,7 @@ class _ForecastPageViewState extends State<ForecastView> {
             context.read<AppBloc>().add(
                   RefreshForecast(
                     context,
-                    state.forecasts[state.selectedForecastIndex],
+                    state.forecasts[_currentForecastNotifier.value],
                     state.temperatureUnit,
                   ),
                 );
