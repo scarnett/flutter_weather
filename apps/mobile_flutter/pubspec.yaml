@@ -20,11 +20,7 @@ dependencies:
   firebase_crashlytics: '^2.0.1'
   firebase_remote_config: '^0.10.0-dev.1'
   flutter_bloc: '^7.0.0'
-  flutter_form_bloc:
-    git:
-      url: https://github.com/WahdanZ/form_bloc
-      ref: ns-mirgrate
-      path: packages/flutter_form_bloc
+  flutter_form_bloc: '^0.20.1'
   flutter_local_notifications: '^5.0.0+1'
   flutter_switch: '^0.3.0'
   geolocator: '^7.0.3'

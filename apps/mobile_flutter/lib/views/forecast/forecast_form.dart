@@ -198,8 +198,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
           children: <Widget>[
             TextFieldBlocBuilder(
               key: Key(AppKeys.locationCityKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().cityName
-                  as TextFieldBloc<Object>,
+              textFieldBloc: context.watch<ForecastFormBloc>().cityName,
               keyboardType: TextInputType.streetAddress,
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.city,
@@ -212,8 +211,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             ),
             TextFieldBlocBuilder(
               key: Key(AppKeys.locationPostalCodeKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().postalCode
-                  as TextFieldBloc<Object>,
+              textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
               keyboardType: TextInputType.streetAddress,
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.postalCode,
@@ -226,8 +224,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             ),
             TextFieldBlocBuilder(
               key: Key(AppKeys.locationCountryKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().countryCode
-                  as TextFieldBloc<Object>,
+              textFieldBloc: context.watch<ForecastFormBloc>().countryCode,
               keyboardType: TextInputType.text,
               readOnly: true,
               decoration: InputDecoration(

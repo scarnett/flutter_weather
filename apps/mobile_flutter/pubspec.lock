@@ -266,12 +266,10 @@ packages:
   flutter_form_bloc:
     dependency: "direct main"
     description:
-      path: "packages/flutter_form_bloc"
-      ref: ns-mirgrate
-      resolved-ref: "7be8912eb8ba4671240c6a0a41e380a792bf73c7"
-      url: "https://github.com/WahdanZ/form_bloc"
-    source: git
-    version: "0.19.0"
+      name: flutter_form_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.20.1"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
@@ -341,12 +339,10 @@ packages:
   form_bloc:
     dependency: transitive
     description:
-      path: "packages/form_bloc"
-      ref: ns-mirgrate
-      resolved-ref: "7be8912eb8ba4671240c6a0a41e380a792bf73c7"
-      url: "https://github.com/WahdanZ/form_bloc"
-    source: git
-    version: "0.19.1"
+      name: form_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.20.1"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
