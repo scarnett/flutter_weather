@@ -194,64 +194,65 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
 
   Widget _buildForm() => SingleChildScrollView(
         physics: ClampingScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            AppUiSafeArea(),
-            TextFieldBlocBuilder(
-              key: Key(AppKeys.locationCityKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().cityName,
-              keyboardType: TextInputType.streetAddress,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.city,
-                prefixIcon: Icon(
-                  Icons.location_city,
-                  color: AppTheme.primaryColor,
+        child: AppUiSafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFieldBlocBuilder(
+                key: Key(AppKeys.locationCityKey),
+                textFieldBloc: context.watch<ForecastFormBloc>().cityName,
+                keyboardType: TextInputType.streetAddress,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.city,
+                  prefixIcon: Icon(
+                    Icons.location_city,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
+                padding: const EdgeInsets.only(bottom: 0.0),
               ),
-              padding: const EdgeInsets.only(bottom: 0.0),
-            ),
-            TextFieldBlocBuilder(
-              key: Key(AppKeys.locationPostalCodeKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
-              keyboardType: TextInputType.streetAddress,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.postalCode,
-                prefixIcon: Icon(
-                  Icons.place,
-                  color: AppTheme.primaryColor,
+              TextFieldBlocBuilder(
+                key: Key(AppKeys.locationPostalCodeKey),
+                textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
+                keyboardType: TextInputType.streetAddress,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.postalCode,
+                  prefixIcon: Icon(
+                    Icons.place,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
+                padding: const EdgeInsets.only(bottom: 0.0),
               ),
-              padding: const EdgeInsets.only(bottom: 0.0),
-            ),
-            TextFieldBlocBuilder(
-              key: Key(AppKeys.locationCountryKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().countryCode,
-              keyboardType: TextInputType.text,
-              readOnly: true,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.country,
-                prefixIcon: Icon(
-                  Icons.language,
-                  color: AppTheme.primaryColor,
+              TextFieldBlocBuilder(
+                key: Key(AppKeys.locationCountryKey),
+                textFieldBloc: context.watch<ForecastFormBloc>().countryCode,
+                keyboardType: TextInputType.text,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.country,
+                  prefixIcon: Icon(
+                    Icons.language,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
+                padding: const EdgeInsets.only(bottom: 10.0),
+                onTap: () => animatePage(_pageController!, page: 1),
               ),
-              padding: const EdgeInsets.only(bottom: 10.0),
-              onTap: () => animatePage(_pageController!, page: 1),
-            ),
-            SwitchFieldBlocBuilder(
-              booleanFieldBloc: context.watch<ForecastFormBloc>().primary,
-              body: GestureDetector(
-                onTap: _tapPrimaryFieldText,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(AppLocalizations.of(context)!.primaryForecast),
+              SwitchFieldBlocBuilder(
+                booleanFieldBloc: context.watch<ForecastFormBloc>().primary,
+                body: GestureDetector(
+                  onTap: _tapPrimaryFieldText,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(AppLocalizations.of(context)!.primaryForecast),
+                  ),
                 ),
+                padding: const EdgeInsets.all(0.0),
               ),
-              padding: const EdgeInsets.all(0.0),
-            ),
-            _buildButtons(),
-          ],
+              _buildButtons(),
+            ],
+          ),
         ),
       );
 

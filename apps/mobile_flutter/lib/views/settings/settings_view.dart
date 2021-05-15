@@ -129,7 +129,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   Widget _buildContent() {
     AppState state = context.read<AppBloc>().state;
     List<Widget> children = []
-      ..add(AppUiSafeArea())
       ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
@@ -147,7 +146,9 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       children: [
         SingleChildScrollView(
           physics: ClampingScrollPhysics(),
-          child: Column(children: children),
+          child: AppUiSafeArea(
+            child: Column(children: children),
+          ),
         ),
         SettingsUpdatePeriodPicker(
           selectedPeriod: state.updatePeriod,

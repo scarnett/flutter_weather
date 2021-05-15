@@ -172,24 +172,25 @@ class _LookupPageViewState extends State<LookupPageView> {
     if (lookupForecast != null) {
       return SingleChildScrollView(
         physics: ClampingScrollPhysics(),
-        child: Column(
-          children: <Widget>[
-            AppUiSafeArea(),
-            ForecastDisplay(
-              bloc: context.read<AppBloc>(),
-              forecast: lookupForecast,
-              showThreeDayForecast: true,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: AppFormButton(
-                key: Key(AppKeys.addThisForecastKey),
-                text: AppLocalizations.of(context)!.addThisForecast,
-                icon: Icon(Icons.add, size: 16.0),
-                onTap: _tapAddLocation,
+        child: AppUiSafeArea(
+          child: Column(
+            children: <Widget>[
+              ForecastDisplay(
+                bloc: context.read<AppBloc>(),
+                forecast: lookupForecast,
+                showThreeDayForecast: true,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: AppFormButton(
+                  key: Key(AppKeys.addThisForecastKey),
+                  text: AppLocalizations.of(context)!.addThisForecast,
+                  icon: Icon(Icons.add, size: 16.0),
+                  onTap: _tapAddLocation,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }

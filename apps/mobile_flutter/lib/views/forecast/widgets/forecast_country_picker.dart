@@ -82,11 +82,16 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
         child: StickyHeader(
           header: Column(
             children: [
-              AppUiSafeArea(),
-              _buildCountryFilter(),
+              AppUiSafeArea(
+                bottom: false,
+                child: _buildCountryFilter(),
+              ),
             ],
           ),
-          content: _buildListOfCountries(),
+          content: AppUiSafeArea(
+            top: false,
+            child: _buildListOfCountries(),
+          ),
         ),
       );
 
