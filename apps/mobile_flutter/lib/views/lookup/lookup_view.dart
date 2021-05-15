@@ -19,8 +19,8 @@ import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:flutter_weather/views/lookup/lookup_utils.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
-import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 import 'package:uuid/uuid.dart';
@@ -174,7 +174,7 @@ class _LookupPageViewState extends State<LookupPageView> {
         physics: ClampingScrollPhysics(),
         child: Column(
           children: <Widget>[
-            AppUiAppbarGap(),
+            AppUiSafeArea(),
             ForecastDisplay(
               bloc: context.read<AppBloc>(),
               forecast: lookupForecast,

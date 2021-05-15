@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicyView extends StatefulWidget {
@@ -41,7 +41,7 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
         ),
         body: Column(
           children: [
-            AppUiAppbarGap(),
+            AppUiSafeArea(),
             Expanded(
               child: Stack(
                 children: <Widget>[

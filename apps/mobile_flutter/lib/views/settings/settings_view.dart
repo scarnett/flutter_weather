@@ -22,8 +22,8 @@ import 'package:flutter_weather/views/settings/widgets/settings_version_status_t
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
-import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:package_info/package_info.dart';
 
 class SettingsView extends StatelessWidget {
@@ -129,7 +129,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   Widget _buildContent() {
     AppState state = context.read<AppBloc>().state;
     List<Widget> children = []
-      ..add(AppUiAppbarGap())
+      ..add(AppUiSafeArea())
       ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());

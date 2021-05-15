@@ -11,7 +11,7 @@ import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_country_picker.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
-import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 
 class ForecastFormController {
@@ -197,7 +197,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            AppUiAppbarGap(),
+            AppUiSafeArea(),
             TextFieldBlocBuilder(
               key: Key(AppKeys.locationCityKey),
               textFieldBloc: context.watch<ForecastFormBloc>().cityName,

@@ -8,8 +8,8 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -82,7 +82,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
         child: StickyHeader(
           header: Column(
             children: [
-              AppUiAppbarGap(),
+              AppUiSafeArea(),
               _buildCountryFilter(),
             ],
           ),
