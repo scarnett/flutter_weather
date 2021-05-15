@@ -34,6 +34,7 @@ dependencies:
   sentry: '^5.0.0'
   sentry_flutter: '^5.0.0'
   shared_preferences: '^2.0.5'
+  sticky_headers: '^0.2.0'
   store_redirect:
     git:
       url: https://github.com/Danesz/store_redirect

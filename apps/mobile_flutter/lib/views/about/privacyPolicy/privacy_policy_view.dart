@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicyView extends StatefulWidget {
@@ -37,14 +39,23 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: Stack(
-          children: <Widget>[
-            WebView(
-              initialUrl: AppConfig.instance.privacyPolicyUrl,
-              onWebViewCreated: _onWebViewCreated,
+        body: Column(
+          children: [
+            AppUiAppbarGap(),
+            Expanded(
+              child: Stack(
+                children: <Widget>[
+                  WebView(
+                    initialUrl: AppConfig.instance.privacyPolicyUrl,
+                    onWebViewCreated: _onWebViewCreated,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
+        extendBody: true,
+        extendBodyBehindAppBar: true,
       );
 
   void _onWebViewCreated(

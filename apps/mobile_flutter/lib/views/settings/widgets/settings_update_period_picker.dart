@@ -50,8 +50,9 @@ class _SettingsUpdatePeriodPickerState
               ? appDarkThemeData
               : appLightThemeData,
           child: Scaffold(
-            extendBody: true,
             body: _buildBody(),
+            extendBody: true,
+            extendBodyBehindAppBar: true,
           ),
         ),
       );
@@ -76,13 +77,7 @@ class _SettingsUpdatePeriodPickerState
     });
   }
 
-  Widget _buildBody() => Column(
-        children: <Widget>[
-          Expanded(child: _buildListOfPeriods()),
-        ],
-      );
-
-  Widget _buildListOfPeriods() => ListView.separated(
+  Widget _buildBody() => ListView.separated(
         itemBuilder: (
           BuildContext context,
           int index,

@@ -60,7 +60,6 @@ class _ForecastPageViewState extends State<ForecastView> {
   ) =>
       Scaffold(
         key: _scaffoldKey,
-        extendBody: true,
         body: BlocListener<AppBloc, AppState>(
           listener: _blocListener,
           child: WillPopScope(
@@ -68,6 +67,8 @@ class _ForecastPageViewState extends State<ForecastView> {
             child: _buildBody(context.watch<AppBloc>().state),
           ),
         ),
+        extendBody: true,
+        extendBodyBehindAppBar: true,
         floatingActionButton: FloatingActionButton(
           key: Key(AppKeys.addLocationKey),
           tooltip: AppLocalizations.of(context)!.addForecast,

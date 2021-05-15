@@ -66,8 +66,9 @@ class _SettingsPushNotificationPickerState
               ? appDarkThemeData
               : appLightThemeData,
           child: Scaffold(
-            extendBody: true,
             body: _buildBody(),
+            extendBody: true,
+            extendBodyBehindAppBar: true,
           ),
         ),
       );
@@ -88,13 +89,7 @@ class _SettingsPushNotificationPickerState
     }
   }
 
-  Widget _buildBody() => Column(
-        children: <Widget>[
-          Expanded(child: _buildListOfNotifications()),
-        ],
-      );
-
-  Widget _buildListOfNotifications() => ListView(
+  Widget _buildBody() => ListView(
         children: [
           ..._buildListOfNotificationTile(PushNotification.OFF),
           ..._buildListOfNotificationTile(
@@ -203,7 +198,7 @@ class _SettingsPushNotificationPickerState
             width: 20.0,
             child: CircularProgressIndicator(
               strokeWidth: 2.0,
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor!),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
             ),
           );
         } else if (error) {

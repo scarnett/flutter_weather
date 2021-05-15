@@ -19,6 +19,7 @@ import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
 import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:flutter_weather/views/lookup/lookup_utils.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
+import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
@@ -95,7 +96,6 @@ class _LookupPageViewState extends State<LookupPageView> {
                   : appLightThemeData,
               child: Scaffold(
                 key: _scaffoldKey,
-                extendBody: true,
                 appBar: AppBar(
                   title: Text(
                     getTitle(AppLocalizations.of(context), _currentPage)!,
@@ -107,10 +107,10 @@ class _LookupPageViewState extends State<LookupPageView> {
                 ),
                 body: WillPopScope(
                   onWillPop: () => _willPopCallback(state),
-                  child: SafeArea(
-                    child: _buildContent(),
-                  ),
+                  child: _buildContent(),
                 ),
+                extendBody: true,
+                extendBodyBehindAppBar: true,
               ),
             ),
           ),
@@ -174,6 +174,7 @@ class _LookupPageViewState extends State<LookupPageView> {
         physics: ClampingScrollPhysics(),
         child: Column(
           children: <Widget>[
+            AppUiAppbarGap(),
             ForecastDisplay(
               bloc: context.read<AppBloc>(),
               forecast: lookupForecast,

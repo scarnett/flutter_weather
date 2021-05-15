@@ -70,7 +70,6 @@ class _ForecastFormViewState extends State<ForecastPageView> {
                 ? Brightness.dark
                 : null,
         child: Scaffold(
-          extendBody: true,
           appBar: AppBar(
             title: Text(getTitle(context, _currentPage)),
             leading: IconButton(
@@ -85,6 +84,8 @@ class _ForecastFormViewState extends State<ForecastPageView> {
               child: _buildBody(context.watch<AppBloc>().state),
             ),
           ),
+          extendBody: true,
+          extendBodyBehindAppBar: true,
         ),
       );
 
@@ -126,20 +127,18 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   Widget _buildBody(
     AppState state,
   ) =>
-      SafeArea(
-        child: ForecastForm(
-          buttonKey: Key(AppKeys.saveForecastButtonKey),
-          formController: _formController,
-          saveButtonText: AppLocalizations.of(context)!.save,
-          deleteButtonText: AppLocalizations.of(context)!.delete,
-          forecast: state.forecasts.isNullOrZeroLength()
-              ? null
-              : state.forecasts[state.selectedForecastIndex],
-          forecasts: state.forecasts,
-          onSuccess: _onSuccess,
-          onFailure: _onFailure,
-          onPageChange: _onPageChange,
-        ),
+      ForecastForm(
+        buttonKey: Key(AppKeys.saveForecastButtonKey),
+        formController: _formController,
+        saveButtonText: AppLocalizations.of(context)!.save,
+        deleteButtonText: AppLocalizations.of(context)!.delete,
+        forecast: state.forecasts.isNullOrZeroLength()
+            ? null
+            : state.forecasts[state.selectedForecastIndex],
+        forecasts: state.forecasts,
+        onSuccess: _onSuccess,
+        onFailure: _onFailure,
+        onPageChange: _onPageChange,
       );
 
   _tapBack() {

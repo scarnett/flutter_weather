@@ -22,6 +22,7 @@ import 'package:flutter_weather/views/settings/widgets/settings_version_status_t
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
+import 'package:flutter_weather/widgets/app_ui_appbar_gap.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:package_info/package_info.dart';
 
@@ -87,7 +88,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         systemNavigationBarIconBrightness:
             context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
-          extendBody: true,
           appBar: AppBar(
             title: Text(settingsUtils.getTitle(context, _currentPage)),
             leading: IconButton(
@@ -99,6 +99,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             onWillPop: () => _willPopCallback(),
             child: _buildContent(),
           ),
+          extendBody: true,
+          extendBodyBehindAppBar: true,
         ),
       );
 
@@ -127,6 +129,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   Widget _buildContent() {
     AppState state = context.read<AppBloc>().state;
     List<Widget> children = []
+      ..add(AppUiAppbarGap())
       ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
@@ -138,30 +141,28 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     children..addAll(_buildBuildInfoSection());
     children..add(SettingsOpenSourceInfo(themeMode: state.themeMode));
 
-    return SafeArea(
-      child: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(children: children),
-          ),
-          SettingsUpdatePeriodPicker(
-            selectedPeriod: state.updatePeriod,
-            onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
-          ),
-          SettingsPushNotificationPicker(
-            selectedNotification: state.pushNotification,
-            selectedNotificationExtras: state.pushNotificationExtras,
-            onTap: (
-              PushNotification? notification,
-              Map<String, dynamic>? extras,
-            ) =>
-                _tapPushNotification(notification, extras: extras),
-          ),
-        ],
-      ),
+    return PageView(
+      controller: _pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(children: children),
+        ),
+        SettingsUpdatePeriodPicker(
+          selectedPeriod: state.updatePeriod,
+          onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
+        ),
+        SettingsPushNotificationPicker(
+          selectedNotification: state.pushNotification,
+          selectedNotificationExtras: state.pushNotificationExtras,
+          onTap: (
+            PushNotification? notification,
+            Map<String, dynamic>? extras,
+          ) =>
+              _tapPushNotification(notification, extras: extras),
+        ),
+      ],
     );
   }
 
