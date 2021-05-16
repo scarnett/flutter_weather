@@ -41,7 +41,7 @@ class AppLocalizations {
   String get updatePeriod4hr => addMessage('4 hours');
   String get updatePeriod5hr => addMessage('5 hours');
   String get updatePeriodUpdated =>
-      addMessage('Your update period settings were updated successfully.');
+      addMessage('Your update period settings were updated');
 
   String get pushNotification => addMessage('Push Notification');
   String get pushNotificationOff => addMessage('Off');
@@ -49,7 +49,7 @@ class AppLocalizations {
   String get pushNotificationCurrent => addMessage('Current Location');
   String get pushNotificationCurrentTap => addMessage('Tap to update');
   String get pushNotificationUpdated =>
-      addMessage('Your push notification settings were updated successfully.');
+      addMessage('Your push notification settings were updated');
 
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
@@ -89,7 +89,7 @@ class AppLocalizations {
       addMessage('A forecast for this city already exists.');
 
   String get forecastPostalCodeAlreadyExists =>
-      addMessage('A forecast for this postal code already exists.');
+      addMessage('A forecast for this postal code already exists');
 
   String get colorThemeEnable => addMessage('Enable Color Theme');
   String get colorThemeDisable => addMessage('Disable Color Theme');
