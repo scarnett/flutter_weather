@@ -19,6 +19,12 @@ class WeatherApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    if (WidgetsBinding.instance?.lifecycleState == AppLifecycleState.resumed) {
+      // Set the initial appstate (resumed) in the shared prefs
+      AppPrefs prefs = AppPrefs();
+      prefs.appState = 0;
+    }
   }
 
   @override

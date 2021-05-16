@@ -166,20 +166,21 @@ String getLocationCurrentForecastText(
 
   if ((forecast.list != null) && (forecast.list!.length > 0)) {
     ForecastDay currentDay = forecast.list!.first;
-    text += currentDay.weather!.first.description!.capitalize();
-
     num currentTemp =
         getTemperature(currentDay.feelsLike!.day, temperatureUnit);
 
-    num highTemp = getTemperature(currentDay.temp!.max, temperatureUnit);
-    num lowTemp = getTemperature(currentDay.temp!.min, temperatureUnit);
+    // num highTemp = getTemperature(currentDay.temp!.max, temperatureUnit);
+    // num lowTemp = getTemperature(currentDay.temp!.min, temperatureUnit);
 
     // TODO! i18n
     // TODO Custom message depending on temperature and conditions
-    text += '. The current temperature is ' +
-        '$currentTemp${temperatureUnit.unitSymbol}. The high for today is ' +
-        '$highTemp${temperatureUnit.unitSymbol} with a low of ' +
-        '$lowTemp${temperatureUnit.unitSymbol}.';
+    // text += '. The current temperature is ' +
+    //     '$currentTemp${temperatureUnit.unitSymbol}. The high for today is ' +
+    //     '$highTemp${temperatureUnit.unitSymbol} with a low of ' +
+    //     '$lowTemp${temperatureUnit.unitSymbol}.';
+
+    text += 'Feels like $currentTemp${temperatureUnit.unitSymbol}. ';
+    text += currentDay.weather!.first.description!.capitalize();
   }
 
   return text.trim();
