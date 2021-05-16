@@ -55,7 +55,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '1.22.6'
+          flutter-version: '2.0.6'
 
       - name: 'Flutter clean'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
@@ -105,7 +105,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '1.22.6'
+          flutter-version: '2.0.6'
 
       - name: 'Decode android local.properties'
         run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
@@ -233,7 +233,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '1.22.6'
+          flutter-version: '2.0.6'
 
       - name: 'Decode GoogleService-Info.plist'
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
