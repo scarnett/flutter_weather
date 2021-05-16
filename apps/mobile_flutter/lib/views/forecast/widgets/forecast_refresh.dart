@@ -76,11 +76,13 @@ class _ForecastRefreshState extends State<ForecastRefresh>
     }
   }
 
-  Widget _buildContent() => TimerBuilder.scheduled([_nextRefreshTime!],
-          builder: (BuildContext context) {
-        AppState state = context.watch<AppBloc>().state;
-        return _buildRefreshIcon(state);
-      });
+  Widget _buildContent() => TimerBuilder.scheduled(
+        [_nextRefreshTime!],
+        builder: (BuildContext context) {
+          AppState state = context.watch<AppBloc>().state;
+          return _buildRefreshIcon(state);
+        },
+      );
 
   Widget _buildRefreshIcon(
     AppState state,
