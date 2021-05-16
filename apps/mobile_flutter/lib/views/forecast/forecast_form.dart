@@ -356,7 +356,10 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
     Widget yesButton = TextButton(
       child: Text(
         AppLocalizations.of(context)!.yes,
-        style: TextStyle(color: AppTheme.dangerColor),
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(AppTheme.dangerColor),
       ),
       onPressed: _tapConfirmDelete,
     );
