@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,27 +65,29 @@ class _ForecastRefreshState extends State<ForecastRefresh>
       setState(() => _nextRefreshTime = getNextUpdateTime(getNow().toLocal()));
     } else {
       setState(() {
-        if (canRefresh(state, index: state.selectedForecastIndex!)) {
+        if (canRefresh(state, index: state.selectedForecastIndex)) {
           _nextRefreshTime = getNow().toLocal();
         } else if (forecastIndexExists(
             state.forecasts, state.selectedForecastIndex)) {
           _nextRefreshTime = getNextUpdateTime(
-              state.forecasts[state.selectedForecastIndex!].lastUpdated!);
+              state.forecasts[state.selectedForecastIndex].lastUpdated!);
         }
       });
     }
   }
 
-  Widget _buildContent() => TimerBuilder.scheduled([_nextRefreshTime!],
-          builder: (BuildContext context) {
-        AppState state = context.watch<AppBloc>().state;
-        return _buildRefreshIcon(state);
-      });
+  Widget _buildContent() => TimerBuilder.scheduled(
+        [_nextRefreshTime!],
+        builder: (BuildContext context) {
+          AppState state = context.watch<AppBloc>().state;
+          return _buildRefreshIcon(state);
+        },
+      );
 
   Widget _buildRefreshIcon(
     AppState state,
   ) =>
-      canRefresh(state, index: state.selectedForecastIndex!)
+      canRefresh(state, index: state.selectedForecastIndex)
           ? Tooltip(
               message: AppLocalizations.of(context)!.refreshForecast,
               child: Material(
@@ -113,8 +116,11 @@ class _ForecastRefreshState extends State<ForecastRefresh>
   void _tapRefresh(
     AppState state,
   ) =>
-      context.read<AppBloc>().add(RefreshForecast(
-            state.forecasts[state.selectedForecastIndex!],
-            context.read<AppBloc>().state.temperatureUnit,
-          ));
+      context.read<AppBloc>().add(
+            RefreshForecast(
+              context,
+              state.forecasts[state.selectedForecastIndex],
+              context.read<AppBloc>().state.temperatureUnit,
+            ),
+          );
 }

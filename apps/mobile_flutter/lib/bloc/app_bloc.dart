@@ -1,17 +1,25 @@
 import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/utils/geolocator_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:sentry/sentry.dart';
 
 part 'app_events.dart';
 part 'app_state.dart';
@@ -28,7 +36,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     if (event is ToggleThemeMode) {
       yield _mapToggleThemeModeToStates(event);
     } else if (event is SetUpdatePeriod) {
-      yield _mapSetUpdatePeriodToStates(event);
+      yield* _mapSetUpdatePeriodToStates(event);
+    } else if (event is SetPushNotification) {
+      yield* _mapSetPushNotificationToStates(event);
     } else if (event is SetThemeMode) {
       yield _mapSetThemeModeToStates(event);
     } else if (event is ToggleColorTheme) {
@@ -68,12 +78,102 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         colorTheme: false,
       );
 
-  AppState _mapSetUpdatePeriodToStates(
+  Stream<AppState> _mapSetUpdatePeriodToStates(
     SetUpdatePeriod event,
-  ) =>
-      state.copyWith(
-        updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
-      );
+  ) async* {
+    AppPrefs prefs = AppPrefs();
+    prefs.updatePeriod = event.updatePeriod;
+
+    if (event.updatePeriod == null) {
+      prefs.pushNotification = null;
+
+      // Stop background fetch
+      await stopBackgroundFetch();
+    } else if (state.pushNotification == null) {
+      prefs.pushNotification = PushNotification.OFF;
+    }
+
+    if ((prefs.pushNotification != null) &&
+        (prefs.pushNotification != PushNotification.OFF)) {
+      restartBackgroundFetch();
+    }
+
+    yield state.copyWith(
+      updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
+      pushNotification: (event.updatePeriod == null)
+          ? Nullable<PushNotification?>(null)
+          : (state.pushNotification == null)
+              ? Nullable<PushNotification?>(PushNotification.OFF)
+              : Nullable<PushNotification?>(state.pushNotification),
+    );
+
+    if (event.callback != null) {
+      event.callback!();
+    }
+
+    showSnackbar(
+      event.context,
+      AppLocalizations.of(event.context)!.updatePeriodUpdated,
+    );
+  }
+
+  Stream<AppState> _mapSetPushNotificationToStates(
+    SetPushNotification event,
+  ) async* {
+    AppPrefs prefs = AppPrefs();
+    prefs.pushNotification = event.pushNotification;
+    prefs.pushNotificationExtras = event.pushNotificationExtras;
+
+    if ((prefs.pushNotification != null) &&
+        (prefs.pushNotification != PushNotification.OFF)) {
+      bool accessGranted = true;
+
+      if (prefs.pushNotification == PushNotification.CURRENT_LOCATION) {
+        accessGranted = await requestLocationPermission();
+        if (accessGranted) {
+          yield* _updatePushNotificationState(event);
+        } else {
+          showSnackbar(
+            event.context,
+            AppLocalizations.of(event.context)!.locationPermissionDenied,
+          );
+
+          if (state.pushNotification == PushNotification.CURRENT_LOCATION) {
+            yield state.copyWith(
+              pushNotification:
+                  Nullable<PushNotification?>(PushNotification.OFF),
+              pushNotificationExtras: Nullable<Map<String, dynamic>?>(null),
+            );
+          }
+        }
+      } else {
+        yield* _updatePushNotificationState(event);
+      }
+    } else {
+      yield* _updatePushNotificationState(event);
+    }
+  }
+
+  Stream<AppState> _updatePushNotificationState(
+    SetPushNotification event,
+  ) async* {
+    await restartBackgroundFetch();
+
+    if (event.callback != null) {
+      event.callback!();
+    }
+
+    yield state.copyWith(
+      pushNotification: Nullable<PushNotification?>(event.pushNotification),
+      pushNotificationExtras:
+          Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
+    );
+
+    showSnackbar(
+      event.context,
+      AppLocalizations.of(event.context)!.pushNotificationUpdated,
+    );
+  }
 
   AppState _mapSetThemeModeToStates(
     SetThemeMode event,
@@ -99,10 +199,14 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   AppState _mapSetTemperatureUnitToStates(
     SetTemperatureUnit event,
-  ) =>
-      state.copyWith(
-        temperatureUnit: event.temperatureUnit,
-      );
+  ) {
+    AppPrefs prefs = AppPrefs();
+    prefs.temperatureUnit = event.temperatureUnit;
+
+    return state.copyWith(
+      temperatureUnit: event.temperatureUnit,
+    );
+  }
 
   AppState _mapSelectedForecastIndexToStates(
     SelectedForecastIndex event,
@@ -142,7 +246,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     Forecast forecast = state.forecasts
         .firstWhere((Forecast forecast) => forecast.id == event.forecastId);
 
-    forecasts[state.selectedForecastIndex!] = forecast.copyWith(
+    forecasts[state.selectedForecastIndex] = forecast.copyWith(
       id: event.forecastId,
       cityName: Nullable<String?>(event.forecastData['cityName']),
       postalCode: Nullable<String?>(event.forecastData['postalCode']),
@@ -157,10 +261,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATED),
     );
 
-    add(RefreshForecast(
-      forecasts[state.selectedForecastIndex!],
-      state.temperatureUnit,
-    ));
+    add(
+      RefreshForecast(
+        event.context,
+        forecasts[state.selectedForecastIndex],
+        state.temperatureUnit,
+      ),
+    );
   }
 
   Stream<AppState> _mapRemovePrimaryStatusToStates(
@@ -192,33 +299,58 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       'countryCode': event.forecast.countryCode,
     };
 
-    http.Response forecastResponse = await tryLookupForecast(lookupData);
-    if (forecastResponse.statusCode == 200) {
-      List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
-      int forecastIndex = forecasts.indexWhere(
-        (Forecast forecast) => forecast.postalCode == event.forecast.postalCode,
-      );
+    try {
+      http.Response forecastResponse = await tryLookupForecast(lookupData);
+      if (forecastResponse.statusCode == 200) {
+        // TODO! check for api errors
 
-      if (forecastIndex == -1) {
-        // TODO! snackbar error
+        List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
+        int forecastIndex = forecasts.indexWhere(
+          (Forecast forecast) =>
+              forecast.postalCode == event.forecast.postalCode,
+        );
+
+        if (forecastIndex == -1) {
+          showSnackbar(
+            event.context,
+            AppLocalizations.of(event.context)!.refreshFailure,
+          );
+
+          yield state;
+        } else {
+          Forecast forecast =
+              Forecast.fromJson(jsonDecode(forecastResponse.body));
+          forecasts[forecastIndex] = forecast.copyWith(
+            id: event.forecast.id,
+            cityName: Nullable<String?>(event.forecast.cityName),
+            postalCode: Nullable<String?>(event.forecast.postalCode),
+            countryCode: Nullable<String?>(event.forecast.countryCode),
+            primary: Nullable<bool?>(event.forecast.primary),
+            lastUpdated: getNow(),
+          );
+
+          yield state.copyWith(
+            forecasts: forecasts,
+            refreshStatus: Nullable<RefreshStatus?>(null),
+          );
+        }
+      } else {
+        showSnackbar(
+          event.context,
+          AppLocalizations.of(event.context)!.refreshFailure,
+        );
+
+        yield state;
       }
+    } on Exception catch (exception, stackTrace) {
+      await Sentry.captureException(exception, stackTrace: stackTrace);
 
-      Forecast _forecast = Forecast.fromJson(jsonDecode(forecastResponse.body));
-      forecasts[forecastIndex] = _forecast.copyWith(
-        id: event.forecast.id,
-        cityName: Nullable<String?>(event.forecast.cityName),
-        postalCode: Nullable<String?>(event.forecast.postalCode),
-        countryCode: Nullable<String?>(event.forecast.countryCode),
-        primary: Nullable<bool?>(event.forecast.primary),
-        lastUpdated: getNow(),
+      showSnackbar(
+        event.context,
+        AppLocalizations.of(event.context)!.refreshFailure,
       );
 
-      yield state.copyWith(
-        forecasts: forecasts,
-        refreshStatus: Nullable<RefreshStatus?>(null),
-      );
-    } else {
-      // TODO! snackbar error
+      yield state;
     }
   }
 
@@ -238,8 +370,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       activeForecastId: Nullable<String?>(null),
       colorTheme: hasForecasts(_forecasts) ? state.colorTheme : false,
       forecasts: _forecasts,
-      selectedForecastIndex: (state.selectedForecastIndex! > 0)
-          ? (state.selectedForecastIndex! - 1)
+      selectedForecastIndex: (state.selectedForecastIndex > 0)
+          ? (state.selectedForecastIndex - 1)
           : 0,
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETED),
     );
@@ -266,14 +398,19 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   @override
   AppState fromJson(
-    Map<String, dynamic> json,
+    Map<String, dynamic> jsonData,
   ) =>
       AppState(
-        themeMode: getThemeMode(json['themeMode']),
-        colorTheme: json['colorTheme'],
-        temperatureUnit: getTemperatureUnit(json['temperatureUnit']),
-        forecasts: Forecast.fromJsonList(json['forecasts']),
-        selectedForecastIndex: json['selectedForecastIndex'],
+        updatePeriod: getPeriod(id: jsonData['updatePeriod']),
+        pushNotification: getPushNotification(jsonData['pushNotification']),
+        pushNotificationExtras: (jsonData['pushNotificationExtras'] != null)
+            ? json.decode(jsonData['pushNotificationExtras'])
+            : null,
+        themeMode: getThemeMode(jsonData['themeMode']),
+        colorTheme: jsonData['colorTheme'],
+        temperatureUnit: getTemperatureUnit(jsonData['temperatureUnit']),
+        forecasts: Forecast.fromJsonList(jsonData['forecasts']),
+        selectedForecastIndex: jsonData['selectedForecastIndex'],
       );
 
   @override
@@ -281,6 +418,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     AppState state,
   ) =>
       {
+        'updatePeriod': state.updatePeriod?.getInfo()?['id'],
+        'pushNotification': state.pushNotification?.getInfo()?['id'],
+        'pushNotificationExtras': state.pushNotificationExtras != null
+            ? json.encode(state.pushNotificationExtras)
+            : null,
         'themeMode': state.themeMode.toString(),
         'colorTheme': state.colorTheme,
         'temperatureUnit': state.temperatureUnit.toString(),

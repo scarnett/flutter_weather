@@ -35,21 +35,38 @@ class FirebaseRemoteConfigService {
   }
 
   Future _fetchAndActivate() async {
+    DateTime lastFetch = _remoteConfig!.lastFetchTime;
+    print('[FirebaseRemoteConfig] Last fetch: $lastFetch');
+
+    await _remoteConfig!.setDefaults({
+      'openweathermap_api_current_forecast_path': '/data/2.5/weather',
+      'openweathermap_api_hourly_forecast_path': '/data/2.5/forecast/hourly',
+      'openweathermap_api_daily_forecast_path': '/data/2.5/forecast/daily',
+    });
+
+    await _remoteConfig!.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: Duration(seconds: 10),
+      minimumFetchInterval: Duration(hours: 1),
+    ));
+
     await _remoteConfig!.fetch();
     await _remoteConfig!.activate();
   }
 
   String get appVersion => _remoteConfig!.getString('app_version');
-  String get openweathermapApiKey =>
+  String get openWeatherMapApiKey =>
       _remoteConfig!.getString('openweathermap_api_key');
 
-  String get openweathermapApiUri =>
+  String get openWeatherMapApiUri =>
       _remoteConfig!.getString('openweathermap_api_uri');
 
-  String get openweathermapApiDailyForecastPath =>
+  String get openWeatherMapApiCurrentForecastPath =>
+      _remoteConfig!.getString('openweathermap_api_current_forecast_path');
+
+  String get openWeatherMapApiDailyForecastPath =>
       _remoteConfig!.getString('openweathermap_api_daily_forecast_path');
 
-  String get openweathermapApiHourlyForecastPath =>
+  String get openWeatherMapApiHourlyForecastPath =>
       _remoteConfig!.getString('openweathermap_api_hourly_forecast_path');
 
   int get refreshTimeout => _remoteConfig!.getInt('refresh_timeout');

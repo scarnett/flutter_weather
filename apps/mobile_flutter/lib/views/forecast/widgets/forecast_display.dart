@@ -414,7 +414,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
   _buildDayForecastsCircleIndicator(
     AppState state,
-    List<ForecastDay> days, {
+    List<ForecastDay>? days, {
     int count: 3, // TODO! parameter?
   }) {
     if (!widget.showThreeDayForecast) {
@@ -528,10 +528,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLastUpdated() {
-    if (widget.forecast == null) {
-      return Container();
-    }
-
     DateTime? lastUpdated = widget.forecast.lastUpdated;
     if (lastUpdated == null) {
       return Container();
@@ -541,10 +537,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
     if (lastUpdated.isToday()) {
       formattedLastUpdated = AppLocalizations.of(context)!
-          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a'));
+          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a')!);
     } else {
       formattedLastUpdated = AppLocalizations.of(context)!.getLastUpdatedOn(
-          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a'));
+          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a')!);
     }
 
     return Container(

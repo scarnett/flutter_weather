@@ -9,10 +9,13 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
 import 'package:flutter_weather/views/lookup/lookup_view.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -35,7 +38,7 @@ class _ForecastPageViewState extends State<ForecastView> {
 
   PageController? _pageController;
   Animatable<Color?>? _pageBackground;
-  late ValueNotifier<int?> _currentForecastNotifier;
+  late ValueNotifier<int> _currentForecastNotifier;
   num? _currentPage = 0;
   bool? _colorTheme = false;
 
@@ -57,7 +60,6 @@ class _ForecastPageViewState extends State<ForecastView> {
   ) =>
       Scaffold(
         key: _scaffoldKey,
-        extendBody: true,
         body: BlocListener<AppBloc, AppState>(
           listener: _blocListener,
           child: WillPopScope(
@@ -65,6 +67,8 @@ class _ForecastPageViewState extends State<ForecastView> {
             child: _buildBody(context.watch<AppBloc>().state),
           ),
         ),
+        extendBody: true,
+        extendBodyBehindAppBar: true,
         floatingActionButton: FloatingActionButton(
           key: Key(AppKeys.addLocationKey),
           tooltip: AppLocalizations.of(context)!.addForecast,
@@ -78,7 +82,7 @@ class _ForecastPageViewState extends State<ForecastView> {
     AppState state = context.read<AppBloc>().state;
     _colorTheme = state.colorTheme;
     _pageController = PageController(
-      initialPage: state.selectedForecastIndex!,
+      initialPage: state.selectedForecastIndex,
       keepPage: true,
     )..addListener(() {
         _currentPage = _pageController!.page;
@@ -88,7 +92,26 @@ class _ForecastPageViewState extends State<ForecastView> {
 
           context
               .read<AppBloc>()
-              .add(SelectedForecastIndex(_currentPage!.toInt()));
+              .add(SelectedForecastIndex(_currentForecastNotifier.value));
+
+          // If auto update is enabled then run the refresh
+          if ((state.updatePeriod != null) &&
+              state.forecasts.isNotEmpty &&
+              (state.forecasts.length >= _currentForecastNotifier.value + 1)) {
+            Forecast forecast = state.forecasts[_currentForecastNotifier.value];
+            DateTime? lastUpdated = forecast.lastUpdated;
+            if ((lastUpdated == null) ||
+                DateTime.now().isAfter(lastUpdated.add(Duration(
+                    minutes: state.updatePeriod?.getInfo()!['minutes'])))) {
+              context.read<AppBloc>().add(
+                    RefreshForecast(
+                      context,
+                      state.forecasts[_currentForecastNotifier.value],
+                      state.temperatureUnit,
+                    ),
+                  );
+            }
+          }
         }
       });
 
@@ -96,7 +119,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       _pageBackground = buildForecastColorSequence(state.forecasts);
     }
 
-    _currentForecastNotifier = ValueNotifier<int?>(state.selectedForecastIndex);
+    _currentForecastNotifier = ValueNotifier<int>(state.selectedForecastIndex);
   }
 
   void _blocListener(
@@ -108,18 +131,15 @@ class _ForecastPageViewState extends State<ForecastView> {
 
       switch (state.crudStatus) {
         case CRUDStatus.CREATED:
-          _scaffoldKey.currentState!
-              .showSnackBar(SnackBar(content: Text(i18n!.forecastAdded)));
+          showSnackbar(context, i18n!.forecastAdded);
           break;
 
         case CRUDStatus.UPDATED:
-          _scaffoldKey.currentState!
-              .showSnackBar(SnackBar(content: Text(i18n!.forecastUpdated)));
+          showSnackbar(context, i18n!.forecastUpdated);
           break;
 
         case CRUDStatus.DELETED:
-          _scaffoldKey.currentState!
-              .showSnackBar(SnackBar(content: Text(i18n!.forecastDeleted)));
+          showSnackbar(context, i18n!.forecastDeleted);
           break;
 
         default:
@@ -194,23 +214,23 @@ class _ForecastPageViewState extends State<ForecastView> {
           num? currentPage = _currentPage;
           if (isInteger(currentPage)) {
             if (state.selectedForecastIndex != currentPage!.toInt()) {
-              currentPage = state.selectedForecastIndex!.toDouble();
+              currentPage = state.selectedForecastIndex.toDouble();
             }
           }
 
           final double _forecastColorValue =
               (_pageController!.hasClients && state.forecasts.isNotEmpty)
                   ? (currentPage! / state.forecasts.length)
-                  : (state.selectedForecastIndex!.toDouble() /
+                  : (state.selectedForecastIndex.toDouble() /
                       state.forecasts.length);
 
-          Color _forecastColor = (_pageBackground == null)
+          Color? _forecastColor = (_pageBackground == null)
               ? Colors.transparent
               : _pageBackground!.evaluate(
                   AlwaysStoppedAnimation(_forecastColorValue),
-                )!;
+                );
 
-          Color _forecastDarkenedColor = _forecastColor.darken(0.25);
+          Color _forecastDarkenedColor = _forecastColor!.darken(0.25);
 
           return AppUiOverlayStyle(
             themeMode: state.themeMode,
@@ -252,7 +272,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       return null;
     }
 
-    if (canRefresh(state, index: state.selectedForecastIndex!)) {
+    if (canRefresh(state, index: state.selectedForecastIndex)) {
       return RefreshIndicator(
         color: AppTheme.primaryColor,
         onRefresh: () => _pullRefresh(state),
@@ -291,7 +311,7 @@ class _ForecastPageViewState extends State<ForecastView> {
               state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 10.0,
           itemCount: state.forecasts.length,
-          currentPageNotifier: _currentForecastNotifier as ValueNotifier<int>,
+          currentPageNotifier: _currentForecastNotifier,
           onPageSelected: _onPageSelected,
         ),
       ),
@@ -308,13 +328,16 @@ class _ForecastPageViewState extends State<ForecastView> {
   Future<void> _pullRefresh(
     AppState state,
   ) async =>
-      context.read<AppBloc>().add(RefreshForecast(
-            state.forecasts[state.selectedForecastIndex!],
-            state.temperatureUnit,
-          ));
+      context.read<AppBloc>().add(
+            RefreshForecast(
+              context,
+              state.forecasts[state.selectedForecastIndex],
+              state.temperatureUnit,
+            ),
+          );
 
   void _tapAddLocation() {
-    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     Navigator.push(context, LookupView.route());
   }
 }

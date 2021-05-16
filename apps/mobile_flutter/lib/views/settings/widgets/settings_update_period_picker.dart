@@ -6,7 +6,7 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsUpdatePeriodPicker extends StatefulWidget {
@@ -50,8 +50,9 @@ class _SettingsUpdatePeriodPickerState
               ? appDarkThemeData
               : appLightThemeData,
           child: Scaffold(
-            extendBody: true,
             body: _buildBody(),
+            extendBody: true,
+            extendBodyBehindAppBar: true,
           ),
         ),
       );
@@ -76,24 +77,19 @@ class _SettingsUpdatePeriodPickerState
     });
   }
 
-  Widget _buildBody() => Column(
-        children: <Widget>[
-          Expanded(child: _buildListOfPeriods()),
-        ],
-      );
-
-  Widget _buildListOfPeriods() => ListView.separated(
+  Widget _buildBody() => ListView.separated(
         itemBuilder: (
           BuildContext context,
           int index,
         ) {
           final UpdatePeriod period = _periodList![index];
+          Map<String, dynamic> periodInfo = period.getInfo(context: context)!;
 
           return ListTile(
-            key: Key('period_${period.info!['id']}'),
+            key: Key('period_${periodInfo['id']}'),
             title: Text(
-              period.info!['text'],
-              style: Theme.of(context).textTheme.headline5!.copyWith(
+              periodInfo['text'],
+              style: Theme.of(context).textTheme.subtitle1!.copyWith(
                     color: _getPeriodColor(period),
                   ),
             ),
@@ -114,7 +110,7 @@ class _SettingsUpdatePeriodPickerState
   Color? _getPeriodColor(
     UpdatePeriod period,
   ) {
-    if (widget.selectedPeriod?.info!['id'] == period.info!['id']) {
+    if (widget.selectedPeriod?.getInfo()!['id'] == period.getInfo()!['id']) {
       return AppTheme.primaryColor;
     }
 

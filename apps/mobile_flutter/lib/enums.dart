@@ -24,6 +24,20 @@ extension TemperatureUnitExtension on TemperatureUnit {
         return 'imperial';
     }
   }
+
+  String get unitSymbol {
+    switch (this) {
+      case TemperatureUnit.kelvin:
+        return 'K';
+
+      case TemperatureUnit.celsius:
+        return '\u00B0C';
+
+      case TemperatureUnit.fahrenheit:
+      default:
+        return '\u00B0F';
+    }
+  }
 }
 
 TemperatureUnit getTemperatureUnit(

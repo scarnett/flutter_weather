@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
@@ -37,14 +38,22 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: Stack(
-          children: <Widget>[
-            WebView(
-              initialUrl: AppConfig.instance.privacyPolicyUrl,
-              onWebViewCreated: _onWebViewCreated,
+        body: Column(
+          children: [
+            Expanded(
+              child: Stack(
+                children: <Widget>[
+                  WebView(
+                    initialUrl: AppConfig.instance.privacyPolicyUrl,
+                    onWebViewCreated: _onWebViewCreated,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
+        extendBody: true,
+        extendBodyBehindAppBar: true,
       );
 
   void _onWebViewCreated(

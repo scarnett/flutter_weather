@@ -1,13 +1,18 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app.dart';
+import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
+import 'package:flutter_weather/notifications/notification_helper.dart';
+import 'package:flutter_weather/utils/background_utils.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -35,9 +40,15 @@ Future<void> main() async {
 
   // await HydratedBloc.storage.clear();
 
+  // Preferences
+  await AppPrefs().init();
+
+  // Local notifications
+  await initLocalNotifications();
+
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    if (remoteConfig.sentryDsn == null) {
+    if (remoteConfig.sentryDsn.isNullOrEmpty()) {
       print(details.exception);
       print(details.stack);
     } else {
@@ -52,12 +63,14 @@ Future<void> main() async {
   AppConfig config = AppConfig(
     flavor: Flavor.dev,
     appVersion: remoteConfig.appVersion,
-    openweathermapApiKey: remoteConfig.openweathermapApiKey,
-    openweathermapApiUri: remoteConfig.openweathermapApiUri,
-    openweathermapApiDailyForecastPath:
-        remoteConfig.openweathermapApiDailyForecastPath,
-    openweathermapApiHourlyForecastPath:
-        remoteConfig.openweathermapApiHourlyForecastPath,
+    openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
+    openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
+    openWeatherMapApiCurrentForecastPath:
+        remoteConfig.openWeatherMapApiCurrentForecastPath,
+    openWeatherMapApiDailyForecastPath:
+        remoteConfig.openWeatherMapApiDailyForecastPath,
+    openWeatherMapApiHourlyForecastPath:
+        remoteConfig.openWeatherMapApiHourlyForecastPath,
     refreshTimeout: remoteConfig.refreshTimeout,
     defaultCountryCode: remoteConfig.defaultCountryCode,
     supportedLocales: remoteConfig.supportedLocales,
@@ -67,14 +80,18 @@ Future<void> main() async {
     child: WeatherApp(),
   );
 
-  if (remoteConfig.sentryDsn == null) {
+  if (remoteConfig.sentryDsn.isNullOrEmpty()) {
     runApp(config);
+    BackgroundFetch.registerHeadlessTask(initBackgroundFetchHeadlessTask);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
         ..dsn = remoteConfig.sentryDsn
         ..environment = 'dev',
-      appRunner: () => runApp(config),
+      appRunner: () {
+        runApp(config);
+        BackgroundFetch.registerHeadlessTask(initBackgroundFetchHeadlessTask);
+      },
     );
   }
 }

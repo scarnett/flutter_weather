@@ -104,7 +104,7 @@ class Forecast extends Equatable {
       };
 
   static List<dynamic> toJsonList(
-    List<Forecast> list,
+    List<Forecast>? list,
   ) =>
       (list == null)
           ? []
