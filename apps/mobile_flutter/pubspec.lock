@@ -140,7 +140,7 @@ packages:
       name: coverage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "0.15.2"
   crypto:
     dependency: "direct overridden"
     description:
@@ -343,13 +343,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.20.1"
-  frontend_server_client:
-    dependency: transitive
-    description:
-      name: frontend_server_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -536,7 +529,7 @@ packages:
       name: node_preamble
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "1.4.13"
   package_config:
     dependency: transitive
     description:
@@ -907,9 +900,9 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.17.4"
+    version: "1.16.5"
   test_api:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
@@ -921,7 +914,7 @@ packages:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.24"
+    version: "0.3.15"
   timer_builder:
     dependency: "direct main"
     description:
@@ -1014,12 +1007,12 @@ packages:
     source: hosted
     version: "2.0.0"
   vm_service:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.2.0"
+    version: "5.5.0"
   watcher:
     dependency: transitive
     description:
