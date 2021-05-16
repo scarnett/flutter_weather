@@ -95,18 +95,22 @@ class _ForecastPageViewState extends State<ForecastView> {
               .add(SelectedForecastIndex(_currentForecastNotifier.value));
 
           // If auto update is enabled then run the refresh
-          Forecast forecast = state.forecasts[_currentForecastNotifier.value];
-          DateTime? lastUpdated = forecast.lastUpdated;
-          if ((lastUpdated == null) ||
-              DateTime.now().isAfter(lastUpdated.add(Duration(
-                  minutes: state.updatePeriod?.getInfo()!['minutes'])))) {
-            context.read<AppBloc>().add(
-                  RefreshForecast(
-                    context,
-                    state.forecasts[_currentForecastNotifier.value],
-                    state.temperatureUnit,
-                  ),
-                );
+          if ((state.updatePeriod != null) &&
+              state.forecasts.isNotEmpty &&
+              (state.forecasts.length >= _currentForecastNotifier.value + 1)) {
+            Forecast forecast = state.forecasts[_currentForecastNotifier.value];
+            DateTime? lastUpdated = forecast.lastUpdated;
+            if ((lastUpdated == null) ||
+                DateTime.now().isAfter(lastUpdated.add(Duration(
+                    minutes: state.updatePeriod?.getInfo()!['minutes'])))) {
+              context.read<AppBloc>().add(
+                    RefreshForecast(
+                      context,
+                      state.forecasts[_currentForecastNotifier.value],
+                      state.temperatureUnit,
+                    ),
+                  );
+            }
           }
         }
       });
