@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicyView extends StatefulWidget {
@@ -30,17 +32,17 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
   Widget build(
     BuildContext context,
   ) =>
-      Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.privacyPolicy),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+      AppUiOverlayStyle(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.privacyPolicy),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
+          body: AppUiSafeArea(
+            child: Expanded(
               child: Stack(
                 children: <Widget>[
                   WebView(
@@ -50,10 +52,10 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
                 ],
               ),
             ),
-          ],
+          ),
+          extendBody: true,
+          extendBodyBehindAppBar: true,
         ),
-        extendBody: true,
-        extendBodyBehindAppBar: true,
       );
 
   void _onWebViewCreated(
