@@ -1,6 +1,4 @@
 PODS:
-  - background_fetch (1.0.0-nullsafety.2):
-    - Flutter
   - Firebase/CoreOnly (7.11.0):
     - FirebaseCore (= 7.11.0)
   - Firebase/Crashlytics (7.11.0):
@@ -100,7 +98,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
@@ -136,8 +133,6 @@ SPEC REPOS:
     - Sentry
 
 EXTERNAL SOURCES:
-  background_fetch:
-    :path: ".symlinks/plugins/background_fetch/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_crashlytics:
@@ -176,7 +171,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 67b227578932e795dbe3ea6d3f7c006e45f3ce66
   Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
   firebase_core: 54856a8a39b8f3e35f34fdd3373f3b92a1daa68b
   firebase_crashlytics: 1e72fe7a913faa6bc73f75794a5f68947e26623e

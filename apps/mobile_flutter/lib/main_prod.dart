@@ -9,7 +9,6 @@ import 'package:flutter_weather/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
-import 'package:flutter_weather/notifications/notification_helper.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,9 +37,6 @@ Future<void> main() async {
 
   // Preferences
   await AppPrefs().init();
-
-  // Local notifications
-  await initLocalNotifications();
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
