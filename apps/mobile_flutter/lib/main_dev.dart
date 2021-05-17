@@ -1,4 +1,3 @@
-import 'package:background_fetch/background_fetch.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
 import 'package:flutter_weather/notifications/notification_helper.dart';
-import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -82,7 +80,6 @@ Future<void> main() async {
 
   if (remoteConfig.sentryDsn.isNullOrEmpty()) {
     runApp(config);
-    BackgroundFetch.registerHeadlessTask(initBackgroundFetchHeadlessTask);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
@@ -90,7 +87,6 @@ Future<void> main() async {
         ..environment = 'dev',
       appRunner: () {
         runApp(config);
-        BackgroundFetch.registerHeadlessTask(initBackgroundFetchHeadlessTask);
       },
     );
   }

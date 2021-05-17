@@ -6,7 +6,6 @@ import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
@@ -86,16 +85,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     if (event.updatePeriod == null) {
       prefs.pushNotification = null;
-
-      // Stop background fetch
-      await stopBackgroundFetch();
     } else if (state.pushNotification == null) {
       prefs.pushNotification = PushNotification.OFF;
-    }
-
-    if ((prefs.pushNotification != null) &&
-        (prefs.pushNotification != PushNotification.OFF)) {
-      restartBackgroundFetch();
     }
 
     yield state.copyWith(
@@ -157,8 +148,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   Stream<AppState> _updatePushNotificationState(
     SetPushNotification event,
   ) async* {
-    await restartBackgroundFetch();
-
     if (event.callback != null) {
       event.callback!();
     }
