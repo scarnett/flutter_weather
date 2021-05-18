@@ -1,30 +1,32 @@
-# Setup
+## Setup
 ```bash
 npm install -g firebase-tools
 firebase login
+cd functions/
+npm i
 ```
 
-# Tests
+## Tests
 ```bash
 npm test
 ```
 
-# Deploy firebase functions
+## Deploy firebase functions
 
 ```bash
 npm run deploy
 ```
 
-# Deploy firestore rules
+## Deploy firestore rules
 
 ```bash
 npm run deploy-rules
 ```
 
-# Structure
+## Structure
 ```
 functions/
-  db/
+  firestore/
     name/
       onWrite.f.ts
 
@@ -40,7 +42,8 @@ functions/
       onDelete.f.ts
 
   http/
-    endpointName.f.ts
+    name/
+      endpointName.f.ts
 
   schedule/
     jobName.f.ts

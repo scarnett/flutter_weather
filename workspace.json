@@ -197,7 +197,7 @@
         "deploy": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "npm run deploy",
+            "command": "npm run deploy-rules",
             "cwd": "apps/firebase"
           }
         }
