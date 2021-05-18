@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app_prefs.dart';
+import 'package:flutter_weather/app_service.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -85,8 +86,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     if (event.updatePeriod == null) {
       prefs.pushNotification = null;
+      // removePushNotification();
     } else if (state.pushNotification == null) {
       prefs.pushNotification = PushNotification.OFF;
+      // removePushNotification();
+    }
+
+    if ((prefs.pushNotification != null) &&
+        (prefs.pushNotification != PushNotification.OFF)) {
+      await savePushNotification();
     }
 
     yield state.copyWith(
@@ -157,6 +165,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       pushNotificationExtras:
           Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
     );
+
+    if ((event.pushNotification != null) &&
+        (event.pushNotification != PushNotification.OFF)) {
+      await savePushNotification();
+    } else {
+      // await removePushNotification();
+    }
 
     showSnackbar(
       event.context,

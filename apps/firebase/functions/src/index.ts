@@ -5,7 +5,8 @@ import * as glob from 'glob'
 admin.initializeApp()
 
 const paths: string[] = [
-  './db/**/*.f.js', // Firestore
+  './firestore/**/*.f.js', // Firestore
+  './http/**/*.f.js', // HTTP
   './schedule/*.f.js', // Cron
 ]
 

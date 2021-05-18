@@ -29,6 +29,9 @@
     "firebase-functions": {
       "tags": []
     },
+    "firebase-hosting": {
+      "tags": []
+    },
     "firebase-rules": {
       "tags": []
     },

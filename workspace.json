@@ -146,6 +146,13 @@
       "root": "apps/firebase",
       "sourceRoot": "apps/firebase/functions",
       "architect": {
+        "install-deps": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm i",
+            "cwd": "apps/firebase/functions"
+          }
+        },
         "deploy": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
@@ -165,6 +172,19 @@
           "options": {
             "command": "npm run test",
             "cwd": "apps/firebase/functions"
+          }
+        }
+      }
+    },
+    "firebase-hosting": {
+      "projectType": "application",
+      "root": "apps/firebase",
+      "architect": {
+        "deploy": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "firebase deploy --only hosting",
+            "cwd": "apps/firebase"
           }
         }
       }
