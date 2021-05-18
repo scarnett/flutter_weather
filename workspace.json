@@ -141,6 +141,48 @@
         }
       }
     },
+    "firebase-functions": {
+      "projectType": "application",
+      "root": "apps/firebase",
+      "sourceRoot": "apps/firebase/functions",
+      "architect": {
+        "deploy": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm run deploy",
+            "cwd": "apps/firebase/functions"
+          }
+        },
+        "logs": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm run logs",
+            "cwd": "apps/firebase/functions"
+          }
+        },
+        "test": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm run test",
+            "cwd": "apps/firebase/functions"
+          }
+        }
+      }
+    },
+    "firebase-rules": {
+      "projectType": "application",
+      "root": "apps/firebase",
+      "sourceRoot": "apps/firebase/rules",
+      "architect": {
+        "deploy": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npm run deploy",
+            "cwd": "apps/firebase"
+          }
+        }
+      }
+    },
     "web_ng": {
       "projectType": "application",
       "root": "apps/web_ng",

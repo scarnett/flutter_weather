@@ -26,6 +26,12 @@
     "mobile_flutter": {
       "tags": []
     },
+    "firebase-functions": {
+      "tags": []
+    },
+    "firebase-rules": {
+      "tags": []
+    },
     "web_ng": {
       "tags": []
     },
