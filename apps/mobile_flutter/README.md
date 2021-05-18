@@ -76,19 +76,19 @@ You can find this file in your Firebase console in *Project Settings -> Your app
 ```bash
 npm run deploy
 ```
-[**Read More**](apps/firebase/README.md)
+[**Read More**](../firebase/README.md)
 
 ## Firebase Firestore Rules
 ```bash
 npm run deploy-rules
 ```
-[**Read More**](apps/firebase/README.md)
+[**Read More**](../firebase/README.md)
 
 ## Firebase Hosting
 ```bash
 firebase deploy --only hosting
 ```
-[**Read More**](apps/firebase/README.md)
+[**Read More**](../firebase/README.md)
 
 ## Run Application (Nx)
 This project uses <a href="https://nx.dev" target="_blank">Nx</a>. Go [here](https://nx.dev/latest/angular/getting-started/cli-overview) for installation instructions.
