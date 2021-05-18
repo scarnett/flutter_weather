@@ -9,6 +9,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/utils/device_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -84,17 +85,25 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     AppPrefs prefs = AppPrefs();
     prefs.updatePeriod = event.updatePeriod;
 
+    Map<String, dynamic> device = await getDeviceInfo();
+
     if (event.updatePeriod == null) {
       prefs.pushNotification = null;
-      // removePushNotification();
+      await removePushNotification(deviceId: device['id']);
     } else if (state.pushNotification == null) {
       prefs.pushNotification = PushNotification.OFF;
-      // removePushNotification();
+      await removePushNotification(deviceId: device['id']);
     }
 
     if ((prefs.pushNotification != null) &&
         (prefs.pushNotification != PushNotification.OFF)) {
-      await savePushNotification();
+      await savePushNotification(
+        deviceId: device['id'],
+        period: event.updatePeriod ?? null,
+        pushNotification: state.pushNotification ?? null,
+        pushNotificationExtras: state.pushNotificationExtras ?? null,
+        temperatureUnit: state.temperatureUnit,
+      );
     }
 
     yield state.copyWith(
@@ -166,11 +175,19 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
     );
 
+    Map<String, dynamic> device = await getDeviceInfo();
+
     if ((event.pushNotification != null) &&
         (event.pushNotification != PushNotification.OFF)) {
-      await savePushNotification();
+      await savePushNotification(
+        deviceId: device['id'],
+        period: state.updatePeriod,
+        pushNotification: state.pushNotification,
+        pushNotificationExtras: state.pushNotificationExtras,
+        temperatureUnit: state.temperatureUnit,
+      );
     } else {
-      // await removePushNotification();
+      await removePushNotification(deviceId: device['id']);
     }
 
     showSnackbar(

@@ -54,6 +54,12 @@ class FirebaseRemoteConfigService {
   }
 
   String get appVersion => _remoteConfig!.getString('app_version');
+  String get appPushNotificationsSave =>
+      _remoteConfig!.getString('app_push_notifications_save');
+
+  String get appPushNotificationsRemove =>
+      _remoteConfig!.getString('app_push_notifications_remove');
+
   String get openWeatherMapApiKey =>
       _remoteConfig!.getString('openweathermap_api_key');
 

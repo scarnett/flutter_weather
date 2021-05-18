@@ -1,17 +1,39 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sentry/sentry.dart';
+import 'dart:convert';
 
-Future<void> savePushNotification() {
-  CollectionReference pushForecasts =
-      FirebaseFirestore.instance.collection('push-notification');
+import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:http/http.dart' as http;
 
-  // TODO! post to firebase function instead. the function will save to push-notification
+Future<http.Response> savePushNotification({
+  required String deviceId,
+  UpdatePeriod? period,
+  PushNotification? pushNotification,
+  Map<String, dynamic>? pushNotificationExtras,
+  TemperatureUnit? temperatureUnit,
+}) async =>
+    http.post(
+      Uri.parse(AppConfig.instance.appPushNotificationsSave!),
+      body: {
+        'device': deviceId,
+        'period': (period == null) ? null : period.getInfo()!['id'],
+        'push_notification': (pushNotification == null)
+            ? null
+            : pushNotification.getInfo()!['id'],
+        'push_notification_extras': (pushNotificationExtras == null)
+            ? null
+            : json.encode(pushNotificationExtras),
+        'temperature_unit':
+            (temperatureUnit == null) ? null : temperatureUnit.units,
+      },
+    );
 
-  return pushForecasts
-      .add({
-        'device': 'deviceId', // TODO!
-        'interval': 'interval', // TODO!
-      })
-      .then((DocumentReference<Object?> value) => print(value.id))
-      .catchError((error) async => await Sentry.captureException(error));
-}
+Future<http.Response> removePushNotification({
+  required String deviceId,
+}) async =>
+    http.post(
+      Uri.parse(AppConfig.instance.appPushNotificationsRemove!),
+      body: {
+        'device': deviceId,
+      },
+    );

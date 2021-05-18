@@ -18,6 +18,10 @@
         "function": "httpPushNotificationsSave"
       },
       {
+        "source": "http-push-notifications-remove",
+        "function": "httpPushNotificationsRemove"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
