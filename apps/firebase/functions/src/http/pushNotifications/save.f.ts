@@ -16,6 +16,9 @@ exports = module.exports = functions.https
             'push_notification_extras': (pushNotificationExtras == null) ?
                 admin.firestore.FieldValue.delete() :
                 JSON.parse(pushNotificationExtras),
+            'fcm': {
+              'token': data['fcm_token'],
+            },
             'last_updated': admin.firestore.FieldValue.serverTimestamp(),
           }, {
             'merge': true,

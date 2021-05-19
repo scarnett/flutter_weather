@@ -11,6 +11,7 @@ Future<http.Response> savePushNotification({
   PushNotification? pushNotification,
   Map<String, dynamic>? pushNotificationExtras,
   TemperatureUnit? temperatureUnit,
+  String? fcmToken,
 }) async =>
     http.post(
       Uri.parse(AppConfig.instance.appPushNotificationsSave!),
@@ -25,6 +26,7 @@ Future<http.Response> savePushNotification({
             : json.encode(pushNotificationExtras),
         'temperature_unit':
             (temperatureUnit == null) ? null : temperatureUnit.units,
+        'fcm_token': (fcmToken == null) ? null : fcmToken,
       },
     );
 

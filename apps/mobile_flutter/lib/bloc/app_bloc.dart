@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/app_service.dart';
@@ -97,12 +98,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     if ((prefs.pushNotification != null) &&
         (prefs.pushNotification != PushNotification.OFF)) {
+      String? token = await FirebaseMessaging.instance.getToken();
+
       await savePushNotification(
         deviceId: device['id'],
         period: event.updatePeriod ?? null,
         pushNotification: state.pushNotification ?? null,
         pushNotificationExtras: state.pushNotificationExtras ?? null,
         temperatureUnit: state.temperatureUnit,
+        fcmToken: token,
       );
     }
 
@@ -179,12 +183,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     if ((event.pushNotification != null) &&
         (event.pushNotification != PushNotification.OFF)) {
+      String? token = await FirebaseMessaging.instance.getToken();
+
       await savePushNotification(
         deviceId: device['id'],
         period: state.updatePeriod,
         pushNotification: state.pushNotification,
         pushNotificationExtras: state.pushNotificationExtras,
         temperatureUnit: state.temperatureUnit,
+        fcmToken: token,
       );
     } else {
       await removePushNotification(deviceId: device['id']);

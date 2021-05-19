@@ -19,6 +19,7 @@ dependencies:
   equatable: '^2.0.0'
   firebase_core: '^1.1.1'
   firebase_crashlytics: '^2.0.3'
+  firebase_messaging: '^10.0.0'
   firebase_remote_config: '^0.10.0-dev.3'
   flutter_bloc: '^7.0.0'
   flutter_form_bloc: '^0.20.1'
