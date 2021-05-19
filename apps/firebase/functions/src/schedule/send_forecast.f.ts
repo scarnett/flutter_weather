@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import * as deviceModel from '../models/device'
 import * as messageModel from '../models/message'
-import * as pushUtils from '../utils/push-utils'
+import * as pushUtils from '../utils/push_utils'
 
 /**
  * This pushes current forecast notifications to devices.
