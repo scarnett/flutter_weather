@@ -1,6 +1,12 @@
 name: 'Deploy Release to App Stores'
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      flutterVersion:
+        description: 'Flutter Version'
+        required: true
+        default: '2.0.6'
 
 # on:
 #   push:
@@ -55,7 +61,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '2.0.6'
+          flutter-version: '${{ github.event.inputs.flutterVersion }}'
 
       - name: 'Flutter clean'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
@@ -106,7 +112,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '2.0.6'
+          flutter-version: '${{ github.event.inputs.flutterVersion }}'
 
       - name: 'Decode android local.properties'
         run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
@@ -233,7 +239,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '2.0.6'
+          flutter-version: '${{ github.event.inputs.flutterVersion }}'
 
       - name: 'Decode GoogleService-Info.plist'
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
