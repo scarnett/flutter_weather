@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "resolveJsonModule": true
+  },
+  "compileOnSave": true,
+  "include": [
+    "**/*.ts",
+    "**/keys/*.json",
+    "**/locales/*.json"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

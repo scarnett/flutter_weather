@@ -2,16 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
 import 'package:flutter_weather/views/lookup/lookup_view.dart';
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -22,7 +26,7 @@ class ForecastView extends StatefulWidget {
       MaterialPageRoute<void>(builder: (_) => ForecastView());
 
   ForecastView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -32,11 +36,11 @@ class ForecastView extends StatefulWidget {
 class _ForecastPageViewState extends State<ForecastView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  PageController _pageController;
-  Animatable<Color> _pageBackground;
-  ValueNotifier<int> _currentForecastNotifier;
-  num _currentPage = 0;
-  bool _colorTheme = false;
+  PageController? _pageController;
+  Animatable<Color?>? _pageBackground;
+  late ValueNotifier<int> _currentForecastNotifier;
+  num? _currentPage = 0;
+  bool? _colorTheme = false;
 
   @override
   void initState() {
@@ -46,7 +50,7 @@ class _ForecastPageViewState extends State<ForecastView> {
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController!.dispose();
     super.dispose();
   }
 
@@ -56,7 +60,6 @@ class _ForecastPageViewState extends State<ForecastView> {
   ) =>
       Scaffold(
         key: _scaffoldKey,
-        extendBody: true,
         body: BlocListener<AppBloc, AppState>(
           listener: _blocListener,
           child: WillPopScope(
@@ -64,8 +67,11 @@ class _ForecastPageViewState extends State<ForecastView> {
             child: _buildBody(context.watch<AppBloc>().state),
           ),
         ),
+        extendBody: true,
+        extendBodyBehindAppBar: true,
         floatingActionButton: FloatingActionButton(
-          tooltip: AppLocalizations.of(context).addForecast,
+          key: Key(AppKeys.addLocationKey),
+          tooltip: AppLocalizations.of(context)!.addForecast,
           onPressed: _tapAddLocation,
           child: Icon(Icons.add),
           mini: true,
@@ -79,14 +85,33 @@ class _ForecastPageViewState extends State<ForecastView> {
       initialPage: state.selectedForecastIndex,
       keepPage: true,
     )..addListener(() {
-        _currentPage = _pageController.page;
+        _currentPage = _pageController!.page;
 
         if (isInteger(_currentPage)) {
-          _currentForecastNotifier.value = _currentPage.toInt();
+          _currentForecastNotifier.value = _currentPage!.toInt();
 
           context
               .read<AppBloc>()
-              .add(SelectedForecastIndex(_currentPage.toInt()));
+              .add(SelectedForecastIndex(_currentForecastNotifier.value));
+
+          // If auto update is enabled then run the refresh
+          if ((state.updatePeriod != null) &&
+              state.forecasts.isNotEmpty &&
+              (state.forecasts.length >= _currentForecastNotifier.value + 1)) {
+            Forecast forecast = state.forecasts[_currentForecastNotifier.value];
+            DateTime? lastUpdated = forecast.lastUpdated;
+            if ((lastUpdated == null) ||
+                DateTime.now().isAfter(lastUpdated.add(Duration(
+                    minutes: state.updatePeriod?.getInfo()!['minutes'])))) {
+              context.read<AppBloc>().add(
+                    RefreshForecast(
+                      context,
+                      state.forecasts[_currentForecastNotifier.value],
+                      state.temperatureUnit,
+                    ),
+                  );
+            }
+          }
         }
       });
 
@@ -102,22 +127,19 @@ class _ForecastPageViewState extends State<ForecastView> {
     AppState state,
   ) {
     if (state.crudStatus != null) {
-      AppLocalizations i18n = AppLocalizations.of(context);
+      AppLocalizations? i18n = AppLocalizations.of(context);
 
       switch (state.crudStatus) {
         case CRUDStatus.CREATED:
-          _scaffoldKey.currentState
-              .showSnackBar(SnackBar(content: Text(i18n.forecastAdded)));
+          showSnackbar(context, i18n!.forecastAdded);
           break;
 
         case CRUDStatus.UPDATED:
-          _scaffoldKey.currentState
-              .showSnackBar(SnackBar(content: Text(i18n.forecastUpdated)));
+          showSnackbar(context, i18n!.forecastUpdated);
           break;
 
         case CRUDStatus.DELETED:
-          _scaffoldKey.currentState
-              .showSnackBar(SnackBar(content: Text(i18n.forecastDeleted)));
+          showSnackbar(context, i18n!.forecastDeleted);
           break;
 
         default:
@@ -144,7 +166,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     } else {
       // Go back to the first forecast
-      _pageController.jumpToPage(0);
+      _pageController!.jumpToPage(0);
       context.read<AppBloc>().add(SelectedForecastIndex(0));
     }
 
@@ -178,7 +200,7 @@ class _ForecastPageViewState extends State<ForecastView> {
                       _buildCircleIndicator(state),
                     ],
                   )
-                : AppNoneFound(text: AppLocalizations.of(context).noForecasts),
+                : AppNoneFound(text: AppLocalizations.of(context)!.noForecasts),
           ),
         ],
       );
@@ -187,29 +209,28 @@ class _ForecastPageViewState extends State<ForecastView> {
     AppState state,
   ) =>
       AnimatedBuilder(
-        animation: _pageController,
-        builder: (BuildContext context, Widget child) {
-          num currentPage = _currentPage;
+        animation: _pageController!,
+        builder: (BuildContext context, Widget? child) {
+          num? currentPage = _currentPage;
           if (isInteger(currentPage)) {
-            if (state.selectedForecastIndex != currentPage.toInt()) {
+            if (state.selectedForecastIndex != currentPage!.toInt()) {
               currentPage = state.selectedForecastIndex.toDouble();
             }
           }
 
-          final double _forecastColorValue = (_pageController.hasClients &&
-                  (state.forecasts != null) &&
-                  state.forecasts.isNotEmpty)
-              ? (currentPage / state.forecasts.length)
-              : (state.selectedForecastIndex.toDouble() /
-                  state.forecasts.length);
+          final double _forecastColorValue =
+              (_pageController!.hasClients && state.forecasts.isNotEmpty)
+                  ? (currentPage! / state.forecasts.length)
+                  : (state.selectedForecastIndex.toDouble() /
+                      state.forecasts.length);
 
-          Color _forecastColor = (_pageBackground == null)
+          Color? _forecastColor = (_pageBackground == null)
               ? Colors.transparent
-              : _pageBackground.evaluate(
+              : _pageBackground!.evaluate(
                   AlwaysStoppedAnimation(_forecastColorValue),
                 );
 
-          Color _forecastDarkenedColor = _forecastColor.darken(0.25);
+          Color _forecastDarkenedColor = _forecastColor!.darken(0.25);
 
           return AppUiOverlayStyle(
             themeMode: state.themeMode,
@@ -251,7 +272,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       return null;
     }
 
-    if (canRefresh(state)) {
+    if (canRefresh(state, index: state.selectedForecastIndex)) {
       return RefreshIndicator(
         color: AppTheme.primaryColor,
         onRefresh: () => _pullRefresh(state),
@@ -274,9 +295,7 @@ class _ForecastPageViewState extends State<ForecastView> {
   _buildCircleIndicator(
     AppState state,
   ) {
-    if ((state.forecasts == null) ||
-        state.forecasts.isEmpty ||
-        (state.forecasts.length <= 1)) {
+    if (state.forecasts.isEmpty || (state.forecasts.length <= 1)) {
       return Container();
     }
 
@@ -303,19 +322,22 @@ class _ForecastPageViewState extends State<ForecastView> {
     int page,
   ) {
     _currentForecastNotifier.value = page;
-    animatePage(_pageController, page: page);
+    animatePage(_pageController!, page: page);
   }
 
   Future<void> _pullRefresh(
     AppState state,
   ) async =>
-      context.read<AppBloc>().add(RefreshForecast(
-            state.forecasts[state.selectedForecastIndex],
-            state.temperatureUnit,
-          ));
+      context.read<AppBloc>().add(
+            RefreshForecast(
+              context,
+              state.forecasts[state.selectedForecastIndex],
+              state.temperatureUnit,
+            ),
+          );
 
   void _tapAddLocation() {
-    _scaffoldKey.currentState.removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     Navigator.push(context, LookupView.route());
   }
 }

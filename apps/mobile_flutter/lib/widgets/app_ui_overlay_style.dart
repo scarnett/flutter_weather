@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppUiOverlayStyle extends StatefulWidget {
-  final Widget child;
-  final ThemeMode themeMode;
+  final Widget? child;
+  final ThemeMode? themeMode;
   final bool colorTheme;
-  final Color systemNavigationBarColor;
-  final Brightness systemNavigationBarIconBrightness;
+  final Color? systemNavigationBarColor;
+  final Brightness? systemNavigationBarIconBrightness;
 
   AppUiOverlayStyle({
     this.child,
     this.themeMode,
-    this.colorTheme,
+    this.colorTheme: false,
     this.systemNavigationBarColor,
     this.systemNavigationBarIconBrightness,
   });
@@ -39,8 +39,8 @@ class _AppUiOverlayStyleState extends State<AppUiOverlayStyle> {
                   : Brightness.light,
           systemNavigationBarColor:
               widget.colorTheme && (widget.systemNavigationBarColor != null)
-                  ? widget.systemNavigationBarColor
-                  : Theme.of(context).scaffoldBackgroundColor,
+                  ? widget.systemNavigationBarColor!.withOpacity(0.9)
+                  : Theme.of(context).appBarTheme.color,
           systemNavigationBarIconBrightness:
               (widget.systemNavigationBarIconBrightness != null)
                   ? widget.systemNavigationBarIconBrightness
@@ -49,6 +49,6 @@ class _AppUiOverlayStyleState extends State<AppUiOverlayStyle> {
                       : Brightness.light,
           systemNavigationBarDividerColor: Colors.transparent,
         ),
-        child: widget.child,
+        child: widget.child!,
       );
 }

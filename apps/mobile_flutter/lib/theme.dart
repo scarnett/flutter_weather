@@ -2,55 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 
 class AppTheme {
-  static Color get primaryColor => Colors.deepPurple[400];
-  static Color get secondaryColor => Colors.grey[900];
+  static Color get primaryColor => Colors.deepPurple[400]!;
+  static Color get secondaryColor => Colors.grey[900]!;
   static Color get disabledColor => primaryColor.withOpacity(0.5);
   static Color get disabledTextColor => Colors.white.withOpacity(0.3);
-  static Color get successColor => Colors.green[700];
-  static Color get warningColor => Colors.yellow[700];
-  static Color get dangerColor => Colors.red[700];
+  static Color get successColor => Colors.green[700]!;
+  static Color get warningColor => Colors.yellow[700]!;
+  static Color get dangerColor => Colors.red[700]!;
   static Color get infoColor => Colors.lightBlue;
 
-  static Color getFadedTextColor({
+  static Color? getFadedTextColor({
     bool colorTheme: false,
   }) =>
       colorTheme ? Colors.white.withOpacity(0.75) : Colors.grey[500];
 
   static Color getBorderColor(
     ThemeMode themeMode, {
-    bool colorTheme: false,
+    bool? colorTheme: false,
   }) =>
       (themeMode == ThemeMode.dark)
           ? Colors.white.withOpacity(0.15)
-          : colorTheme
+          : colorTheme!
               ? Colors.white.withOpacity(0.35)
-              : secondaryColor.withOpacity(0.15);
+              : secondaryColor.withOpacity(0.1);
 
-  static Color getHintColor(
+  static Color? getHintColor(
     ThemeMode themeMode,
   ) =>
       (themeMode == ThemeMode.dark) ? Colors.grey[500] : Colors.grey[400];
 
-  static Color getSectionColor(
+  static Color? getSectionColor(
     ThemeMode themeMode,
   ) =>
       (themeMode == ThemeMode.dark)
           ? Colors.black.withOpacity(0.3)
           : Colors.grey[100];
 
-  static Color getRadioActiveColor(
+  static Color? getRadioActiveColor(
     ThemeMode themeMode,
   ) =>
       (themeMode == ThemeMode.dark) ? Colors.white : Colors.grey[700];
 
-  static Color getRadioInactiveColor(
+  static Color? getRadioInactiveColor(
     ThemeMode themeMode,
   ) =>
       (themeMode == ThemeMode.dark) ? Colors.grey[700] : Colors.grey[300];
 }
 
 ThemeMode getThemeMode(
-  String themeMode,
+  String? themeMode,
 ) {
   switch (themeMode) {
     case 'ThemeMode.dark':
@@ -71,7 +71,7 @@ ThemeData appLightThemeData = ThemeData(
   fontFamily: 'roboto',
   appBarTheme: AppBarTheme(
     brightness: Brightness.light,
-    color: Colors.white,
+    color: Colors.white.withOpacity(0.9),
     elevation: 0.0,
     textTheme: TextTheme(
       headline6: TextStyle(
@@ -83,7 +83,7 @@ ThemeData appLightThemeData = ThemeData(
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.light),
-    space: 0.0,
+    space: 1.0,
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: AppTheme.primaryColor,
@@ -117,7 +117,7 @@ ThemeData appLightThemeData = ThemeData(
     ),
     errorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.red[800],
+        color: Colors.red[800]!,
         width: 2.0,
         style: BorderStyle.solid,
       ),
@@ -157,7 +157,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   hintColor: AppTheme.getHintColor(ThemeMode.dark),
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark,
-    color: AppTheme.secondaryColor,
+    color: AppTheme.secondaryColor.withOpacity(0.9),
     elevation: 0.0,
     textTheme: TextTheme(
       headline6: TextStyle(
@@ -169,7 +169,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.dark),
-    space: 0.0,
+    space: 1.0,
   ),
   iconTheme: IconThemeData(
     color: Colors.white,

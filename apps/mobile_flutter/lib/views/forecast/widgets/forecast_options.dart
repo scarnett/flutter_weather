@@ -47,7 +47,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
     return !hasForecasts(state.forecasts)
         ? Container()
         : Tooltip(
-            message: AppLocalizations.of(context).editForecast,
+            message: AppLocalizations.of(context)!.editForecast,
             child: Material(
               type: MaterialType.transparency,
               child: Container(
@@ -66,7 +66,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
   Widget _buildSettingsButton() => Container(
         padding: EdgeInsets.only(left: 10.0),
         child: Tooltip(
-          message: AppLocalizations.of(context).settings,
+          message: AppLocalizations.of(context)!.settings,
           child: Material(
             type: MaterialType.transparency,
             child: Container(
@@ -85,16 +85,16 @@ class _ForecastOptionsState extends State<ForecastOptions> {
   void _tapEdit(
     AppState state,
   ) {
-    Forecast forecast = state.forecasts[state.selectedForecastIndex];
-    if (forecast != null) {
+    if (state.forecasts.length > state.selectedForecastIndex) {
+      Forecast? forecast = state.forecasts[state.selectedForecastIndex];
       context.read<AppBloc>().add(SetActiveForecastId(forecast.id));
-      Scaffold.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       Navigator.push(context, ForecastFormView.route());
     }
   }
 
   void _tapSettings() {
-    Scaffold.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     Navigator.push(context, SettingsView.route());
   }
 }

@@ -42,6 +42,18 @@ nx run mobile_flutter:runProd
 ```
 [**Read More**](apps/mobile_flutter/README.md)
 
+### Firebase Functions
+```bash
+nx run firebase-functions:deploy
+```
+[**Read More**](apps/firebase/README.md)
+
+### Firebase Firestore Rules
+```bash
+nx run firebase-rules:deploy
+```
+[**Read More**](apps/firebase/README.md)
+
 ### Angular
 ```bash
 nx run web_ng:serve

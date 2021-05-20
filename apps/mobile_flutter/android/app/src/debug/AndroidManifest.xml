@@ -1,4 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.flutter_weather">
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:label="${appLabel}${appLabelSuffix}"
+        android:targetPackage="io.flutter_weather" />
 </manifest>

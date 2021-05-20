@@ -7,17 +7,17 @@ enum RefreshStatus {
 }
 
 class Forecast extends Equatable {
-  final String id;
-  final String cityName;
-  final String postalCode;
-  final String countryCode;
-  final ForecastCity city;
-  final String cod;
-  final num message;
-  final int cnt;
-  final List<ForecastDay> list;
-  final DateTime lastUpdated;
-  final bool primary;
+  final String? id;
+  final String? cityName;
+  final String? postalCode;
+  final String? countryCode;
+  final ForecastCity? city;
+  final String? cod;
+  final num? message;
+  final int? cnt;
+  final List<ForecastDay>? list;
+  final DateTime? lastUpdated;
+  final bool? primary;
 
   Forecast({
     this.id,
@@ -34,17 +34,17 @@ class Forecast extends Equatable {
   });
 
   Forecast copyWith({
-    String id,
-    Nullable<String> cityName,
-    Nullable<String> postalCode,
-    Nullable<String> countryCode,
-    ForecastCity city,
-    String cod,
-    num message,
-    int cnt,
-    List<ForecastDay> list,
-    DateTime lastUpdated,
-    Nullable<bool> primary,
+    String? id,
+    Nullable<String?>? cityName,
+    Nullable<String?>? postalCode,
+    Nullable<String?>? countryCode,
+    ForecastCity? city,
+    String? cod,
+    num? message,
+    int? cnt,
+    List<ForecastDay>? list,
+    DateTime? lastUpdated,
+    Nullable<bool?>? primary,
   }) =>
       Forecast(
         id: id ?? this.id,
@@ -94,7 +94,7 @@ class Forecast extends Equatable {
         'cityName': cityName,
         'postalCode': postalCode,
         'countryCode': countryCode,
-        'city': city.toJson(),
+        'city': city!.toJson(),
         'cod': cod,
         'message': message,
         'cnt': cnt,
@@ -104,14 +104,14 @@ class Forecast extends Equatable {
       };
 
   static List<dynamic> toJsonList(
-    List<Forecast> list,
+    List<Forecast>? list,
   ) =>
       (list == null)
           ? []
           : list.map((Forecast forecast) => forecast.toJson()).toList();
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         cityName,
         postalCode,
@@ -134,12 +134,12 @@ class Forecast extends Equatable {
 }
 
 class ForecastCity extends Equatable {
-  final int id;
-  final String name;
-  final ForecastCityCoord coord;
-  final String country;
-  final int population;
-  final int timezone;
+  final int? id;
+  final String? name;
+  final ForecastCityCoord? coord;
+  final String? country;
+  final int? population;
+  final int? timezone;
 
   ForecastCity({
     this.id,
@@ -151,11 +151,11 @@ class ForecastCity extends Equatable {
   });
 
   ForecastCity copyWith({
-    int id,
-    String name,
-    ForecastCityCoord coord,
-    String country,
-    int population,
+    int? id,
+    String? name,
+    ForecastCityCoord? coord,
+    String? country,
+    int? population,
   }) =>
       ForecastCity(
         id: id ?? this.id,
@@ -183,14 +183,14 @@ class ForecastCity extends Equatable {
   dynamic toJson() => {
         'id': id,
         'name': name,
-        'coord': coord.toJson(),
+        'coord': coord!.toJson(),
         'country': country,
         'population': population,
         'timezone': timezone,
       };
 
   @override
-  List<Object> get props => [id, name, coord, country, population, timezone];
+  List<Object?> get props => [id, name, coord, country, population, timezone];
 
   @override
   String toString() =>
@@ -199,8 +199,8 @@ class ForecastCity extends Equatable {
 }
 
 class ForecastCityCoord extends Equatable {
-  final num lon;
-  final num lat;
+  final num? lon;
+  final num? lat;
 
   ForecastCityCoord({
     this.lon,
@@ -208,8 +208,8 @@ class ForecastCityCoord extends Equatable {
   });
 
   ForecastCityCoord copyWith({
-    num lon,
-    num lat,
+    num? lon,
+    num? lat,
   }) =>
       ForecastCityCoord(
         lon: lon ?? this.lon,
@@ -232,27 +232,27 @@ class ForecastCityCoord extends Equatable {
       };
 
   @override
-  List<Object> get props => [lon, lat];
+  List<Object?> get props => [lon, lat];
 
   @override
   String toString() => 'ForecastCityCoord{lon: $lon, lat: $lat}';
 }
 
 class ForecastDay extends Equatable {
-  final int dt;
-  final int sunrise;
-  final int sunset;
-  final ForecastDayTemp temp;
-  final ForecastDayFeelsLike feelsLike;
-  final num pressure;
-  final num humidity;
-  final List<ForecastDayWeather> weather;
-  final num speed;
-  final num deg;
-  final num clouds;
-  final num rain;
-  final num snow;
-  final num pop;
+  final int? dt;
+  final int? sunrise;
+  final int? sunset;
+  final ForecastDayTemp? temp;
+  final ForecastDayFeelsLike? feelsLike;
+  final num? pressure;
+  final num? humidity;
+  final List<ForecastDayWeather>? weather;
+  final num? speed;
+  final num? deg;
+  final num? clouds;
+  final num? rain;
+  final num? snow;
+  final num? pop;
 
   ForecastDay({
     this.dt,
@@ -272,20 +272,20 @@ class ForecastDay extends Equatable {
   });
 
   ForecastDay copyWith({
-    int dt,
-    int sunrise,
-    int sunset,
-    ForecastDayTemp temp,
-    ForecastDayFeelsLike feelsLike,
-    int pressure,
-    int humidity,
-    List<ForecastDayWeather> weather,
-    num speed,
-    int deg,
-    int clouds,
-    num rain,
-    num snow,
-    num pop,
+    int? dt,
+    int? sunrise,
+    int? sunset,
+    ForecastDayTemp? temp,
+    ForecastDayFeelsLike? feelsLike,
+    int? pressure,
+    int? humidity,
+    List<ForecastDayWeather>? weather,
+    num? speed,
+    int? deg,
+    int? clouds,
+    num? rain,
+    num? snow,
+    num? pop,
   }) =>
       ForecastDay(
         dt: dt ?? this.dt,
@@ -339,8 +339,8 @@ class ForecastDay extends Equatable {
         'dt': dt,
         'sunrise': sunrise,
         'sunset': sunset,
-        'temp': temp.toJson(),
-        'feels_like': feelsLike.toJson(),
+        'temp': temp!.toJson(),
+        'feels_like': feelsLike!.toJson(),
         'pressure': pressure,
         'humidity': humidity,
         'weather': ForecastDayWeather.toJsonList(weather),
@@ -353,14 +353,14 @@ class ForecastDay extends Equatable {
       };
 
   static List<dynamic> toJsonList(
-    List<ForecastDay> list,
+    List<ForecastDay>? list,
   ) =>
       (list == null)
           ? []
           : list.map((ForecastDay day) => day.toJson()).toList();
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         dt,
         sunrise,
         sunset,
@@ -386,12 +386,12 @@ class ForecastDay extends Equatable {
 }
 
 class ForecastDayTemp extends Equatable {
-  final num day;
-  final num min;
-  final num max;
-  final num night;
-  final num eve;
-  final num morn;
+  final num? day;
+  final num? min;
+  final num? max;
+  final num? night;
+  final num? eve;
+  final num? morn;
 
   ForecastDayTemp({
     this.day,
@@ -403,12 +403,12 @@ class ForecastDayTemp extends Equatable {
   });
 
   ForecastDayTemp copyWith({
-    num day,
-    num min,
-    num max,
-    num night,
-    num eve,
-    num morn,
+    num? day,
+    num? min,
+    num? max,
+    num? night,
+    num? eve,
+    num? morn,
   }) =>
       ForecastDayTemp(
         day: day ?? this.day,
@@ -443,7 +443,7 @@ class ForecastDayTemp extends Equatable {
       };
 
   @override
-  List<Object> get props => [day, min, max, night, eve, morn];
+  List<Object?> get props => [day, min, max, night, eve, morn];
 
   @override
   String toString() =>
@@ -452,10 +452,10 @@ class ForecastDayTemp extends Equatable {
 }
 
 class ForecastDayFeelsLike extends Equatable {
-  final num day;
-  final num night;
-  final num eve;
-  final num morn;
+  final num? day;
+  final num? night;
+  final num? eve;
+  final num? morn;
 
   ForecastDayFeelsLike({
     this.day,
@@ -465,10 +465,10 @@ class ForecastDayFeelsLike extends Equatable {
   });
 
   ForecastDayFeelsLike copyWith({
-    num day,
-    num night,
-    num eve,
-    num morn,
+    num? day,
+    num? night,
+    num? eve,
+    num? morn,
   }) =>
       ForecastDayFeelsLike(
         day: day ?? this.day,
@@ -497,7 +497,7 @@ class ForecastDayFeelsLike extends Equatable {
       };
 
   @override
-  List<Object> get props => [day, night, eve, morn];
+  List<Object?> get props => [day, night, eve, morn];
 
   @override
   String toString() =>
@@ -505,10 +505,10 @@ class ForecastDayFeelsLike extends Equatable {
 }
 
 class ForecastDayWeather extends Equatable {
-  final int id;
-  final String main;
-  final String description;
-  final String icon;
+  final int? id;
+  final String? main;
+  final String? description;
+  final String? icon;
 
   ForecastDayWeather({
     this.id,
@@ -518,10 +518,10 @@ class ForecastDayWeather extends Equatable {
   });
 
   ForecastDayWeather copyWith({
-    int id,
-    String main,
-    String description,
-    String icon,
+    int? id,
+    String? main,
+    String? description,
+    String? icon,
   }) =>
       ForecastDayWeather(
         id: id ?? this.id,
@@ -560,7 +560,7 @@ class ForecastDayWeather extends Equatable {
       };
 
   static List<dynamic> toJsonList(
-    List<ForecastDayWeather> list,
+    List<ForecastDayWeather>? list,
   ) =>
       (list == null)
           ? []
@@ -569,7 +569,7 @@ class ForecastDayWeather extends Equatable {
               .toList();
 
   @override
-  List<Object> get props => [id, main, description, icon];
+  List<Object?> get props => [id, main, description, icon];
 
   @override
   String toString() =>

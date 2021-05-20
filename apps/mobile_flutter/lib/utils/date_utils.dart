@@ -50,8 +50,8 @@ DateTime getLastDayOfWeek({
       lastDayOfWeek.year, lastDayOfWeek.month, (lastDayOfWeek.day + offset));
 }
 
-String toIso8601String(
-  DateTime date,
+String? toIso8601String(
+  DateTime? date,
 ) {
   if (date == null) {
     return null;
@@ -60,7 +60,7 @@ String toIso8601String(
   return date.toIso8601String();
 }
 
-DateTime fromIso8601String(String date) {
+DateTime? fromIso8601String(String? date) {
   if (date == null) {
     return null;
   }
@@ -68,22 +68,9 @@ DateTime fromIso8601String(String date) {
   return DateTime.parse(date).toUtc();
 }
 
-String formatEpoch(
-  int epoch,
-  String format, {
-  isUtc: false,
-}) {
-  if (epoch == null) {
-    return null;
-  }
-
-  DateTime date = DateTime.fromMillisecondsSinceEpoch(epoch, isUtc: isUtc);
-  return formatDateTime(date, format);
-}
-
-String formatDateTime(
-  DateTime date,
-  String format,
+String? formatDateTime(
+  DateTime? date,
+  String? format,
 ) {
   if ((date == null) || (format == null)) {
     return null;
@@ -92,19 +79,8 @@ String formatDateTime(
   return DateFormat(format).format(date);
 }
 
-String formatDateStr(
-  String dateStr,
-  String format,
-) {
-  if (dateStr == null) {
-    return null;
-  }
-
-  return formatDateTime(DateTime.parse(dateStr), format);
-}
-
-String getDateFormat(
-  DateTime date,
+String? getDateFormat(
+  DateTime? date,
 ) {
   if (date == null) {
     return null;
@@ -129,22 +105,11 @@ DateTime epochToDateTime(
   return date;
 }
 
-int dayDiff(
-  DateTime date1,
-  DateTime date2,
-) {
-  if ((date1 != null) && (date1 != null)) {
-    return date2.difference(date1).inDays;
-  }
-
-  return 0;
-}
-
 String getMonthDay(
   DateTime dateTime,
 ) {
-  String month = formatDateTime(dateTime, 'MMM');
-  String day = formatDateTime(dateTime, 'd');
+  String? month = formatDateTime(dateTime, 'MMM');
+  String day = formatDateTime(dateTime, 'd')!;
   String suffix = getDaySuffix(int.parse(day));
   return '$month $day$suffix';
 }

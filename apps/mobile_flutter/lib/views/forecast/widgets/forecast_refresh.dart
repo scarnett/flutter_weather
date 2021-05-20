@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +19,9 @@ class ForecastRefresh extends StatefulWidget {
 
 class _ForecastRefreshState extends State<ForecastRefresh>
     with TickerProviderStateMixin {
-  Animation _refreshAnimation;
-  AnimationController _refreshAnimationController;
-  DateTime _nextRefreshTime;
+  late Animation _refreshAnimation;
+  late AnimationController _refreshAnimationController;
+  DateTime? _nextRefreshTime;
 
   @override
   void initState() {
@@ -64,29 +65,31 @@ class _ForecastRefreshState extends State<ForecastRefresh>
       setState(() => _nextRefreshTime = getNextUpdateTime(getNow().toLocal()));
     } else {
       setState(() {
-        if (canRefresh(state)) {
+        if (canRefresh(state, index: state.selectedForecastIndex)) {
           _nextRefreshTime = getNow().toLocal();
         } else if (forecastIndexExists(
             state.forecasts, state.selectedForecastIndex)) {
           _nextRefreshTime = getNextUpdateTime(
-              state.forecasts[state.selectedForecastIndex].lastUpdated);
+              state.forecasts[state.selectedForecastIndex].lastUpdated!);
         }
       });
     }
   }
 
-  Widget _buildContent() => TimerBuilder.scheduled([_nextRefreshTime],
-          builder: (BuildContext context) {
-        AppState state = context.watch<AppBloc>().state;
-        return _buildRefreshIcon(state);
-      });
+  Widget _buildContent() => TimerBuilder.scheduled(
+        [_nextRefreshTime!],
+        builder: (BuildContext context) {
+          AppState state = context.watch<AppBloc>().state;
+          return _buildRefreshIcon(state);
+        },
+      );
 
   Widget _buildRefreshIcon(
     AppState state,
   ) =>
-      canRefresh(state)
+      canRefresh(state, index: state.selectedForecastIndex)
           ? Tooltip(
-              message: AppLocalizations.of(context).refreshForecast,
+              message: AppLocalizations.of(context)!.refreshForecast,
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
@@ -96,7 +99,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
                     borderRadius: BorderRadius.circular(40.0),
                     child: AnimatedBuilder(
                       animation: _refreshAnimationController,
-                      builder: (BuildContext context, Widget child) =>
+                      builder: (BuildContext context, Widget? child) =>
                           Transform.rotate(
                         angle: _refreshAnimation.value,
                         child: child,
@@ -113,8 +116,11 @@ class _ForecastRefreshState extends State<ForecastRefresh>
   void _tapRefresh(
     AppState state,
   ) =>
-      context.read<AppBloc>().add(RefreshForecast(
-            state.forecasts[state.selectedForecastIndex],
-            context.read<AppBloc>().state.temperatureUnit,
-          ));
+      context.read<AppBloc>().add(
+            RefreshForecast(
+              context,
+              state.forecasts[state.selectedForecastIndex],
+              context.read<AppBloc>().state.temperatureUnit,
+            ),
+          );
 }

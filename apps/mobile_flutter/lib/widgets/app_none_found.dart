@@ -4,7 +4,7 @@ import 'package:flutter_weather/theme.dart';
 class AppNoneFound extends StatefulWidget {
   final IconData icon;
   final double iconSize;
-  final String text;
+  final String? text;
 
   AppNoneFound({
     this.icon: Icons.sentiment_dissatisfied,
@@ -44,8 +44,8 @@ class _AppNoneFoundState extends State<AppNoneFound> {
           (widget.text == null)
               ? Container()
               : Text(
-                  widget.text,
-                  style: Theme.of(context).textTheme.headline3.copyWith(
+                  widget.text!,
+                  style: Theme.of(context).textTheme.headline3!.copyWith(
                         fontSize: 30.0,
                       ),
                   textAlign: TextAlign.center,

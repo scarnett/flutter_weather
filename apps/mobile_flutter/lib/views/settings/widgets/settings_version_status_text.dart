@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -10,28 +11,27 @@ import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
 class SettingsVersionStatusText extends StatelessWidget {
-  final AppBloc bloc;
+  final AppBloc? bloc;
   final PackageInfo packageInfo;
 
   const SettingsVersionStatusText({
-    Key key,
-    @required this.bloc,
-    @required this.packageInfo,
+    Key? key,
+    required this.bloc,
+    required this.packageInfo,
   }) : super(key: key);
 
   @override
   Widget build(
     BuildContext context,
   ) {
-    Version _latestVersion;
+    Version? _latestVersion;
 
     try {
-      String _appVersion = bloc.state.appVersion;
-      if (_appVersion.isNullOrEmpty()) {
+      if (AppConfig.instance.appVersion.isNullOrEmpty()) {
         return Text('');
       }
 
-      _latestVersion = getAppVersion(_appVersion);
+      _latestVersion = getAppVersion(AppConfig.instance.appVersion);
 
       if (packageInfo.version == 'unknown') {
         return Text('');
@@ -41,7 +41,7 @@ class SettingsVersionStatusText extends StatelessWidget {
         return GestureDetector(
           onTap: () => _showAppUpdateDialog(context),
           child: Text(
-            AppLocalizations.of(context).updateAvailable,
+            AppLocalizations.of(context)!.updateAvailable,
             style: TextStyle(
               color: AppTheme.warningColor,
               fontWeight: FontWeight.w700,
@@ -50,7 +50,7 @@ class SettingsVersionStatusText extends StatelessWidget {
         );
       } else if (isAppBeta(_latestVersion.toString(), packageInfo.version)) {
         return Text(
-          AppLocalizations.of(context).beta,
+          AppLocalizations.of(context)!.beta,
           style: TextStyle(
             color: AppTheme.infoColor,
             fontWeight: FontWeight.w700,
@@ -59,7 +59,7 @@ class SettingsVersionStatusText extends StatelessWidget {
       }
 
       return Text(
-        AppLocalizations.of(context).latest,
+        AppLocalizations.of(context)!.latest,
         style: TextStyle(
           color: AppTheme.successColor,
           fontWeight: FontWeight.w700,
@@ -78,7 +78,7 @@ class SettingsVersionStatusText extends StatelessWidget {
         barrierDismissible: true,
         builder: (BuildContext context) => AppUpdateDialog(
           packageInfo: packageInfo,
-          appVersion: bloc.state.appVersion,
+          appVersion: AppConfig.instance.appVersion!,
         ),
       );
 }

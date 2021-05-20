@@ -1,3 +1,9 @@
+enum Flavor {
+  dev,
+  tst,
+  prod,
+}
+
 enum TemperatureUnit {
   kelvin,
   celsius,
@@ -18,10 +24,24 @@ extension TemperatureUnitExtension on TemperatureUnit {
         return 'imperial';
     }
   }
+
+  String get unitSymbol {
+    switch (this) {
+      case TemperatureUnit.kelvin:
+        return 'K';
+
+      case TemperatureUnit.celsius:
+        return '\u00B0C';
+
+      case TemperatureUnit.fahrenheit:
+      default:
+        return '\u00B0F';
+    }
+  }
 }
 
 TemperatureUnit getTemperatureUnit(
-  String temperatureUnit,
+  String? temperatureUnit,
 ) {
   switch (temperatureUnit) {
     case 'TemperatureUnit.kelvin':

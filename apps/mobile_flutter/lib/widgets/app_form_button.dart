@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppFormButton extends StatelessWidget {
-  final Function onTap;
-  final String text;
-  final Widget icon;
-  final Color buttonColor;
-  final Color textColor;
+  final Function? onTap;
+  final String? text;
+  final Widget? icon;
+  final Color? buttonColor;
+  final Color? textColor;
 
   AppFormButton({
-    Key key,
+    Key? key,
     this.onTap,
     this.text,
     this.icon,
@@ -22,20 +22,25 @@ class AppFormButton extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      FlatButton(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10.0,
-          vertical: 10.0,
+      TextButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 10.0,
+          ),
+          backgroundColor:
+              (buttonColor == null) ? AppTheme.primaryColor : buttonColor,
+          primary: Colors.white,
+          onSurface: AppTheme.disabledTextColor,
+          minimumSize: Size(100, 10),
+          textStyle: TextStyle(
+            color: Colors.white,
+          ),
         ),
-        color: (buttonColor == null) ? AppTheme.primaryColor : buttonColor,
-        disabledTextColor: AppTheme.disabledTextColor,
-        disabledColor: AppTheme.disabledColor,
-        textColor: Colors.white,
-        height: 50.0,
         child: (icon == null)
             ? (text == null)
                 ? Container()
-                : Text(text,
+                : Text(text!,
                     style: TextStyle(
                       fontSize: 16.0,
                       color: textColor,
@@ -50,13 +55,13 @@ class AppFormButton extends StatelessWidget {
                       child: icon),
                   (text == null)
                       ? Container()
-                      : Text(text,
+                      : Text(text!,
                           style: TextStyle(
                             fontSize: 16.0,
                             color: textColor,
                           )),
                 ],
               ),
-        onPressed: onTap,
+        onPressed: onTap as void Function()?,
       );
 }

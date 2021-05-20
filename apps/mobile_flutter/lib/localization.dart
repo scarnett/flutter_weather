@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +14,7 @@ class AppLocalizations {
     this.locale,
   );
 
-  static AppLocalizations of(
+  static AppLocalizations? of(
     BuildContext context,
   ) =>
       Localizations.of<AppLocalizations>(
@@ -32,6 +33,24 @@ class AppLocalizations {
   String get updateNow => addMessage('Update Now');
   String get later => addMessage('Later');
   String get beta => addMessage('Beta');
+  String get autoUpdates => addMessage('Auto Updates');
+  String get updatePeriod => addMessage('Update Period');
+  String get updatePeriod1hr => addMessage('1 hour');
+  String get updatePeriod2hr => addMessage('2 hours');
+  String get updatePeriod3hr => addMessage('3 hours');
+  String get updatePeriod4hr => addMessage('4 hours');
+  String get updatePeriod5hr => addMessage('5 hours');
+  String get updatePeriodUpdated =>
+      addMessage('Your update period settings were updated');
+
+  String get pushNotification => addMessage('Push Notification');
+  String get pushNotificationOff => addMessage('Off');
+  String get pushNotificationSaved => addMessage('Saved Locations');
+  String get pushNotificationCurrent => addMessage('Current Location');
+  String get pushNotificationCurrentTap => addMessage('Tap to update');
+  String get pushNotificationUpdated =>
+      addMessage('Your push notification settings were updated');
+
   String get themeMode => addMessage('Theme Mode');
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
@@ -50,6 +69,12 @@ class AppLocalizations {
   String get editForecast => addMessage('Edit Forecast');
   String get deleteForecast => addMessage('Delete Forecast');
   String get refreshForecast => addMessage('Refresh Forecast');
+  String get refreshFailure => addMessage(
+      'There was an error refreshing this forecast. Please try again.');
+
+  String get locationFailure => addMessage(
+      'There was an error getting your current location. Please try again.');
+
   String get forecastAdded => addMessage('Forecast Added');
   String get forecastUpdated => addMessage('Forecast Updated');
   String get forecastDeleted => addMessage('Forecast Deleted');
@@ -58,12 +83,13 @@ class AppLocalizations {
 
   String get forecastBadForecastInput =>
       addMessage('Please enter the city or postal code');
+
   String get forecastAlreadyExists => addMessage('Forecast already exists');
   String get forecastCityAlreadyExists =>
       addMessage('A forecast for this city already exists.');
 
   String get forecastPostalCodeAlreadyExists =>
-      addMessage('A forecast for this postal code already exists.');
+      addMessage('A forecast for this postal code already exists');
 
   String get colorThemeEnable => addMessage('Enable Color Theme');
   String get colorThemeDisable => addMessage('Disable Color Theme');
@@ -84,6 +110,8 @@ class AppLocalizations {
 
   String get selectCountry => addMessage('Select a country');
   String get filterCountries => addMessage('Filter Countries');
+  String get locationPermissionDenied =>
+      addMessage('Location permission denied');
 
   String getFeelsLike(
     String temp,
@@ -130,18 +158,20 @@ class AppLocalizations {
 
   addMessage(
     String message, {
-    String name,
-    List<Object> args,
+    String? name,
+    List<Object>? args,
   }) =>
       Intl.message(
         message,
-        name: (name == null) ? toCamelCase(message) : name,
+        name: (name == null) ? message.camelCase() : name,
         args: args,
         locale: locale.toString(),
       );
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  AppLocalizationsDelegate();
+
   @override
   Future<AppLocalizations> load(
     Locale locale,
@@ -158,7 +188,9 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   bool isSupported(
     Locale locale,
   ) =>
-      locale.languageCode.toLowerCase().contains(EnvConfig.SUPPORTED_LOCALES);
+      locale.languageCode
+          .toLowerCase()
+          .contains(AppConfig.instance.supportedLocales!);
 }
 
 class FallbackCupertinoLocalisationsDelegate

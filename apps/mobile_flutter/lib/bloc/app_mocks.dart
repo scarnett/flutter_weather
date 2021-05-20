@@ -4,4 +4,4 @@ import 'package:injectable/injectable.dart';
 
 @test
 @Injectable(as: AppBloc)
-class MockAppBloc extends MockBloc<AppState> implements AppBloc {}
+class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
