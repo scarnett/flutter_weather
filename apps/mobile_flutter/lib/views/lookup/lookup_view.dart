@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
@@ -19,6 +19,7 @@ import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:flutter_weather/views/lookup/lookup_utils.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 import 'package:uuid/uuid.dart';
@@ -83,9 +84,9 @@ class _LookupPageViewState extends State<LookupPageView> {
           ) =>
               AppUiOverlayStyle(
             themeMode: context.watch<AppBloc>().state.themeMode,
-            colorTheme: (context.watch<AppBloc>().state.colorTheme ?? false),
+            colorTheme: (context.watch<AppBloc>().state.colorTheme),
             systemNavigationBarIconBrightness:
-                context.watch<AppBloc>().state.colorTheme!
+                context.watch<AppBloc>().state.colorTheme
                     ? Brightness.dark
                     : null,
             child: Theme(
@@ -94,7 +95,6 @@ class _LookupPageViewState extends State<LookupPageView> {
                   : appLightThemeData,
               child: Scaffold(
                 key: _scaffoldKey,
-                extendBody: true,
                 appBar: AppBar(
                   title: Text(
                     getTitle(AppLocalizations.of(context), _currentPage)!,
@@ -106,10 +106,10 @@ class _LookupPageViewState extends State<LookupPageView> {
                 ),
                 body: WillPopScope(
                   onWillPop: () => _willPopCallback(state),
-                  child: SafeArea(
-                    child: _buildContent(),
-                  ),
+                  child: _buildContent(),
                 ),
+                extendBody: true,
+                extendBodyBehindAppBar: true,
               ),
             ),
           ),
@@ -143,8 +143,7 @@ class _LookupPageViewState extends State<LookupPageView> {
       switch (state.status) {
         case LookupStatus.FORECAST_NOT_FOUND:
           closeKeyboard(context);
-          _scaffoldKey.currentState!
-              .showSnackBar(SnackBar(content: Text(i18n!.lookupFailure)));
+          showSnackbar(context, i18n!.lookupFailure);
           break;
 
         default:
@@ -172,23 +171,25 @@ class _LookupPageViewState extends State<LookupPageView> {
     if (lookupForecast != null) {
       return SingleChildScrollView(
         physics: ClampingScrollPhysics(),
-        child: Column(
-          children: <Widget>[
-            ForecastDisplay(
-              bloc: context.read<AppBloc>(),
-              forecast: lookupForecast,
-              showThreeDayForecast: true,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: AppFormButton(
-                key: Key(AppKeys.addThisForecastKey),
-                text: AppLocalizations.of(context)!.addThisForecast,
-                icon: Icon(Icons.add, size: 16.0),
-                onTap: _tapAddLocation,
+        child: AppUiSafeArea(
+          child: Column(
+            children: <Widget>[
+              ForecastDisplay(
+                bloc: context.read<AppBloc>(),
+                forecast: lookupForecast,
+                showThreeDayForecast: true,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: AppFormButton(
+                  key: Key(AppKeys.addThisForecastKey),
+                  text: AppLocalizations.of(context)!.addThisForecast,
+                  icon: Icon(Icons.add, size: 16.0),
+                  onTap: _tapAddLocation,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -229,8 +230,8 @@ class _LookupPageViewState extends State<LookupPageView> {
 
     if (lookupState.primary!) {
       List<Forecast> forecasts = context.read<AppBloc>().state.forecasts;
-      Forecast? primaryForecast = forecasts.firstWhereOrNull(
-          (Forecast forecast) => forecast.primary!);
+      Forecast? primaryForecast =
+          forecasts.firstWhereOrNull((Forecast forecast) => forecast.primary!);
 
       if (primaryForecast != null) {
         // Remove the status from the current primary forecast
@@ -247,11 +248,12 @@ class _LookupPageViewState extends State<LookupPageView> {
   ) async {
     Map<String, dynamic> lookupData = state.toJson();
     if (lookupData.containsKey('countryCode')) {
-      final Country? country = (await IsoCountries.iso_countries).firstWhereOrNull(
-          (Country _country) => _country.name == lookupData['countryCode']);
+      final Country? country = (await IsoCountries.iso_countries)
+          .firstWhereOrNull(
+              (Country _country) => _country.name == lookupData['countryCode']);
 
       lookupData['countryCode'] = (country == null)
-          ? EnvConfig.DEFAULT_COUNTRY_CODE
+          ? null // AppConfig.instance.defaultCountryCode
           : country.countryCode;
     }
 
@@ -266,8 +268,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     FormBlocFailure<String, String> state,
   ) {
     closeKeyboard(context);
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text(state.failureResponse!)));
+    showSnackbar(context, state.failureResponse!);
   }
 
   void _onPageChange(

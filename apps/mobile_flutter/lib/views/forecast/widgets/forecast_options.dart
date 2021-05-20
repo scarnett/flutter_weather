@@ -103,16 +103,16 @@ class _ForecastOptionsState extends State<ForecastOptions> {
   void _tapEdit(
     AppState state,
   ) {
-    Forecast forecast = state.forecasts[state.selectedForecastIndex!];
-    if (forecast != null) {
+    if (state.forecasts.length > state.selectedForecastIndex) {
+      Forecast? forecast = state.forecasts[state.selectedForecastIndex];
       context.read<AppBloc>().add(SetActiveForecastId(forecast.id));
-      Scaffold.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       Navigator.push(context, ForecastFormView.route());
     }
   }
 
   void _tapSettings() {
-    Scaffold.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     Navigator.push(context, SettingsView.route());
   }
 }

@@ -11,28 +11,31 @@ dependencies:
   flutter:
     sdk: flutter
 
-  background_fetch: '^1.0.0-nullsafety.2'
   bloc: '^7.0.0'
-  cupertino_icons: '^1.0.2'
+  cloud_firestore: '^2.1.0'
+  collection: '^1.15.0-nullsafety.4'
+  cupertino_icons: '^1.0.3'
+  device_info: '^2.0.0'
   equatable: '^2.0.0'
-  firebase_core: '^1.0.3'
-  firebase_crashlytics: '^2.0.0'
-  firebase_remote_config: '^0.9.0-dev.2'
+  firebase_core: '^1.1.1'
+  firebase_crashlytics: '^2.0.3'
+  firebase_messaging: '^10.0.0'
+  firebase_remote_config: '^0.10.0-dev.3'
   flutter_bloc: '^7.0.0'
-  flutter_form_bloc:
-    git:
-      url: https://github.com/WahdanZ/form_bloc
-      ref: ns-mirgrate
-      path: packages/flutter_form_bloc
+  flutter_form_bloc: '^0.20.1'
   flutter_switch: '^0.3.0'
-  http: '^0.13.1'
+  geolocator: '^7.0.3'
+  http: '^0.13.3'
   hydrated_bloc: '^7.0.0'
   iso_countries: '^2.0.1'
   package_info: '^2.0.0'
   page_view_indicators: '^2.0.0'
   path_provider: '^2.0.1'
+  permission_handler: '^7.1.0'
   sentry: '^5.0.0'
   sentry_flutter: '^5.0.0'
+  shared_preferences: '^2.0.5'
+  sticky_headers: '^0.2.0'
   store_redirect:
     git:
       url: https://github.com/Danesz/store_redirect
@@ -42,7 +45,6 @@ dependencies:
   version: '^2.0.0'
   weather_icons: '^3.0.0-nullsafety.0'
   webview_flutter: '^2.0.4'
-  collection: ^1.15.0-nullsafety.4
 
 dev_dependencies:
   flutter_driver:
@@ -51,11 +53,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  test: '^1.15.7'
+  test: '^1.16.5'
   bloc_test: '^8.0.0'
   flutter_launcher_icons: '^0.9.0'
   flutter_native_splash: '^1.1.8+4'
-  injectable_generator: '^1.2.2'
+  injectable_generator: '^1.4.0'
   integration_test: '^1.0.2+3'
   mockito: '^5.0.3'
 

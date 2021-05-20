@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 
 class AppTheme {
-  static Color? get primaryColor => Colors.deepPurple[400];
-  static Color? get secondaryColor => Colors.grey[900];
-  static Color get disabledColor => primaryColor!.withOpacity(0.5);
+  static Color get primaryColor => Colors.deepPurple[400]!;
+  static Color get secondaryColor => Colors.grey[900]!;
+  static Color get disabledColor => primaryColor.withOpacity(0.5);
   static Color get disabledTextColor => Colors.white.withOpacity(0.3);
-  static Color? get successColor => Colors.green[700];
-  static Color? get warningColor => Colors.yellow[700];
-  static Color? get dangerColor => Colors.red[700];
+  static Color get successColor => Colors.green[700]!;
+  static Color get warningColor => Colors.yellow[700]!;
+  static Color get dangerColor => Colors.red[700]!;
   static Color get infoColor => Colors.lightBlue;
 
   static Color? getFadedTextColor({
@@ -24,7 +24,7 @@ class AppTheme {
           ? Colors.white.withOpacity(0.15)
           : colorTheme!
               ? Colors.white.withOpacity(0.35)
-              : secondaryColor!.withOpacity(0.1);
+              : secondaryColor.withOpacity(0.1);
 
   static Color? getHintColor(
     ThemeMode themeMode,
@@ -71,7 +71,7 @@ ThemeData appLightThemeData = ThemeData(
   fontFamily: 'roboto',
   appBarTheme: AppBarTheme(
     brightness: Brightness.light,
-    color: Colors.white,
+    color: Colors.white.withOpacity(0.9),
     elevation: 0.0,
     textTheme: TextTheme(
       headline6: TextStyle(
@@ -103,14 +103,14 @@ ThemeData appLightThemeData = ThemeData(
     isDense: true,
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: AppTheme.primaryColor!,
+        color: AppTheme.primaryColor,
         width: 2.0,
         style: BorderStyle.solid,
       ),
     ),
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: AppTheme.primaryColor!.withOpacity(0.1),
+        color: AppTheme.primaryColor.withOpacity(0.1),
         width: 2.0,
         style: BorderStyle.solid,
       ),
@@ -157,7 +157,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   hintColor: AppTheme.getHintColor(ThemeMode.dark),
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark,
-    color: AppTheme.secondaryColor,
+    color: AppTheme.secondaryColor.withOpacity(0.9),
     elevation: 0.0,
     textTheme: TextTheme(
       headline6: TextStyle(
@@ -194,13 +194,13 @@ TextTheme _darkTextTheme = TextTheme(
     fontWeight: FontWeight.w100,
   ),
   headline4: TextStyle(
-    color: AppTheme.secondaryColor!.withOpacity(0.7),
+    color: AppTheme.secondaryColor.withOpacity(0.7),
     fontSize: 24.0,
     fontWeight: FontWeight.w300,
     height: 0.9,
   ),
   headline5: TextStyle(
-    color: AppTheme.secondaryColor!.withOpacity(0.7),
+    color: AppTheme.secondaryColor.withOpacity(0.7),
     fontSize: 16.0,
     height: 0.9,
     fontWeight: FontWeight.w400,
@@ -214,7 +214,7 @@ TextTheme _darkTextTheme = TextTheme(
     color: Colors.grey[700],
   ),
   subtitle2: TextStyle(
-    color: AppTheme.secondaryColor!.withOpacity(0.7),
+    color: AppTheme.secondaryColor.withOpacity(0.7),
     fontSize: 12.0,
     fontWeight: FontWeight.w100,
   ),

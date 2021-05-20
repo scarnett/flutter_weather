@@ -1,13 +1,25 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
+
+Uri getCurrentApiUri(
+  Map<String, dynamic> params,
+) {
+  params['cnt'] = '1';
+  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
+
+  return Uri.https(
+    AppConfig.instance.openWeatherMapApiUri!,
+    AppConfig.instance.openWeatherMapApiDailyForecastPath!,
+    params.cast<String, String>(),
+  );
+}
 
 Uri getDailyApiUri(
   Map<String, dynamic> params, {
@@ -17,11 +29,11 @@ Uri getDailyApiUri(
     params['cnt'] = count.toString();
   }
 
-  params['appid'] = EnvConfig.OPENWEATHERMAP_API_KEY;
+  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
 
   return Uri.https(
-    EnvConfig.OPENWEATHERMAP_API_URI,
-    EnvConfig.OPENWEATHERMAP_API_DAILY_FORECAST_PATH,
+    AppConfig.instance.openWeatherMapApiUri!,
+    AppConfig.instance.openWeatherMapApiDailyForecastPath!,
     params.cast<String, String>(),
   );
 }
@@ -43,12 +55,12 @@ num getTemperature(
   }
 }
 
-Color? getTemperatureColor(
+Color getTemperatureColor(
   num? temperature,
 ) {
   num _temperature = getTemperature(temperature, TemperatureUnit.fahrenheit);
   if (_temperature > 100) {
-    return Colors.red[900];
+    return Colors.red[900]!;
   } else if ((_temperature > 90) && (_temperature <= 100)) {
     return Colors.red;
   } else if ((_temperature > 80) && (_temperature <= 90)) {
@@ -74,16 +86,16 @@ Color? getTemperatureColor(
   } else if ((_temperature > -20) && (_temperature <= -10)) {
     return Colors.deepPurple;
   } else if ((_temperature > -30) && (_temperature <= -20)) {
-    return Colors.deepPurple[100];
+    return Colors.deepPurple[100]!;
   }
 
-  return Colors.blueGrey[50];
+  return Colors.blueGrey[50]!;
 }
 
 Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {
-  List<TweenSequenceItem<Color?>> colors = <TweenSequenceItem<Color>>[];
+  List<TweenSequenceItem<Color?>> colors = <TweenSequenceItem<Color?>>[];
 
   if (forecastList.isNotEmpty) {
     forecastList.asMap().forEach((int index, Forecast forecast) {
@@ -116,16 +128,59 @@ Animatable<Color?>? buildForecastColorSequence(
 }
 
 String getLocationText(
-  Forecast forecast,
-) {
+  Forecast forecast, {
+  bool includePostalCode: true,
+}) {
   String text = '';
 
-  if (!forecast.postalCode.isNullOrEmpty()) {
+  if (!forecast.cityName.isNullOrEmpty()) {
+    text += '${forecast.cityName}, ';
+  } else if ((forecast.city != null) && !forecast.city!.name.isNullOrEmpty()) {
+    text += '${forecast.city!.name}, ';
+  }
+
+  if (includePostalCode && !forecast.postalCode.isNullOrEmpty()) {
     text += '${forecast.postalCode!.toUpperCase()}, ';
   }
 
   if (!forecast.countryCode.isNullOrEmpty()) {
-    text += '${forecast.countryCode!.toUpperCase()}';
+    text += forecast.countryCode!.toUpperCase();
+  } else if ((forecast.city != null) &&
+      !forecast.city!.country.isNullOrEmpty()) {
+    text += forecast.city!.country!.toUpperCase();
+  }
+
+  String trimmedText = text.trim();
+  if (trimmedText.endsWith(',')) {
+    trimmedText = trimmedText.substring(0, (trimmedText.length - 1));
+  }
+
+  return trimmedText;
+}
+
+String getLocationCurrentForecastText(
+  Forecast forecast,
+  TemperatureUnit temperatureUnit,
+) {
+  String text = '';
+
+  if ((forecast.list != null) && (forecast.list!.length > 0)) {
+    ForecastDay currentDay = forecast.list!.first;
+    num currentTemp =
+        getTemperature(currentDay.feelsLike!.day, temperatureUnit);
+
+    // num highTemp = getTemperature(currentDay.temp!.max, temperatureUnit);
+    // num lowTemp = getTemperature(currentDay.temp!.min, temperatureUnit);
+
+    // TODO! i18n
+    // TODO Custom message depending on temperature and conditions
+    // text += '. The current temperature is ' +
+    //     '$currentTemp${temperatureUnit.unitSymbol}. The high for today is ' +
+    //     '$highTemp${temperatureUnit.unitSymbol} with a low of ' +
+    //     '$lowTemp${temperatureUnit.unitSymbol}.';
+
+    text += 'Feels like $currentTemp${temperatureUnit.unitSymbol}. ';
+    text += currentDay.weather!.first.description!.capitalize();
   }
 
   return text.trim();
@@ -149,7 +204,7 @@ String getUnitSymbol(
   }
 }
 
-// @see https://openweathermap.org/weather-conditions
+// @see https://openWeatherMap.org/weather-conditions
 IconData getForecastIconData(
   String? iconCode,
 ) {
@@ -244,7 +299,9 @@ bool canRefresh(
 DateTime getNextUpdateTime(
   DateTime dateTime,
 ) =>
-    dateTime.add(Duration(milliseconds: EnvConfig.REFRESH_TIMEOUT));
+    dateTime.add(Duration(
+      milliseconds: AppConfig.instance.refreshTimeout!,
+    ));
 
 bool hasForecasts(
   List<Forecast>? forecasts,

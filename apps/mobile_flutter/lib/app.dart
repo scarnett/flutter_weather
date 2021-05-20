@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 
 class WeatherApp extends StatelessWidget {
@@ -18,6 +18,12 @@ class WeatherApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    if (WidgetsBinding.instance?.lifecycleState == AppLifecycleState.resumed) {
+      // Set the initial appstate (resumed) in the shared prefs
+      AppPrefs prefs = AppPrefs();
+      prefs.appState = 0;
+    }
   }
 
   @override
@@ -25,8 +31,7 @@ class WeatherApp extends StatelessWidget {
     BuildContext context,
   ) =>
       BlocProvider(
-        create: (BuildContext context) =>
-            AppBloc()..add(GetCurrentAppVersion()),
+        create: (BuildContext context) => AppBloc(),
         child: FlutterWeatherAppView(),
       );
 }
@@ -36,16 +41,20 @@ class FlutterWeatherAppView extends StatefulWidget {
   _FlutterWeatherAppViewState createState() => _FlutterWeatherAppViewState();
 }
 
-class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
+class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
+    with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-
-  ThemeData? _themeData;
 
   @override
   void initState() {
     super.initState();
-    initBackgroundFetch(context);
-    if (!mounted) return;
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -58,35 +67,45 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> {
             BuildContext context,
             AppState state,
           ) =>
-              BlocListener<AppBloc, AppState>(
-            listener: _blocListener,
-            child: MaterialApp(
-              title: AppLocalizations.appTitle,
-              theme: _themeData,
-              darkTheme: appDarkThemeData,
-              themeMode: state.themeMode,
-              debugShowCheckedModeBanner: AppConfig.isDebug(context),
-              localizationsDelegates: [
-                AppLocalizationsDelegate(),
-                FallbackCupertinoLocalisationsDelegate(),
-              ],
-              navigatorKey: _navigatorKey,
-              home: ForecastView(),
-            ),
+              MaterialApp(
+            title: AppLocalizations.appTitle,
+            theme: _getThemeData(state),
+            darkTheme: appDarkThemeData,
+            themeMode: state.themeMode,
+            debugShowCheckedModeBanner: AppConfig.isDebug(),
+            localizationsDelegates: [
+              AppLocalizationsDelegate(),
+              FallbackCupertinoLocalisationsDelegate(),
+            ],
+            navigatorKey: _navigatorKey,
+            home: ForecastView(),
           ),
         ),
       );
 
-  void _blocListener(
-    BuildContext context,
+  @override
+  void didChangeAppLifecycleState(
+    AppLifecycleState state,
+  ) {
+    AppPrefs prefs = AppPrefs();
+    prefs.appState = state.index;
+
+    // switch (state) {
+    //   case AppLifecycleState.resumed:
+    //   case AppLifecycleState.inactive:
+    //   case AppLifecycleState.paused:
+    //   case AppLifecycleState.detached:
+    //     break;
+    // }
+  }
+
+  ThemeData? _getThemeData(
     AppState state,
-  ) =>
-      setState(() {
-        if (state.activeForecastId != null) {
-          _themeData = appLightThemeData;
-        } else {
-          _themeData =
-              state.colorTheme! ? appColorThemeData : appLightThemeData;
-        }
-      });
+  ) {
+    if (state.activeForecastId != null) {
+      return appLightThemeData;
+    }
+
+    return state.colorTheme ? appColorThemeData : appLightThemeData;
+  }
 }

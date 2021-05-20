@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -414,7 +414,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
   _buildDayForecastsCircleIndicator(
     AppState state,
-    List<ForecastDay> days, {
+    List<ForecastDay>? days, {
     int count: 3, // TODO! parameter?
   }) {
     if (!widget.showThreeDayForecast) {
@@ -442,7 +442,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             state.themeMode,
           ),
           selectedDotColor:
-              state.colorTheme! ? Colors.white : AppTheme.primaryColor,
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 6.0,
           itemCount: pageCount,
           currentPageNotifier: _dayForecastsNotifier,
@@ -491,7 +491,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         style: Theme.of(context).textTheme.headline5!.copyWith(
                               fontSize: 8.0,
                               color: AppTheme.getFadedTextColor(
-                                colorTheme: widget.bloc.state.colorTheme!,
+                                colorTheme: widget.bloc.state.colorTheme,
                               ),
                             ),
                       ),
@@ -528,10 +528,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLastUpdated() {
-    if (widget.forecast == null) {
-      return Container();
-    }
-
     DateTime? lastUpdated = widget.forecast.lastUpdated;
     if (lastUpdated == null) {
       return Container();
@@ -541,10 +537,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
     if (lastUpdated.isToday()) {
       formattedLastUpdated = AppLocalizations.of(context)!
-          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a'));
+          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a')!);
     } else {
       formattedLastUpdated = AppLocalizations.of(context)!.getLastUpdatedOn(
-          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a'));
+          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a')!);
     }
 
     return Container(

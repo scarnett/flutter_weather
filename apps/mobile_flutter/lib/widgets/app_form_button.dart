@@ -22,16 +22,21 @@ class AppFormButton extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      FlatButton(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10.0,
-          vertical: 10.0,
+      TextButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 10.0,
+          ),
+          backgroundColor:
+              (buttonColor == null) ? AppTheme.primaryColor : buttonColor,
+          primary: Colors.white,
+          onSurface: AppTheme.disabledTextColor,
+          minimumSize: Size(100, 10),
+          textStyle: TextStyle(
+            color: Colors.white,
+          ),
         ),
-        color: (buttonColor == null) ? AppTheme.primaryColor : buttonColor,
-        disabledTextColor: AppTheme.disabledTextColor,
-        disabledColor: AppTheme.disabledColor,
-        textColor: Colors.white,
-        height: 50.0,
         child: (icon == null)
             ? (text == null)
                 ? Container()

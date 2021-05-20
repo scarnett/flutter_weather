@@ -3,14 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_country_picker.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 
 class ForecastFormController {
@@ -193,66 +194,65 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
 
   Widget _buildForm() => SingleChildScrollView(
         physics: ClampingScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextFieldBlocBuilder(
-              key: Key(AppKeys.locationCityKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().cityName
-                  as TextFieldBloc<Object>,
-              keyboardType: TextInputType.streetAddress,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.city,
-                prefixIcon: Icon(
-                  Icons.location_city,
-                  color: AppTheme.primaryColor,
+        child: AppUiSafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFieldBlocBuilder(
+                key: Key(AppKeys.locationCityKey),
+                textFieldBloc: context.watch<ForecastFormBloc>().cityName,
+                keyboardType: TextInputType.streetAddress,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.city,
+                  prefixIcon: Icon(
+                    Icons.location_city,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
+                padding: const EdgeInsets.only(bottom: 0.0),
               ),
-              padding: const EdgeInsets.only(bottom: 0.0),
-            ),
-            TextFieldBlocBuilder(
-              key: Key(AppKeys.locationPostalCodeKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().postalCode
-                  as TextFieldBloc<Object>,
-              keyboardType: TextInputType.streetAddress,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.postalCode,
-                prefixIcon: Icon(
-                  Icons.place,
-                  color: AppTheme.primaryColor,
+              TextFieldBlocBuilder(
+                key: Key(AppKeys.locationPostalCodeKey),
+                textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
+                keyboardType: TextInputType.streetAddress,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.postalCode,
+                  prefixIcon: Icon(
+                    Icons.place,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
+                padding: const EdgeInsets.only(bottom: 0.0),
               ),
-              padding: const EdgeInsets.only(bottom: 0.0),
-            ),
-            TextFieldBlocBuilder(
-              key: Key(AppKeys.locationCountryKey),
-              textFieldBloc: context.watch<ForecastFormBloc>().countryCode
-                  as TextFieldBloc<Object>,
-              keyboardType: TextInputType.text,
-              readOnly: true,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.country,
-                prefixIcon: Icon(
-                  Icons.language,
-                  color: AppTheme.primaryColor,
+              TextFieldBlocBuilder(
+                key: Key(AppKeys.locationCountryKey),
+                textFieldBloc: context.watch<ForecastFormBloc>().countryCode,
+                keyboardType: TextInputType.text,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.country,
+                  prefixIcon: Icon(
+                    Icons.language,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
+                padding: const EdgeInsets.only(bottom: 10.0),
+                onTap: () => animatePage(_pageController!, page: 1),
               ),
-              padding: const EdgeInsets.only(bottom: 10.0),
-              onTap: () => animatePage(_pageController!, page: 1),
-            ),
-            SwitchFieldBlocBuilder(
-              booleanFieldBloc: context.watch<ForecastFormBloc>().primary,
-              body: GestureDetector(
-                onTap: _tapPrimaryFieldText,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(AppLocalizations.of(context)!.primaryForecast),
+              SwitchFieldBlocBuilder(
+                booleanFieldBloc: context.watch<ForecastFormBloc>().primary,
+                body: GestureDetector(
+                  onTap: _tapPrimaryFieldText,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(AppLocalizations.of(context)!.primaryForecast),
+                  ),
                 ),
+                padding: const EdgeInsets.all(0.0),
               ),
-              padding: const EdgeInsets.all(0.0),
-            ),
-            _buildButtons(),
-          ],
+              _buildButtons(),
+            ],
+          ),
         ),
       );
 
@@ -345,7 +345,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       animatePage(_pageController!, page: page);
 
   void _tapDelete() {
-    Widget noButton = FlatButton(
+    Widget noButton = TextButton(
       child: Text(
         AppLocalizations.of(context)!.no,
         style: TextStyle(color: AppTheme.primaryColor),
@@ -353,10 +353,13 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       onPressed: () => Navigator.of(context).pop(),
     );
 
-    Widget yesButton = FlatButton(
+    Widget yesButton = TextButton(
       child: Text(
         AppLocalizations.of(context)!.yes,
-        style: TextStyle(color: AppTheme.dangerColor),
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(AppTheme.dangerColor),
       ),
       onPressed: _tapConfirmDelete,
     );
@@ -375,7 +378,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   }
 
   void _tapCountry(
-    Country country,
+    Country? country,
   ) {
     if (country != null) {
       context

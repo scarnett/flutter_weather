@@ -7,8 +7,8 @@ abstract class AppEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class GetCurrentAppVersion extends AppEvent {
-  const GetCurrentAppVersion();
+class GetRemoteConfig extends AppEvent {
+  const GetRemoteConfig();
 
   @override
   List<Object> get props => [];
@@ -22,14 +22,38 @@ class ToggleThemeMode extends AppEvent {
 }
 
 class SetUpdatePeriod extends AppEvent {
+  final BuildContext context;
   final UpdatePeriod? updatePeriod;
+  final Function? callback;
 
   const SetUpdatePeriod({
+    required this.context,
     this.updatePeriod,
+    this.callback,
   });
 
   @override
   List<Object?> get props => [updatePeriod];
+}
+
+class SetPushNotification extends AppEvent {
+  final BuildContext context;
+  final PushNotification? pushNotification;
+  final Map<String, dynamic>? pushNotificationExtras;
+  final Function? callback;
+
+  const SetPushNotification({
+    required this.context,
+    this.pushNotification,
+    this.pushNotificationExtras,
+    this.callback,
+  });
+
+  @override
+  List<Object?> get props => [
+        pushNotification,
+        pushNotificationExtras,
+      ];
 }
 
 class SetThemeMode extends AppEvent {
@@ -84,10 +108,12 @@ class AddForecast extends AppEvent {
 }
 
 class UpdateForecast extends AppEvent {
+  final BuildContext context;
   final String? forecastId;
   final Map<String, dynamic> forecastData;
 
   const UpdateForecast(
+    this.context,
     this.forecastId,
     this.forecastData,
   );
@@ -108,16 +134,21 @@ class RemovePrimaryStatus extends AppEvent {
 }
 
 class RefreshForecast extends AppEvent {
+  final BuildContext context;
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
 
   const RefreshForecast(
+    this.context,
     this.forecast,
     this.temperatureUnit,
   );
 
   @override
-  List<Object> get props => [forecast, temperatureUnit];
+  List<Object> get props => [
+        forecast,
+        temperatureUnit,
+      ];
 }
 
 class DeleteForecast extends AppEvent {

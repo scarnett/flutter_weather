@@ -27,7 +27,7 @@ class _ForecastIconState extends State<ForecastIcon> {
     BuildContext context,
   ) {
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
-        !context.watch<AppBloc>().state.colorTheme!) {
+        !context.watch<AppBloc>().state.colorTheme) {
       return BoxedIcon(
         widget.icon!,
         color: widget.color,

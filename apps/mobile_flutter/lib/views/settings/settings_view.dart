@@ -3,25 +3,27 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/env_config.dart';
+import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/model.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart'
     as forecastUtils;
+import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart'
     as settingsUtils;
-import 'package:flutter_weather/views/settings/widgets/settings_enums.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
 import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:package_info/package_info.dart';
 
 class SettingsView extends StatelessWidget {
@@ -84,9 +86,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         themeMode: context.read<AppBloc>().state.themeMode,
         colorTheme: context.read<AppBloc>().state.colorTheme,
         systemNavigationBarIconBrightness:
-            context.read<AppBloc>().state.colorTheme! ? Brightness.dark : null,
+            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
-          extendBody: true,
           appBar: AppBar(
             title: Text(settingsUtils.getTitle(context, _currentPage)),
             leading: IconButton(
@@ -98,6 +99,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             onWillPop: () => _willPopCallback(),
             child: _buildContent(),
           ),
+          extendBody: true,
+          extendBodyBehindAppBar: true,
         ),
       );
 
@@ -124,39 +127,43 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   Widget _buildContent() {
+    AppState state = context.read<AppBloc>().state;
     List<Widget> children = []
       ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
 
-    if (EnvConfig.PRIVACY_POLICY_URL != null) {
+    if (AppConfig.instance.privacyPolicyUrl != '') {
       children..addAll(_buildAboutSection());
     }
 
     children..addAll(_buildBuildInfoSection());
+    children..add(SettingsOpenSourceInfo(themeMode: state.themeMode));
 
-    if (EnvConfig.GITHUB_URL != null) {
-      children
-        ..add(SettingsOpenSourceInfo(
-          themeMode: context.read<AppBloc>().state.themeMode,
-        ));
-    }
-
-    return SafeArea(
-      child: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
+    return PageView(
+      controller: _pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: AppUiSafeArea(
             child: Column(children: children),
           ),
-          SettingsUpdatePeriodPicker(
-            selectedPeriod: context.read<AppBloc>().state.updatePeriod,
-            onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
-          ),
-        ],
-      ),
+        ),
+        SettingsUpdatePeriodPicker(
+          selectedPeriod: state.updatePeriod,
+          onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
+        ),
+        SettingsPushNotificationPicker(
+          selectedNotification: state.pushNotification,
+          selectedNotificationExtras: state.pushNotificationExtras,
+          onTap: (
+            PushNotification? notification,
+            Map<String, dynamic>? extras,
+          ) =>
+              _tapPushNotification(notification, extras: extras),
+        ),
+      ],
     );
   }
 
@@ -167,7 +174,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       [
         AppSectionHeader(
           bloc: context.read<AppBloc>(),
-          text: AppLocalizations.of(context)!.autoUpdate,
+          text: AppLocalizations.of(context)!.autoUpdates,
           padding: const EdgeInsets.only(
             left: 16.0,
             right: 4.0,
@@ -178,10 +185,12 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             SizedBox(
               height: 16.0,
               child: Switch(
-                onChanged: (bool value) => _tapUpdatePeriod(
-                  value ? UpdatePeriod.HOUR2 : null,
-                  redirect: false,
-                ),
+                onChanged: (bool value) {
+                  return _tapUpdatePeriod(
+                    value ? UpdatePeriod.HOUR2 : null,
+                    redirect: false,
+                  );
+                },
                 value: (updatePeriod != null),
               ),
             ),
@@ -198,9 +207,32 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             AppLocalizations.of(context)!.updatePeriod,
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          trailing:
-              Text(context.read<AppBloc>().state.updatePeriod!.info!['text']),
+          trailing: Text(
+            context
+                .read<AppBloc>()
+                .state
+                .updatePeriod!
+                .getInfo(context: context)!['text'],
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
           onTap: () => animatePage(_pageController!, page: 1),
+        ),
+        Divider(),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.pushNotification,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          trailing: Text(
+            settingsUtils.getPushNotificationText(
+                  context,
+                  context.read<AppBloc>().state.pushNotification,
+                  extras: context.read<AppBloc>().state.pushNotificationExtras,
+                ) ??
+                '',
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          onTap: () => animatePage(_pageController!, page: 2),
         ),
       ]);
     }
@@ -232,10 +264,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         forecastUtils.hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
-          AppChekboxTile(
+          AppCheckboxTile(
             bloc: context.read<AppBloc>(),
             title: AppLocalizations.of(context)!.colorized,
-            checked: context.read<AppBloc>().state.colorTheme!,
+            checked: context.read<AppBloc>().state.colorTheme,
             onTap: _tapColorized,
           ),
           Divider(),
@@ -325,7 +357,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             bloc: context.read<AppBloc>(),
             packageInfo: _packageInfo,
           ),
-          onTap: () => animatePage(_pageController!, page: 1),
         ),
         Divider(),
       ];
@@ -340,11 +371,36 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     UpdatePeriod? period, {
     bool redirect: true,
   }) {
-    context.read<AppBloc>().add(SetUpdatePeriod(updatePeriod: period));
+    context.read<AppBloc>().add(
+          SetUpdatePeriod(
+            context: context,
+            updatePeriod: period,
+            callback: () {
+              if (redirect) {
+                animatePage(_pageController!, page: 0);
+              }
+            },
+          ),
+        );
+  }
 
-    if (redirect) {
-      animatePage(_pageController!, page: 0);
-    }
+  void _tapPushNotification(
+    PushNotification? notification, {
+    Map<String, dynamic>? extras,
+    bool redirect: true,
+  }) {
+    context.read<AppBloc>().add(
+          SetPushNotification(
+            context: context,
+            pushNotification: notification,
+            pushNotificationExtras: extras,
+            callback: () {
+              if (redirect) {
+                animatePage(_pageController!, page: 0);
+              }
+            },
+          ),
+        );
   }
 
   void _tapThemeMode(

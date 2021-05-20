@@ -1,6 +1,19 @@
 name: 'Deploy Beta to Firebase App Distribution'
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      flutterVersion:
+        description: 'Flutter Version'
+        required: true
+        default: '2.0.6'
+      distributionGroups:
+        description: 'Distribution Groups'
+        required: true
+        default: 'testers'
+      releaseNotes:
+        description: 'Release Notes'
+        required: true
 
 # on:
 #   push:
@@ -13,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION_TXT_PATH: ${{ './apps/mobile_flutter/version.txt' }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -46,8 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
-      FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
-      FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -55,10 +68,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '1.22.6'
-
-      - name: 'Decode environment config'
-        run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
+          flutter-version: '${{ github.event.inputs.flutterVersion }}'
 
       - name: 'Flutter clean'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
@@ -72,9 +82,10 @@ jobs:
       #   working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
       #   run: 'flutter format .'
 
-      - name: 'Flutter test'
-        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter test'
+      # TODO! re-enable
+      # - name: 'Flutter test'
+      #   working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+      #   run: 'flutter test'
 
   buildAndroid:
     name: 'Build Android'
@@ -93,12 +104,11 @@ jobs:
       FLUTTER_WEATHER_KEYSTORE_KEY_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}
       FLUTTER_WEATHER_KEYSTORE_JKS_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks' }}
       FLUTTER_WEATHER_KEYSTORE_JKS_ASC_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks.asc' }}
-      FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
-      FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
       FLUTTER_WEATHER_RELEASE_FOLDER: ${{ './apps/mobile_flutter/build/app/outputs/apk/prod/release' }}
       FLUTTER_WEATHER_RELEASE_ZIP: ${{ 'android-app.zip' }}
       FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'android-dev' }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -109,7 +119,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '1.22.6'
+          flutter-version: '${{ github.event.inputs.flutterVersion }}'
 
       - name: 'Decode android local.properties'
         run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
@@ -122,9 +132,6 @@ jobs:
 
       - name: 'Decode android keystore'
         run: exec .github/scripts/configure-android-keystore.sh
-
-      - name: 'Decode environment config'
-        run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
 
       - name: 'Get version.txt'
         uses: actions/download-artifact@v2
@@ -213,8 +220,6 @@ jobs:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
-      FLUTTER_WEATHER_ENV_CONFIG: ${{ secrets.FLUTTER_WEATHER_ENV_CONFIG }}
-      FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH: ${{ './apps/mobile_flutter/lib/env_config.dart' }}
       FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_P12_DATA }}
       FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_PASSWORD }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
@@ -231,6 +236,7 @@ jobs:
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'ios-beta' }}
       XCODE_VERSION: ${{ '12.3' }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -241,13 +247,10 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-          flutter-version: '1.22.6'
+          flutter-version: '${{ github.event.inputs.flutterVersion }}'
 
       - name: 'Decode GoogleService-Info.plist'
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
-
-      - name: 'Decode environment config'
-        run: echo "${{ env.FLUTTER_WEATHER_ENV_CONFIG }}" > "${{ env.FLUTTER_WEATHER_ENV_CONFIG_FILE_PATH }}"
 
       - name: 'Decode signing certificate'
         run: echo "${{ env.FLUTTER_WEATHER_CERTS_P12_DATA }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_CERTS_FILE_PATH }}"
@@ -325,6 +328,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -338,7 +342,8 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: testers
+          groups: '${{ github.event.inputs.distributionGroups }}'
+          releaseNotes: '${{ github.event.inputs.releaseNotes }}'
           file: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
 
   deployIos:
@@ -347,6 +352,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -360,5 +366,6 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_IOS_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: testers
+          groups: '${{ github.event.inputs.distributionGroups }}'
+          releaseNotes: '${{ github.event.inputs.releaseNotes }}'
           file: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
