@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -254,7 +253,7 @@ class _LookupPageViewState extends State<LookupPageView> {
               (Country _country) => _country.name == lookupData['countryCode']);
 
       lookupData['countryCode'] = (country == null)
-          ? AppConfig.instance.defaultCountryCode
+          ? null // AppConfig.instance.defaultCountryCode
           : country.countryCode;
     }
 
