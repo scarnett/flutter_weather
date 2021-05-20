@@ -17,6 +17,18 @@ Future<Map<String, dynamic>> getDeviceInfo() async {
   return data;
 }
 
+Future<String?> getDeviceId() async {
+  Map<String, dynamic> data = await getDeviceInfo();
+
+  if (Platform.isAndroid) {
+    return data['androidId'];
+  } else if (Platform.isIOS) {
+    return data['identifierForVendor'];
+  }
+
+  return null;
+}
+
 Map<String, dynamic> _readAndroidBuildData(
   AndroidDeviceInfo build,
 ) =>

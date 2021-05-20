@@ -86,14 +86,14 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     AppPrefs prefs = AppPrefs();
     prefs.updatePeriod = event.updatePeriod;
 
-    Map<String, dynamic> device = await getDeviceInfo();
+    String? deviceId = await getDeviceId();
 
     if (event.updatePeriod == null) {
       prefs.pushNotification = null;
-      await removePushNotification(deviceId: device['id']);
+      await removePushNotification(deviceId: deviceId);
     } else if (state.pushNotification == null) {
       prefs.pushNotification = PushNotification.OFF;
-      await removePushNotification(deviceId: device['id']);
+      await removePushNotification(deviceId: deviceId);
     }
 
     yield state.copyWith(
@@ -110,7 +110,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       String? token = await FirebaseMessaging.instance.getToken();
 
       await savePushNotification(
-        deviceId: device['id'],
+        deviceId: deviceId,
         period: event.updatePeriod ?? null,
         pushNotification: state.pushNotification ?? null,
         pushNotificationExtras: state.pushNotificationExtras ?? null,
@@ -179,14 +179,14 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
     );
 
-    Map<String, dynamic> device = await getDeviceInfo();
+    String? deviceId = await getDeviceId();
 
     if ((event.pushNotification != null) &&
         (event.pushNotification != PushNotification.OFF)) {
       String? token = await FirebaseMessaging.instance.getToken();
 
       await savePushNotification(
-        deviceId: device['id'],
+        deviceId: deviceId,
         period: state.updatePeriod,
         pushNotification: state.pushNotification,
         pushNotificationExtras: state.pushNotificationExtras,
@@ -194,7 +194,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         fcmToken: token,
       );
     } else {
-      await removePushNotification(deviceId: device['id']);
+      await removePushNotification(deviceId: deviceId);
     }
 
     showSnackbar(
@@ -237,11 +237,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     if ((prefs.pushNotification != null) &&
         (prefs.pushNotification != PushNotification.OFF)) {
-      Map<String, dynamic> device = await getDeviceInfo();
+      String? deviceId = await getDeviceId();
       String? token = await FirebaseMessaging.instance.getToken();
 
       await savePushNotification(
-        deviceId: device['id'],
+        deviceId: deviceId,
         period: state.updatePeriod,
         pushNotification: state.pushNotification,
         pushNotificationExtras: state.pushNotificationExtras,
