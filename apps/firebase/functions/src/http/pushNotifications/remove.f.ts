@@ -13,20 +13,16 @@ exports = module.exports = functions.https
           return Promise.all(promises)
               .then(() => {
                 res.status(200).send('ok')
-                return
               })
               .catch((error: any) => {
                 functions.logger.error(error)
                 res.status(500).send('error')
-                return
               })
         } catch (error) {
           functions.logger.error(error)
           res.status(500).send('error')
-          return
         }
       }
 
       res.status(200).send('ok')
-      return
     })
