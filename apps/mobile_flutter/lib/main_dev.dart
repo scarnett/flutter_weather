@@ -1,7 +1,7 @@
-import 'package:background_fetch/background_fetch.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app.dart';
@@ -10,18 +10,26 @@ import 'package:flutter_weather/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
-import 'package:flutter_weather/notifications/notification_helper.dart';
-import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(
+  RemoteMessage message,
+) async {
+  await Firebase.initializeApp();
+  // TODO!
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Firebase
   await Firebase.initializeApp();
+
+  // Messaging
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Crashlytics
   if (kDebugMode) {
@@ -43,9 +51,6 @@ Future<void> main() async {
   // Preferences
   await AppPrefs().init();
 
-  // Local notifications
-  await initLocalNotifications();
-
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
     if (remoteConfig.sentryDsn.isNullOrEmpty()) {
@@ -63,6 +68,8 @@ Future<void> main() async {
   AppConfig config = AppConfig(
     flavor: Flavor.dev,
     appVersion: remoteConfig.appVersion,
+    appPushNotificationsSave: remoteConfig.appPushNotificationsSave,
+    appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
     openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
     openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
     openWeatherMapApiCurrentForecastPath:
@@ -82,7 +89,6 @@ Future<void> main() async {
 
   if (remoteConfig.sentryDsn.isNullOrEmpty()) {
     runApp(config);
-    BackgroundFetch.registerHeadlessTask(initBackgroundFetchHeadlessTask);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
@@ -90,7 +96,6 @@ Future<void> main() async {
         ..environment = 'dev',
       appRunner: () {
         runApp(config);
-        BackgroundFetch.registerHeadlessTask(initBackgroundFetchHeadlessTask);
       },
     );
   }

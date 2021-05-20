@@ -7,7 +7,6 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
-import 'package:flutter_weather/utils/background_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 
 class WeatherApp extends StatelessWidget {
@@ -50,7 +49,6 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    initBackgroundFetch();
   }
 
   @override

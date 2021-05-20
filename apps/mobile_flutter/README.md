@@ -58,7 +58,7 @@ storeFile=
 
 ## Firebase Configuration
 
-This application uses <a href="https://firebase.google.com/" target="_blank">Firebase</a> for web hosting, app distribution and remote configuration. You will need to create your own account and copy your Firebase configuration into the following folder(s):
+This application uses <a href="https://firebase.google.com/" target="_blank">Firebase</a> for web hosting, app distribution, functions and remote configuration. You will need to create your own account and copy your Firebase configuration into the following folder(s):
 
 **Android**:
 ```bash
@@ -71,6 +71,24 @@ ios/Runner/GoogleService-Info.plist
 ```
 
 You can find this file in your Firebase console in *Project Settings -> Your apps -> SDK setup and configuration*.
+
+## Firebase Functions
+```bash
+npm run deploy
+```
+[**Read More**](../firebase/README.md)
+
+## Firebase Firestore Rules
+```bash
+npm run deploy-rules
+```
+[**Read More**](../firebase/README.md)
+
+## Firebase Hosting
+```bash
+firebase deploy --only hosting
+```
+[**Read More**](../firebase/README.md)
 
 ## Run Application (Nx)
 This project uses <a href="https://nx.dev" target="_blank">Nx</a>. Go [here](https://nx.dev/latest/angular/getting-started/cli-overview) for installation instructions.

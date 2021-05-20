@@ -11,17 +11,18 @@ dependencies:
   flutter:
     sdk: flutter
 
-  background_fetch: '^1.0.0-nullsafety.2'
   bloc: '^7.0.0'
+  cloud_firestore: '^2.1.0'
   collection: '^1.15.0-nullsafety.4'
   cupertino_icons: '^1.0.3'
+  device_info: '^2.0.0'
   equatable: '^2.0.0'
   firebase_core: '^1.1.1'
   firebase_crashlytics: '^2.0.3'
+  firebase_messaging: '^10.0.0'
   firebase_remote_config: '^0.10.0-dev.3'
   flutter_bloc: '^7.0.0'
   flutter_form_bloc: '^0.20.1'
-  flutter_local_notifications: '^5.0.0+4'
   flutter_switch: '^0.3.0'
   geolocator: '^7.0.3'
   http: '^0.13.3'
