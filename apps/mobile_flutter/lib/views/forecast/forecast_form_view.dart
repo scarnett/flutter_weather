@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -69,7 +69,6 @@ class _ForecastFormViewState extends State<ForecastPageView> {
                 ? Brightness.dark
                 : null,
         child: Scaffold(
-          extendBody: true,
           appBar: AppBar(
             title: Text(getTitle(context, _currentPage)),
             leading: IconButton(
@@ -84,6 +83,8 @@ class _ForecastFormViewState extends State<ForecastPageView> {
               child: _buildBody(context.watch<AppBloc>().state),
             ),
           ),
+          extendBody: true,
+          extendBodyBehindAppBar: true,
         ),
       );
 
@@ -125,20 +126,18 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   Widget _buildBody(
     AppState state,
   ) =>
-      SafeArea(
-        child: ForecastForm(
-          buttonKey: Key(AppKeys.saveForecastButtonKey),
-          formController: _formController,
-          saveButtonText: AppLocalizations.of(context)!.save,
-          deleteButtonText: AppLocalizations.of(context)!.delete,
-          forecast: state.forecasts.isNullOrZeroLength()
-              ? null
-              : state.forecasts[state.selectedForecastIndex!],
-          forecasts: state.forecasts,
-          onSuccess: _onSuccess,
-          onFailure: _onFailure,
-          onPageChange: _onPageChange,
-        ),
+      ForecastForm(
+        buttonKey: Key(AppKeys.saveForecastButtonKey),
+        formController: _formController,
+        saveButtonText: AppLocalizations.of(context)!.save,
+        deleteButtonText: AppLocalizations.of(context)!.delete,
+        forecast: state.forecasts.isNullOrZeroLength()
+            ? null
+            : state.forecasts[state.selectedForecastIndex],
+        forecasts: state.forecasts,
+        onSuccess: _onSuccess,
+        onFailure: _onFailure,
+        onPageChange: _onPageChange,
       );
 
   _tapBack() {
@@ -163,7 +162,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
             (Country _country) => _country.name == forecastData['countryCode']);
 
     forecastData['countryCode'] = (country == null)
-        ? AppConfig.instance.defaultCountryCode
+        ? null // AppConfig.instance.defaultCountryCode
         : country.countryCode;
 
     if (forecastData['primary']) {
@@ -178,7 +177,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
 
     context
         .read<AppBloc>()
-        .add(UpdateForecast(appState.activeForecastId, forecastData));
+        .add(UpdateForecast(context, appState.activeForecastId, forecastData));
   }
 
   void _onFailure(
@@ -186,8 +185,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     FormBlocFailure<String, String> state,
   ) {
     closeKeyboard(context);
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text(state.failureResponse!)));
+    showSnackbar(context, state.failureResponse!);
   }
 
   void _onPageChange(

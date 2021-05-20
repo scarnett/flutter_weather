@@ -1,8 +1,10 @@
+// @dart=2.10
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/main_test.dart' as app;
 import 'package:integration_test/integration_test.dart';
+
 import '../../integration_test_utils.dart';
 
 void main() {

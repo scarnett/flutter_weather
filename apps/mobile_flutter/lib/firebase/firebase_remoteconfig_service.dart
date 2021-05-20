@@ -2,22 +2,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:sentry/sentry.dart';
 
 class FirebaseRemoteConfigService {
-  final RemoteConfig? _remoteConfig;
-
-  FirebaseRemoteConfigService({
-    RemoteConfig? remoteConfig,
-  }) : _remoteConfig = remoteConfig;
-
-  static FirebaseRemoteConfigService? _instance;
-  static FirebaseRemoteConfigService? getInstance() {
-    if (_instance == null) {
-      _instance = FirebaseRemoteConfigService(
-        remoteConfig: RemoteConfig.instance,
-      );
-    }
-
-    return _instance;
-  }
+  late RemoteConfig _remoteConfig;
 
   Future initialize() async {
     try {
@@ -35,32 +20,52 @@ class FirebaseRemoteConfigService {
   }
 
   Future _fetchAndActivate() async {
-    await _remoteConfig!.fetch();
-    await _remoteConfig!.activate();
+    final RemoteConfig initialRemoteConfig = RemoteConfig.instance;
+
+    await initialRemoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: Duration(minutes: 1),
+      minimumFetchInterval: Duration(hours: 1),
+    ));
+
+    await initialRemoteConfig.fetch();
+    _remoteConfig = initialRemoteConfig;
+    bool fetchActivated = await _remoteConfig.activate();
+    print('[FirebaseRemoteConfig] Fetched: $fetchActivated');
+
+    DateTime lastFetch = _remoteConfig.lastFetchTime;
+    print('[FirebaseRemoteConfig] Last fetch: $lastFetch');
   }
 
-  String get appVersion => _remoteConfig!.getString('app_version');
-  String get openweathermapApiKey =>
-      _remoteConfig!.getString('openweathermap_api_key');
+  String get appVersion => _remoteConfig.getString('app_version');
+  String get appPushNotificationsSave =>
+      _remoteConfig.getString('app_push_notifications_save');
 
-  String get openweathermapApiUri =>
-      _remoteConfig!.getString('openweathermap_api_uri');
+  String get appPushNotificationsRemove =>
+      _remoteConfig.getString('app_push_notifications_remove');
 
-  String get openweathermapApiDailyForecastPath =>
-      _remoteConfig!.getString('openweathermap_api_daily_forecast_path');
+  String get openWeatherMapApiKey =>
+      _remoteConfig.getString('openweathermap_api_key');
 
-  String get openweathermapApiHourlyForecastPath =>
-      _remoteConfig!.getString('openweathermap_api_hourly_forecast_path');
+  String get openWeatherMapApiUri =>
+      _remoteConfig.getString('openweathermap_api_uri');
 
-  int get refreshTimeout => _remoteConfig!.getInt('refresh_timeout');
+  String get openWeatherMapApiCurrentForecastPath =>
+      _remoteConfig.getString('openweathermap_api_current_forecast_path');
+
+  String get openWeatherMapApiDailyForecastPath =>
+      _remoteConfig.getString('openweathermap_api_daily_forecast_path');
+
+  String get openWeatherMapApiHourlyForecastPath =>
+      _remoteConfig.getString('openweathermap_api_hourly_forecast_path');
+
+  int get refreshTimeout => _remoteConfig.getInt('refresh_timeout');
 
   String get defaultCountryCode =>
-      _remoteConfig!.getString('default_country_code');
+      _remoteConfig.getString('default_country_code');
 
-  String get supportedLocales => _remoteConfig!.getString('supported_locales');
-  String? get privacyPolicyUrl =>
-      _remoteConfig!.getString('privacy_policy_url');
+  String get supportedLocales => _remoteConfig.getString('supported_locales');
+  String? get privacyPolicyUrl => _remoteConfig.getString('privacy_policy_url');
 
-  String? get githubUrl => _remoteConfig!.getString('github_url');
-  String? get sentryDsn => _remoteConfig!.getString('sentry_dsn');
+  String? get githubUrl => _remoteConfig.getString('github_url');
+  String? get sentryDsn => _remoteConfig.getString('sentry_dsn');
 }

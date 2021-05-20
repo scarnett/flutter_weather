@@ -3,8 +3,10 @@
     <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
         <item name="android:windowBackground">@drawable/launch_background</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
     <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 </resources>

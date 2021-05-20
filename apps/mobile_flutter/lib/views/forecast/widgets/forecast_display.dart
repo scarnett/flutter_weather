@@ -429,7 +429,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
   _buildDayForecastsCircleIndicator(
     AppState state,
-    List<ForecastDay> days, {
+    List<ForecastDay>? days, {
     int dayCount: 3, // TODO! parameter?
   }) {
     if (!widget.showSixDayForecast) {
@@ -543,10 +543,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Widget _buildLastUpdated() {
-    if (widget.forecast == null) {
-      return Container();
-    }
-
     DateTime? lastUpdated = widget.forecast.lastUpdated;
     if (lastUpdated == null) {
       return Container();
@@ -556,10 +552,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
     if (lastUpdated.isToday()) {
       formattedLastUpdated = AppLocalizations.of(context)!
-          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a'));
+          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a')!);
     } else {
       formattedLastUpdated = AppLocalizations.of(context)!.getLastUpdatedOn(
-          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a'));
+          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a')!);
     }
 
     return Container(
@@ -572,11 +568,9 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
   void _tapForecastDetails() {
     Forecast forecast =
-        widget.bloc.state.forecasts[widget.bloc.state.selectedForecastIndex!];
+        widget.bloc.state.forecasts[widget.bloc.state.selectedForecastIndex];
 
-    if (forecast != null) {
-      widget.bloc.add(SetActiveForecastId(forecast.id));
-      Navigator.push(context, ForecastDetailsView.route());
-    }
+    widget.bloc.add(SetActiveForecastId(forecast.id));
+    Navigator.push(context, ForecastDetailsView.route());
   }
 }

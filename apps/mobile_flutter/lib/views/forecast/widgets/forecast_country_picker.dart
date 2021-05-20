@@ -9,8 +9,10 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class ForecastCountryPicker extends StatefulWidget {
   final String? selectedCountryCode;
@@ -52,10 +54,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
           data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
               ? appDarkThemeData
               : appLightThemeData,
-          child: Scaffold(
-            extendBody: true,
-            body: _buildBody(),
-          ),
+          child: _buildBody(),
         ),
       );
 
@@ -78,64 +77,83 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
     });
   }
 
-  Widget _buildBody() => Column(
-        children: <Widget>[
-          _buildCountryFilter(),
-          Expanded(child: _buildListOfCountries()),
-        ],
-      );
-
-  Widget _buildCountryFilter() => TextField(
-        key: Key(AppKeys.locationCountryFilterKey),
-        keyboardType: TextInputType.streetAddress,
-        decoration: InputDecoration(
-          labelText: AppLocalizations.of(context)!.filterCountries,
-          prefixIcon: Icon(
-            Icons.filter_alt,
-            color: AppTheme.primaryColor,
+  Widget _buildBody() => SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: StickyHeader(
+          header: Column(
+            children: [
+              AppUiSafeArea(
+                bottom: false,
+                child: _buildCountryFilter(),
+              ),
+            ],
+          ),
+          content: AppUiSafeArea(
+            top: false,
+            child: _buildListOfCountries(),
           ),
         ),
-        onChanged: (String criteria) {
-          setState(() {
-            _filteredCountryList = _countryList!
-                .where((Country country) => (country.name
-                        .toLowerCase()
-                        .contains(criteria.toLowerCase()) ||
-                    country.countryCode
-                        .toLowerCase()
-                        .contains(criteria.toLowerCase())))
-                .toList();
-          });
-        },
       );
 
-  Widget _buildListOfCountries() => ListView.separated(
-        itemBuilder: (
-          BuildContext context,
-          int index,
-        ) {
-          final Country country = _filteredCountryList![index];
+  Widget _buildCountryFilter() => Container(
+        color: Theme.of(context).appBarTheme.color,
+        child: TextField(
+          key: Key(AppKeys.locationCountryFilterKey),
+          keyboardType: TextInputType.streetAddress,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.filterCountries,
+            prefixIcon: Icon(
+              Icons.filter_alt,
+              color: AppTheme.primaryColor,
+            ),
+          ),
+          onChanged: (String criteria) {
+            setState(() {
+              _filteredCountryList = _countryList!
+                  .where((Country country) => (country.name
+                          .toLowerCase()
+                          .contains(criteria.toLowerCase()) ||
+                      country.countryCode
+                          .toLowerCase()
+                          .contains(criteria.toLowerCase())))
+                  .toList();
+            });
+          },
+        ),
+      );
 
-          return ListTile(
-            key: Key(country.countryCode),
-            title: Text(
-              country.name,
-              style: Theme.of(context).textTheme.headline5!.copyWith(
-                    color: _getCountryColor(country),
-                  ),
-            ),
-            subtitle: Text(
-              country.countryCode,
-              style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                    fontWeight: FontWeight.w400,
-                  ),
-            ),
-            onTap: () => _tapCountry(country),
-          );
-        },
-        separatorBuilder: (context, index) => Divider(),
-        itemCount:
-            (_filteredCountryList != null) ? _filteredCountryList!.length : 0,
+  Widget _buildListOfCountries() => Container(
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (
+            BuildContext context,
+            int index,
+          ) {
+            final Country country = _filteredCountryList![index];
+
+            return ListTile(
+              key: Key(country.countryCode),
+              title: Text(
+                country.name,
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      color: _getCountryColor(country),
+                    ),
+              ),
+              subtitle: Text(
+                country.countryCode,
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                      fontWeight: FontWeight.w400,
+                    ),
+              ),
+              onTap: () => _tapCountry(country),
+            );
+          },
+          separatorBuilder: (context, index) => Divider(),
+          padding: const EdgeInsets.all(0.0),
+          itemCount:
+              (_filteredCountryList != null) ? _filteredCountryList!.length : 0,
+        ),
       );
 
   void _tapCountry(

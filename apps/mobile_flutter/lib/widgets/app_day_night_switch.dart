@@ -45,7 +45,7 @@ class _AppDayNightSwitchState extends State<AppDayNightSwitch> {
               widget.bloc.state.colorTheme ? Colors.white : Colors.grey[300]!,
           width: 2.0,
         ),
-        activeColor: AppTheme.secondaryColor!,
+        activeColor: AppTheme.secondaryColor,
         inactiveColor: Colors.white.withOpacity(0.5),
         activeIcon: Icon(
           widget.activeIcon,

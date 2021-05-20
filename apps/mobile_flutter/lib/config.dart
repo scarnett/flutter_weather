@@ -4,10 +4,13 @@ import 'package:flutter_weather/enums.dart';
 class AppConfig extends InheritedWidget {
   final Flavor flavor;
   final String? appVersion;
-  final String? openweathermapApiKey;
-  final String? openweathermapApiUri;
-  final String? openweathermapApiDailyForecastPath;
-  final String? openweathermapApiHourlyForecastPath;
+  final String? appPushNotificationsSave;
+  final String? appPushNotificationsRemove;
+  final String? openWeatherMapApiKey;
+  final String? openWeatherMapApiUri;
+  final String? openWeatherMapApiCurrentForecastPath;
+  final String? openWeatherMapApiDailyForecastPath;
+  final String? openWeatherMapApiHourlyForecastPath;
   final int? refreshTimeout;
   final String? defaultCountryCode;
   final String? supportedLocales;
@@ -20,10 +23,13 @@ class AppConfig extends InheritedWidget {
   factory AppConfig({
     required flavor,
     appVersion,
-    openweathermapApiKey,
-    openweathermapApiUri,
-    openweathermapApiDailyForecastPath,
-    openweathermapApiHourlyForecastPath,
+    appPushNotificationsSave,
+    appPushNotificationsRemove,
+    openWeatherMapApiKey,
+    openWeatherMapApiUri,
+    openWeatherMapApiCurrentForecastPath,
+    openWeatherMapApiDailyForecastPath,
+    openWeatherMapApiHourlyForecastPath,
     refreshTimeout,
     defaultCountryCode,
     supportedLocales,
@@ -35,10 +41,13 @@ class AppConfig extends InheritedWidget {
     _instance = AppConfig._internal(
       flavor,
       appVersion,
-      openweathermapApiKey,
-      openweathermapApiUri,
-      openweathermapApiDailyForecastPath,
-      openweathermapApiHourlyForecastPath,
+      appPushNotificationsSave,
+      appPushNotificationsRemove,
+      openWeatherMapApiKey,
+      openWeatherMapApiUri,
+      openWeatherMapApiCurrentForecastPath,
+      openWeatherMapApiDailyForecastPath,
+      openWeatherMapApiHourlyForecastPath,
       refreshTimeout,
       defaultCountryCode,
       supportedLocales,
@@ -54,10 +63,13 @@ class AppConfig extends InheritedWidget {
   AppConfig._internal(
     this.flavor,
     this.appVersion,
-    this.openweathermapApiKey,
-    this.openweathermapApiUri,
-    this.openweathermapApiDailyForecastPath,
-    this.openweathermapApiHourlyForecastPath,
+    this.appPushNotificationsSave,
+    this.appPushNotificationsRemove,
+    this.openWeatherMapApiKey,
+    this.openWeatherMapApiUri,
+    this.openWeatherMapApiCurrentForecastPath,
+    this.openWeatherMapApiDailyForecastPath,
+    this.openWeatherMapApiHourlyForecastPath,
     this.refreshTimeout,
     this.defaultCountryCode,
     this.supportedLocales,
