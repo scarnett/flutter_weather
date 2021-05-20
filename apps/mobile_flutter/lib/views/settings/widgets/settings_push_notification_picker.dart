@@ -10,6 +10,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
+import 'package:flutter_weather/utils/push_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
@@ -224,6 +225,10 @@ class _SettingsPushNotificationPickerState
 
     switch (notification) {
       case PushNotification.SAVED_LOCATION:
+        if (!await requestPushNotificationPermission()) {
+          break;
+        }
+
         if (forecast != null) {
           notificationExtras = {
             'location': {
@@ -238,6 +243,10 @@ class _SettingsPushNotificationPickerState
         break;
 
       case PushNotification.CURRENT_LOCATION:
+        if (!await requestPushNotificationPermission()) {
+          break;
+        }
+
         setState(() => processing = true);
 
         Position? position = await getPosition();
