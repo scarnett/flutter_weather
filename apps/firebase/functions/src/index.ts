@@ -1,6 +1,8 @@
 import camelcase from 'camelcase'
 import * as admin from 'firebase-admin'
 import * as glob from 'glob'
+import * as i18n from 'i18n'
+import * as path from 'path'
 
 admin.initializeApp()
 
@@ -9,6 +11,11 @@ const paths: string[] = [
   './http/**/*.f.js', // HTTP
   './schedule/*.f.js', // Cron
 ]
+
+i18n.configure({
+  locales: ['en'],
+  directory: path.join(__dirname, 'locales'),
+})
 
 for (const path of paths) {
   const files: string[] = glob.sync(path, {cwd: __dirname, ignore: `./node_modules/**`})

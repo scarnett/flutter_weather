@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
+import * as i18n from 'i18n'
 import { DateTime } from 'luxon'
 import OpenWeatherMap from 'openweathermap-ts'
 import * as deviceModel from '../models/device'
@@ -47,9 +48,13 @@ exports = module.exports = functions.pubsub
                 // functions.logger.debug(JSON.stringify(response))
 
                 const message: messageModel.Message = new messageModel.Message()
+                const messageText: string = i18n.__('{{temp}}{{temperatureUnit}} in {{cityName}}', {
+                  temp: response.main.temp.toFixed(),
+                  temperatureUnit: forecastUtils.getTemperatureUnit(device.temperatureUnit),
+                  cityName: response.name,
+                })
 
-                // TODO! i18n, degree symbol
-                message.title = `${response.main.temp.toFixed()}F in ${response.name}`
+                message.title = messageText
                 message.body = stringUtils.capitalize(response.weather[0].description)
 
                 // Push the message to the device

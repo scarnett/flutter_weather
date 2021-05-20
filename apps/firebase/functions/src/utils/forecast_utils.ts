@@ -49,3 +49,22 @@ export function getPeriodHours(device: deviceModel.Device): number {
       return 0
   }
 }
+
+/**
+ * Gets the temperature unit
+ * @param {any} temperatureUnit the temperature unit. can be one of standard, metric or imperial
+ * @return {string} with the temperature unit
+ */
+export function getTemperatureUnit(temperatureUnit: any): string {
+  switch (temperatureUnit) {
+    case 'metric':
+      return '°C'
+
+    case 'standard':
+      return ' K'
+
+    case 'imperial':
+    default:
+      return '°F'
+  }
+}

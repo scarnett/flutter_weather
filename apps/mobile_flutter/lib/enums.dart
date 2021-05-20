@@ -14,7 +14,7 @@ extension TemperatureUnitExtension on TemperatureUnit {
   String get units {
     switch (this) {
       case TemperatureUnit.kelvin:
-        return 'internal';
+        return 'standard';
 
       case TemperatureUnit.celsius:
         return 'metric';
