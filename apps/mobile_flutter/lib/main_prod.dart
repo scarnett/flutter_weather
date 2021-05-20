@@ -38,7 +38,9 @@ Future<void> main() async {
 
   // Remote configuration
   final FirebaseRemoteConfigService remoteConfig =
-      FirebaseRemoteConfigService.getInstance()!..initialize();
+      FirebaseRemoteConfigService();
+
+  await remoteConfig.initialize();
 
   // Bloc
   Bloc.observer = AppBlocObserver();
