@@ -22,6 +22,7 @@ functions/src/keys/
 ```bash
 firebase functions:config:set auth.key.filename="<you_firebase_sdk_private_key_filename>" # This is the private key that you generated above. Ex: flutter-weather-firebase-adminsdk.json
 firebase functions:config:set project.id="<your_firebase_project_id>"
+firebase functions:config:set openweathermap.key="<your_openweathermap_api_key>"
 ```
 
 ### Inspect your Firebase Environment Configuration

@@ -4,8 +4,9 @@
 export class Message {
   title: any
   body: any
-  data?: any = {}
-  color?: string = '#7D33B7'
-  sound?: string = 'default'
-  icon?: string = 'app_icon'
+  data: any = {}
+  color: string = '#7D33B7'
+  sound: string = 'default'
+  icon: string = 'app_icon'
+  tag: string = 'flutter_weather'
 }

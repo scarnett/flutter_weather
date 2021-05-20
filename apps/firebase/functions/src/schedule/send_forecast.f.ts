@@ -1,8 +1,13 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
+import { DateTime } from 'luxon'
+import OpenWeatherMap from 'openweathermap-ts'
 import * as deviceModel from '../models/device'
 import * as messageModel from '../models/message'
+import { PushNotificationExtras } from '../models/push_notification'
+import * as forecastUtils from '../utils/forecast_utils'
 import * as pushUtils from '../utils/push_utils'
+import * as stringUtils from '../utils/string_utils'
 
 /**
  * This pushes current forecast notifications to devices.
@@ -12,29 +17,54 @@ exports = module.exports = functions.pubsub
     .timeZone('America/Chicago')
     .onRun(async (context: functions.EventContext) => {
       try {
-        const devicesSnapshot = await admin.firestore()
+        const openWeather: OpenWeatherMap = new OpenWeatherMap({
+          apiKey: functions.config().openweathermap.key,
+        })
+
+        const now: admin.firestore.Timestamp = admin.firestore.Timestamp.now()
+        const nowDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
+
+        const promises: Array<Promise<any>> = []
+        const devicesSnapshot: admin.firestore.QuerySnapshot<admin.firestore.DocumentData> = await admin.firestore()
             .collection('devices')
             .get()
 
-        const promises: Array<Promise<any>> = []
-
-        devicesSnapshot.docs.forEach((deviceDoc: admin.firestore.QueryDocumentSnapshot) => {
+        devicesSnapshot.docs.forEach(async (deviceDoc: admin.firestore.QueryDocumentSnapshot) => {
           const deviceData: admin.firestore.DocumentData = deviceDoc.data()
           const device: deviceModel.Device = deviceData as deviceModel.Device
-          const message: messageModel.Message | null = {
-            title: 'Hello World', // TODO!
-            body: 'This is a test', // TODO!
-            color: '#7D33B7', // TODO!
-            sound: 'default', // TODO!
-            icon: 'app_icon', // TODO!
-          }
+          if (forecastUtils.canPushForecast(device, now.toDate())) {
+            if ((device.pushNotificationExtras != null) && (device.pushNotificationExtras.location != null)) {
+              openWeather.setUnits(device.temperatureUnit || 'imperial')
 
-          promises.push(pushUtils.pushMessage(device, message)
-              .then((res: any) => Promise.resolve('ok'))
-              .catch((error: any) => {
-                functions.logger.error(error)
-                return Promise.resolve(null)
-              }))
+              const extras: PushNotificationExtras = device.pushNotificationExtras
+              const response: any = await openWeather.getByGeoCoordinates({
+                latitude: extras.location!.latitude,
+                longitude: extras.location!.longitude,
+                queryType: 'weather',
+              })
+
+              if (response != null) {
+                // functions.logger.debug(JSON.stringify(response))
+
+                const message: messageModel.Message = new messageModel.Message()
+
+                // TODO! i18n, degree symbol
+                message.title = `${response.main.temp.toFixed()}F in ${response.name}`
+                message.body = stringUtils.capitalize(response.weather[0].description)
+
+                // Push the message to the device
+                promises.push(pushUtils.pushMessage(device, message)
+                    .then((res: any) => Promise.resolve('ok'))
+                    .catch((error: any) => {
+                      functions.logger.error(error)
+                      return Promise.resolve(null)
+                    }))
+
+                // Update the last push date in the device document
+                promises.push(deviceDoc.ref.update('lastPushDate', nowDate.toJSDate()))
+              }
+            }
+          }
         })
 
         return Promise.all(promises)

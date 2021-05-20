@@ -48,7 +48,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     } else if (event is SetColorTheme) {
       yield _mapSetColorThemeToStates(event);
     } else if (event is SetTemperatureUnit) {
-      yield _mapSetTemperatureUnitToStates(event);
+      yield* _mapSetTemperatureUnitToStates(event);
     } else if (event is SelectedForecastIndex) {
       yield _mapSelectedForecastIndexToStates(event);
     } else if (event is AddForecast) {
@@ -96,6 +96,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       await removePushNotification(deviceId: device['id']);
     }
 
+    yield state.copyWith(
+      updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
+      pushNotification: (event.updatePeriod == null)
+          ? Nullable<PushNotification?>(null)
+          : (state.pushNotification == null)
+              ? Nullable<PushNotification?>(PushNotification.OFF)
+              : Nullable<PushNotification?>(state.pushNotification),
+    );
+
     if ((prefs.pushNotification != null) &&
         (prefs.pushNotification != PushNotification.OFF)) {
       String? token = await FirebaseMessaging.instance.getToken();
@@ -109,15 +118,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         fcmToken: token,
       );
     }
-
-    yield state.copyWith(
-      updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
-      pushNotification: (event.updatePeriod == null)
-          ? Nullable<PushNotification?>(null)
-          : (state.pushNotification == null)
-              ? Nullable<PushNotification?>(PushNotification.OFF)
-              : Nullable<PushNotification?>(state.pushNotification),
-    );
 
     if (event.callback != null) {
       event.callback!();
@@ -225,15 +225,30 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         colorTheme: event.colorTheme,
       );
 
-  AppState _mapSetTemperatureUnitToStates(
+  Stream<AppState> _mapSetTemperatureUnitToStates(
     SetTemperatureUnit event,
-  ) {
+  ) async* {
     AppPrefs prefs = AppPrefs();
     prefs.temperatureUnit = event.temperatureUnit;
 
-    return state.copyWith(
+    yield state.copyWith(
       temperatureUnit: event.temperatureUnit,
     );
+
+    if ((prefs.pushNotification != null) &&
+        (prefs.pushNotification != PushNotification.OFF)) {
+      Map<String, dynamic> device = await getDeviceInfo();
+      String? token = await FirebaseMessaging.instance.getToken();
+
+      await savePushNotification(
+        deviceId: device['id'],
+        period: state.updatePeriod,
+        pushNotification: state.pushNotification,
+        pushNotificationExtras: state.pushNotificationExtras,
+        temperatureUnit: event.temperatureUnit,
+        fcmToken: token,
+      );
+    }
   }
 
   AppState _mapSelectedForecastIndexToStates(

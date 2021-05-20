@@ -7,19 +7,20 @@ exports = module.exports = functions.https
       const data: any = req.body
       if (data != null) {
         try {
-          const pushNotificationExtras: string = data['push_notification_extras']
+          const pushNotificationExtras: string = data['pushNotificationExtras']
 
           // Save the device to firestore
           promises.push(admin.firestore().doc(`devices/${data['device']}`).set({
             'period': data['period'],
-            'push_notification': data['push_notification'],
-            'push_notification_extras': (pushNotificationExtras == null) ?
+            'pushNotification': data['pushNotification'],
+            'pushNotificationExtras': (pushNotificationExtras == null) ?
                 admin.firestore.FieldValue.delete() :
                 JSON.parse(pushNotificationExtras),
+            'temperatureUnit': data['temperatureUnit'],
             'fcm': {
-              'token': data['fcm_token'],
+              'token': data['fcmToken'],
             },
-            'last_updated': admin.firestore.FieldValue.serverTimestamp(),
+            'lastUpdated': admin.firestore.FieldValue.serverTimestamp(),
           }, {
             'merge': true,
           }))

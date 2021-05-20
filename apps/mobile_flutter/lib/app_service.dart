@@ -18,15 +18,15 @@ Future<http.Response> savePushNotification({
       body: {
         'device': deviceId,
         'period': (period == null) ? null : period.getInfo()!['id'],
-        'push_notification': (pushNotification == null)
+        'pushNotification': (pushNotification == null)
             ? null
             : pushNotification.getInfo()!['id'],
-        'push_notification_extras': (pushNotificationExtras == null)
+        'pushNotificationExtras': (pushNotificationExtras == null)
             ? null
             : json.encode(pushNotificationExtras),
-        'temperature_unit':
+        'temperatureUnit':
             (temperatureUnit == null) ? null : temperatureUnit.units,
-        'fcm_token': (fcmToken == null) ? null : fcmToken,
+        'fcmToken': (fcmToken == null) ? null : fcmToken,
       },
     );
 
