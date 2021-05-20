@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -163,7 +162,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
             (Country _country) => _country.name == forecastData['countryCode']);
 
     forecastData['countryCode'] = (country == null)
-        ? AppConfig.instance.defaultCountryCode
+        ? null // AppConfig.instance.defaultCountryCode
         : country.countryCode;
 
     if (forecastData['primary']) {
