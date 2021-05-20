@@ -45,17 +45,12 @@ export async function pushMessage(
   // Send push notification
   promises.push(admin.messaging().send(payload))
 
-  try {
-    return Promise.all(promises)
-        .then(() => {
-          return Promise.resolve('ok')
-        })
-        .catch((error: any) => {
-          functions.logger.error(error)
-          return Promise.resolve('error')
-        })
-  } catch (error) {
-    functions.logger.error(error)
-    return Promise.resolve('error')
-  }
+  return Promise.all(promises)
+      .then(() => {
+        return Promise.resolve('ok')
+      })
+      .catch((error: any) => {
+        functions.logger.error(error)
+        return Promise.resolve('error')
+      })
 }

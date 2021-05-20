@@ -17,8 +17,8 @@ i18n.configure({
   directory: path.join(__dirname, 'locales'),
 })
 
-for (const path of paths) {
-  const files: string[] = glob.sync(path, {cwd: __dirname, ignore: `./node_modules/**`})
+for (const filePath of paths) {
+  const files: string[] = glob.sync(filePath, {cwd: __dirname, ignore: `./node_modules/**`})
   for (const file of files) {
     processExport(file)
   }
