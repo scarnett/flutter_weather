@@ -5,7 +5,6 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_details_view.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
@@ -87,17 +86,14 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget _buildCurrentForecast(
     ForecastDay currentDay,
   ) =>
-      InkWell(
-        onTap: () => widget.hourlyEnabled ? _tapForecastDetails() : null,
-        child: Column(
-          children: <Widget>[
-            _buildLocation(),
-            _buildCurrentTemperature(currentDay),
-            _buildCondition(currentDay),
-            _buildCurrentHiLow(currentDay),
-            _buildForecastDetails(currentDay),
-          ],
-        ),
+      Column(
+        children: <Widget>[
+          _buildLocation(),
+          _buildCurrentTemperature(currentDay),
+          _buildCondition(currentDay),
+          _buildCurrentHiLow(currentDay),
+          _buildForecastDetails(currentDay),
+        ],
       );
 
   Widget _buildLocation() => Container(
@@ -564,13 +560,5 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         style: Theme.of(context).textTheme.subtitle2,
       ),
     );
-  }
-
-  void _tapForecastDetails() {
-    Forecast forecast =
-        widget.bloc.state.forecasts[widget.bloc.state.selectedForecastIndex];
-
-    widget.bloc.add(SetActiveForecastId(forecast.id));
-    Navigator.push(context, ForecastDetailsView.route());
   }
 }
