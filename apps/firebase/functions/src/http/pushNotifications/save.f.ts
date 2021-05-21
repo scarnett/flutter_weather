@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
+import { DateTime } from 'luxon'
 
 exports = module.exports = functions.https
     .onRequest(async (req: functions.https.Request, res: functions.Response<any>) => {
@@ -7,6 +8,8 @@ exports = module.exports = functions.https
       const data: any = req.body
       if (data != null) {
         try {
+          const now: admin.firestore.Timestamp = admin.firestore.Timestamp.now()
+          const lastPushDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
           const pushNotificationExtras: string = data['pushNotificationExtras']
 
           // Save the device to firestore
@@ -20,7 +23,8 @@ exports = module.exports = functions.https
             'fcm': {
               'token': data['fcmToken'],
             },
-            'lastUpdated': admin.firestore.FieldValue.serverTimestamp(),
+            'lastUpdated': now.toDate(),
+            'lastPushDate': lastPushDate.toJSDate(),
           }, {
             'merge': true,
           }))

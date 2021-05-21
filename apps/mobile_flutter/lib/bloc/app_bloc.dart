@@ -88,14 +88,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     String? deviceId = await getDeviceId();
 
-    if (event.updatePeriod == null) {
-      prefs.pushNotification = null;
-      await removePushNotification(deviceId: deviceId);
-    } else if (state.pushNotification == null) {
-      prefs.pushNotification = PushNotification.OFF;
-      await removePushNotification(deviceId: deviceId);
-    }
-
     yield state.copyWith(
       updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
       pushNotification: (event.updatePeriod == null)
@@ -105,8 +97,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
               : Nullable<PushNotification?>(state.pushNotification),
     );
 
-    if ((prefs.pushNotification != null) &&
-        (prefs.pushNotification != PushNotification.OFF)) {
+    if (event.updatePeriod == null) {
+      prefs.pushNotification = null;
+      await removePushNotification(deviceId: deviceId);
+    } else if (state.pushNotification == null) {
+      prefs.pushNotification = PushNotification.OFF;
+      await removePushNotification(deviceId: deviceId);
+    } else if (prefs.pushNotification != PushNotification.OFF) {
       String? token = await FirebaseMessaging.instance.getToken();
 
       await savePushNotification(
