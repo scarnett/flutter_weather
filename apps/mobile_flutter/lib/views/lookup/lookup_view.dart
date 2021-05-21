@@ -167,6 +167,7 @@ class _LookupPageViewState extends State<LookupPageView> {
   }
 
   Widget _buildContent() {
+    AppState appState = context.read<AppBloc>().state;
     Forecast? lookupForecast = context.read<LookupBloc>().state.lookupForecast;
     if (lookupForecast != null) {
       return SingleChildScrollView(
@@ -175,7 +176,9 @@ class _LookupPageViewState extends State<LookupPageView> {
           child: Column(
             children: <Widget>[
               ForecastDisplay(
-                bloc: context.read<AppBloc>(),
+                temperatureUnit: appState.temperatureUnit,
+                themeMode: appState.themeMode,
+                colorTheme: appState.colorTheme,
                 forecast: lookupForecast,
                 showSixDayForecast: true,
               ),

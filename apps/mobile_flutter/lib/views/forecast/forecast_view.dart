@@ -279,7 +279,9 @@ class _ForecastPageViewState extends State<ForecastView> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: ForecastDisplay(
-            bloc: context.read<AppBloc>(),
+            temperatureUnit: state.temperatureUnit,
+            themeMode: state.themeMode,
+            colorTheme: state.colorTheme,
             forecast: state.forecasts[position],
           ),
         ),
@@ -287,7 +289,9 @@ class _ForecastPageViewState extends State<ForecastView> {
     }
 
     return ForecastDisplay(
-      bloc: context.read<AppBloc>(),
+      temperatureUnit: state.temperatureUnit,
+      themeMode: state.themeMode,
+      colorTheme: state.colorTheme,
       forecast: state.forecasts[position],
     );
   }

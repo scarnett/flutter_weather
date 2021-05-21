@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -15,14 +14,18 @@ import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class ForecastDisplay extends StatefulWidget {
-  final AppBloc bloc;
+  final TemperatureUnit temperatureUnit;
+  final ThemeMode themeMode;
+  final bool colorTheme;
   final Forecast forecast;
   final bool hourlyEnabled;
   final bool showSixDayForecast;
 
   ForecastDisplay({
-    required this.bloc,
+    required this.temperatureUnit,
+    required this.themeMode,
     required this.forecast,
+    required this.colorTheme,
     this.hourlyEnabled: true,
     this.showSixDayForecast: true,
   });
@@ -72,8 +75,9 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               _buildCurrentForecast(currentDay),
               _buildDays(days.toList()),
               _buildDayForecastsCircleIndicator(
-                widget.bloc.state,
-                days.toList(),
+                themeMode: widget.themeMode,
+                colorTheme: widget.colorTheme,
+                days: days.toList(),
               ),
               _buildLastUpdated(),
             ],
@@ -115,7 +119,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget _buildCurrentTemperature(
     ForecastDay currentDay,
   ) {
-    TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
+    TemperatureUnit temperatureUnit = widget.temperatureUnit;
     ForecastDayWeather currentWeater = currentDay.weather!.first;
 
     return Container(
@@ -166,7 +170,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget _buildCurrentHiLow(
     ForecastDay currentDay,
   ) {
-    TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
+    TemperatureUnit temperatureUnit = widget.temperatureUnit;
 
     return Container(
       padding: const EdgeInsets.only(bottom: 10.0),
@@ -180,8 +184,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               border: Border(
                 right: BorderSide(
                   color: AppTheme.getBorderColor(
-                    widget.bloc.state.themeMode,
-                    colorTheme: widget.bloc.state.colorTheme,
+                    widget.themeMode,
+                    colorTheme: widget.colorTheme,
                   ),
                   width: 1.0,
                 ),
@@ -373,8 +377,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         border: Border(
           top: BorderSide(
             color: AppTheme.getBorderColor(
-              widget.bloc.state.themeMode,
-              colorTheme: widget.bloc.state.colorTheme,
+              widget.themeMode,
+              colorTheme: widget.colorTheme,
             ),
             width: 1.0,
           ),
@@ -423,9 +427,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     return forecasts;
   }
 
-  _buildDayForecastsCircleIndicator(
-    AppState state,
-    List<ForecastDay>? days, {
+  _buildDayForecastsCircleIndicator({
+    required ThemeMode themeMode,
+    required bool colorTheme,
+    List<ForecastDay>? days,
     int dayCount: 3, // TODO! parameter?
   }) {
     if (!widget.showSixDayForecast) {
@@ -449,11 +454,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         padding: const EdgeInsets.only(bottom: 10.0),
         child: CirclePageIndicator(
           size: 4.0,
-          dotColor: AppTheme.getHintColor(
-            state.themeMode,
-          ),
-          selectedDotColor:
-              state.colorTheme ? Colors.white : AppTheme.primaryColor,
+          dotColor: AppTheme.getHintColor(themeMode),
+          selectedDotColor: colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 6.0,
           itemCount: pageCount,
           currentPageNotifier: _dayForecastsNotifier,
@@ -474,7 +476,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     List<ForecastDay> days,
   ) {
     int count = 0;
-    TemperatureUnit temperatureUnit = widget.bloc.state.temperatureUnit;
+    TemperatureUnit temperatureUnit = widget.temperatureUnit;
     List<Widget> dayList = <Widget>[];
 
     days.forEach((ForecastDay day) {
@@ -502,7 +504,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         style: Theme.of(context).textTheme.headline5!.copyWith(
                               fontSize: 8.0,
                               color: AppTheme.getFadedTextColor(
-                                colorTheme: widget.bloc.state.colorTheme,
+                                colorTheme: widget.colorTheme,
                               ),
                             ),
                       ),

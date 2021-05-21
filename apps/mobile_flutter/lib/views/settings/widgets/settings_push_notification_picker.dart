@@ -67,7 +67,7 @@ class _SettingsPushNotificationPickerState
               ? appDarkThemeData
               : appLightThemeData,
           child: Scaffold(
-            body: _buildBody(),
+            body: _buildBody(context.watch<AppBloc>().state),
             extendBody: true,
             extendBodyBehindAppBar: true,
           ),
@@ -90,18 +90,23 @@ class _SettingsPushNotificationPickerState
     }
   }
 
-  Widget _buildBody() => ListView(
+  Widget _buildBody(
+    AppState state,
+  ) =>
+      ListView(
         children: [
           ..._buildListOfNotificationTile(PushNotification.OFF),
           ..._buildListOfNotificationTile(
             PushNotification.CURRENT_LOCATION,
             showDivider: false,
           ),
-          ..._buildListOfForecasts(),
+          ..._buildListOfForecasts(state),
         ],
       );
 
-  List<Widget> _buildListOfForecasts() {
+  List<Widget> _buildListOfForecasts(
+    AppState state,
+  ) {
     List<Forecast> forecasts = context.watch<AppBloc>().state.forecasts;
     if (forecasts.isNullOrZeroLength()) {
       return <Widget>[];
@@ -110,7 +115,8 @@ class _SettingsPushNotificationPickerState
     List<Widget> children = <Widget>[];
     children.add(
       AppSectionHeader(
-        bloc: context.read<AppBloc>(),
+        themeMode: state.themeMode,
+        colorTheme: state.colorTheme,
         text:
             PushNotification.SAVED_LOCATION.getInfo(context: context)!['text'],
       ),

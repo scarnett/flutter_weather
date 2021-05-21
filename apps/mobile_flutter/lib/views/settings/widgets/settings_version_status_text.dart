@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -11,12 +10,10 @@ import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
 class SettingsVersionStatusText extends StatelessWidget {
-  final AppBloc? bloc;
   final PackageInfo packageInfo;
 
   const SettingsVersionStatusText({
     Key? key,
-    required this.bloc,
     required this.packageInfo,
   }) : super(key: key);
 

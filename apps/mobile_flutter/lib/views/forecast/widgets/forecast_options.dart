@@ -27,7 +27,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
         padding: const EdgeInsets.only(
           left: 20.0,
           right: 20.0,
-          top: 20.0,
+          top: 10.0,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -35,8 +35,17 @@ class _ForecastOptionsState extends State<ForecastOptions> {
             _buildEditButton(),
             ForecastRefresh(),
             Expanded(child: Container()),
-            AppColorThemeToggle(bloc: context.watch<AppBloc>()),
-            AppDayNightSwitch(bloc: context.watch<AppBloc>()),
+            AppColorThemeToggle(
+              forecasts: context.watch<AppBloc>().state.forecasts,
+              themeMode: context.watch<AppBloc>().state.themeMode,
+              colorTheme: context.watch<AppBloc>().state.colorTheme,
+              callback: () => context.read<AppBloc>().add(ToggleColorTheme()),
+            ),
+            AppDayNightSwitch(
+              themeMode: context.watch<AppBloc>().state.themeMode,
+              colorTheme: context.watch<AppBloc>().state.colorTheme,
+              callback: () => context.read<AppBloc>().add(ToggleThemeMode()),
+            ),
             _buildSettingsButton(),
           ],
         ),

@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppDayNightSwitch extends StatefulWidget {
-  final AppBloc bloc;
+  final ThemeMode themeMode;
+  final bool colorTheme;
   final IconData activeIcon;
   final IconData inactiveIcon;
+  final Function callback;
 
   AppDayNightSwitch({
     Key? key,
-    required this.bloc,
+    required this.themeMode,
+    required this.colorTheme,
     this.activeIcon: Icons.nightlight_round,
     this.inactiveIcon: Icons.wb_sunny,
+    required this.callback,
   }) : super(key: key);
 
   @override
@@ -31,18 +34,16 @@ class _AppDayNightSwitchState extends State<AppDayNightSwitch> {
         toggleSize: 24.0,
         borderRadius: 24.0,
         padding: 1.0,
-        value: (widget.bloc.state.themeMode == ThemeMode.dark),
+        value: (widget.themeMode == ThemeMode.dark),
         activeToggleColor: AppTheme.primaryColor,
-        inactiveToggleColor: widget.bloc.state.colorTheme
-            ? Colors.white
-            : AppTheme.secondaryColor,
+        inactiveToggleColor:
+            widget.colorTheme ? Colors.white : AppTheme.secondaryColor,
         activeSwitchBorder: Border.all(
           color: Colors.deepPurple[500]!,
           width: 2.0,
         ),
         inactiveSwitchBorder: Border.all(
-          color:
-              widget.bloc.state.colorTheme ? Colors.white : Colors.grey[300]!,
+          color: widget.colorTheme ? Colors.white : Colors.grey[300]!,
           width: 2.0,
         ),
         activeColor: AppTheme.secondaryColor,
@@ -57,6 +58,6 @@ class _AppDayNightSwitchState extends State<AppDayNightSwitch> {
           color: Colors.amber[500],
           size: 16.0,
         ),
-        onToggle: (val) => widget.bloc.add(ToggleThemeMode()),
+        onToggle: (bool val) => widget.callback(),
       );
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppSectionHeader extends StatefulWidget {
-  final AppBloc bloc;
+  final ThemeMode themeMode;
+  final bool colorTheme;
   final String text;
   final bool borderTop;
   final bool borderBottom;
@@ -11,7 +11,8 @@ class AppSectionHeader extends StatefulWidget {
   final EdgeInsets padding;
 
   AppSectionHeader({
-    required this.bloc,
+    required this.themeMode,
+    required this.colorTheme,
     required this.text,
     this.borderTop: false,
     this.borderBottom: false,
@@ -33,19 +34,19 @@ class _AppSectionHeaderState extends State<AppSectionHeader> {
   ) =>
       Container(
         decoration: BoxDecoration(
-          color: AppTheme.getSectionColor(widget.bloc.state.themeMode),
+          color: AppTheme.getSectionColor(widget.themeMode),
           border: Border(
             bottom: BorderSide(
               color: AppTheme.getBorderColor(
-                widget.bloc.state.themeMode,
-                colorTheme: widget.bloc.state.colorTheme,
+                widget.themeMode,
+                colorTheme: widget.colorTheme,
               ),
               width: widget.borderBottom ? 1.0 : 0.0,
             ),
             top: BorderSide(
               color: AppTheme.getBorderColor(
-                widget.bloc.state.themeMode,
-                colorTheme: widget.bloc.state.colorTheme,
+                widget.themeMode,
+                colorTheme: widget.colorTheme,
               ),
               width: widget.borderTop ? 1.0 : 0.0,
             ),
