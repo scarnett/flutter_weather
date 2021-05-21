@@ -23,7 +23,7 @@ exports = module.exports = functions.pubsub
         })
 
         const now: admin.firestore.Timestamp = admin.firestore.Timestamp.now()
-        const nowDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
+        const lastPushDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
 
         const promises: Array<Promise<any>> = []
         const devicesSnapshot: admin.firestore.QuerySnapshot<admin.firestore.DocumentData> = await admin.firestore()
@@ -66,7 +66,7 @@ exports = module.exports = functions.pubsub
                     }))
 
                 // Update the last push date in the device document
-                promises.push(deviceDoc.ref.update('lastPushDate', nowDate.toJSDate()))
+                promises.push(deviceDoc.ref.update('lastPushDate', lastPushDate.toJSDate()))
               }
             }
           }
