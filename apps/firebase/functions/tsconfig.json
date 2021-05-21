@@ -13,8 +13,8 @@
   "compileOnSave": true,
   "include": [
     "**/*.ts",
-    "**/keys/*.json",
-    "**/locales/*.json"
+    "*/keys/*.json",
+    "*/locales/*.json"
   ],
   "exclude": [
     "node_modules"
