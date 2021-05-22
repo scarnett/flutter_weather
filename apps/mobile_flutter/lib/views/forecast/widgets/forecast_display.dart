@@ -100,20 +100,17 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         ],
       );
 
-  Widget _buildLocation() => Container(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-              widget.forecast.city!.name!.toUpperCase(),
-              style: Theme.of(context).textTheme.headline3,
-            ),
-            Text(
-              getLocationText(widget.forecast),
-              style: Theme.of(context).textTheme.subtitle2,
-            ),
-          ],
-        ),
+  Widget _buildLocation() => Column(
+        children: <Widget>[
+          Text(
+            widget.forecast.city!.name!.toUpperCase(),
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          Text(
+            getLocationText(widget.forecast),
+            style: Theme.of(context).textTheme.subtitle2,
+          ),
+        ],
       );
 
   Widget _buildCurrentTemperature(
@@ -122,35 +119,34 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     TemperatureUnit temperatureUnit = widget.temperatureUnit;
     ForecastDayWeather currentWeater = currentDay.weather!.first;
 
-    return Container(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              AppTemperatureDisplay(
-                temperature:
-                    getTemperature(currentDay.temp!.day, temperatureUnit)
-                        .toString(),
-                style: Theme.of(context).textTheme.headline1,
-                unit: temperatureUnit,
-              ),
-              AppTemperatureDisplay(
-                temperature: AppLocalizations.of(context)!.getFeelsLike(
-                    getTemperature(currentDay.feelsLike!.day, temperatureUnit)
-                        .toString()),
-                style: Theme.of(context).textTheme.headline5,
-                unit: temperatureUnit,
-                unitSizeFactor: 1.5,
-              ),
-            ],
-          ),
-          ForecastIcon(icon: getForecastIconData(currentWeater.icon)),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AppTemperatureDisplay(
+              temperature: getTemperature(currentDay.temp!.day, temperatureUnit)
+                  .toString(),
+              style: Theme.of(context).textTheme.headline1,
+              unit: temperatureUnit,
+            ),
+            AppTemperatureDisplay(
+              temperature: AppLocalizations.of(context)!.getFeelsLike(
+                  getTemperature(currentDay.feelsLike!.day, temperatureUnit)
+                      .toString()),
+              style: Theme.of(context).textTheme.headline5,
+              unit: temperatureUnit,
+              unitSizeFactor: 1.5,
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: ForecastIcon(icon: getForecastIconData(currentWeater.icon)),
+        ),
+      ],
     );
   }
 
