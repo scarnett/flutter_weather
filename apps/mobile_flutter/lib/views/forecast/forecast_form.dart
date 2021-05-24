@@ -7,6 +7,7 @@ import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/input_utils.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_country_picker.dart';
@@ -121,6 +122,9 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   bool _submitting = false;
   bool _deleting = false;
 
+  late FocusNode _cityFocusNode;
+  late FocusNode _postalCodeFocusNode;
+
   @override
   void initState() {
     super.initState();
@@ -134,6 +138,9 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       ..addListener(() {
         _onPageChange(_pageController!.page ?? 0);
       });
+
+    _cityFocusNode = FocusNode()..addListener(() => setState(() => {}));
+    _postalCodeFocusNode = FocusNode()..addListener(() => setState(() => {}));
   }
 
   @override
@@ -200,10 +207,12 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
             children: <Widget>[
               TextFieldBlocBuilder(
                 key: Key(AppKeys.locationCityKey),
+                focusNode: _cityFocusNode,
                 textFieldBloc: context.watch<ForecastFormBloc>().cityName,
                 keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.city,
+                  labelStyle: getInputTextLabelStyle(_cityFocusNode),
                   prefixIcon: Icon(
                     Icons.location_city,
                     color: AppTheme.primaryColor,
@@ -213,10 +222,12 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
               ),
               TextFieldBlocBuilder(
                 key: Key(AppKeys.locationPostalCodeKey),
+                focusNode: _postalCodeFocusNode,
                 textFieldBloc: context.watch<ForecastFormBloc>().postalCode,
                 keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.postalCode,
+                  labelStyle: getInputTextLabelStyle(_postalCodeFocusNode),
                   prefixIcon: Icon(
                     Icons.place,
                     color: AppTheme.primaryColor,

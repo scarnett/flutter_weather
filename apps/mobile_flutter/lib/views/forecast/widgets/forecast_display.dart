@@ -83,7 +83,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         padding: const EdgeInsets.only(
           left: 10.0,
           right: 10.0,
-          top: 10.0,
         ),
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
@@ -104,7 +103,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                 colorTheme: widget.colorTheme,
                 days: days.toList(),
               ),
-              _buildLastUpdated(),
             ],
           ),
         ),
@@ -140,7 +138,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     colorTheme: widget.colorTheme,
                     days: days.toList(),
                   ),
-                  _buildLastUpdated(),
                 ],
               ),
             ),
@@ -391,7 +388,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       ),
       padding: const EdgeInsets.only(
         top: 20.0,
-        bottom: 20.0,
+        bottom: 10.0,
       ),
       child: Container(
         width: double.infinity,
@@ -542,30 +539,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: dayList,
-    );
-  }
-
-  Widget _buildLastUpdated() {
-    DateTime? lastUpdated = widget.forecast.lastUpdated;
-    if (lastUpdated == null) {
-      return Container();
-    }
-
-    String formattedLastUpdated;
-
-    if (lastUpdated.isToday()) {
-      formattedLastUpdated = AppLocalizations.of(context)!
-          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a')!);
-    } else {
-      formattedLastUpdated = AppLocalizations.of(context)!.getLastUpdatedOn(
-          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a')!);
-    }
-
-    return Container(
-      child: Text(
-        formattedLastUpdated,
-        style: Theme.of(context).textTheme.subtitle2,
-      ),
     );
   }
 }

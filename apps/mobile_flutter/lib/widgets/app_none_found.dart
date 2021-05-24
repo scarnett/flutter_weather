@@ -22,11 +22,11 @@ class _AppNoneFoundState extends State<AppNoneFound> {
     BuildContext context,
   ) =>
       Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 20.0, top: 40.0),
+            padding: const EdgeInsets.only(bottom: 20.0),
             child: Container(
               width: widget.iconSize,
               height: widget.iconSize,

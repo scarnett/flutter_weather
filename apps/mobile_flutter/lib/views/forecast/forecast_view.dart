@@ -9,6 +9,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -204,9 +205,17 @@ class _ForecastPageViewState extends State<ForecastView> {
                   state: state,
                   forecastColor: forecastColor,
                 ),
+                _buildLastUpdated(
+                  state: state,
+                  forecastColor: forecastColor,
+                ),
               ],
             )
-          : AppNoneFound(text: AppLocalizations.of(context)!.noForecasts);
+          : Center(
+              child: AppNoneFound(
+                text: AppLocalizations.of(context)!.noForecasts,
+              ),
+            );
 
   Widget _buildForecastColorContent(
     AppState state,
@@ -332,7 +341,7 @@ class _ForecastPageViewState extends State<ForecastView> {
         ),
         padding: EdgeInsets.all(4.0),
         margin: EdgeInsets.only(
-            bottom: (MediaQuery.of(context).padding.bottom + 30.0)),
+            bottom: (MediaQuery.of(context).padding.bottom + 40.0)),
         child: CirclePageIndicator(
           dotColor: AppTheme.getHintColor(
             state.themeMode,
@@ -343,6 +352,46 @@ class _ForecastPageViewState extends State<ForecastView> {
           itemCount: state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
           onPageSelected: _onPageSelected,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLastUpdated({
+    required AppState state,
+    Color? forecastColor,
+  }) {
+    DateTime? lastUpdated =
+        state.forecasts[state.selectedForecastIndex].lastUpdated;
+    if (lastUpdated == null) {
+      return Container();
+    }
+
+    String formattedLastUpdated;
+
+    if (lastUpdated.isToday()) {
+      formattedLastUpdated = AppLocalizations.of(context)!
+          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a')!);
+    } else {
+      formattedLastUpdated = AppLocalizations.of(context)!.getLastUpdatedOn(
+          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a')!);
+    }
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        decoration: BoxDecoration(
+          color: (forecastColor == null)
+              ? Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7)
+              : forecastColor.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        margin: EdgeInsets.only(
+            bottom: (MediaQuery.of(context).padding.bottom + 12.0)),
+        child: Text(
+          formattedLastUpdated,
+          style: Theme.of(context).textTheme.subtitle2,
         ),
       ),
     );
