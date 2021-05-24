@@ -134,7 +134,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               delegate: SliverChildListDelegate(
                 [
                   _buildCurrentForecast(currentDay),
-                  SizedBox(height: 600), // TODO! remove
                   _buildDays(days.toList()),
                   _buildDayForecastsCircleIndicator(
                     themeMode: widget.themeMode,
