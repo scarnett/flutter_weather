@@ -341,7 +341,7 @@ class _ForecastPageViewState extends State<ForecastView> {
         ),
         padding: EdgeInsets.all(4.0),
         margin: EdgeInsets.only(
-            bottom: (MediaQuery.of(context).padding.bottom + 40.0)),
+            bottom: (MediaQuery.of(context).padding.bottom + 44.0)),
         child: CirclePageIndicator(
           dotColor: AppTheme.getHintColor(
             state.themeMode,
@@ -388,7 +388,7 @@ class _ForecastPageViewState extends State<ForecastView> {
         ),
         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         margin: EdgeInsets.only(
-            bottom: (MediaQuery.of(context).padding.bottom + 12.0)),
+            bottom: (MediaQuery.of(context).padding.bottom + 16.0)),
         child: Text(
           formattedLastUpdated,
           style: Theme.of(context).textTheme.subtitle2,
