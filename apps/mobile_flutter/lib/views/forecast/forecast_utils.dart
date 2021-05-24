@@ -297,3 +297,10 @@ double getScrollScale({
 
   return (1.0 - position);
 }
+
+/// Return wind direction relative to plane heading
+double getWindDirection({
+  required num windDirection,
+  required num heading,
+}) =>
+    (((windDirection - heading + 180) % 360) - 180);

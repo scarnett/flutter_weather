@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -281,13 +282,54 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20.0,
-                    width: 30.0,
-                    child: ForecastWindDirection(
-                      degree: currentDay.deg,
-                      size: 20.0,
-                    ),
+                  StreamBuilder<CompassEvent>(
+                    stream: FlutterCompass.events,
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<CompassEvent> snapshot,
+                    ) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child:
+                                Icon(Icons.close, color: AppTheme.dangerColor),
+                          ),
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: SizedBox(
+                              height: 10.0,
+                              width: 10.0,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.0,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  (widget.themeMode == ThemeMode.dark) ||
+                                          widget.colorTheme
+                                      ? Colors.white
+                                      : AppTheme.primaryColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return SizedBox(
+                        height: 20.0,
+                        width: 30.0,
+                        child: ForecastWindDirection(
+                          degree: getWindDirection(
+                            windDirection: currentDay.deg!,
+                            heading: snapshot.data!.heading!,
+                          ),
+                          size: 20.0,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
