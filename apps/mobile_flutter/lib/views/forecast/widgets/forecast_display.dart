@@ -323,8 +323,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         width: 30.0,
                         child: ForecastWindDirection(
                           degree: getWindDirection(
-                            windDirection: currentDay.deg!,
-                            heading: snapshot.data!.heading!,
+                            windDirection: currentDay.deg ?? 0,
+                            heading: snapshot.data!.heading ?? 0,
                           ),
                           size: 20.0,
                         ),
