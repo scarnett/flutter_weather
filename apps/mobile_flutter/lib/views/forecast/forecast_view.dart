@@ -319,8 +319,14 @@ class _ForecastPageViewState extends State<ForecastView> {
 
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        padding: EdgeInsets.all(4.0),
+        margin: EdgeInsets.only(
+            bottom: (MediaQuery.of(context).padding.bottom + 30.0)),
         child: CirclePageIndicator(
           dotColor: AppTheme.getHintColor(
             state.themeMode,
