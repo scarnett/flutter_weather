@@ -22,25 +22,28 @@ class AppUiSafeArea extends StatelessWidget {
     BuildContext context,
   ) =>
       Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (top) SizedBox(height: MediaQuery.of(context).padding.top),
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                child,
-                if (topWidget != null)
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: topWidget,
+          ((topWidget == null) && (bottomWidget == null))
+              ? child
+              : Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      child,
+                      if (topWidget != null)
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: topWidget,
+                        ),
+                      if (bottomWidget != null)
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: bottomWidget,
+                        ),
+                    ],
                   ),
-                if (bottomWidget != null)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: bottomWidget,
-                  ),
-              ],
-            ),
-          ),
+                ),
           if (bottom) SizedBox(height: MediaQuery.of(context).padding.bottom),
         ],
       );
