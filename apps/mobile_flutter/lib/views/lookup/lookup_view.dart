@@ -181,6 +181,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                 colorTheme: appState.colorTheme,
                 forecast: lookupForecast,
                 showSixDayForecast: true,
+                sliverView: false,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 30.0),

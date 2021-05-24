@@ -21,6 +21,7 @@ class ForecastDisplay extends StatefulWidget {
   final Forecast forecast;
   final bool hourlyEnabled;
   final bool showSixDayForecast;
+  final bool sliverView;
 
   ForecastDisplay({
     required this.temperatureUnit,
@@ -29,6 +30,7 @@ class ForecastDisplay extends StatefulWidget {
     required this.colorTheme,
     this.hourlyEnabled: true,
     this.showSixDayForecast: true,
+    this.sliverView: true,
   });
 
   @override
@@ -63,7 +65,48 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
     return Align(
       alignment: Alignment.topCenter,
-      child: CustomScrollView(
+      child: widget.sliverView
+          ? _buildSliverContent(days, currentDay)
+          : _buildNormalContent(days, currentDay),
+    );
+  }
+
+  Widget _buildNormalContent(
+    List<ForecastDay> days,
+    ForecastDay currentDay,
+  ) =>
+      Padding(
+        padding: const EdgeInsets.only(
+          left: 10.0,
+          right: 10.0,
+          top: 10.0,
+        ),
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            children: <Widget>[
+              // _buildLocation(),
+              // _buildCurrentTemperature(currentDay),
+              _buildCondition(currentDay),
+              _buildCurrentHiLow(currentDay),
+              _buildForecastDetails(currentDay),
+              _buildDays(days.toList()),
+              _buildDayForecastsCircleIndicator(
+                themeMode: widget.themeMode,
+                colorTheme: widget.colorTheme,
+                days: days.toList(),
+              ),
+              _buildLastUpdated(),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildSliverContent(
+    List<ForecastDay> days,
+    ForecastDay currentDay,
+  ) =>
+      CustomScrollView(
         shrinkWrap: true,
         slivers: <Widget>[
           SliverPersistentHeader(
@@ -95,9 +138,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             ),
           ),
         ],
-      ),
-    );
-  }
+      );
 
   Widget _buildCurrentForecast(
     ForecastDay currentDay,
