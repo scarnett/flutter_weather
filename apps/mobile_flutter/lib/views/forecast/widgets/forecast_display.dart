@@ -30,7 +30,7 @@ class ForecastDisplay extends StatefulWidget {
     required this.temperatureUnit,
     required this.themeMode,
     required this.forecast,
-    required this.colorTheme,
+    this.colorTheme: false,
     this.hourlyEnabled: true,
     this.showSixDayForecast: true,
     this.sliverView: true,

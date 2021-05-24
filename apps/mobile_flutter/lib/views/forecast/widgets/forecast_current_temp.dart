@@ -79,7 +79,7 @@ class _ForecastCurrentTempState extends State<ForecastCurrentTemp> {
                 child: ForecastIcon(
                   icon: getForecastIconData(
                       widget.currentDay.weather!.first.icon),
-                  scaleFactor: _getScrollScale(3),
+                  scaleFactor: _getScrollScale(2.5),
                 ),
               ),
             ],
