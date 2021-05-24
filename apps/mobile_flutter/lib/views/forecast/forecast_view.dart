@@ -200,7 +200,10 @@ class _ForecastPageViewState extends State<ForecastView> {
                     forecastColor: forecastColor,
                   ),
                 ),
-                _buildCircleIndicator(state),
+                _buildCircleIndicator(
+                  state: state,
+                  forecastColor: forecastColor,
+                ),
               ],
             )
           : AppNoneFound(text: AppLocalizations.of(context)!.noForecasts);
@@ -310,9 +313,10 @@ class _ForecastPageViewState extends State<ForecastView> {
     );
   }
 
-  _buildCircleIndicator(
-    AppState state,
-  ) {
+  _buildCircleIndicator({
+    required AppState state,
+    Color? forecastColor,
+  }) {
     if (state.forecasts.isEmpty || (state.forecasts.length <= 1)) {
       return Container();
     }
@@ -321,7 +325,9 @@ class _ForecastPageViewState extends State<ForecastView> {
       alignment: Alignment.bottomCenter,
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+          color: (forecastColor == null)
+              ? Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7)
+              : forecastColor.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         padding: EdgeInsets.all(4.0),
