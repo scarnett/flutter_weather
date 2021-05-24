@@ -240,6 +240,7 @@ class _ForecastPageViewState extends State<ForecastView> {
                     _forecastColor,
                     _forecastDarkenedColor,
                   ],
+                  stops: [0.3, 1.0],
                 ),
               ),
               child: AppUiSafeArea(

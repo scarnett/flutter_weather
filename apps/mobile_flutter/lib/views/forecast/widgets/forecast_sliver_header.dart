@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/views/forecast/forecast_extension.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
@@ -12,6 +13,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
   final BuildContext context;
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
+  final bool colorTheme;
 
   final AlignmentTween _locationAlignTween = AlignmentTween(
     begin: Alignment.topCenter,
@@ -27,6 +29,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
     required this.context,
     required this.forecast,
     required this.temperatureUnit,
+    this.colorTheme: false,
   });
 
   @override
@@ -48,8 +51,8 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Theme.of(context).appBarTheme.color!,
-              Theme.of(context).appBarTheme.color!.withOpacity(0.0),
+              _backgroundColor,
+              _backgroundColor.withOpacity(0.0),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -57,8 +60,20 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
             tileMode: TileMode.clamp,
           ),
         ),
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [
+        //       Colors.orange.withOpacity(0.7),
+        //       Colors.orange.withOpacity(0.0),
+        //     ],
+        //     begin: Alignment.topCenter,
+        //     end: Alignment.bottomCenter,
+        //     stops: [0.7, 1.0],
+        //     tileMode: TileMode.clamp,
+        //   ),
+        // ),
         padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top + ForecastOptions.height,
+          top: (MediaQuery.of(context).padding.top + ForecastOptions.height),
           bottom: 10.0,
         ),
         child: Container(
@@ -80,7 +95,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
   ) =>
       Align(
         alignment:
-            _locationAlignTween.lerp(getProgress(shrinkOffset: shrinkOffset)),
+            _locationAlignTween.lerp(_getProgress(shrinkOffset: shrinkOffset)),
         child: Container(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -90,15 +105,15 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
               Text(
                 forecast.city!.name!.toUpperCase(),
                 style: Theme.of(context).textTheme.headline3,
-                textScaleFactor: getScale(
+                textScaleFactor: _getScale(
                   shrinkOffset: shrinkOffset,
                   factor: 5.0,
                 ),
               ),
               Text(
-                getLocationText(forecast),
+                forecast.getLocationText(),
                 style: Theme.of(context).textTheme.headline5,
-                textScaleFactor: getScale(
+                textScaleFactor: _getScale(
                   shrinkOffset: shrinkOffset,
                   factor: 3.0,
                 ),
@@ -115,7 +130,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
       Container(
         child: Align(
           alignment: _currentTemperatureAlignTween
-              .lerp(getProgress(shrinkOffset: shrinkOffset)),
+              .lerp(_getProgress(shrinkOffset: shrinkOffset)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -131,7 +146,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
                         getTemperature(currentDay.temp!.day, temperatureUnit)
                             .toString(),
                     style: Theme.of(context).textTheme.headline1,
-                    scaleFactor: getScale(
+                    scaleFactor: _getScale(
                       shrinkOffset: shrinkOffset,
                       factor: 2.0,
                     ),
@@ -143,7 +158,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
                                 currentDay.feelsLike!.day, temperatureUnit)
                             .toString()),
                     style: Theme.of(context).textTheme.headline5,
-                    scaleFactor: getScale(
+                    scaleFactor: _getScale(
                       shrinkOffset: shrinkOffset,
                       factor: 3.0,
                     ),
@@ -154,11 +169,12 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    left: (40.0 *
-                        getScale(shrinkOffset: shrinkOffset, factor: 1.5))),
+                  left: (40.0 *
+                      _getScale(shrinkOffset: shrinkOffset, factor: 1.5)),
+                ),
                 child: ForecastIcon(
                   icon: getForecastIconData(currentDay.weather!.first.icon),
-                  scaleFactor: getScale(
+                  scaleFactor: _getScale(
                     shrinkOffset: shrinkOffset,
                     factor: 3,
                   ),
@@ -169,18 +185,26 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
         ),
       );
 
-  double getProgress({
+  double _getProgress({
     required double shrinkOffset,
     double speed: 1.0,
   }) =>
       ((shrinkOffset * speed) / (this.maxExtent - this.minExtent))
           .clamp(0.0, 1.0);
 
-  double getScale({
+  double _getScale({
     required double shrinkOffset,
     double factor: 4.0,
   }) {
-    double position = (getProgress(shrinkOffset: shrinkOffset) / factor);
+    double position = (_getProgress(shrinkOffset: shrinkOffset) / factor);
     return (1.0 - position);
+  }
+
+  Color get _backgroundColor {
+    if (colorTheme) {
+      return forecast.getTemperatureColor().withOpacity(0.8);
+    }
+
+    return Theme.of(context).appBarTheme.color!;
   }
 }

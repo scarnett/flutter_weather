@@ -72,6 +72,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             delegate: ForecastSliverHeader(
               context: context,
               temperatureUnit: widget.temperatureUnit,
+              colorTheme: widget.colorTheme,
               forecast: widget.forecast,
             ),
           ),
