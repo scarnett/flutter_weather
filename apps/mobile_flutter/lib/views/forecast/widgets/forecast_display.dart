@@ -6,7 +6,9 @@ import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_current_temp.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_location.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_sliver_header.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_wind_direction.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
@@ -87,8 +89,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           physics: ClampingScrollPhysics(),
           child: Column(
             children: <Widget>[
-              // _buildLocation(),
-              // _buildCurrentTemperature(currentDay),
+              ForecastLocation(forecast: widget.forecast),
+              SizedBox(height: 10.0),
+              ForecastCurrentTemp(
+                currentDay: widget.forecast.list!.first,
+                temperatureUnit: widget.temperatureUnit,
+              ),
               _buildCondition(currentDay),
               _buildCurrentHiLow(currentDay),
               _buildForecastDetails(currentDay),

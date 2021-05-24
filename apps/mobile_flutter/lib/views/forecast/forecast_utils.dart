@@ -274,3 +274,26 @@ bool forecastIndexExists(
 
   return false;
 }
+
+double getScrollProgress({
+  required double shrinkOffset,
+  required double maxExtent,
+  required double minExtent,
+  double speed: 1.0,
+}) =>
+    ((shrinkOffset * speed) / (maxExtent - minExtent)).clamp(0.0, 1.0);
+
+double getScrollScale({
+  required double shrinkOffset,
+  required double maxExtent,
+  required double minExtent,
+  double factor: 4.0,
+}) {
+  double position = (getScrollProgress(
+          shrinkOffset: shrinkOffset,
+          maxExtent: maxExtent,
+          minExtent: minExtent) /
+      factor);
+
+  return (1.0 - position);
+}

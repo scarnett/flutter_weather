@@ -49,7 +49,8 @@ class ForecastFormBloc extends FormBloc<String, String> {
 
       if (_initialForecast!.countryCode != null) {
         final Country? isoCountry = (await IsoCountries.iso_countries)
-            .firstWhereOrNull((e) => e.countryCode == _initialForecast!.countryCode);
+            .firstWhereOrNull(
+                (e) => e.countryCode == _initialForecast!.countryCode);
 
         if (isoCountry != null) {
           countryCode.updateInitialValue(isoCountry.name);
@@ -99,7 +100,6 @@ class ForecastFormBloc extends FormBloc<String, String> {
           _hasError = true;
         }
       } else if (!forecast.postalCode.isNullOrEmpty() &&
-          !forecast.countryCode.isNullOrEmpty() &&
           (forecast.postalCode!.toLowerCase() ==
               postalCode.value!.toLowerCase()) &&
           (forecast.postalCode!.toLowerCase() ==
