@@ -184,14 +184,14 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
 TextTheme _darkTextTheme = TextTheme(
   headline1: TextStyle(
     color: AppTheme.secondaryColor,
-    fontSize: 86.0,
+    fontSize: 70.0,
     fontWeight: FontWeight.w100,
     height: 0.9,
   ),
   headline3: TextStyle(
     color: AppTheme.secondaryColor,
     fontSize: 40.0,
-    fontWeight: FontWeight.w100,
+    fontWeight: FontWeight.w300,
   ),
   headline4: TextStyle(
     color: AppTheme.secondaryColor.withOpacity(0.7),
@@ -223,7 +223,7 @@ TextTheme _darkTextTheme = TextTheme(
 TextTheme _lightTextTheme = TextTheme(
   headline1: TextStyle(
     color: Colors.white,
-    fontSize: 86.0,
+    fontSize: 70.0,
     fontWeight: FontWeight.w100,
     height: 0.9,
     shadows: commonTextShadow(),
@@ -231,7 +231,7 @@ TextTheme _lightTextTheme = TextTheme(
   headline3: TextStyle(
     color: Colors.white,
     fontSize: 40.0,
-    fontWeight: FontWeight.w100,
+    fontWeight: FontWeight.w300,
     shadows: commonTextShadow(),
   ),
   headline4: TextStyle(

@@ -19,6 +19,7 @@ import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class ForecastView extends StatefulWidget {
@@ -183,27 +184,20 @@ class _ForecastPageViewState extends State<ForecastView> {
   Widget _buildContent(
     AppState state,
   ) =>
-      Column(
-        children: <Widget>[
-          ForecastOptions(),
-          Expanded(
-            child: hasForecasts(state.forecasts)
-                ? Stack(
-                    children: [
-                      PageView.builder(
-                        controller: _pageController,
-                        physics: const AppPageViewScrollPhysics(),
-                        itemCount: state.forecasts.length,
-                        itemBuilder: (BuildContext context, int position) =>
-                            _buildForecastItem(context, position, state),
-                      ),
-                      _buildCircleIndicator(state),
-                    ],
-                  )
-                : AppNoneFound(text: AppLocalizations.of(context)!.noForecasts),
-          ),
-        ],
-      );
+      hasForecasts(state.forecasts)
+          ? Stack(
+              children: [
+                PageView.builder(
+                  controller: _pageController,
+                  physics: const AppPageViewScrollPhysics(),
+                  itemCount: state.forecasts.length,
+                  itemBuilder: (BuildContext context, int position) =>
+                      _buildForecastItem(context, position, state),
+                ),
+                _buildCircleIndicator(state),
+              ],
+            )
+          : AppNoneFound(text: AppLocalizations.of(context)!.noForecasts);
 
   Widget _buildForecastColorContent(
     AppState state,
@@ -248,7 +242,12 @@ class _ForecastPageViewState extends State<ForecastView> {
                   ],
                 ),
               ),
-              child: SafeArea(child: _buildContent(state)),
+              child: AppUiSafeArea(
+                bottom: false,
+                top: false,
+                topWidget: ForecastOptions(),
+                child: _buildContent(state),
+              ),
             ),
           );
         },
@@ -260,7 +259,12 @@ class _ForecastPageViewState extends State<ForecastView> {
       AppUiOverlayStyle(
         themeMode: state.themeMode,
         colorTheme: state.colorTheme,
-        child: SafeArea(child: _buildContent(state)),
+        child: AppUiSafeArea(
+          bottom: false,
+          top: false,
+          topWidget: ForecastOptions(),
+          child: _buildContent(state),
+        ),
       );
 
   _buildForecastItem(
@@ -276,14 +280,11 @@ class _ForecastPageViewState extends State<ForecastView> {
       return RefreshIndicator(
         color: AppTheme.primaryColor,
         onRefresh: () => _pullRefresh(state),
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: ForecastDisplay(
-            temperatureUnit: state.temperatureUnit,
-            themeMode: state.themeMode,
-            colorTheme: state.colorTheme,
-            forecast: state.forecasts[position],
-          ),
+        child: ForecastDisplay(
+          temperatureUnit: state.temperatureUnit,
+          themeMode: state.themeMode,
+          colorTheme: state.colorTheme,
+          forecast: state.forecasts[position],
         ),
       );
     }

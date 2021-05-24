@@ -7,6 +7,7 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_sliver_header.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_wind_direction.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
@@ -62,27 +63,37 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
     return Align(
       alignment: Alignment.topCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: 10.0,
-          right: 10.0,
-          top: 10.0,
-        ),
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Column(
-            children: <Widget>[
-              _buildCurrentForecast(currentDay),
-              _buildDays(days.toList()),
-              _buildDayForecastsCircleIndicator(
-                themeMode: widget.themeMode,
-                colorTheme: widget.colorTheme,
-                days: days.toList(),
-              ),
-              _buildLastUpdated(),
-            ],
+      child: CustomScrollView(
+        shrinkWrap: true,
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            pinned: true,
+            floating: false,
+            delegate: ForecastSliverHeader(
+              context: context,
+              temperatureUnit: widget.temperatureUnit,
+              forecast: widget.forecast,
+            ),
           ),
-        ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  _buildCurrentForecast(currentDay),
+                  SizedBox(height: 600), // TODO! remove
+                  _buildDays(days.toList()),
+                  _buildDayForecastsCircleIndicator(
+                    themeMode: widget.themeMode,
+                    colorTheme: widget.colorTheme,
+                    days: days.toList(),
+                  ),
+                  _buildLastUpdated(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -92,69 +103,17 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   ) =>
       Column(
         children: <Widget>[
-          _buildLocation(),
-          _buildCurrentTemperature(currentDay),
           _buildCondition(currentDay),
           _buildCurrentHiLow(currentDay),
           _buildForecastDetails(currentDay),
         ],
       );
 
-  Widget _buildLocation() => Column(
-        children: <Widget>[
-          Text(
-            widget.forecast.city!.name!.toUpperCase(),
-            style: Theme.of(context).textTheme.headline3,
-          ),
-          Text(
-            getLocationText(widget.forecast),
-            style: Theme.of(context).textTheme.subtitle2,
-          ),
-        ],
-      );
-
-  Widget _buildCurrentTemperature(
-    ForecastDay currentDay,
-  ) {
-    TemperatureUnit temperatureUnit = widget.temperatureUnit;
-    ForecastDayWeather currentWeater = currentDay.weather!.first;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            AppTemperatureDisplay(
-              temperature: getTemperature(currentDay.temp!.day, temperatureUnit)
-                  .toString(),
-              style: Theme.of(context).textTheme.headline1,
-              unit: temperatureUnit,
-            ),
-            AppTemperatureDisplay(
-              temperature: AppLocalizations.of(context)!.getFeelsLike(
-                  getTemperature(currentDay.feelsLike!.day, temperatureUnit)
-                      .toString()),
-              style: Theme.of(context).textTheme.headline5,
-              unit: temperatureUnit,
-              unitSizeFactor: 1.5,
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: ForecastIcon(icon: getForecastIconData(currentWeater.icon)),
-        ),
-      ],
-    );
-  }
-
   Widget _buildCondition(
     ForecastDay currentDay,
   ) =>
       Container(
-        padding: const EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.only(bottom: 20.0, top: 10.0),
         child: Text(
           currentDay.weather!.first.description!.toUpperCase(),
           style: Theme.of(context).textTheme.headline4!.copyWith(
@@ -314,7 +273,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     height: 30.0,
                     width: 30.0,
                     child: ForecastIcon(
-                      size: 20.0,
+                      iconSize: 20.0,
                       icon: WeatherIcons.barometer,
                       shadowColor: Colors.black26,
                     ),
@@ -349,7 +308,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     height: 30.0,
                     width: 30.0,
                     child: ForecastIcon(
-                      size: 20.0,
+                      iconSize: 20.0,
                       icon: WeatherIcons.humidity,
                       shadowColor: Colors.black26,
                     ),
@@ -517,7 +476,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                 ),
               ),
               ForecastIcon(
-                size: 24.0,
+                iconSize: 24.0,
                 icon: getForecastIconData(day.weather!.first.icon),
                 shadowColor: Colors.black26,
               ),

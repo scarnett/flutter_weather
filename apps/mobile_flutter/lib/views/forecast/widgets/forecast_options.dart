@@ -12,7 +12,7 @@ import 'package:flutter_weather/widgets/app_color_theme.dart';
 import 'package:flutter_weather/widgets/app_day_night_switch.dart';
 
 class ForecastOptions extends StatefulWidget {
-  ForecastOptions();
+  static final double height = 40.0;
 
   @override
   _ForecastOptionsState createState() => _ForecastOptionsState();
@@ -24,10 +24,11 @@ class _ForecastOptionsState extends State<ForecastOptions> {
     BuildContext context,
   ) =>
       Container(
-        padding: const EdgeInsets.only(
+        height: (ForecastOptions.height + MediaQuery.of(context).padding.top),
+        padding: EdgeInsets.only(
           left: 20.0,
           right: 20.0,
-          top: 10.0,
+          top: MediaQuery.of(context).padding.top,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

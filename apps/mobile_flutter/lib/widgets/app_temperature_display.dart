@@ -8,12 +8,14 @@ class AppTemperatureDisplay extends StatefulWidget {
   final TextStyle? style;
   final TemperatureUnit? unit;
   final num unitSizeFactor;
+  final double scaleFactor;
 
   AppTemperatureDisplay({
     required this.temperature,
     this.style,
     this.unit,
     this.unitSizeFactor: 3.5,
+    this.scaleFactor: 1.0,
   });
 
   @override
@@ -33,6 +35,7 @@ class _AppTemperatureDisplayState extends State<AppTemperatureDisplay> {
           Text(
             widget.temperature,
             style: widget.style,
+            textScaleFactor: widget.scaleFactor,
           ),
           Align(
             alignment: Alignment.topLeft,
@@ -41,6 +44,7 @@ class _AppTemperatureDisplayState extends State<AppTemperatureDisplay> {
               style: widget.style!.copyWith(
                 fontSize: (widget.style!.fontSize! / widget.unitSizeFactor),
               ),
+              textScaleFactor: widget.scaleFactor,
             ),
           ),
         ],

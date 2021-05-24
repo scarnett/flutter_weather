@@ -6,13 +6,15 @@ import 'package:weather_icons/weather_icons.dart';
 
 class ForecastIcon extends StatefulWidget {
   final IconData? icon;
-  final double size;
+  final double iconSize;
+  final double scaleFactor;
   final Color? color;
   final Color shadowColor;
 
   ForecastIcon({
     this.icon,
-    this.size: 80.0,
+    this.iconSize: 60.0,
+    this.scaleFactor: 1.0,
     this.color,
     this.shadowColor: Colors.black38,
   });
@@ -28,10 +30,13 @@ class _ForecastIconState extends State<ForecastIcon> {
   ) {
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
         !context.watch<AppBloc>().state.colorTheme) {
-      return BoxedIcon(
-        widget.icon!,
-        color: widget.color,
-        size: widget.size,
+      return SizedBox(
+        height: containerSize,
+        child: BoxedIcon(
+          widget.icon!,
+          color: widget.color,
+          size: iconSize,
+        ),
       );
     }
 
@@ -43,15 +48,24 @@ class _ForecastIconState extends State<ForecastIcon> {
           child: BoxedIcon(
             widget.icon!,
             color: widget.shadowColor,
-            size: widget.size,
+            size: iconSize,
           ),
         ),
-        BoxedIcon(
-          widget.icon!,
-          color: widget.color,
-          size: widget.size,
+        Positioned(
+          child: SizedBox(
+            height: containerSize,
+            child: BoxedIcon(
+              widget.icon!,
+              color: widget.color,
+              size: iconSize,
+            ),
+          ),
         ),
       ],
     );
   }
+
+  double get iconSize => (widget.iconSize * widget.scaleFactor);
+
+  double get containerSize => (90 * widget.scaleFactor);
 }
