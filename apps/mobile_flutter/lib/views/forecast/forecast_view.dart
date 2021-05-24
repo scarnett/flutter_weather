@@ -181,9 +181,10 @@ class _ForecastPageViewState extends State<ForecastView> {
           ? _buildForecastColorContent(state)
           : _buildLightDarkContent(state);
 
-  Widget _buildContent(
-    AppState state,
-  ) =>
+  Widget _buildContent({
+    required AppState state,
+    Color? forecastColor,
+  }) =>
       hasForecasts(state.forecasts)
           ? Stack(
               children: [
@@ -192,7 +193,12 @@ class _ForecastPageViewState extends State<ForecastView> {
                   physics: const AppPageViewScrollPhysics(),
                   itemCount: state.forecasts.length,
                   itemBuilder: (BuildContext context, int position) =>
-                      _buildForecastItem(context, position, state),
+                      _buildForecastItem(
+                    context: context,
+                    position: position,
+                    state: state,
+                    forecastColor: forecastColor,
+                  ),
                 ),
                 _buildCircleIndicator(state),
               ],
@@ -247,7 +253,10 @@ class _ForecastPageViewState extends State<ForecastView> {
                 bottom: false,
                 top: false,
                 topWidget: ForecastOptions(),
-                child: _buildContent(state),
+                child: _buildContent(
+                  state: state,
+                  forecastColor: _forecastColor,
+                ),
               ),
             ),
           );
@@ -264,15 +273,16 @@ class _ForecastPageViewState extends State<ForecastView> {
           bottom: false,
           top: false,
           topWidget: ForecastOptions(),
-          child: _buildContent(state),
+          child: _buildContent(state: state),
         ),
       );
 
-  _buildForecastItem(
-    BuildContext context,
-    int position,
-    AppState state,
-  ) {
+  _buildForecastItem({
+    required BuildContext context,
+    required int position,
+    required AppState state,
+    Color? forecastColor,
+  }) {
     if (position == state.forecasts.length) {
       return null;
     }
@@ -282,6 +292,7 @@ class _ForecastPageViewState extends State<ForecastView> {
         color: AppTheme.primaryColor,
         onRefresh: () => _pullRefresh(state),
         child: ForecastDisplay(
+          forecastColor: forecastColor,
           temperatureUnit: state.temperatureUnit,
           themeMode: state.themeMode,
           colorTheme: state.colorTheme,

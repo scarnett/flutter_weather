@@ -13,6 +13,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
   final BuildContext context;
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
+  final Color? forecastColor;
   final bool colorTheme;
 
   final AlignmentTween _locationAlignTween = AlignmentTween(
@@ -29,6 +30,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
     required this.context,
     required this.forecast,
     required this.temperatureUnit,
+    this.forecastColor,
     this.colorTheme: false,
   });
 
@@ -60,18 +62,6 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
             tileMode: TileMode.clamp,
           ),
         ),
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: [
-        //       Colors.orange.withOpacity(0.7),
-        //       Colors.orange.withOpacity(0.0),
-        //     ],
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //     stops: [0.7, 1.0],
-        //     tileMode: TileMode.clamp,
-        //   ),
-        // ),
         padding: EdgeInsets.only(
           top: (MediaQuery.of(context).padding.top + ForecastOptions.height),
           bottom: 10.0,
@@ -202,6 +192,10 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
 
   Color get _backgroundColor {
     if (colorTheme) {
+      if (forecastColor != null) {
+        return forecastColor!.withOpacity(0.8);
+      }
+
       return forecast.getTemperatureColor().withOpacity(0.8);
     }
 

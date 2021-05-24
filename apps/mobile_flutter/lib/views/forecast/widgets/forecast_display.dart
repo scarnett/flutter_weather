@@ -22,6 +22,7 @@ class ForecastDisplay extends StatefulWidget {
   final bool hourlyEnabled;
   final bool showSixDayForecast;
   final bool sliverView;
+  final Color? forecastColor;
 
   ForecastDisplay({
     required this.temperatureUnit,
@@ -31,6 +32,7 @@ class ForecastDisplay extends StatefulWidget {
     this.hourlyEnabled: true,
     this.showSixDayForecast: true,
     this.sliverView: true,
+    this.forecastColor,
   });
 
   @override
@@ -114,6 +116,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             floating: false,
             delegate: ForecastSliverHeader(
               context: context,
+              forecastColor: widget.forecastColor,
               temperatureUnit: widget.temperatureUnit,
               colorTheme: widget.colorTheme,
               forecast: widget.forecast,
