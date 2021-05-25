@@ -142,6 +142,26 @@ Animatable<Color?>? buildForecastColorSequence(
   return TweenSequence<Color?>(colors);
 }
 
+String getHumidity(
+  num? humidity,
+) {
+  if (humidity == null) {
+    return '0%';
+  }
+
+  return '${humidity.toDouble().round()}%';
+}
+
+String getWind(
+  num? windSpeed,
+) {
+  if (windSpeed == null) {
+    return '0 mph'; // TODO! unit
+  }
+
+  return '${windSpeed.toDouble().round()} mph';
+}
+
 String getUnitSymbol(
   TemperatureUnit? unit,
 ) {

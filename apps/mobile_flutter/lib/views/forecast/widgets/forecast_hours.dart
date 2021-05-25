@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hour_tile.dart';
 
 class ForecastHours extends StatefulWidget {
   final Forecast forecast;
+  final TemperatureUnit temperatureUnit;
 
   ForecastHours({
     required this.forecast,
+    required this.temperatureUnit,
   });
 
   @override
@@ -25,10 +28,11 @@ class _ForecastHoursState extends State<ForecastHours> {
         itemBuilder: (
           BuildContext context,
           int index,
-        ) {
-          final ForecastHour hour = widget.forecast.details!.hourly![index];
-          return ForecastHourTile(hour: hour);
-        },
+        ) =>
+            ForecastHourTile(
+          hour: widget.forecast.details!.hourly![index],
+          temperatureUnit: widget.temperatureUnit,
+        ),
         separatorBuilder: (context, index) => Divider(),
         padding: const EdgeInsets.all(0.0),
         itemCount: (widget.forecast.details!.hourly != null)
