@@ -113,6 +113,7 @@ class _ForecastCurrentTempState extends State<ForecastCurrentTemp> {
           shrinkOffset: widget.shrinkOffset!,
           maxExtent: widget.maxExtent!,
           minExtent: widget.minExtent!,
+          speed: 0.5,
         ),
       );
     }

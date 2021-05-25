@@ -81,6 +81,7 @@ class _ForecastLocationState extends State<ForecastLocation> {
           shrinkOffset: widget.shrinkOffset!,
           maxExtent: widget.maxExtent!,
           minExtent: widget.minExtent!,
+          speed: 0.5,
         ),
       );
     }
