@@ -114,7 +114,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     ForecastDay currentDay,
   ) =>
       CustomScrollView(
-        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
         slivers: <Widget>[
           SliverPersistentHeader(
             pinned: true,
