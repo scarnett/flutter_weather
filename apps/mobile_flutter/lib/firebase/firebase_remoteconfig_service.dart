@@ -8,10 +8,15 @@ class FirebaseRemoteConfigService {
     try {
       await _fetchAndActivate();
     } on Exception catch (exception, stackTrace) {
-      // Fetch throttled.
+      _remoteConfig = RemoteConfig
+          .instance; // TODO! set the 'retry' flag in the state instead
+
       print('Remote config fetch throttled: $exception');
       await Sentry.captureException(exception, stackTrace: stackTrace);
     } catch (exception, stackTrace) {
+      _remoteConfig = RemoteConfig
+          .instance; // TODO! set the 'retry' flag in the state instead
+
       print('Unable to fetch remote config. Cached or default values will be '
           'used');
 

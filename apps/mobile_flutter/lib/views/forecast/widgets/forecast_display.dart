@@ -46,6 +46,7 @@ class ForecastDisplay extends StatefulWidget {
 class _ForecastDisplayState extends State<ForecastDisplay> {
   PageController? _pageController;
   late ValueNotifier<int> _dayForecastsNotifier;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
@@ -59,6 +60,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       });
 
     _dayForecastsNotifier = ValueNotifier<int>(0);
+    _scrollController = ScrollController();
+
     super.initState();
   }
 
@@ -108,6 +111,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               if (widget.detailsEnabled &&
                   (widget.forecast.details!.timezone != null))
                 ForecastDetailDisplay(
+                  scrollController: _scrollController,
                   forecast: widget.forecast,
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
@@ -123,6 +127,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     ForecastDay currentDay,
   ) =>
       CustomScrollView(
+        controller: _scrollController,
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[
           SliverPersistentHeader(
@@ -151,6 +156,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   if (widget.detailsEnabled &&
                       (widget.forecast.details!.timezone != null))
                     ForecastDetailDisplay(
+                      scrollController: _scrollController,
                       forecast: widget.forecast,
                       themeMode: widget.themeMode,
                       colorTheme: widget.colorTheme,

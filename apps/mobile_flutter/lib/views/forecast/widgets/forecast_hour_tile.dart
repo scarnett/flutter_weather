@@ -10,10 +10,12 @@ import 'package:flutter_weather/widgets/app_temperature_display.dart';
 class ForecastHourTile extends StatefulWidget {
   final ForecastHour hour;
   final TemperatureUnit temperatureUnit;
+  final bool colorTheme;
 
   ForecastHourTile({
     required this.hour,
     required this.temperatureUnit,
+    this.colorTheme: false,
   });
 
   @override
@@ -32,7 +34,7 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
         leading: Text(
           formatHour(widget.hour.dt) ?? '',
           style: Theme.of(context).textTheme.headline5!.copyWith(
-                shadows: commonTextShadow(),
+                shadows: widget.colorTheme ? commonTextShadow() : null,
               ),
         ),
         title: Row(
@@ -59,7 +61,7 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
                       getTemperature(widget.hour.temp, widget.temperatureUnit)
                           .toString(),
                   style: Theme.of(context).textTheme.headline5!.copyWith(
-                        shadows: commonTextShadow(),
+                        shadows: widget.colorTheme ? commonTextShadow() : null,
                       ),
                   unit: widget.temperatureUnit,
                   unitSizeFactor: 2.0,
@@ -72,7 +74,7 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
                 child: Text(
                   getHumidity(widget.hour.humidity),
                   style: Theme.of(context).textTheme.headline5!.copyWith(
-                        shadows: commonTextShadow(),
+                        shadows: widget.colorTheme ? commonTextShadow() : null,
                       ),
                 ),
               ),
@@ -82,7 +84,7 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
         trailing: Text(
           getWind(widget.hour.windSpeed),
           style: Theme.of(context).textTheme.headline5!.copyWith(
-                shadows: commonTextShadow(),
+                shadows: widget.colorTheme ? commonTextShadow() : null,
               ),
         ),
         onTap: null,

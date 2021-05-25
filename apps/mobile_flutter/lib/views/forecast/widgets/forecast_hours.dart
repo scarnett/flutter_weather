@@ -7,10 +7,12 @@ import 'package:flutter_weather/views/forecast/widgets/forecast_hour_tile.dart';
 class ForecastHours extends StatefulWidget {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
+  final bool colorTheme;
 
   ForecastHours({
     required this.forecast,
     required this.temperatureUnit,
+    this.colorTheme: false,
   });
 
   @override
@@ -32,6 +34,7 @@ class _ForecastHoursState extends State<ForecastHours> {
             ForecastHourTile(
           hour: widget.forecast.details!.hourly![index],
           temperatureUnit: widget.temperatureUnit,
+          colorTheme: widget.colorTheme,
         ),
         separatorBuilder: (context, index) => Divider(),
         padding: const EdgeInsets.all(0.0),

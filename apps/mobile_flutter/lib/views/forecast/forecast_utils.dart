@@ -300,8 +300,11 @@ double getScrollProgress({
   required double maxExtent,
   required double minExtent,
   double speed: 1.0,
+  double clampUpper: 1.0,
+  double clampLower: 0.0,
 }) =>
-    ((shrinkOffset * speed) / (maxExtent - minExtent)).clamp(0.0, 1.0);
+    ((shrinkOffset * speed) / (maxExtent - minExtent))
+        .clamp(clampLower, clampUpper);
 
 double getScrollScale({
   required double shrinkOffset,
@@ -310,9 +313,10 @@ double getScrollScale({
   double factor: 4.0,
 }) {
   double position = (getScrollProgress(
-          shrinkOffset: shrinkOffset,
-          maxExtent: maxExtent,
-          minExtent: minExtent) /
+        shrinkOffset: shrinkOffset,
+        maxExtent: maxExtent,
+        minExtent: minExtent,
+      ) /
       factor);
 
   return (1.0 - position);
