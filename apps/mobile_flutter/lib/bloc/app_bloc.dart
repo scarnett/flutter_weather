@@ -342,13 +342,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     try {
       http.Response forecastResponse = await tryLookupForecast(lookupData);
       if (forecastResponse.statusCode == 200) {
-        // TODO! check for api errors
-
         List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
-        int forecastIndex = forecasts.indexWhere(
-          (Forecast forecast) =>
-              forecast.postalCode == event.forecast.postalCode,
-        );
+        int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
+            forecast.postalCode == event.forecast.postalCode);
 
         if (forecastIndex == -1) {
           showSnackbar(
@@ -360,6 +356,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         } else {
           Forecast forecast =
               Forecast.fromJson(jsonDecode(forecastResponse.body));
+
           forecasts[forecastIndex] = forecast.copyWith(
             id: event.forecast.id,
             cityName: Nullable<String?>(event.forecast.cityName),
@@ -368,6 +365,18 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             primary: Nullable<bool?>(event.forecast.primary),
             lastUpdated: getNow(),
           );
+
+          // TODO! premium
+          http.Response forecastDetailsResponse = await fetchDetailedForecast(
+            longitude: forecast.city!.coord!.lon!,
+            latitude: forecast.city!.coord!.lat!,
+          );
+
+          if (forecastDetailsResponse.statusCode == 200) {
+            forecasts[forecastIndex] = forecasts[forecastIndex].copyWith(
+                details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
+                    jsonDecode(forecastDetailsResponse.body))));
+          }
 
           yield state.copyWith(
             forecasts: forecasts,

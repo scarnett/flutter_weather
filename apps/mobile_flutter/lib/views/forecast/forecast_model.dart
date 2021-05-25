@@ -45,7 +45,7 @@ class Forecast extends Equatable {
     num? message,
     int? cnt,
     List<ForecastDay>? list,
-    ForecastDetails? details,
+    Nullable<ForecastDetails?>? details,
     DateTime? lastUpdated,
     Nullable<bool?>? primary,
   }) =>
@@ -60,7 +60,7 @@ class Forecast extends Equatable {
         message: message ?? this.message,
         cnt: cnt ?? this.cnt,
         list: list ?? this.list,
-        details: details ?? this.details,
+        details: (details == null) ? this.details : details.value,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         primary: (primary == null) ? this.primary : primary.value,
       );
@@ -593,6 +593,7 @@ class ForecastDetails extends Equatable {
   final List<ForecastMinute>? minutely;
   final List<ForecastHour>? hourly;
   final List<ForecastDaily>? daily;
+  final List<ForecastAlert>? alerts;
 
   ForecastDetails({
     this.lon,
@@ -603,6 +604,7 @@ class ForecastDetails extends Equatable {
     this.minutely,
     this.hourly,
     this.daily,
+    this.alerts,
   });
 
   ForecastDetails copyWith({
@@ -614,6 +616,7 @@ class ForecastDetails extends Equatable {
     List<ForecastMinute>? minutely,
     List<ForecastHour>? hourly,
     List<ForecastDaily>? daily,
+    List<ForecastAlert>? alerts,
   }) =>
       ForecastDetails(
         lon: lon ?? this.lon,
@@ -624,6 +627,7 @@ class ForecastDetails extends Equatable {
         minutely: minutely ?? this.minutely,
         hourly: hourly ?? this.hourly,
         daily: daily ?? this.daily,
+        alerts: alerts ?? this.alerts,
       );
 
   static ForecastDetails fromJson(
@@ -640,6 +644,7 @@ class ForecastDetails extends Equatable {
               minutely: ForecastMinute.fromJsonList(json['minutely']),
               hourly: ForecastHour.fromJsonList(json['hourly']),
               daily: ForecastDaily.fromJsonList(json['daily']),
+              alerts: ForecastAlert.fromJsonList(json['alerts']),
             );
 
   dynamic toJson() => {
@@ -651,6 +656,7 @@ class ForecastDetails extends Equatable {
         'minutely': ForecastMinute.toJsonList(minutely),
         'hourly': ForecastHour.toJsonList(hourly),
         'daily': ForecastDaily.toJsonList(daily),
+        'alerts': ForecastAlert.toJsonList(alerts),
       };
 
   @override
@@ -663,6 +669,7 @@ class ForecastDetails extends Equatable {
         minutely,
         hourly,
         daily,
+        alerts,
       ];
 
   @override
@@ -1072,15 +1079,15 @@ class ForecastDaily extends Equatable {
               moonrise: json['moonrise'],
               moonset: json['moonset'],
               moonPhase: json['moon_phase'],
-              temp: json['temp'],
-              feelsLike: json['feels_like'],
+              temp: ForecastDayTemp.fromJson(json['temp']),
+              feelsLike: ForecastDayFeelsLike.fromJson(json['feels_like']),
               pressure: json['pressure'],
               humidity: json['humidity'],
               dewPoint: json['dew_point'],
               windSpeed: json['wind_speed'],
               windDeg: json['wind_deg'],
               windGust: json['wind_gust'],
-              weather: json['weather'],
+              weather: ForecastDayWeather.fromJsonList(json['weather']),
               clouds: json['clouds'],
               pop: json['pop'],
               rain: json['rain'],
@@ -1155,4 +1162,86 @@ class ForecastDaily extends Equatable {
       'moonPhase: $moonPhase, pressure: $pressure, humidity: $humidity, ' +
       'dewPoint: $dewPoint, windSpeed: $windSpeed, windDeg: $windDeg, ' +
       'windGust: $windGust, clouds: $clouds, pop: $pop, rain: $rain, uvi: $uvi}';
+}
+
+class ForecastAlert extends Equatable {
+  final String? senderName;
+  final String? event;
+  final int? start;
+  final int? end;
+  final String? description;
+
+  ForecastAlert({
+    this.senderName,
+    this.event,
+    this.start,
+    this.end,
+    this.description,
+  });
+
+  ForecastAlert copyWith({
+    String? senderName,
+    String? event,
+    int? start,
+    int? end,
+    String? description,
+  }) =>
+      ForecastAlert(
+        senderName: senderName ?? this.senderName,
+        event: event ?? this.event,
+        start: start ?? this.start,
+        end: end ?? this.end,
+        description: description ?? this.description,
+      );
+
+  static ForecastAlert fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? ForecastAlert()
+          : ForecastAlert(
+              senderName: json['sender_name'],
+              event: json['event'],
+              start: json['start'],
+              end: json['end'],
+              description: json['description'],
+            );
+
+  static List<ForecastAlert> fromJsonList(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? []
+          : List<dynamic>.from(json)
+              .map((dynamic alertJson) => ForecastAlert.fromJson(alertJson))
+              .toList();
+
+  dynamic toJson() => {
+        'sender_name': senderName,
+        'event': event,
+        'start': start,
+        'end': end,
+        'description': description,
+      };
+
+  static List<dynamic> toJsonList(
+    List<ForecastAlert>? list,
+  ) =>
+      (list == null)
+          ? []
+          : list.map((ForecastAlert alert) => alert.toJson()).toList();
+
+  @override
+  List<Object?> get props => [
+        senderName,
+        event,
+        start,
+        end,
+        description,
+      ];
+
+  @override
+  String toString() =>
+      'ForecastAlert{senderName: $senderName, event: $event ' +
+      'start: $start, end: $end, description: $description}';
 }
