@@ -9,6 +9,18 @@ import 'package:flutter_weather/views/forecast/forecast_extension.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+Uri getDetailedUri(
+  Map<String, dynamic> params,
+) {
+  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
+
+  return Uri.https(
+    AppConfig.instance.openWeatherMapApiUri!,
+    AppConfig.instance.openWeatherMapApiOneCallPath!,
+    params.cast<String, String>(),
+  );
+}
+
 Uri getCurrentApiUri(
   Map<String, dynamic> params,
 ) {

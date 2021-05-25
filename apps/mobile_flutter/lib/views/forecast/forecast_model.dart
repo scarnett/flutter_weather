@@ -94,7 +94,7 @@ class Forecast extends Equatable {
         'cityName': cityName,
         'postalCode': postalCode,
         'countryCode': countryCode,
-        'city': city!.toJson(),
+        'city': (city == null) ? null : city!.toJson(),
         'cod': cod,
         'message': message,
         'cnt': cnt,
@@ -183,7 +183,7 @@ class ForecastCity extends Equatable {
   dynamic toJson() => {
         'id': id,
         'name': name,
-        'coord': coord!.toJson(),
+        'coord': (coord == null) ? null : coord!.toJson(),
         'country': country,
         'population': population,
         'timezone': timezone,
@@ -339,8 +339,8 @@ class ForecastDay extends Equatable {
         'dt': dt,
         'sunrise': sunrise,
         'sunset': sunset,
-        'temp': temp!.toJson(),
-        'feels_like': feelsLike!.toJson(),
+        'temp': (temp == null) ? null : temp!.toJson(),
+        'feels_like': (feelsLike == null) ? null : feelsLike!.toJson(),
         'pressure': pressure,
         'humidity': humidity,
         'weather': ForecastDayWeather.toJsonList(weather),
@@ -575,4 +575,577 @@ class ForecastDayWeather extends Equatable {
   String toString() =>
       'ForecastDayWeather{id: $id main: $main, description: $description, ' +
       'icon: $icon}';
+}
+
+class ForecastDetails extends Equatable {
+  final num? lon;
+  final num? lat;
+  final String? timezone;
+  final num? timezoneOffset;
+  final ForecastCurrent? current;
+  final List<ForecastMinute>? minutely;
+  final List<ForecastHour>? hourly;
+  final List<ForecastDaily>? daily;
+
+  ForecastDetails({
+    this.lon,
+    this.lat,
+    this.timezone,
+    this.timezoneOffset,
+    this.current,
+    this.minutely,
+    this.hourly,
+    this.daily,
+  });
+
+  ForecastDetails copyWith({
+    num? lon,
+    num? lat,
+    String? timezone,
+    num? timezoneOffset,
+    ForecastCurrent? current,
+    List<ForecastMinute>? minutely,
+    List<ForecastHour>? hourly,
+    List<ForecastDaily>? daily,
+  }) =>
+      ForecastDetails(
+        lon: lon ?? this.lon,
+        lat: lat ?? this.lat,
+        timezone: timezone ?? this.timezone,
+        timezoneOffset: timezoneOffset ?? this.timezoneOffset,
+        current: current ?? this.current,
+        minutely: minutely ?? this.minutely,
+        hourly: hourly ?? this.hourly,
+        daily: daily ?? this.daily,
+      );
+
+  static ForecastDetails fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? ForecastDetails()
+          : ForecastDetails(
+              lon: json['lon'],
+              lat: json['lat'],
+              timezone: json['timezone'],
+              timezoneOffset: json['timezone_offset'],
+              current: ForecastCurrent.fromJson(json['current']),
+              minutely: ForecastMinute.fromJsonList(json['minutely']),
+              hourly: ForecastHour.fromJsonList(json['hourly']),
+              daily: ForecastDaily.fromJsonList(json['daily']),
+            );
+
+  dynamic toJson() => {
+        'lon': lon,
+        'lat': lat,
+        'timezone': timezone,
+        'timezone_offset': timezoneOffset,
+        'current': (current == null) ? null : current!.toJson(),
+        'minutely': ForecastMinute.toJsonList(minutely),
+        'hourly': ForecastHour.toJsonList(hourly),
+        'daily': ForecastDaily.toJsonList(daily),
+      };
+
+  @override
+  List<Object?> get props => [
+        lon,
+        lat,
+        timezone,
+        timezoneOffset,
+        current,
+        minutely,
+        hourly,
+        daily,
+      ];
+
+  @override
+  String toString() =>
+      'ForecastDetails{lon: $lon, lat: $lat, timezone: $timezone, ' +
+      'timezoneOffset: $timezoneOffset, current: $current}';
+}
+
+class ForecastCurrent extends Equatable {
+  final int? dt;
+  final int? sunrise;
+  final int? sunset;
+  final num? temp;
+  final num? feelsLike;
+  final num? pressure;
+  final num? humidity;
+  final num? dewPoint;
+  final num? uvi;
+  final num? clouds;
+  final num? visibility;
+  final num? windSpeed;
+  final num? windDeg;
+  final List<ForecastDayWeather>? weather;
+
+  ForecastCurrent({
+    this.dt,
+    this.sunrise,
+    this.sunset,
+    this.temp,
+    this.feelsLike,
+    this.pressure,
+    this.humidity,
+    this.dewPoint,
+    this.uvi,
+    this.clouds,
+    this.visibility,
+    this.windSpeed,
+    this.windDeg,
+    this.weather,
+  });
+
+  ForecastCurrent copyWith({
+    int? dt,
+    int? sunrise,
+    int? sunset,
+    num? temp,
+    num? feelsLike,
+    num? pressure,
+    num? humidity,
+    num? dewPoint,
+    num? uvi,
+    num? clouds,
+    num? visibility,
+    num? windSpeed,
+    num? windDeg,
+    List<ForecastDayWeather>? weather,
+  }) =>
+      ForecastCurrent(
+        dt: dt ?? this.dt,
+        sunrise: sunrise ?? this.sunrise,
+        sunset: sunset ?? this.sunset,
+        temp: temp ?? this.temp,
+        feelsLike: feelsLike ?? this.feelsLike,
+        pressure: pressure ?? this.pressure,
+        humidity: humidity ?? this.humidity,
+        dewPoint: dewPoint ?? this.dewPoint,
+        uvi: uvi ?? this.uvi,
+        clouds: clouds ?? this.clouds,
+        visibility: visibility ?? this.visibility,
+        windSpeed: windSpeed ?? this.windSpeed,
+        windDeg: windDeg ?? this.windDeg,
+        weather: weather ?? this.weather,
+      );
+
+  static ForecastCurrent fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? ForecastCurrent()
+          : ForecastCurrent(
+              dt: json['dt'],
+              sunrise: json['sunrise'],
+              sunset: json['sunset'],
+              temp: json['temp'],
+              feelsLike: json['feels_like'],
+              pressure: json['pressure'],
+              humidity: json['humidity'],
+              dewPoint: json['dew_point'],
+              uvi: json['uvi'],
+              clouds: json['clouds'],
+              visibility: json['visibility'],
+              windSpeed: json['wind_speed'],
+              windDeg: json['wind_deg'],
+              weather: ForecastDayWeather.fromJsonList(json['weather']),
+            );
+
+  dynamic toJson() => {
+        'dt': dt,
+        'sunrise': sunrise,
+        'sunset': sunset,
+        'temp': temp,
+        'feels_like': feelsLike,
+        'pressure': pressure,
+        'humidity': humidity,
+        'dew_point': dewPoint,
+        'uvi': uvi,
+        'clouds': clouds,
+        'visibility': visibility,
+        'wind_speed': windSpeed,
+        'wind_deg': windDeg,
+        'weather': ForecastDayWeather.toJsonList(weather),
+      };
+
+  @override
+  List<Object?> get props => [
+        dt,
+        sunrise,
+        sunset,
+        temp,
+        feelsLike,
+        pressure,
+        humidity,
+        dewPoint,
+        uvi,
+        clouds,
+        visibility,
+        windSpeed,
+        windDeg,
+        weather,
+      ];
+
+  @override
+  String toString() =>
+      'ForecastCurrent{dt: $dt, sunrise: $sunrise, sunset: $sunset, ' +
+      'temp: $temp, feelsLike: $feelsLike, pressure: $pressure, ' +
+      'humidity: $humidity, dewPoint: $dewPoint, uvi: $uvi, clouds: $clouds, ' +
+      'visibility: $visibility, windSpeed: $windSpeed, windDeg: $windDeg}';
+}
+
+class ForecastMinute extends Equatable {
+  final int? dt;
+  final num? precipitation;
+
+  ForecastMinute({
+    this.dt,
+    this.precipitation,
+  });
+
+  ForecastMinute copyWith({
+    int? dt,
+    num? precipitation,
+  }) =>
+      ForecastMinute(
+        dt: dt ?? this.dt,
+        precipitation: precipitation ?? this.precipitation,
+      );
+
+  static ForecastMinute fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? ForecastMinute()
+          : ForecastMinute(
+              dt: json['dt'],
+              precipitation: json['precipitation'],
+            );
+
+  static List<ForecastMinute> fromJsonList(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? []
+          : List<dynamic>.from(json)
+              .map((dynamic minuteJson) => ForecastMinute.fromJson(minuteJson))
+              .toList();
+
+  dynamic toJson() => {
+        'dt': dt,
+        'precipitation': precipitation,
+      };
+
+  static List<dynamic> toJsonList(
+    List<ForecastMinute>? list,
+  ) =>
+      (list == null)
+          ? []
+          : list.map((ForecastMinute minute) => minute.toJson()).toList();
+
+  @override
+  List<Object?> get props => [dt, precipitation];
+
+  @override
+  String toString() => 'ForecastMinute{dt: $dt, precipitation: $precipitation}';
+}
+
+class ForecastHour extends Equatable {
+  final int? dt;
+  final num? temp;
+  final num? feelsLike;
+  final num? pressure;
+  final num? humidity;
+  final num? dewPoint;
+  final num? uvi;
+  final num? clouds;
+  final num? visibility;
+  final num? windSpeed;
+  final num? windDeg;
+  final num? windGust;
+
+  ForecastHour({
+    this.dt,
+    this.temp,
+    this.feelsLike,
+    this.pressure,
+    this.humidity,
+    this.dewPoint,
+    this.uvi,
+    this.clouds,
+    this.visibility,
+    this.windSpeed,
+    this.windDeg,
+    this.windGust,
+  });
+
+  ForecastHour copyWith({
+    int? dt,
+    num? temp,
+    num? feelsLike,
+    num? pressure,
+    num? humidity,
+    num? dewPoint,
+    num? uvi,
+    num? clouds,
+    num? visibility,
+    num? windSpeed,
+    num? windDeg,
+    num? windGust,
+  }) =>
+      ForecastHour(
+        dt: dt ?? this.dt,
+        temp: temp ?? this.temp,
+        feelsLike: feelsLike ?? this.feelsLike,
+        pressure: pressure ?? this.pressure,
+        humidity: humidity ?? this.humidity,
+        dewPoint: dewPoint ?? this.dewPoint,
+        uvi: uvi ?? this.uvi,
+        clouds: clouds ?? this.clouds,
+        visibility: visibility ?? this.visibility,
+        windSpeed: windSpeed ?? this.windSpeed,
+        windDeg: windDeg ?? this.windDeg,
+        windGust: windGust ?? this.windGust,
+      );
+
+  static ForecastHour fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? ForecastHour()
+          : ForecastHour(
+              dt: json['dt'],
+              temp: json['temp'],
+              feelsLike: json['feels_like'],
+              pressure: json['pressure'],
+              humidity: json['humidity'],
+              dewPoint: json['dew_point'],
+              uvi: json['uvi'],
+              clouds: json['clouds'],
+              visibility: json['visibility'],
+              windSpeed: json['wind_speed'],
+              windDeg: json['wind_deg'],
+              windGust: json['wind_gust'],
+            );
+
+  static List<ForecastHour> fromJsonList(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? []
+          : List<dynamic>.from(json)
+              .map((dynamic hourJson) => ForecastHour.fromJson(hourJson))
+              .toList();
+
+  dynamic toJson() => {
+        'dt': dt,
+        'temp': temp,
+        'feels_like': feelsLike,
+        'pressure': pressure,
+        'humidity': humidity,
+        'dew_point': dewPoint,
+        'uvi': uvi,
+        'clouds': clouds,
+        'visibility': visibility,
+        'wind_speed': windSpeed,
+        'wind_deg': windDeg,
+        'wind_gust': windGust,
+      };
+
+  static List<dynamic> toJsonList(
+    List<ForecastHour>? list,
+  ) =>
+      (list == null)
+          ? []
+          : list.map((ForecastHour hour) => hour.toJson()).toList();
+
+  @override
+  List<Object?> get props => [
+        dt,
+        temp,
+        feelsLike,
+        pressure,
+        humidity,
+        dewPoint,
+        uvi,
+        clouds,
+        visibility,
+        windSpeed,
+        windDeg,
+        windGust,
+      ];
+
+  @override
+  String toString() =>
+      'ForecastCurrent{dt: $dt, temp: $temp, feelsLike: $feelsLike, ' +
+      'pressure: $pressure, humidity: $humidity, dewPoint: $dewPoint, ' +
+      'uvi: $uvi, clouds: $clouds, visibility: $visibility, ' +
+      'windSpeed: $windSpeed, windDeg: $windDeg, windGust: $windGust}';
+}
+
+class ForecastDaily extends Equatable {
+  final int? dt;
+  final int? sunrise;
+  final int? sunset;
+  final int? moonrise;
+  final int? moonset;
+  final num? moonPhase;
+  final ForecastDayTemp? temp;
+  final ForecastDayFeelsLike? feelsLike;
+  final num? pressure;
+  final num? humidity;
+  final num? dewPoint;
+  final num? windSpeed;
+  final num? windDeg;
+  final num? windGust;
+  final List<ForecastDayWeather>? weather;
+  final num? clouds;
+  final num? pop;
+  final num? rain;
+  final num? uvi;
+
+  ForecastDaily({
+    this.dt,
+    this.sunrise,
+    this.sunset,
+    this.moonrise,
+    this.moonset,
+    this.moonPhase,
+    this.temp,
+    this.feelsLike,
+    this.pressure,
+    this.humidity,
+    this.dewPoint,
+    this.windSpeed,
+    this.windDeg,
+    this.windGust,
+    this.weather,
+    this.clouds,
+    this.pop,
+    this.rain,
+    this.uvi,
+  });
+
+  ForecastDaily copyWith({
+    int? dt,
+    int? sunrise,
+  }) =>
+      ForecastDaily(
+        dt: dt ?? this.dt,
+        sunrise: sunrise ?? this.sunrise,
+        sunset: sunset ?? this.sunset,
+        moonrise: moonrise ?? this.moonrise,
+        moonset: moonset ?? this.moonset,
+        moonPhase: moonPhase ?? this.moonPhase,
+        temp: temp ?? this.temp,
+        feelsLike: feelsLike ?? this.feelsLike,
+        pressure: pressure ?? this.pressure,
+        humidity: humidity ?? this.humidity,
+        dewPoint: dewPoint ?? this.dewPoint,
+        windSpeed: windSpeed ?? this.windSpeed,
+        windDeg: windDeg ?? this.windDeg,
+        windGust: windGust ?? this.windGust,
+        weather: weather ?? this.weather,
+        clouds: clouds ?? this.clouds,
+        pop: pop ?? this.pop,
+        rain: rain ?? this.rain,
+        uvi: uvi ?? this.uvi,
+      );
+
+  static ForecastDaily fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? ForecastDaily()
+          : ForecastDaily(
+              dt: json['dt'],
+              sunrise: json['sunrise'],
+              sunset: json['sunset'],
+              moonrise: json['moonrise'],
+              moonset: json['moonset'],
+              moonPhase: json['moon_phase'],
+              temp: json['temp'],
+              feelsLike: json['feels_like'],
+              pressure: json['pressure'],
+              humidity: json['humidity'],
+              dewPoint: json['dew_point'],
+              windSpeed: json['wind_speed'],
+              windDeg: json['wind_deg'],
+              windGust: json['wind_gust'],
+              weather: json['weather'],
+              clouds: json['clouds'],
+              pop: json['pop'],
+              rain: json['rain'],
+              uvi: json['uvi'],
+            );
+
+  static List<ForecastDaily> fromJsonList(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? []
+          : List<dynamic>.from(json)
+              .map((dynamic dailyJson) => ForecastDaily.fromJson(dailyJson))
+              .toList();
+
+  dynamic toJson() => {
+        'dt': dt,
+        'sunrise': sunrise,
+        'sunset': sunset,
+        'moonrise': moonrise,
+        'moonset': moonset,
+        'moon_phase': moonPhase,
+        'temp': temp,
+        'feels_like': feelsLike,
+        'pressure': pressure,
+        'humidity': humidity,
+        'dew_point': dewPoint,
+        'wind_speed': windSpeed,
+        'wind_deg': windDeg,
+        'wind_gust': windGust,
+        'weather': weather,
+        'clouds': clouds,
+        'pop': pop,
+        'rain': rain,
+        'uvi': uvi,
+      };
+
+  static List<dynamic> toJsonList(
+    List<ForecastDaily>? list,
+  ) =>
+      (list == null)
+          ? []
+          : list.map((ForecastDaily daily) => daily.toJson()).toList();
+
+  @override
+  List<Object?> get props => [
+        dt,
+        sunrise,
+        sunset,
+        moonrise,
+        moonset,
+        moonPhase,
+        temp,
+        feelsLike,
+        pressure,
+        humidity,
+        dewPoint,
+        windSpeed,
+        windDeg,
+        windGust,
+        weather,
+        clouds,
+        pop,
+        rain,
+        uvi,
+      ];
+
+  @override
+  String toString() =>
+      'ForecastMinute{dt: $dt, sunrise: $sunrise, ' +
+      'sunset: $sunset, moonrise: $moonrise, moonset: $moonset, ' +
+      'moonPhase: $moonPhase, pressure: $pressure, humidity: $humidity, ' +
+      'dewPoint: $dewPoint, windSpeed: $windSpeed, windDeg: $windDeg, ' +
+      'windGust: $windGust, clouds: $clouds, pop: $pop, rain: $rain, uvi: $uvi}';
 }

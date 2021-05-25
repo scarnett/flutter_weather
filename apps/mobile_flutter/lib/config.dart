@@ -9,6 +9,7 @@ class AppConfig extends InheritedWidget {
   final String? openWeatherMapApiKey;
   final String? openWeatherMapApiUri;
   final String? openWeatherMapApiDailyForecastPath;
+  final String? openWeatherMapApiOneCallPath;
   final int? refreshTimeout;
   final String? defaultCountryCode;
   final String? supportedLocales;
@@ -26,6 +27,7 @@ class AppConfig extends InheritedWidget {
     openWeatherMapApiKey,
     openWeatherMapApiUri,
     openWeatherMapApiDailyForecastPath,
+    openWeatherMapApiOneCallPath,
     refreshTimeout,
     defaultCountryCode,
     supportedLocales,
@@ -42,6 +44,7 @@ class AppConfig extends InheritedWidget {
       openWeatherMapApiKey,
       openWeatherMapApiUri,
       openWeatherMapApiDailyForecastPath,
+      openWeatherMapApiOneCallPath,
       refreshTimeout,
       defaultCountryCode,
       supportedLocales,
@@ -62,6 +65,7 @@ class AppConfig extends InheritedWidget {
     this.openWeatherMapApiKey,
     this.openWeatherMapApiUri,
     this.openWeatherMapApiDailyForecastPath,
+    this.openWeatherMapApiOneCallPath,
     this.refreshTimeout,
     this.defaultCountryCode,
     this.supportedLocales,

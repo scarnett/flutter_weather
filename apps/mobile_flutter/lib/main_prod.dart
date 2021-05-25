@@ -71,6 +71,7 @@ Future<void> main() async {
     openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
     openWeatherMapApiDailyForecastPath:
         remoteConfig.openWeatherMapApiDailyForecastPath,
+    openWeatherMapApiOneCallPath: remoteConfig.openWeatherMapApiOneCallPath,
     refreshTimeout: remoteConfig.refreshTimeout,
     defaultCountryCode: remoteConfig.defaultCountryCode,
     supportedLocales: remoteConfig.supportedLocales,
