@@ -32,9 +32,9 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
       ..addListener(() => setState(() => scrollOffset = getScrollProgress(
             shrinkOffset: widget.scrollController.offset,
             minExtent: 0.0,
-            maxExtent: 100.0,
+            maxExtent: 50.0,
             clampLower: 0.2,
-            speed: 0.5,
+            speed: 1.5,
           )));
 
     super.initState();
