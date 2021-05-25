@@ -16,6 +16,7 @@ class Forecast extends Equatable {
   final num? message;
   final int? cnt;
   final List<ForecastDay>? list;
+  final ForecastDetails? details;
   final DateTime? lastUpdated;
   final bool? primary;
 
@@ -29,6 +30,7 @@ class Forecast extends Equatable {
     this.message,
     this.cnt,
     this.list,
+    this.details,
     this.lastUpdated,
     this.primary,
   });
@@ -43,6 +45,7 @@ class Forecast extends Equatable {
     num? message,
     int? cnt,
     List<ForecastDay>? list,
+    ForecastDetails? details,
     DateTime? lastUpdated,
     Nullable<bool?>? primary,
   }) =>
@@ -57,6 +60,7 @@ class Forecast extends Equatable {
         message: message ?? this.message,
         cnt: cnt ?? this.cnt,
         list: list ?? this.list,
+        details: details ?? this.details,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         primary: (primary == null) ? this.primary : primary.value,
       );
@@ -76,6 +80,7 @@ class Forecast extends Equatable {
               message: json['message'],
               cnt: json['cnt'],
               list: ForecastDay.fromJsonList(json['list']),
+              details: ForecastDetails.fromJson(json['details']),
               lastUpdated: fromIso8601String(json['lastUpdated']),
               primary: json['primary'],
             );
@@ -99,6 +104,7 @@ class Forecast extends Equatable {
         'message': message,
         'cnt': cnt,
         'list': ForecastDay.toJsonList(list),
+        'details': (details == null) ? null : details!.toJson(),
         'lastUpdated': toIso8601String(lastUpdated),
         'primary': primary,
       };
@@ -121,6 +127,7 @@ class Forecast extends Equatable {
         message,
         cnt,
         list,
+        details,
         lastUpdated,
         primary,
       ];
