@@ -8,6 +8,7 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_current_temp.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_detail_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_location.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_sliver_header.dart';
@@ -137,6 +138,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     colorTheme: widget.colorTheme,
                     days: days.toList(),
                   ),
+                  if (widget.forecast.details!.timezone != null)
+                    ForecastDetailDisplay(
+                      forecast: widget.forecast,
+                      themeMode: widget.themeMode,
+                      colorTheme: widget.colorTheme,
+                    ),
                 ],
               ),
             ),
@@ -188,7 +195,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     widget.themeMode,
                     colorTheme: widget.colorTheme,
                   ),
-                  width: 1.0,
+                  width: 2.0,
                 ),
               ),
             ),
@@ -435,7 +442,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               widget.themeMode,
               colorTheme: widget.colorTheme,
             ),
-            width: 1.0,
+            width: 2.0,
           ),
         ),
       ),
