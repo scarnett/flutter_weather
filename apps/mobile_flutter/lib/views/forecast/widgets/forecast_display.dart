@@ -26,6 +26,7 @@ class ForecastDisplay extends StatefulWidget {
   final bool showSixDayForecast;
   final bool sliverView;
   final Color? forecastColor;
+  final bool detailsEnabled;
 
   ForecastDisplay({
     required this.temperatureUnit,
@@ -35,6 +36,7 @@ class ForecastDisplay extends StatefulWidget {
     this.showSixDayForecast: true,
     this.sliverView: true,
     this.forecastColor,
+    this.detailsEnabled: true,
   });
 
   @override
@@ -103,6 +105,13 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                 colorTheme: widget.colorTheme,
                 days: days.toList(),
               ),
+              if (widget.detailsEnabled &&
+                  (widget.forecast.details!.timezone != null))
+                ForecastDetailDisplay(
+                  forecast: widget.forecast,
+                  themeMode: widget.themeMode,
+                  colorTheme: widget.colorTheme,
+                ),
             ],
           ),
         ),
@@ -138,7 +147,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     colorTheme: widget.colorTheme,
                     days: days.toList(),
                   ),
-                  if (widget.forecast.details!.timezone != null)
+                  if (widget.detailsEnabled &&
+                      (widget.forecast.details!.timezone != null))
                     ForecastDetailDisplay(
                       forecast: widget.forecast,
                       themeMode: widget.themeMode,

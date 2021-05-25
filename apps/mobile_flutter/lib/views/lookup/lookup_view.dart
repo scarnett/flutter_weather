@@ -181,6 +181,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                 forecast: lookupForecast,
                 showSixDayForecast: true,
                 sliverView: false,
+                detailsEnabled: false,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 30.0),

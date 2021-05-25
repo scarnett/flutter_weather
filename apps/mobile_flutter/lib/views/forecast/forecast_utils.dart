@@ -309,3 +309,15 @@ double getWindDirection({
 
   return (((windDirection - heading + 180) % 360) - 180);
 }
+
+String? formatHour(
+  int? dateTime,
+) {
+  if (dateTime != null) {
+    DateTime dt = epochToDateTime(dateTime);
+    String? formatted = formatDateTime(dt, 'h:mm');
+    return formatted;
+  }
+
+  return null;
+}

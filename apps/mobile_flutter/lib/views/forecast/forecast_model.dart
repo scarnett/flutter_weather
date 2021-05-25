@@ -878,6 +878,10 @@ class ForecastHour extends Equatable {
   final num? windSpeed;
   final num? windDeg;
   final num? windGust;
+  final num? pop;
+  final ForecastRain? rain;
+  final ForecastSnow? snow;
+  final List<ForecastDayWeather>? weather;
 
   ForecastHour({
     this.dt,
@@ -892,6 +896,10 @@ class ForecastHour extends Equatable {
     this.windSpeed,
     this.windDeg,
     this.windGust,
+    this.pop,
+    this.rain,
+    this.snow,
+    this.weather,
   });
 
   ForecastHour copyWith({
@@ -907,6 +915,10 @@ class ForecastHour extends Equatable {
     num? windSpeed,
     num? windDeg,
     num? windGust,
+    num? pop,
+    Nullable<ForecastRain?>? rain,
+    Nullable<ForecastSnow?>? snow,
+    List<ForecastDayWeather>? weather,
   }) =>
       ForecastHour(
         dt: dt ?? this.dt,
@@ -921,6 +933,10 @@ class ForecastHour extends Equatable {
         windSpeed: windSpeed ?? this.windSpeed,
         windDeg: windDeg ?? this.windDeg,
         windGust: windGust ?? this.windGust,
+        pop: pop ?? this.pop,
+        rain: (rain == null) ? this.rain : rain.value,
+        snow: (snow == null) ? this.snow : snow.value,
+        weather: weather ?? this.weather,
       );
 
   static ForecastHour fromJson(
@@ -941,6 +957,10 @@ class ForecastHour extends Equatable {
               windSpeed: json['wind_speed'],
               windDeg: json['wind_deg'],
               windGust: json['wind_gust'],
+              pop: json['pop'],
+              rain: ForecastRain.fromJson(json['rain']),
+              snow: ForecastSnow.fromJson(json['snow']),
+              weather: ForecastDayWeather.fromJsonList(json['weather']),
             );
 
   static List<ForecastHour> fromJsonList(
@@ -965,6 +985,11 @@ class ForecastHour extends Equatable {
         'wind_speed': windSpeed,
         'wind_deg': windDeg,
         'wind_gust': windGust,
+        'pop': pop,
+        'rain': (rain == null) ? null : rain!.toJson(),
+        'snow': (snow == null) ? null : snow!.toJson(),
+        'weather':
+            (weather == null) ? null : ForecastDayWeather.toJsonList(weather),
       };
 
   static List<dynamic> toJsonList(
@@ -988,6 +1013,10 @@ class ForecastHour extends Equatable {
         windSpeed,
         windDeg,
         windGust,
+        pop,
+        rain,
+        snow,
+        weather,
       ];
 
   @override
@@ -995,7 +1024,8 @@ class ForecastHour extends Equatable {
       'ForecastCurrent{dt: $dt, temp: $temp, feelsLike: $feelsLike, ' +
       'pressure: $pressure, humidity: $humidity, dewPoint: $dewPoint, ' +
       'uvi: $uvi, clouds: $clouds, visibility: $visibility, ' +
-      'windSpeed: $windSpeed, windDeg: $windDeg, windGust: $windGust}';
+      'windSpeed: $windSpeed, windDeg: $windDeg, windGust: $windGust, ' +
+      'pop: $pop, rain: $rain, snow: $snow}';
 }
 
 class ForecastDaily extends Equatable {
@@ -1244,4 +1274,72 @@ class ForecastAlert extends Equatable {
   String toString() =>
       'ForecastAlert{senderName: $senderName, event: $event ' +
       'start: $start, end: $end, description: $description}';
+}
+
+class ForecastRain extends Equatable {
+  final num? oneHour;
+
+  ForecastRain({
+    this.oneHour,
+  });
+
+  ForecastRain copyWith({
+    num? oneHour,
+  }) =>
+      ForecastRain(
+        oneHour: oneHour ?? this.oneHour,
+      );
+
+  static ForecastRain? fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? null
+          : ForecastRain(
+              oneHour: json['1h'],
+            );
+
+  dynamic toJson() => {
+        '1h': oneHour,
+      };
+
+  @override
+  List<Object?> get props => [oneHour];
+
+  @override
+  String toString() => 'ForecastRain{oneHour: $oneHour}';
+}
+
+class ForecastSnow extends Equatable {
+  final num? oneHour;
+
+  ForecastSnow({
+    this.oneHour,
+  });
+
+  ForecastSnow copyWith({
+    num? oneHour,
+  }) =>
+      ForecastSnow(
+        oneHour: oneHour ?? this.oneHour,
+      );
+
+  static ForecastSnow? fromJson(
+    dynamic json,
+  ) =>
+      (json == null)
+          ? null
+          : ForecastSnow(
+              oneHour: json['1h'],
+            );
+
+  dynamic toJson() => {
+        '1h': oneHour,
+      };
+
+  @override
+  List<Object?> get props => [oneHour];
+
+  @override
+  String toString() => 'ForecastSnow{oneHour: $oneHour}';
 }
