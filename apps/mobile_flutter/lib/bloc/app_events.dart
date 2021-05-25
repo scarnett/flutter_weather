@@ -197,3 +197,14 @@ class ClearCRUDStatus extends AppEvent {
   @override
   List<Object> get props => [];
 }
+
+class SetScrollDirection extends AppEvent {
+  final ScrollDirection scrollDirection;
+
+  const SetScrollDirection(
+    this.scrollDirection,
+  );
+
+  @override
+  List<Object?> get props => [scrollDirection];
+}

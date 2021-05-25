@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/app_service.dart';
 import 'package:flutter_weather/enums.dart';
@@ -67,6 +68,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapSetActiveForecastIdToState(event);
     } else if (event is ClearActiveForecastId) {
       yield _mapClearActiveForecastIdToState(event);
+    } else if (event is SetScrollDirection) {
+      yield _mapScrollDirectionToState(event);
     }
   }
 
@@ -443,6 +446,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) =>
       state.copyWith(
         activeForecastId: Nullable<String?>(null),
+      );
+
+  AppState _mapScrollDirectionToState(
+    SetScrollDirection event,
+  ) =>
+      state.copyWith(
+        scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
       );
 
   @override

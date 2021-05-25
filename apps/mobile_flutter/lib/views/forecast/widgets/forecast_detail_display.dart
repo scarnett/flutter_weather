@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -28,16 +31,23 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
 
   @override
   void initState() {
+    super.initState();
+
     widget.scrollController
-      ..addListener(() => setState(() => scrollOffset = getScrollProgress(
+      ..addListener(() {
+        setState(() {
+          scrollOffset = getScrollProgress(
             shrinkOffset: widget.scrollController.offset,
             minExtent: 0.0,
             maxExtent: 50.0,
             clampLower: 0.2,
-            speed: 1.5,
-          )));
+            speed: 1.25,
+          );
+        });
 
-    super.initState();
+        BlocProvider.of<AppBloc>(context, listen: false).add(SetScrollDirection(
+            widget.scrollController.position.userScrollDirection));
+      });
   }
 
   @override

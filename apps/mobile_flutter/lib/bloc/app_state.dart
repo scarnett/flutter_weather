@@ -13,6 +13,7 @@ class AppState extends Equatable {
   final String? activeForecastId;
   final RefreshStatus? refreshStatus;
   final CRUDStatus? crudStatus;
+  final ScrollDirection? scrollDirection;
 
   AppState({
     this.updatePeriod,
@@ -26,6 +27,7 @@ class AppState extends Equatable {
     this.activeForecastId,
     this.refreshStatus,
     this.crudStatus,
+    this.scrollDirection,
   });
 
   const AppState._({
@@ -40,6 +42,7 @@ class AppState extends Equatable {
     this.activeForecastId,
     this.refreshStatus,
     this.crudStatus,
+    this.scrollDirection: ScrollDirection.idle,
   });
 
   const AppState.initial() : this._();
@@ -57,6 +60,7 @@ class AppState extends Equatable {
     Nullable<String?>? activeForecastId,
     Nullable<RefreshStatus?>? refreshStatus,
     Nullable<CRUDStatus?>? crudStatus,
+    Nullable<ScrollDirection?>? scrollDirection,
   }) =>
       AppState._(
         updatePeriod:
@@ -79,6 +83,9 @@ class AppState extends Equatable {
         refreshStatus:
             (refreshStatus == null) ? this.refreshStatus : refreshStatus.value,
         crudStatus: (crudStatus == null) ? this.crudStatus : crudStatus.value,
+        scrollDirection: (scrollDirection == null)
+            ? this.scrollDirection
+            : scrollDirection.value,
       );
 
   @override
@@ -94,6 +101,7 @@ class AppState extends Equatable {
         activeForecastId,
         refreshStatus,
         crudStatus,
+        scrollDirection,
       ];
 
   @override
@@ -105,5 +113,5 @@ class AppState extends Equatable {
       'temperatureUnit: $temperatureUnit, ' +
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
-      'crudStatus: $crudStatus}';
+      'crudStatus: $crudStatus, scrollDirection: $scrollDirection}';
 }

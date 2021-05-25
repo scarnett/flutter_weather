@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
@@ -35,11 +36,13 @@ class ForecastView extends StatefulWidget {
   State<StatefulWidget> createState() => _ForecastPageViewState();
 }
 
-class _ForecastPageViewState extends State<ForecastView> {
+class _ForecastPageViewState extends State<ForecastView>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  PageController? _pageController;
+  late PageController _pageController;
   Animatable<Color?>? _pageBackground;
+  late AnimationController _hideFabAnimationController;
   late ValueNotifier<int> _currentForecastNotifier;
   num? _currentPage = 0;
   bool? _colorTheme = false;
@@ -52,7 +55,9 @@ class _ForecastPageViewState extends State<ForecastView> {
 
   @override
   void dispose() {
-    _pageController!.dispose();
+    context.read<AppBloc>().add(SetScrollDirection(ScrollDirection.idle));
+    _pageController.dispose();
+    _hideFabAnimationController.dispose();
     super.dispose();
   }
 
@@ -71,12 +76,18 @@ class _ForecastPageViewState extends State<ForecastView> {
         ),
         extendBody: true,
         extendBodyBehindAppBar: true,
-        floatingActionButton: FloatingActionButton(
-          key: Key(AppKeys.addLocationKey),
-          tooltip: AppLocalizations.of(context)!.addForecast,
-          onPressed: _tapAddLocation,
-          child: Icon(Icons.add),
-          mini: true,
+        floatingActionButton: FadeTransition(
+          opacity: _hideFabAnimationController,
+          child: ScaleTransition(
+            scale: _hideFabAnimationController,
+            child: FloatingActionButton(
+              key: Key(AppKeys.addLocationKey),
+              tooltip: AppLocalizations.of(context)!.addForecast,
+              onPressed: _tapAddLocation,
+              child: Icon(Icons.add),
+              mini: true,
+            ),
+          ),
         ),
       );
 
@@ -87,14 +98,14 @@ class _ForecastPageViewState extends State<ForecastView> {
       initialPage: state.selectedForecastIndex,
       keepPage: true,
     )..addListener(() {
-        _currentPage = _pageController!.page;
+        _currentPage = _pageController.page;
 
         if (isInteger(_currentPage)) {
           _currentForecastNotifier.value = _currentPage!.toInt();
 
-          context
-              .read<AppBloc>()
-              .add(SelectedForecastIndex(_currentForecastNotifier.value));
+          context.read<AppBloc>()
+            ..add(SelectedForecastIndex(_currentForecastNotifier.value))
+            ..add(SetScrollDirection(ScrollDirection.idle));
 
           // If auto update is enabled then run the refresh
           if ((state.updatePeriod != null) &&
@@ -116,6 +127,12 @@ class _ForecastPageViewState extends State<ForecastView> {
           }
         }
       });
+
+    _hideFabAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+      value: 1.0,
+    );
 
     if (state.colorTheme) {
       _pageBackground = buildForecastColorSequence(state.forecasts);
@@ -151,6 +168,19 @@ class _ForecastPageViewState extends State<ForecastView> {
       context.read<AppBloc>().add(ClearCRUDStatus());
     }
 
+    if (state.scrollDirection != null) {
+      switch (state.scrollDirection!) {
+        case ScrollDirection.reverse:
+          _hideFabAnimationController.reverse();
+          break;
+
+        case ScrollDirection.forward:
+        case ScrollDirection.idle:
+          _hideFabAnimationController.forward();
+          break;
+      }
+    }
+
     if (state.colorTheme) {
       _pageBackground = buildForecastColorSequence(state.forecasts);
     }
@@ -168,7 +198,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     } else {
       // Go back to the first forecast
-      _pageController!.jumpToPage(0);
+      _pageController.jumpToPage(0);
       context.read<AppBloc>().add(SelectedForecastIndex(0));
     }
 
@@ -201,13 +231,29 @@ class _ForecastPageViewState extends State<ForecastView> {
                     forecastColor: forecastColor,
                   ),
                 ),
-                _buildCircleIndicator(
-                  state: state,
-                  forecastColor: forecastColor,
-                ),
-                _buildLastUpdated(
-                  state: state,
-                  forecastColor: forecastColor,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: FadeTransition(
+                    opacity: _hideFabAnimationController,
+                    child: ScaleTransition(
+                      scale: _hideFabAnimationController,
+                      child: Container(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildCircleIndicator(
+                              state: state,
+                              forecastColor: forecastColor,
+                            ),
+                            _buildLastUpdated(
+                              state: state,
+                              forecastColor: forecastColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             )
@@ -221,7 +267,7 @@ class _ForecastPageViewState extends State<ForecastView> {
     AppState state,
   ) =>
       AnimatedBuilder(
-        animation: _pageController!,
+        animation: _pageController,
         builder: (BuildContext context, Widget? child) {
           num? currentPage = _currentPage;
           if (isInteger(currentPage)) {
@@ -231,7 +277,7 @@ class _ForecastPageViewState extends State<ForecastView> {
           }
 
           final double _forecastColorValue =
-              (_pageController!.hasClients && state.forecasts.isNotEmpty)
+              (_pageController.hasClients && state.forecasts.isNotEmpty)
                   ? (currentPage! / state.forecasts.length)
                   : (state.selectedForecastIndex.toDouble() /
                       state.forecasts.length);
@@ -330,8 +376,7 @@ class _ForecastPageViewState extends State<ForecastView> {
       return Container();
     }
 
-    return Align(
-      alignment: Alignment.bottomCenter,
+    return Center(
       child: Container(
         decoration: BoxDecoration(
           color: (forecastColor == null)
@@ -339,9 +384,8 @@ class _ForecastPageViewState extends State<ForecastView> {
               : forecastColor.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        padding: EdgeInsets.all(4.0),
-        margin: EdgeInsets.only(
-            bottom: (MediaQuery.of(context).padding.bottom + 44.0)),
+        padding: const EdgeInsets.all(4.0),
+        margin: const EdgeInsets.only(bottom: 6.0),
         child: CirclePageIndicator(
           dotColor: AppTheme.getHintColor(
             state.themeMode,
@@ -377,8 +421,7 @@ class _ForecastPageViewState extends State<ForecastView> {
           formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a')!);
     }
 
-    return Align(
-      alignment: Alignment.bottomCenter,
+    return Center(
       child: Container(
         decoration: BoxDecoration(
           color: (forecastColor == null)
@@ -387,8 +430,8 @@ class _ForecastPageViewState extends State<ForecastView> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        margin: EdgeInsets.only(
-            bottom: (MediaQuery.of(context).padding.bottom + 16.0)),
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16),
         child: Text(
           formattedLastUpdated,
           style: Theme.of(context).textTheme.subtitle2,
@@ -401,7 +444,7 @@ class _ForecastPageViewState extends State<ForecastView> {
     int page,
   ) {
     _currentForecastNotifier.value = page;
-    animatePage(_pageController!, page: page);
+    animatePage(_pageController, page: page);
   }
 
   Future<void> _pullRefresh(
