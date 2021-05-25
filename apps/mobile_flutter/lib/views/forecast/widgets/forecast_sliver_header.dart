@@ -26,7 +26,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
   double get minExtent => (MediaQuery.of(context).padding.top + 160.0);
 
   @override
-  double get maxExtent => (MediaQuery.of(context).padding.top + 220.0);
+  double get maxExtent => (MediaQuery.of(context).padding.top + 230.0);
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate _) => true;

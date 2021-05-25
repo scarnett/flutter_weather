@@ -12,7 +12,7 @@ import 'package:flutter_weather/widgets/app_color_theme.dart';
 import 'package:flutter_weather/widgets/app_day_night_switch.dart';
 
 class ForecastOptions extends StatefulWidget {
-  static final double height = 40.0;
+  static final double height = 50.0;
 
   @override
   _ForecastOptionsState createState() => _ForecastOptionsState();
