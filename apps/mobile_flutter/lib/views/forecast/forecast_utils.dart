@@ -62,8 +62,10 @@ Map<String, dynamic> buildLookupParams(
   Map<String, dynamic> params = Map<String, dynamic>();
 
   if (lookupData.containsKey('postalCode') &&
+      (lookupData['postalCode'] != null) &&
       !(lookupData['postalCode'] as String).isNullOrEmpty()) {
     if (lookupData.containsKey('countryCode') &&
+        (lookupData['countryCode'] != null) &&
         !(lookupData['countryCode'] as String).isNullOrEmpty()) {
       params['zip'] =
           '${lookupData['postalCode']},${lookupData['countryCode'].toLowerCase()}';
@@ -71,15 +73,18 @@ Map<String, dynamic> buildLookupParams(
       params['zip'] = lookupData['postalCode'];
     }
   } else if (lookupData.containsKey('cityName') &&
+      (lookupData['cityName'] != null) &&
       !(lookupData['cityName'] as String).isNullOrEmpty()) {
     String query = lookupData['cityName'];
 
     if (lookupData.containsKey('stateCode') &&
+        (lookupData['stateCode'] != null) &&
         !(lookupData['stateCode'] as String).isNullOrEmpty()) {
       query += ',${lookupData['stateCode']}';
     }
 
     if (lookupData.containsKey('countryCode') &&
+        (lookupData['countryCode'] != null) &&
         !(lookupData['countryCode'] as String).isNullOrEmpty()) {
       query += ',${lookupData['countryCode']}';
     }
