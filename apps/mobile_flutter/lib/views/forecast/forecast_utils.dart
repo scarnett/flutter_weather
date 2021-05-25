@@ -306,6 +306,11 @@ double getScrollScale({
 /// Return wind direction relative to plane heading
 double getWindDirection({
   required num windDirection,
-  required num heading,
-}) =>
-    (((windDirection - heading + 180) % 360) - 180);
+  num? heading,
+}) {
+  if (heading == null) {
+    return windDirection.toDouble();
+  }
+
+  return (((windDirection - heading + 180) % 360) - 180);
+}

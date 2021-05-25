@@ -298,6 +298,19 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                         );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
+                        if (currentDay.deg != null) {
+                          return SizedBox(
+                            height: 20.0,
+                            width: 30.0,
+                            child: ForecastWindDirection(
+                              degree: getWindDirection(
+                                windDirection: currentDay.deg ?? 0,
+                              ),
+                              size: 20.0,
+                            ),
+                          );
+                        }
+
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
