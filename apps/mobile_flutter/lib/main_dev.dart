@@ -74,12 +74,8 @@ Future<void> main() async {
     appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
     openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
     openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
-    openWeatherMapApiCurrentForecastPath:
-        remoteConfig.openWeatherMapApiCurrentForecastPath,
     openWeatherMapApiDailyForecastPath:
         remoteConfig.openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiHourlyForecastPath:
-        remoteConfig.openWeatherMapApiHourlyForecastPath,
     refreshTimeout: remoteConfig.refreshTimeout,
     defaultCountryCode: remoteConfig.defaultCountryCode,
     supportedLocales: remoteConfig.supportedLocales,

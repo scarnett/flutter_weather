@@ -8,9 +8,7 @@ class AppConfig extends InheritedWidget {
   final String? appPushNotificationsRemove;
   final String? openWeatherMapApiKey;
   final String? openWeatherMapApiUri;
-  final String? openWeatherMapApiCurrentForecastPath;
   final String? openWeatherMapApiDailyForecastPath;
-  final String? openWeatherMapApiHourlyForecastPath;
   final int? refreshTimeout;
   final String? defaultCountryCode;
   final String? supportedLocales;
@@ -27,9 +25,7 @@ class AppConfig extends InheritedWidget {
     appPushNotificationsRemove,
     openWeatherMapApiKey,
     openWeatherMapApiUri,
-    openWeatherMapApiCurrentForecastPath,
     openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiHourlyForecastPath,
     refreshTimeout,
     defaultCountryCode,
     supportedLocales,
@@ -45,9 +41,7 @@ class AppConfig extends InheritedWidget {
       appPushNotificationsRemove,
       openWeatherMapApiKey,
       openWeatherMapApiUri,
-      openWeatherMapApiCurrentForecastPath,
       openWeatherMapApiDailyForecastPath,
-      openWeatherMapApiHourlyForecastPath,
       refreshTimeout,
       defaultCountryCode,
       supportedLocales,
@@ -67,9 +61,7 @@ class AppConfig extends InheritedWidget {
     this.appPushNotificationsRemove,
     this.openWeatherMapApiKey,
     this.openWeatherMapApiUri,
-    this.openWeatherMapApiCurrentForecastPath,
     this.openWeatherMapApiDailyForecastPath,
-    this.openWeatherMapApiHourlyForecastPath,
     this.refreshTimeout,
     this.defaultCountryCode,
     this.supportedLocales,

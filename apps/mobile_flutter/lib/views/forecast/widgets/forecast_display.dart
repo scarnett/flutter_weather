@@ -22,7 +22,6 @@ class ForecastDisplay extends StatefulWidget {
   final ThemeMode themeMode;
   final bool colorTheme;
   final Forecast forecast;
-  final bool hourlyEnabled;
   final bool showSixDayForecast;
   final bool sliverView;
   final Color? forecastColor;
@@ -32,7 +31,6 @@ class ForecastDisplay extends StatefulWidget {
     required this.themeMode,
     required this.forecast,
     this.colorTheme: false,
-    this.hourlyEnabled: true,
     this.showSixDayForecast: true,
     this.sliverView: true,
     this.forecastColor,

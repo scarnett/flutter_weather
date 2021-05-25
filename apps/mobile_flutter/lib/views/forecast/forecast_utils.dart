@@ -39,23 +39,6 @@ Uri getDailyApiUri(
   );
 }
 
-Uri getHourlyApiUri(
-  Map<String, dynamic> params, {
-  int count: 3,
-}) {
-  if (!params.containsKey('cnt')) {
-    params['cnt'] = count.toString();
-  }
-
-  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
-
-  return Uri.https(
-    AppConfig.instance.openWeatherMapApiUri!,
-    AppConfig.instance.openWeatherMapApiHourlyForecastPath!,
-    params.cast<String, String>(),
-  );
-}
-
 Map<String, dynamic> buildLookupParams(
   Map<String, dynamic> lookupData,
 ) {

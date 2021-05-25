@@ -49,14 +49,14 @@ class FirebaseRemoteConfigService {
   String get openWeatherMapApiUri =>
       _remoteConfig.getString('openweathermap_api_uri');
 
-  String get openWeatherMapApiCurrentForecastPath =>
-      _remoteConfig.getString('openweathermap_api_current_forecast_path');
+  String get openWeatherMapApiOneCallUrl =>
+      _remoteConfig.getString('openweathermap_api_one_call_url');
 
   String get openWeatherMapApiDailyForecastPath =>
       _remoteConfig.getString('openweathermap_api_daily_forecast_path');
 
-  String get openWeatherMapApiHourlyForecastPath =>
-      _remoteConfig.getString('openweathermap_api_hourly_forecast_path');
+  String get openWeatherMapApiOneCallPath =>
+      _remoteConfig.getString('openweathermap_api_one_call_path');
 
   int get refreshTimeout => _remoteConfig.getInt('refresh_timeout');
 
