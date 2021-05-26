@@ -29,26 +29,37 @@ class ForecastDetailDisplay extends StatefulWidget {
 
 class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
   double scrollOffset = 0.2;
+  VoidCallback? _scrollListener;
 
   @override
   void initState() {
     super.initState();
 
-    widget.scrollController
-      ..addListener(() {
-        setState(() {
-          scrollOffset = getScrollProgress(
-            shrinkOffset: widget.scrollController.offset,
-            minExtent: 0.0,
-            maxExtent: 50.0,
-            clampLower: 0.2,
-            speed: 2.0,
-          );
-        });
-
-        BlocProvider.of<AppBloc>(context, listen: false).add(SetScrollDirection(
-            widget.scrollController.position.userScrollDirection));
+    _scrollListener = () {
+      setState(() {
+        scrollOffset = getScrollProgress(
+          shrinkOffset: widget.scrollController.offset,
+          minExtent: 0.0,
+          maxExtent: 50.0,
+          clampLower: 0.2,
+          speed: 2.0,
+        );
       });
+    };
+
+    widget.scrollController..addListener(_scrollListener!);
+
+    BlocProvider.of<AppBloc>(context, listen: false).add(SetScrollDirection(
+        widget.scrollController.position.userScrollDirection));
+  }
+
+  @override
+  void dispose() {
+    if (_scrollListener != null) {
+      widget.scrollController.removeListener(_scrollListener!);
+    }
+
+    super.dispose();
   }
 
   @override

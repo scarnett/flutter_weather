@@ -58,6 +58,7 @@ class _ForecastPageViewState extends State<ForecastView>
     context.read<AppBloc>().add(SetScrollDirection(ScrollDirection.idle));
     _pageController.dispose();
     _hideFabAnimationController.dispose();
+    _currentForecastNotifier.dispose();
     super.dispose();
   }
 
