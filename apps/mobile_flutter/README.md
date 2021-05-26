@@ -25,6 +25,7 @@
 | Name                                     | Value                      | Optional |
 |------------------------------------------|----------------------------|----------|
 | app_version                              | 1.0.0                      | No       |
+| app_build                                | 123                        | No       |
 | openweathermap_api_key                   | <your_openweather_api_key> | No       |
 | openweathermap_api_uri                   | api.openweathermap.com     | No       |
 | openweathermap_api_daily_forecast_path   | /data/2.5/forecast/daily   | No       |

@@ -42,6 +42,7 @@ class FirebaseRemoteConfigService {
   }
 
   String get appVersion => _remoteConfig.getString('app_version');
+  String get appBuild => _remoteConfig.getString('app_build');
   String get appPushNotificationsSave =>
       _remoteConfig.getString('app_push_notifications_save');
 

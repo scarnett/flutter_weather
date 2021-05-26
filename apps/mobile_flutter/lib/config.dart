@@ -4,6 +4,7 @@ import 'package:flutter_weather/enums.dart';
 class AppConfig extends InheritedWidget {
   final Flavor flavor;
   final String? appVersion;
+  final String? appBuild;
   final String? appPushNotificationsSave;
   final String? appPushNotificationsRemove;
   final String? openWeatherMapApiKey;
@@ -22,6 +23,7 @@ class AppConfig extends InheritedWidget {
   factory AppConfig({
     required flavor,
     appVersion,
+    appBuild,
     appPushNotificationsSave,
     appPushNotificationsRemove,
     openWeatherMapApiKey,
@@ -39,6 +41,7 @@ class AppConfig extends InheritedWidget {
     _instance = AppConfig._internal(
       flavor,
       appVersion,
+      appBuild,
       appPushNotificationsSave,
       appPushNotificationsRemove,
       openWeatherMapApiKey,
@@ -60,6 +63,7 @@ class AppConfig extends InheritedWidget {
   AppConfig._internal(
     this.flavor,
     this.appVersion,
+    this.appBuild,
     this.appPushNotificationsSave,
     this.appPushNotificationsRemove,
     this.openWeatherMapApiKey,

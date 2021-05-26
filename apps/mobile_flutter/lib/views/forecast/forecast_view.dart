@@ -37,7 +37,7 @@ class ForecastView extends StatefulWidget {
 }
 
 class _ForecastPageViewState extends State<ForecastView>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late PageController _pageController;
@@ -380,7 +380,7 @@ class _ForecastPageViewState extends State<ForecastView>
       child: Container(
         decoration: BoxDecoration(
           color: (forecastColor == null)
-              ? Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7)
+              ? Colors.black.withOpacity(0.1)
               : forecastColor.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
@@ -425,7 +425,7 @@ class _ForecastPageViewState extends State<ForecastView>
       child: Container(
         decoration: BoxDecoration(
           color: (forecastColor == null)
-              ? Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7)
+              ? Colors.black.withOpacity(0.1)
               : forecastColor.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),

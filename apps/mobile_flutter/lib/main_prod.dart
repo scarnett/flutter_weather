@@ -65,6 +65,7 @@ Future<void> main() async {
   AppConfig config = AppConfig(
     flavor: Flavor.prod,
     appVersion: remoteConfig.appVersion,
+    appBuild: remoteConfig.appBuild,
     appPushNotificationsSave: remoteConfig.appPushNotificationsSave,
     appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
     openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
