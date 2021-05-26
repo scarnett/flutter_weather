@@ -111,37 +111,42 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           _snapHeader();
           return false;
         },
-        child: CustomScrollView(
-          controller: _scrollController,
-          physics: ClampingScrollPhysics(),
-          slivers: <Widget>[
-            SliverPersistentHeader(
-              pinned: true,
-              floating: false,
-              delegate: ForecastSliverHeader(
-                context: context,
-                forecastColor: widget.forecastColor,
-                temperatureUnit: widget.temperatureUnit,
-                colorTheme: widget.colorTheme,
-                forecast: widget.forecast,
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  _buildCurrentForecast(currentDay),
-                  ForecastDivider(
-                    themeMode: widget.themeMode,
-                    colorTheme: widget.colorTheme,
-                  ),
-                  ForecastDayScroller(
-                    forecast: widget.forecast,
-                    themeMode: widget.themeMode,
-                    colorTheme: widget.colorTheme,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            CustomScrollView(
+              controller: _scrollController,
+              physics: ClampingScrollPhysics(),
+              slivers: <Widget>[
+                SliverPersistentHeader(
+                  pinned: true,
+                  floating: false,
+                  delegate: ForecastSliverHeader(
+                    context: context,
+                    forecastColor: widget.forecastColor,
                     temperatureUnit: widget.temperatureUnit,
+                    colorTheme: widget.colorTheme,
+                    forecast: widget.forecast,
                   ),
-                ]..addAll(_buildDetailDisplay()),
-              ),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      _buildCurrentForecast(currentDay),
+                      ForecastDivider(
+                        themeMode: widget.themeMode,
+                        colorTheme: widget.colorTheme,
+                      ),
+                      ForecastDayScroller(
+                        forecast: widget.forecast,
+                        themeMode: widget.themeMode,
+                        colorTheme: widget.colorTheme,
+                        temperatureUnit: widget.temperatureUnit,
+                      ),
+                    ]..addAll(_buildDetailDisplay()),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

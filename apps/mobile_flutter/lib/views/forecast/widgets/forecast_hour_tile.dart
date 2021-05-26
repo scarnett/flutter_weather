@@ -26,11 +26,18 @@ class ForecastHourTile extends StatelessWidget {
         key: Key(hour.dt.toString()),
         dense: true,
         contentPadding: const EdgeInsets.all(0.0),
-        leading: Text(
-          formatHour(hour.dt) ?? '',
-          style: Theme.of(context).textTheme.headline5!.copyWith(
-                shadows: colorTheme ? commonTextShadow() : null,
-              ),
+        horizontalTitleGap: 0.0,
+        leading: Container(
+          width: 50.0,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              formatHour(hour.dt) ?? '',
+              style: Theme.of(context).textTheme.headline5!.copyWith(
+                    shadows: colorTheme ? commonTextShadow() : null,
+                  ),
+            ),
+          ),
         ),
         title: Row(
           mainAxisSize: MainAxisSize.max,
@@ -73,11 +80,17 @@ class ForecastHourTile extends StatelessWidget {
             ),
           ],
         ),
-        trailing: Text(
-          getWind(hour.windSpeed),
-          style: Theme.of(context).textTheme.headline5!.copyWith(
-                shadows: colorTheme ? commonTextShadow() : null,
-              ),
+        trailing: Container(
+          width: 70.0,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              getWind(hour.windSpeed),
+              style: Theme.of(context).textTheme.headline5!.copyWith(
+                    shadows: colorTheme ? commonTextShadow() : null,
+                  ),
+            ),
+          ),
         ),
         onTap: null,
       );

@@ -264,8 +264,6 @@ class _SettingsPushNotificationPickerState
             );
 
             if (forecastResponse.statusCode == 200) {
-              // TODO! check for api errors
-
               Forecast forecast =
                   Forecast.fromJson(jsonDecode(forecastResponse.body));
 
