@@ -18,6 +18,7 @@ class ForecastDisplay extends StatefulWidget {
   final Forecast forecast;
   final bool sliverView;
   final Color? forecastColor;
+  final Color? forecastDarkenedColor;
   final bool detailsEnabled;
 
   ForecastDisplay({
@@ -27,6 +28,7 @@ class ForecastDisplay extends StatefulWidget {
     this.colorTheme: false,
     this.sliverView: true,
     this.forecastColor,
+    this.forecastDarkenedColor,
     this.detailsEnabled: true,
   });
 
@@ -148,6 +150,25 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                 ),
               ],
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      _fadeColor,
+                      _fadeColor.withOpacity(0.0),
+                    ],
+                    stops: [0.0, 1.0],
+                  ),
+                ),
+                height: 50.0,
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom),
+              ),
+            ),
           ],
         ),
       );
@@ -202,12 +223,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }) {
     final double scrollDistance = (maxHeight - minHeight);
 
-    if ((_scrollController.offset > 0) &&
+    if ((_scrollController.offset > 0.0) &&
         (_scrollController.offset < scrollDistance)) {
       final double snapOffset =
           ((_scrollController.offset / scrollDistance) > minDistance)
               ? scrollDistance
-              : 0;
+              : 0.0;
 
       Future.microtask(() => _scrollController.animateTo(
             snapOffset,
@@ -215,5 +236,13 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             curve: Curves.easeIn,
           ));
     }
+  }
+
+  Color get _fadeColor {
+    if (widget.colorTheme && (widget.forecastDarkenedColor != null)) {
+      return widget.forecastDarkenedColor!;
+    }
+
+    return Theme.of(context).scaffoldBackgroundColor;
   }
 }

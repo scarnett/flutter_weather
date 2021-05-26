@@ -215,6 +215,7 @@ class _ForecastPageViewState extends State<ForecastView>
   Widget _buildContent({
     required AppState state,
     Color? forecastColor,
+    Color? forecastDarkenedColor,
   }) =>
       hasForecasts(state.forecasts)
           ? Stack(
@@ -229,6 +230,7 @@ class _ForecastPageViewState extends State<ForecastView>
                     position: position,
                     state: state,
                     forecastColor: forecastColor,
+                    forecastDarkenedColor: forecastDarkenedColor,
                   ),
                 ),
                 Align(
@@ -314,6 +316,7 @@ class _ForecastPageViewState extends State<ForecastView>
                 child: _buildContent(
                   state: state,
                   forecastColor: _forecastColor,
+                  forecastDarkenedColor: _forecastDarkenedColor,
                 ),
               ),
             ),
@@ -340,6 +343,7 @@ class _ForecastPageViewState extends State<ForecastView>
     required int position,
     required AppState state,
     Color? forecastColor,
+    Color? forecastDarkenedColor,
   }) {
     if (position == state.forecasts.length) {
       return null;
@@ -351,6 +355,7 @@ class _ForecastPageViewState extends State<ForecastView>
         onRefresh: () => _pullRefresh(state),
         child: ForecastDisplay(
           forecastColor: forecastColor,
+          forecastDarkenedColor: forecastDarkenedColor,
           temperatureUnit: state.temperatureUnit,
           themeMode: state.themeMode,
           colorTheme: state.colorTheme,
