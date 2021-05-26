@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_condition.dart';
@@ -226,7 +229,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     double minDistance: 0.5,
   }) {
     final double scrollDistance = (maxHeight - minHeight);
-
     if ((_scrollController.offset > 0.0) &&
         (_scrollController.offset < scrollDistance)) {
       final double snapOffset =
@@ -239,6 +241,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             duration: Duration(milliseconds: 250),
             curve: Curves.easeIn,
           ));
+
+      if (snapOffset == 0.0) {
+        BlocProvider.of<AppBloc>(context, listen: false)
+            .add(SetScrollDirection(ScrollDirection.forward));
+      }
     }
   }
 

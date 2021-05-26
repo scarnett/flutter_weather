@@ -131,7 +131,7 @@ class _ForecastPageViewState extends State<ForecastView>
 
     _hideFabAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 250),
       value: 1.0,
     );
 
@@ -169,6 +169,8 @@ class _ForecastPageViewState extends State<ForecastView>
       context.read<AppBloc>().add(ClearCRUDStatus());
     }
 
+    print(state.scrollDirection);
+
     if (state.scrollDirection != null) {
       switch (state.scrollDirection!) {
         case ScrollDirection.reverse:
@@ -176,8 +178,11 @@ class _ForecastPageViewState extends State<ForecastView>
           break;
 
         case ScrollDirection.forward:
-        case ScrollDirection.idle:
+          // case ScrollDirection.idle:
           _hideFabAnimationController.forward();
+          break;
+
+        default:
           break;
       }
     }

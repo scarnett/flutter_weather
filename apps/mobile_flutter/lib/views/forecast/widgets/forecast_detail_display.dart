@@ -31,6 +31,7 @@ class ForecastDetailDisplay extends StatefulWidget {
 class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
   double scrollOffset = 0.2;
   VoidCallback? _scrollListener;
+  ScrollDirection? _scrollDirection;
 
   @override
   void initState() {
@@ -46,12 +47,17 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
           speed: 2.0,
         );
       });
+
+      if (_scrollDirection !=
+          widget.scrollController.position.userScrollDirection) {
+        _scrollDirection = widget.scrollController.position.userScrollDirection;
+
+        BlocProvider.of<AppBloc>(context, listen: false)
+            .add(SetScrollDirection(_scrollDirection!));
+      }
     };
 
     widget.scrollController..addListener(_scrollListener!);
-
-    BlocProvider.of<AppBloc>(context, listen: false).add(SetScrollDirection(
-        widget.scrollController.position.userScrollDirection));
   }
 
   @override
