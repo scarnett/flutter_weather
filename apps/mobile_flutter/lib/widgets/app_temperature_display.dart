@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 
-class AppTemperatureDisplay extends StatefulWidget {
+class AppTemperatureDisplay extends StatelessWidget {
   final String temperature;
   final TextStyle? style;
   final TemperatureUnit? unit;
@@ -19,11 +19,6 @@ class AppTemperatureDisplay extends StatefulWidget {
   });
 
   @override
-  _AppTemperatureDisplayState createState() => _AppTemperatureDisplayState();
-}
-
-class _AppTemperatureDisplayState extends State<AppTemperatureDisplay> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
@@ -33,18 +28,18 @@ class _AppTemperatureDisplayState extends State<AppTemperatureDisplay> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            widget.temperature,
-            style: widget.style,
-            textScaleFactor: widget.scaleFactor,
+            temperature,
+            style: style,
+            textScaleFactor: scaleFactor,
           ),
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              getUnitSymbol(widget.unit),
-              style: widget.style!.copyWith(
-                fontSize: (widget.style!.fontSize! / widget.unitSizeFactor),
+              getUnitSymbol(unit),
+              style: style!.copyWith(
+                fontSize: (style!.fontSize! / unitSizeFactor),
               ),
-              textScaleFactor: widget.scaleFactor,
+              textScaleFactor: scaleFactor,
             ),
           ),
         ],

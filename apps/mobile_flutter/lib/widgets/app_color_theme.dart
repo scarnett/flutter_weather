@@ -5,7 +5,7 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 
-class AppColorThemeToggle extends StatefulWidget {
+class AppColorThemeToggle extends StatelessWidget {
   final List<Forecast> forecasts;
   final ThemeMode themeMode;
   final bool colorTheme;
@@ -20,20 +20,15 @@ class AppColorThemeToggle extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AppColorThemeToggleState createState() => _AppColorThemeToggleState();
-}
-
-class _AppColorThemeToggleState extends State<AppColorThemeToggle> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
-      (widget.themeMode == ThemeMode.dark) || !hasForecasts(widget.forecasts)
+      (themeMode == ThemeMode.dark) || !hasForecasts(forecasts)
           ? Container()
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: Tooltip(
-                message: widget.colorTheme
+                message: colorTheme
                     ? AppLocalizations.of(context)!.colorThemeDisable
                     : AppLocalizations.of(context)!.colorThemeEnable,
                 child: Material(
@@ -45,11 +40,11 @@ class _AppColorThemeToggleState extends State<AppColorThemeToggle> {
                       borderRadius: BorderRadius.circular(40.0),
                       child: Icon(
                         Icons.brightness_7,
-                        color: widget.colorTheme
+                        color: colorTheme
                             ? Colors.white
-                            : AppTheme.getHintColor(widget.themeMode),
+                            : AppTheme.getHintColor(themeMode),
                       ),
-                      onTap: () => widget.callback(),
+                      onTap: () => callback(),
                     ),
                   ),
                 ),

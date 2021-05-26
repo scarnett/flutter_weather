@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_weather/theme.dart';
 
-class AppDayNightSwitch extends StatefulWidget {
+class AppDayNightSwitch extends StatelessWidget {
   final ThemeMode themeMode;
   final bool colorTheme;
   final IconData activeIcon;
@@ -20,11 +20,6 @@ class AppDayNightSwitch extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AppDayNightSwitchState createState() => _AppDayNightSwitchState();
-}
-
-class _AppDayNightSwitchState extends State<AppDayNightSwitch> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
@@ -34,30 +29,30 @@ class _AppDayNightSwitchState extends State<AppDayNightSwitch> {
         toggleSize: 24.0,
         borderRadius: 24.0,
         padding: 1.0,
-        value: (widget.themeMode == ThemeMode.dark),
+        value: (themeMode == ThemeMode.dark),
         activeToggleColor: AppTheme.primaryColor,
         inactiveToggleColor:
-            widget.colorTheme ? Colors.white : AppTheme.secondaryColor,
+            colorTheme ? Colors.white : AppTheme.secondaryColor,
         activeSwitchBorder: Border.all(
           color: Colors.deepPurple[500]!,
           width: 2.0,
         ),
         inactiveSwitchBorder: Border.all(
-          color: widget.colorTheme ? Colors.white : Colors.grey[300]!,
+          color: colorTheme ? Colors.white : Colors.grey[300]!,
           width: 2.0,
         ),
         activeColor: AppTheme.secondaryColor,
         inactiveColor: Colors.white.withOpacity(0.5),
         activeIcon: Icon(
-          widget.activeIcon,
+          activeIcon,
           color: Colors.yellow[400],
           size: 16.0,
         ),
         inactiveIcon: Icon(
-          widget.inactiveIcon,
+          inactiveIcon,
           color: Colors.amber[500],
           size: 16.0,
         ),
-        onToggle: (bool val) => widget.callback(),
+        onToggle: (bool val) => callback(),
       );
 }

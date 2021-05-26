@@ -11,14 +11,9 @@ import 'package:flutter_weather/views/settings/settings_view.dart';
 import 'package:flutter_weather/widgets/app_color_theme.dart';
 import 'package:flutter_weather/widgets/app_day_night_switch.dart';
 
-class ForecastOptions extends StatefulWidget {
+class ForecastOptions extends StatelessWidget {
   static final double height = 50.0;
 
-  @override
-  _ForecastOptionsState createState() => _ForecastOptionsState();
-}
-
-class _ForecastOptionsState extends State<ForecastOptions> {
   @override
   Widget build(
     BuildContext context,
@@ -33,7 +28,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            _buildEditButton(),
+            _buildEditButton(context),
             ForecastRefresh(),
             Expanded(child: Container()),
             AppColorThemeToggle(
@@ -47,12 +42,14 @@ class _ForecastOptionsState extends State<ForecastOptions> {
               colorTheme: context.watch<AppBloc>().state.colorTheme,
               callback: () => context.read<AppBloc>().add(ToggleThemeMode()),
             ),
-            _buildSettingsButton(),
+            _buildSettingsButton(context),
           ],
         ),
       );
 
-  Widget _buildEditButton() {
+  Widget _buildEditButton(
+    BuildContext context,
+  ) {
     AppState state = context.watch<AppBloc>().state;
     return !hasForecasts(state.forecasts)
         ? Container()
@@ -66,14 +63,17 @@ class _ForecastOptionsState extends State<ForecastOptions> {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(40.0),
                   child: Icon(Icons.edit),
-                  onTap: () => _tapEdit(state),
+                  onTap: () => _tapEdit(context, state),
                 ),
               ),
             ),
           );
   }
 
-  Widget _buildSettingsButton() => Container(
+  Widget _buildSettingsButton(
+    BuildContext context,
+  ) =>
+      Container(
         padding: EdgeInsets.only(left: 10.0),
         child: Tooltip(
           message: AppLocalizations.of(context)!.settings,
@@ -85,7 +85,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.0),
                 child: Icon(Icons.settings),
-                onTap: _tapSettings,
+                onTap: () => _tapSettings(context),
               ),
             ),
           ),
@@ -93,6 +93,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
       );
 
   void _tapEdit(
+    BuildContext context,
     AppState state,
   ) {
     if (state.forecasts.length > state.selectedForecastIndex) {
@@ -103,7 +104,9 @@ class _ForecastOptionsState extends State<ForecastOptions> {
     }
   }
 
-  void _tapSettings() {
+  void _tapSettings(
+    BuildContext context,
+  ) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     Navigator.push(context, SettingsView.route());
   }

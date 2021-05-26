@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/theme.dart';
 
-class AppSectionHeader extends StatefulWidget {
+class AppSectionHeader extends StatelessWidget {
   final ThemeMode themeMode;
   final bool colorTheme;
   final String text;
@@ -24,44 +24,42 @@ class AppSectionHeader extends StatefulWidget {
   });
 
   @override
-  _AppSectionHeaderState createState() => _AppSectionHeaderState();
-}
-
-class _AppSectionHeaderState extends State<AppSectionHeader> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
       Container(
         decoration: BoxDecoration(
-          color: AppTheme.getSectionColor(widget.themeMode),
+          color: AppTheme.getSectionColor(themeMode),
           border: Border(
             bottom: BorderSide(
               color: AppTheme.getBorderColor(
-                widget.themeMode,
-                colorTheme: widget.colorTheme,
+                themeMode,
+                colorTheme: colorTheme,
               ),
-              width: widget.borderBottom ? 1.0 : 0.0,
+              width: borderBottom ? 1.0 : 0.0,
             ),
             top: BorderSide(
               color: AppTheme.getBorderColor(
-                widget.themeMode,
-                colorTheme: widget.colorTheme,
+                themeMode,
+                colorTheme: colorTheme,
               ),
-              width: widget.borderTop ? 1.0 : 0.0,
+              width: borderTop ? 1.0 : 0.0,
             ),
           ),
         ),
-        padding: widget.padding,
-        child: _buildContent(),
+        padding: padding,
+        child: _buildContent(context),
       );
 
-  Widget _buildContent() => Row(
+  Widget _buildContent(
+    BuildContext context,
+  ) =>
+      Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Expanded(
             child: Text(
-              widget.text,
+              text,
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
@@ -70,10 +68,10 @@ class _AppSectionHeaderState extends State<AppSectionHeader> {
       );
 
   Widget _buildOptions() {
-    if ((widget.options == null) || widget.options!.isEmpty) {
+    if ((options == null) || options!.isEmpty) {
       return Container();
     }
 
-    return Container(child: Row(children: widget.options!));
+    return Container(child: Row(children: options!));
   }
 }

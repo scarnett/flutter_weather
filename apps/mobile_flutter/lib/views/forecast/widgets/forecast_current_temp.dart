@@ -7,14 +7,19 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
 
-class ForecastCurrentTemp extends StatefulWidget {
+class ForecastCurrentTemp extends StatelessWidget {
   final ForecastDay currentDay;
   final TemperatureUnit temperatureUnit;
   final double? shrinkOffset;
   final double? maxExtent;
   final double? minExtent;
 
-  const ForecastCurrentTemp({
+  final AlignmentTween _currentTemperatureAlignTween = AlignmentTween(
+    begin: Alignment.bottomCenter,
+    end: Alignment.topRight,
+  );
+
+  ForecastCurrentTemp({
     Key? key,
     required this.currentDay,
     required this.temperatureUnit,
@@ -22,16 +27,6 @@ class ForecastCurrentTemp extends StatefulWidget {
     this.maxExtent,
     this.minExtent,
   }) : super(key: key);
-
-  @override
-  _ForecastCurrentTempState createState() => _ForecastCurrentTempState();
-}
-
-class _ForecastCurrentTempState extends State<ForecastCurrentTemp> {
-  final AlignmentTween _currentTemperatureAlignTween = AlignmentTween(
-    begin: Alignment.bottomCenter,
-    end: Alignment.topRight,
-  );
 
   @override
   Widget build(
@@ -52,22 +47,22 @@ class _ForecastCurrentTempState extends State<ForecastCurrentTemp> {
                 children: [
                   AppTemperatureDisplay(
                     temperature: getTemperature(
-                      widget.currentDay.temp!.day,
-                      widget.temperatureUnit,
+                      currentDay.temp!.day,
+                      temperatureUnit,
                     ).toString(),
                     style: Theme.of(context).textTheme.headline1,
                     scaleFactor: _getScrollScale(2.0),
-                    unit: widget.temperatureUnit,
+                    unit: temperatureUnit,
                   ),
                   AppTemperatureDisplay(
                     temperature: AppLocalizations.of(context)!
                         .getFeelsLike(getTemperature(
-                      widget.currentDay.feelsLike!.day,
-                      widget.temperatureUnit,
+                      currentDay.feelsLike!.day,
+                      temperatureUnit,
                     ).toString()),
                     style: Theme.of(context).textTheme.headline5,
                     scaleFactor: _getScrollScale(3.0),
-                    unit: widget.temperatureUnit,
+                    unit: temperatureUnit,
                     unitSizeFactor: 1.5,
                   ),
                 ],
@@ -77,8 +72,7 @@ class _ForecastCurrentTempState extends State<ForecastCurrentTemp> {
                   left: (40.0 * _getScrollScale(1.5)),
                 ),
                 child: ForecastIcon(
-                  icon: getForecastIconData(
-                      widget.currentDay.weather!.first.icon),
+                  icon: getForecastIconData(currentDay.weather!.first.icon),
                   scaleFactor: _getScrollScale(2.5),
                 ),
               ),
@@ -87,18 +81,17 @@ class _ForecastCurrentTempState extends State<ForecastCurrentTemp> {
         ),
       );
 
-  bool isScrollable() => ((widget.shrinkOffset != null) &&
-      (widget.maxExtent != null) &&
-      (widget.minExtent != null));
+  bool isScrollable() =>
+      ((shrinkOffset != null) && (maxExtent != null) && (minExtent != null));
 
   double _getScrollScale(
     double factor,
   ) {
     if (isScrollable()) {
       return getScrollScale(
-        shrinkOffset: widget.shrinkOffset!,
-        maxExtent: widget.maxExtent!,
-        minExtent: widget.minExtent!,
+        shrinkOffset: shrinkOffset!,
+        maxExtent: maxExtent!,
+        minExtent: minExtent!,
         factor: factor,
       );
     }
@@ -110,9 +103,9 @@ class _ForecastCurrentTempState extends State<ForecastCurrentTemp> {
     if (isScrollable()) {
       return _currentTemperatureAlignTween.lerp(
         getScrollProgress(
-          shrinkOffset: widget.shrinkOffset!,
-          maxExtent: widget.maxExtent!,
-          minExtent: widget.minExtent!,
+          shrinkOffset: shrinkOffset!,
+          maxExtent: maxExtent!,
+          minExtent: minExtent!,
           speed: 0.5,
         ),
       );

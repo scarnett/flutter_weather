@@ -7,7 +7,7 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
 
-class ForecastHourTile extends StatefulWidget {
+class ForecastHourTile extends StatelessWidget {
   final ForecastHour hour;
   final TemperatureUnit temperatureUnit;
   final bool colorTheme;
@@ -19,22 +19,17 @@ class ForecastHourTile extends StatefulWidget {
   });
 
   @override
-  _ForecastHourTileState createState() => _ForecastHourTileState();
-}
-
-class _ForecastHourTileState extends State<ForecastHourTile> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
       ListTile(
-        key: Key(widget.hour.dt.toString()),
+        key: Key(hour.dt.toString()),
         dense: true,
         contentPadding: const EdgeInsets.all(0.0),
         leading: Text(
-          formatHour(widget.hour.dt) ?? '',
+          formatHour(hour.dt) ?? '',
           style: Theme.of(context).textTheme.headline5!.copyWith(
-                shadows: widget.colorTheme ? commonTextShadow() : null,
+                shadows: colorTheme ? commonTextShadow() : null,
               ),
         ),
         title: Row(
@@ -46,9 +41,7 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
                 containerSize: 30.0,
                 iconSize: 20.0,
                 icon: getForecastIconData(
-                  (widget.hour.weather == null)
-                      ? null
-                      : widget.hour.weather!.first.icon,
+                  (hour.weather == null) ? null : hour.weather!.first.icon,
                 ),
                 shadowColor: Colors.black26,
               ),
@@ -58,12 +51,11 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
                 padding: const EdgeInsets.only(left: 20.0),
                 child: AppTemperatureDisplay(
                   temperature:
-                      getTemperature(widget.hour.temp, widget.temperatureUnit)
-                          .toString(),
+                      getTemperature(hour.temp, temperatureUnit).toString(),
                   style: Theme.of(context).textTheme.headline5!.copyWith(
-                        shadows: widget.colorTheme ? commonTextShadow() : null,
+                        shadows: colorTheme ? commonTextShadow() : null,
                       ),
-                  unit: widget.temperatureUnit,
+                  unit: temperatureUnit,
                   unitSizeFactor: 2.0,
                 ),
               ),
@@ -72,9 +64,9 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Text(
-                  getHumidity(widget.hour.humidity),
+                  getHumidity(hour.humidity),
                   style: Theme.of(context).textTheme.headline5!.copyWith(
-                        shadows: widget.colorTheme ? commonTextShadow() : null,
+                        shadows: colorTheme ? commonTextShadow() : null,
                       ),
                 ),
               ),
@@ -82,9 +74,9 @@ class _ForecastHourTileState extends State<ForecastHourTile> {
           ],
         ),
         trailing: Text(
-          getWind(widget.hour.windSpeed),
+          getWind(hour.windSpeed),
           style: Theme.of(context).textTheme.headline5!.copyWith(
-                shadows: widget.colorTheme ? commonTextShadow() : null,
+                shadows: colorTheme ? commonTextShadow() : null,
               ),
         ),
         onTap: null,

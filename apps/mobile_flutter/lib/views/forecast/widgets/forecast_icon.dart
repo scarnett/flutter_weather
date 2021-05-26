@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-class ForecastIcon extends StatefulWidget {
+class ForecastIcon extends StatelessWidget {
   final double containerSize;
   final IconData? icon;
   final double iconSize;
@@ -22,22 +22,17 @@ class ForecastIcon extends StatefulWidget {
   });
 
   @override
-  _ForecastIconState createState() => _ForecastIconState();
-}
-
-class _ForecastIconState extends State<ForecastIcon> {
-  @override
   Widget build(
     BuildContext context,
   ) {
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
         !context.watch<AppBloc>().state.colorTheme) {
       return SizedBox(
-        height: containerSize,
+        height: getContainerSize(),
         child: BoxedIcon(
-          widget.icon!,
-          color: widget.color,
-          size: iconSize,
+          icon!,
+          color: color,
+          size: getIconSize(),
         ),
       );
     }
@@ -48,18 +43,18 @@ class _ForecastIconState extends State<ForecastIcon> {
           top: 1.0,
           left: 1.0,
           child: BoxedIcon(
-            widget.icon!,
-            color: widget.shadowColor,
-            size: iconSize,
+            icon!,
+            color: shadowColor,
+            size: getIconSize(),
           ),
         ),
         Positioned(
           child: SizedBox(
-            height: containerSize,
+            height: getContainerSize(),
             child: BoxedIcon(
-              widget.icon!,
-              color: widget.color,
-              size: iconSize,
+              icon!,
+              color: color,
+              size: getIconSize(),
             ),
           ),
         ),
@@ -67,7 +62,6 @@ class _ForecastIconState extends State<ForecastIcon> {
     );
   }
 
-  double get iconSize => (widget.iconSize * widget.scaleFactor);
-
-  double get containerSize => (widget.containerSize * widget.scaleFactor);
+  double getIconSize() => (iconSize * scaleFactor);
+  double getContainerSize() => (containerSize * scaleFactor);
 }

@@ -4,7 +4,7 @@ import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hour_tile.dart';
 
-class ForecastHours extends StatefulWidget {
+class ForecastHours extends StatelessWidget {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
   final bool colorTheme;
@@ -18,11 +18,6 @@ class ForecastHours extends StatefulWidget {
   });
 
   @override
-  _ForecastHoursState createState() => _ForecastHoursState();
-}
-
-class _ForecastHoursState extends State<ForecastHours> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
@@ -34,9 +29,9 @@ class _ForecastHoursState extends State<ForecastHours> {
           int index,
         ) =>
             ForecastHourTile(
-          hour: widget.forecast.details!.hourly![index],
-          temperatureUnit: widget.temperatureUnit,
-          colorTheme: widget.colorTheme,
+          hour: forecast.details!.hourly![index],
+          temperatureUnit: temperatureUnit,
+          colorTheme: colorTheme,
         ),
         separatorBuilder: (context, index) => Divider(),
         padding: const EdgeInsets.all(0.0),
@@ -44,13 +39,13 @@ class _ForecastHoursState extends State<ForecastHours> {
       );
 
   int _getHourCount() {
-    if (widget.forecast.details!.hourly != null) {
-      int count = widget.forecast.details!.hourly!.length;
-      if (count < widget.maxHours) {
+    if (forecast.details!.hourly != null) {
+      int count = forecast.details!.hourly!.length;
+      if (count < maxHours) {
         return count;
       }
 
-      return widget.maxHours;
+      return maxHours;
     }
 
     return 0;

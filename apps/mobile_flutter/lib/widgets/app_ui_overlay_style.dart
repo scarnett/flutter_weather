@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AppUiOverlayStyle extends StatefulWidget {
+class AppUiOverlayStyle extends StatelessWidget {
   final Widget? child;
   final ThemeMode? themeMode;
   final bool colorTheme;
@@ -18,37 +18,30 @@ class AppUiOverlayStyle extends StatefulWidget {
   });
 
   @override
-  _AppUiOverlayStyleState createState() => _AppUiOverlayStyleState();
-}
-
-class _AppUiOverlayStyleState extends State<AppUiOverlayStyle> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
       AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarBrightness:
-              (widget.themeMode == ThemeMode.light) && !widget.colorTheme
-                  ? Brightness.light
-                  : Brightness.dark,
-          statusBarIconBrightness:
-              (widget.themeMode == ThemeMode.light) && !widget.colorTheme
-                  ? Brightness.dark
-                  : Brightness.light,
+          statusBarBrightness: (themeMode == ThemeMode.light) && !colorTheme
+              ? Brightness.light
+              : Brightness.dark,
+          statusBarIconBrightness: (themeMode == ThemeMode.light) && !colorTheme
+              ? Brightness.dark
+              : Brightness.light,
           systemNavigationBarColor:
-              widget.colorTheme && (widget.systemNavigationBarColor != null)
-                  ? widget.systemNavigationBarColor!.withOpacity(0.925)
+              colorTheme && (systemNavigationBarColor != null)
+                  ? systemNavigationBarColor!.withOpacity(0.925)
                   : Theme.of(context).appBarTheme.color,
           systemNavigationBarIconBrightness:
-              (widget.systemNavigationBarIconBrightness != null)
-                  ? widget.systemNavigationBarIconBrightness
-                  : (widget.themeMode == ThemeMode.light) && !widget.colorTheme
+              (systemNavigationBarIconBrightness != null)
+                  ? systemNavigationBarIconBrightness
+                  : (themeMode == ThemeMode.light) && !colorTheme
                       ? Brightness.dark
                       : Brightness.light,
           systemNavigationBarDividerColor: Colors.transparent,
         ),
-        child: widget.child!,
+        child: child!,
       );
 }
