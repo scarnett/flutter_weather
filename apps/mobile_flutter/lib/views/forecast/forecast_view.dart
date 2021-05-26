@@ -366,6 +366,7 @@ class _ForecastPageViewState extends State<ForecastView>
 
     return ForecastDisplay(
       forecastColor: forecastColor,
+      forecastDarkenedColor: forecastDarkenedColor,
       temperatureUnit: state.temperatureUnit,
       themeMode: state.themeMode,
       colorTheme: state.colorTheme,

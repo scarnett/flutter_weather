@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -170,7 +172,9 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                 ),
                 height: _bottomFadeHeight,
                 margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom,
+                  bottom: (Platform.isIOS)
+                      ? 0.0
+                      : MediaQuery.of(context).padding.bottom,
                 ),
               ),
             ),
@@ -245,7 +249,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
       Future.microtask(() => _scrollController.animateTo(
             snapOffset,
-            duration: Duration(milliseconds: 200),
+            duration: Duration(milliseconds: 250),
             curve: Curves.easeIn,
           ));
     }
