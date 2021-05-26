@@ -236,7 +236,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   void _snapHeader({
     double maxHeight: 260.0,
     double minHeight: 0.0,
-    double minDistance: 0.3,
+    double minDistance: 0.5,
   }) {
     final double scrollDistance = (maxHeight - minHeight);
 

@@ -10,11 +10,11 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_last_updated.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
 import 'package:flutter_weather/views/lookup/lookup_view.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
@@ -224,14 +224,18 @@ class _ForecastPageViewState extends State<ForecastView>
                   controller: _pageController,
                   physics: const AppPageViewScrollPhysics(),
                   itemCount: state.forecasts.length,
-                  itemBuilder: (BuildContext context, int position) =>
+                  itemBuilder: (
+                    BuildContext context,
+                    int position,
+                  ) =>
                       _buildForecastItem(
-                    context: context,
-                    position: position,
-                    state: state,
-                    forecastColor: forecastColor,
-                    forecastDarkenedColor: forecastDarkenedColor,
-                  ),
+                        context: context,
+                        position: position,
+                        state: state,
+                        forecastColor: forecastColor,
+                        forecastDarkenedColor: forecastDarkenedColor,
+                      ) ??
+                      Container(),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -247,9 +251,10 @@ class _ForecastPageViewState extends State<ForecastView>
                               state: state,
                               forecastColor: forecastColor,
                             ),
-                            _buildLastUpdated(
-                              state: state,
-                              forecastColor: forecastColor,
+                            ForecastLastUpdated(
+                              forecast:
+                                  state.forecasts[state.selectedForecastIndex],
+                              fillColor: forecastColor,
                             ),
                           ],
                         ),
@@ -324,7 +329,7 @@ class _ForecastPageViewState extends State<ForecastView>
         },
       );
 
-  _buildLightDarkContent(
+  Widget _buildLightDarkContent(
     AppState state,
   ) =>
       AppUiOverlayStyle(
@@ -338,7 +343,7 @@ class _ForecastPageViewState extends State<ForecastView>
         ),
       );
 
-  _buildForecastItem({
+  Widget? _buildForecastItem({
     required BuildContext context,
     required int position,
     required AppState state,
@@ -374,7 +379,7 @@ class _ForecastPageViewState extends State<ForecastView>
     );
   }
 
-  _buildCircleIndicator({
+  Widget _buildCircleIndicator({
     required AppState state,
     Color? forecastColor,
   }) {
@@ -402,51 +407,6 @@ class _ForecastPageViewState extends State<ForecastView>
           itemCount: state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
           onPageSelected: _onPageSelected,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLastUpdated({
-    required AppState state,
-    Color? forecastColor,
-  }) {
-    DateTime? lastUpdated =
-        state.forecasts[state.selectedForecastIndex].lastUpdated;
-    if (lastUpdated == null) {
-      return Container();
-    }
-
-    String formattedLastUpdated;
-
-    if (lastUpdated.isToday()) {
-      formattedLastUpdated =
-          AppLocalizations.of(context)!.getLastUpdatedAt(formatDateTime(
-        date: lastUpdated.toLocal(),
-        format: 'h:mm a',
-      )!);
-    } else {
-      formattedLastUpdated =
-          AppLocalizations.of(context)!.getLastUpdatedOn(formatDateTime(
-        date: lastUpdated.toLocal(),
-        format: 'EEE, MMM d, yyyy @ h:mm a',
-      )!);
-    }
-
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          color: (forecastColor == null)
-              ? Colors.black.withOpacity(0.1)
-              : forecastColor.withOpacity(0.2),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        margin:
-            EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16),
-        child: Text(
-          formattedLastUpdated,
-          style: Theme.of(context).textTheme.subtitle2,
         ),
       ),
     );
