@@ -71,7 +71,7 @@ ThemeData appLightThemeData = ThemeData(
   fontFamily: 'roboto',
   appBarTheme: AppBarTheme(
     brightness: Brightness.light,
-    color: Colors.white.withOpacity(0.9),
+    color: Colors.white.withOpacity(0.925),
     elevation: 0.0,
     textTheme: TextTheme(
       headline6: TextStyle(
@@ -157,7 +157,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   hintColor: AppTheme.getHintColor(ThemeMode.dark),
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark,
-    color: AppTheme.secondaryColor.withOpacity(0.9),
+    color: AppTheme.secondaryColor.withOpacity(0.925),
     elevation: 0.0,
     textTheme: TextTheme(
       headline6: TextStyle(
@@ -215,7 +215,7 @@ TextTheme _darkTextTheme = TextTheme(
   ),
   subtitle2: TextStyle(
     color: AppTheme.secondaryColor.withOpacity(0.7),
-    fontSize: 14.0,
+    fontSize: 12.0,
     fontWeight: FontWeight.w600,
     shadows: null,
   ),
@@ -258,7 +258,7 @@ TextTheme _lightTextTheme = TextTheme(
   ),
   subtitle2: TextStyle(
     color: Colors.white.withOpacity(0.9),
-    fontSize: 14.0,
+    fontSize: 12.0,
     fontWeight: FontWeight.w600,
     shadows: commonTextShadow(
       color: Colors.black12,

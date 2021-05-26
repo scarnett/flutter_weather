@@ -41,7 +41,7 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
             minExtent: 0.0,
             maxExtent: 50.0,
             clampLower: 0.2,
-            speed: 1.25,
+            speed: 2.0,
           );
         });
 

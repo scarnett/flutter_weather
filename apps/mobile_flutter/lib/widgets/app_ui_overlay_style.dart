@@ -39,7 +39,7 @@ class _AppUiOverlayStyleState extends State<AppUiOverlayStyle> {
                   : Brightness.light,
           systemNavigationBarColor:
               widget.colorTheme && (widget.systemNavigationBarColor != null)
-                  ? widget.systemNavigationBarColor!.withOpacity(0.9)
+                  ? widget.systemNavigationBarColor!.withOpacity(0.925)
                   : Theme.of(context).appBarTheme.color,
           systemNavigationBarIconBrightness:
               (widget.systemNavigationBarIconBrightness != null)

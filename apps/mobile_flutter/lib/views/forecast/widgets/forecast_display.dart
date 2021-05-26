@@ -565,9 +565,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           padding:
               EdgeInsets.only(right: (count + 1 == days.length) ? 0.0 : 20.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 4.0),
+                padding: const EdgeInsets.only(right: 4.0, top: 4.0),
                 child: Column(
                   children: <Widget>[
                     Padding(
