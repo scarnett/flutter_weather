@@ -339,7 +339,7 @@ String? formatHour(
 ) {
   if (dateTime != null) {
     DateTime dt = epochToDateTime(dateTime);
-    String? formatted = formatDateTime(dt, 'h:mm');
+    String? formatted = formatDateTime(date: dt, format: 'h:mm');
     return formatted;
   }
 

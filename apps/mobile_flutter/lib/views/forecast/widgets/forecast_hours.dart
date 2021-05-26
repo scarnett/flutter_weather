@@ -8,11 +8,13 @@ class ForecastHours extends StatefulWidget {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
   final bool colorTheme;
+  final int maxHours;
 
   ForecastHours({
     required this.forecast,
     required this.temperatureUnit,
     this.colorTheme: false,
+    this.maxHours: 24,
   });
 
   @override
@@ -38,8 +40,19 @@ class _ForecastHoursState extends State<ForecastHours> {
         ),
         separatorBuilder: (context, index) => Divider(),
         padding: const EdgeInsets.all(0.0),
-        itemCount: (widget.forecast.details!.hourly != null)
-            ? widget.forecast.details!.hourly!.length
-            : 0,
+        itemCount: _getHourCount(),
       );
+
+  int _getHourCount() {
+    if (widget.forecast.details!.hourly != null) {
+      int count = widget.forecast.details!.hourly!.length;
+      if (count < widget.maxHours) {
+        return count;
+      }
+
+      return widget.maxHours;
+    }
+
+    return 0;
+  }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/theme.dart';
+import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hours.dart';
@@ -57,13 +59,39 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
       Opacity(
         opacity: scrollOffset,
         child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: AppTheme.getBorderColor(
+                  widget.themeMode,
+                  colorTheme: widget.colorTheme,
+                ),
+                width: 2.0,
+              ),
+            ),
+          ),
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).padding.bottom,
           ),
-          child: ForecastHours(
-            forecast: widget.forecast,
-            temperatureUnit: widget.temperatureUnit,
-            colorTheme: widget.colorTheme,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
+                child: Text(
+                  formatDateTime(
+                    date: DateTime.now(),
+                    format: 'EEEE, MMMM d',
+                    addSuffix: true,
+                  )!,
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ),
+              ForecastHours(
+                forecast: widget.forecast,
+                temperatureUnit: widget.temperatureUnit,
+                colorTheme: widget.colorTheme,
+              )
+            ],
           ),
         ),
       );

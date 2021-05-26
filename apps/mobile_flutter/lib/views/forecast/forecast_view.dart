@@ -414,11 +414,17 @@ class _ForecastPageViewState extends State<ForecastView>
     String formattedLastUpdated;
 
     if (lastUpdated.isToday()) {
-      formattedLastUpdated = AppLocalizations.of(context)!
-          .getLastUpdatedAt(formatDateTime(lastUpdated.toLocal(), 'h:mm a')!);
+      formattedLastUpdated =
+          AppLocalizations.of(context)!.getLastUpdatedAt(formatDateTime(
+        date: lastUpdated.toLocal(),
+        format: 'h:mm a',
+      )!);
     } else {
-      formattedLastUpdated = AppLocalizations.of(context)!.getLastUpdatedOn(
-          formatDateTime(lastUpdated.toLocal(), 'EEE, MMM d, yyyy @ h:mm a')!);
+      formattedLastUpdated =
+          AppLocalizations.of(context)!.getLastUpdatedOn(formatDateTime(
+        date: lastUpdated.toLocal(),
+        format: 'EEE, MMM d, yyyy @ h:mm a',
+      )!);
     }
 
     return Center(

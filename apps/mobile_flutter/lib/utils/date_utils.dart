@@ -68,12 +68,19 @@ DateTime? fromIso8601String(String? date) {
   return DateTime.parse(date).toUtc();
 }
 
-String? formatDateTime(
+String? formatDateTime({
   DateTime? date,
   String? format,
-) {
+  bool addSuffix: false,
+}) {
   if ((date == null) || (format == null)) {
     return null;
+  }
+
+  if (addSuffix) {
+    String day = formatDateTime(date: date, format: 'd')!;
+    String suffix = getDaySuffix(int.parse(day));
+    return '${DateFormat(format).format(date)}$suffix';
   }
 
   return DateFormat(format).format(date);
@@ -108,8 +115,8 @@ DateTime epochToDateTime(
 String getMonthDay(
   DateTime dateTime,
 ) {
-  String? month = formatDateTime(dateTime, 'MMM');
-  String day = formatDateTime(dateTime, 'd')!;
+  String? month = formatDateTime(date: dateTime, format: 'MMM');
+  String day = formatDateTime(date: dateTime, format: 'd')!;
   String suffix = getDaySuffix(int.parse(day));
   return '$month $day$suffix';
 }

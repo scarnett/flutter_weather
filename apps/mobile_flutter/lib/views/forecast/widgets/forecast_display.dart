@@ -574,7 +574,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4.0),
                       child: Text(
-                        formatDateTime(epochToDateTime(day.dt!), 'EEE')!,
+                        formatDateTime(
+                          date: epochToDateTime(day.dt!),
+                          format: 'EEE',
+                        )!,
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
