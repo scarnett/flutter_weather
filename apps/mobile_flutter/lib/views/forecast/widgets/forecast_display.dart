@@ -7,7 +7,6 @@ import 'package:flutter_weather/views/forecast/widgets/forecast_condition.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_current_temp.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_day_scroller.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_detail_display.dart';
-import 'package:flutter_weather/views/forecast/widgets/forecast_divider.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hi_lo.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_location.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_meta_row.dart';
@@ -97,10 +96,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
               themeMode: widget.themeMode,
               colorTheme: widget.colorTheme,
             ),
-            ForecastDivider(
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-            ),
             ForecastDayScroller(
               forecast: widget.forecast,
               themeMode: widget.themeMode,
@@ -141,10 +136,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   delegate: SliverChildListDelegate(
                     [
                       _buildCurrentForecast(currentDay),
-                      ForecastDivider(
-                        themeMode: widget.themeMode,
-                        colorTheme: widget.colorTheme,
-                      ),
                       ForecastDayScroller(
                         forecast: widget.forecast,
                         themeMode: widget.themeMode,
@@ -205,10 +196,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   List<Widget> _buildDetailDisplay() {
     if (widget.detailsEnabled && (widget.forecast.details!.timezone != null)) {
       return [
-        ForecastDivider(
-          themeMode: widget.themeMode,
-          colorTheme: widget.colorTheme,
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: ForecastDetailDisplay(

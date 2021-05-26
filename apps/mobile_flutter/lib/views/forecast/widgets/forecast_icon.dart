@@ -8,17 +8,17 @@ class ForecastIcon extends StatelessWidget {
   final double containerSize;
   final IconData? icon;
   final double iconSize;
-  final double scaleFactor;
   final Color? color;
   final Color shadowColor;
+  final Animation<double>? resizeAnimation;
 
   ForecastIcon({
     this.containerSize: 90.0,
     this.icon,
     this.iconSize: 60.0,
-    this.scaleFactor: 1.0,
     this.color,
     this.shadowColor: Colors.black38,
+    this.resizeAnimation,
   });
 
   @override
@@ -62,6 +62,25 @@ class ForecastIcon extends StatelessWidget {
     );
   }
 
-  double getIconSize() => (iconSize * scaleFactor);
-  double getContainerSize() => (containerSize * scaleFactor);
+  double getIconSize() {
+    if (resizeAnimation == null) {
+      return iconSize;
+    }
+
+    return Tween<double>(
+      begin: (iconSize - 36.0),
+      end: iconSize,
+    ).evaluate(resizeAnimation!);
+  }
+
+  double getContainerSize() {
+    if (resizeAnimation == null) {
+      return containerSize;
+    }
+
+    return Tween<double>(
+      begin: (containerSize - 50.0),
+      end: containerSize,
+    ).evaluate(resizeAnimation!);
+  }
 }

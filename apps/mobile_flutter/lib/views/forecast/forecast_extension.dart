@@ -43,28 +43,34 @@ extension ForecastExtension on Forecast {
   }
 
   String getLocationText({
+    bool includeCityName: true,
     bool includePostalCode: true,
+    bool includeCountryCode: true,
   }) {
     String text = '';
 
-    if (!this.cityName.isNullOrEmpty()) {
-      text += '${this.cityName}, ';
-    } else if ((this.city != null) && !this.city!.name.isNullOrEmpty()) {
-      text += '${this.city!.name}, ';
+    if (includeCityName) {
+      if (!this.cityName.isNullOrEmpty()) {
+        text += '${this.cityName}, ';
+      } else if ((this.city != null) && !this.city!.name.isNullOrEmpty()) {
+        text += '${this.city!.name}, ';
+      }
     }
 
     if (includePostalCode && !this.postalCode.isNullOrEmpty()) {
       text += '${this.postalCode!.toUpperCase()}, ';
     }
 
-    if (!this.countryCode.isNullOrEmpty()) {
-      text += this.countryCode!.toUpperCase();
-    } else if ((this.city != null) && !this.city!.country.isNullOrEmpty()) {
-      text += this.city!.country!.toUpperCase();
+    if (includeCountryCode) {
+      if (!this.countryCode.isNullOrEmpty()) {
+        text += this.countryCode!.toUpperCase();
+      } else if ((this.city != null) && !this.city!.country.isNullOrEmpty()) {
+        text += this.city!.country!.toUpperCase();
+      }
     }
 
     String trimmedText = text.trim();
-    if (trimmedText.endsWith(',')) {
+    if (trimmedText.isNotEmpty && trimmedText.endsWith(',')) {
       trimmedText = trimmedText.substring(0, (trimmedText.length - 1));
     }
 

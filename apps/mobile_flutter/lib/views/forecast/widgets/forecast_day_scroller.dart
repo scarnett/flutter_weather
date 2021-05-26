@@ -62,10 +62,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
       Column(
         children: [
           Container(
-            padding: const EdgeInsets.only(
-              top: 20.0,
-              bottom: 10.0,
-            ),
+            padding: const EdgeInsets.only(bottom: 10.0),
             child: Container(
               width: double.infinity,
               height: 60.0,

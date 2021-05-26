@@ -37,43 +37,57 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) =>
-      Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              _backgroundColor,
-              _backgroundColor.withOpacity(0.0),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0.7, 1.0],
-            tileMode: TileMode.clamp,
-          ),
-        ),
-        padding: EdgeInsets.only(
-          top: (MediaQuery.of(context).padding.top + ForecastOptions.height),
-          bottom: 10.0,
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Stack(
-            children: [
-              ForecastLocation(
-                forecast: forecast,
-                shrinkOffset: shrinkOffset,
-                maxExtent: maxExtent,
-                minExtent: minExtent,
+      LayoutBuilder(
+        builder: (
+          BuildContext context,
+          BoxConstraints constraints,
+        ) {
+          final double expandRatio = _calculateExpandRatio(constraints);
+          final AlwaysStoppedAnimation<double> resizeAnimation =
+              AlwaysStoppedAnimation(expandRatio);
+
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  _backgroundColor,
+                  _backgroundColor.withOpacity(0.0),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.7, 1.0],
+                tileMode: TileMode.clamp,
               ),
-              ForecastCurrentTemp(
-                currentDay: forecast.list!.first,
-                temperatureUnit: temperatureUnit,
-                shrinkOffset: shrinkOffset,
-                maxExtent: maxExtent,
-                minExtent: minExtent,
+            ),
+            padding: EdgeInsets.only(
+              top:
+                  (MediaQuery.of(context).padding.top + ForecastOptions.height),
+              bottom: 10.0,
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Stack(
+                children: [
+                  ForecastLocation(
+                    forecast: forecast,
+                    shrinkOffset: shrinkOffset,
+                    maxExtent: maxExtent,
+                    minExtent: minExtent,
+                    resizeAnimation: resizeAnimation,
+                  ),
+                  ForecastCurrentTemp(
+                    currentDay: forecast.list!.first,
+                    temperatureUnit: temperatureUnit,
+                    shrinkOffset: shrinkOffset,
+                    maxExtent: maxExtent,
+                    minExtent: minExtent,
+                    resizeAnimation: resizeAnimation,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       );
 
   Color get _backgroundColor {
@@ -86,5 +100,22 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
     }
 
     return Theme.of(context).appBarTheme.color!;
+  }
+
+  double _calculateExpandRatio(
+    BoxConstraints constraints,
+  ) {
+    double expandRatio =
+        ((constraints.maxHeight - minExtent) / (maxExtent - minExtent));
+
+    if (expandRatio > 1.0) {
+      expandRatio = 1.0;
+    }
+
+    if (expandRatio < 0.0) {
+      expandRatio = 0.0;
+    }
+
+    return expandRatio;
   }
 }

@@ -13,6 +13,7 @@ class ForecastCurrentTemp extends StatelessWidget {
   final double? shrinkOffset;
   final double? maxExtent;
   final double? minExtent;
+  final Animation<double>? resizeAnimation;
 
   final AlignmentTween _currentTemperatureAlignTween = AlignmentTween(
     begin: Alignment.bottomCenter,
@@ -26,6 +27,7 @@ class ForecastCurrentTemp extends StatelessWidget {
     this.shrinkOffset,
     this.maxExtent,
     this.minExtent,
+    this.resizeAnimation,
   }) : super(key: key);
 
   @override
@@ -50,8 +52,7 @@ class ForecastCurrentTemp extends StatelessWidget {
                       currentDay.temp!.day,
                       temperatureUnit,
                     ).toString(),
-                    style: Theme.of(context).textTheme.headline1,
-                    scaleFactor: _getScrollScale(2.0),
+                    style: getTemperatureTextStyle(context),
                     unit: temperatureUnit,
                   ),
                   AppTemperatureDisplay(
@@ -60,20 +61,17 @@ class ForecastCurrentTemp extends StatelessWidget {
                       currentDay.feelsLike!.day,
                       temperatureUnit,
                     ).toString()),
-                    style: Theme.of(context).textTheme.headline5,
-                    scaleFactor: _getScrollScale(3.0),
+                    style: getFeelsLikeTextStyle(context),
                     unit: temperatureUnit,
                     unitSizeFactor: 1.5,
                   ),
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(
-                  left: (40.0 * _getScrollScale(1.5)),
-                ),
+                padding: EdgeInsets.only(left: getTemperaturePadding(context)),
                 child: ForecastIcon(
                   icon: getForecastIconData(currentDay.weather!.first.icon),
-                  scaleFactor: _getScrollScale(2.5),
+                  resizeAnimation: resizeAnimation,
                 ),
               ),
             ],
@@ -81,23 +79,54 @@ class ForecastCurrentTemp extends StatelessWidget {
         ),
       );
 
-  bool isScrollable() =>
-      ((shrinkOffset != null) && (maxExtent != null) && (minExtent != null));
-
-  double _getScrollScale(
-    double factor,
+  TextStyle getTemperatureTextStyle(
+    BuildContext context,
   ) {
-    if (isScrollable()) {
-      return getScrollScale(
-        shrinkOffset: shrinkOffset!,
-        maxExtent: maxExtent!,
-        minExtent: minExtent!,
-        factor: factor,
+    TextStyle style = Theme.of(context).textTheme.headline1!;
+
+    if (resizeAnimation != null) {
+      return style.copyWith(
+        fontSize: (resizeAnimation == null)
+            ? null
+            : Tween<double>(
+                begin: (style.fontSize! - 40.0),
+                end: style.fontSize,
+              ).evaluate(resizeAnimation!),
       );
     }
 
-    return 1.0;
+    return style;
   }
+
+  TextStyle getFeelsLikeTextStyle(
+    BuildContext context,
+  ) {
+    TextStyle style = Theme.of(context).textTheme.headline5!;
+
+    if (resizeAnimation != null) {
+      return style.copyWith(
+        fontSize: (resizeAnimation == null)
+            ? null
+            : Tween<double>(
+                begin: (style.fontSize! - 6.0),
+                end: style.fontSize,
+              ).evaluate(resizeAnimation!),
+      );
+    }
+
+    return style;
+  }
+
+  double getTemperaturePadding(
+    BuildContext context,
+  ) =>
+      Tween<double>(
+        begin: 10.0,
+        end: 40.0,
+      ).evaluate(resizeAnimation!);
+
+  bool isScrollable() =>
+      ((shrinkOffset != null) && (maxExtent != null) && (minExtent != null));
 
   AlignmentGeometry _getAlignment() {
     if (isScrollable()) {

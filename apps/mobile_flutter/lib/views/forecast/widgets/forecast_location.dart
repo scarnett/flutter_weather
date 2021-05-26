@@ -9,6 +9,7 @@ class ForecastLocation extends StatelessWidget {
   final double? shrinkOffset;
   final double? maxExtent;
   final double? minExtent;
+  final Animation<double>? resizeAnimation;
 
   final AlignmentTween _locationAlignTween = AlignmentTween(
     begin: Alignment.topCenter,
@@ -21,6 +22,7 @@ class ForecastLocation extends StatelessWidget {
     this.shrinkOffset,
     this.maxExtent,
     this.minExtent,
+    this.resizeAnimation,
   }) : super(key: key);
 
   @override
@@ -37,36 +39,57 @@ class ForecastLocation extends StatelessWidget {
             children: <Widget>[
               Text(
                 forecast.city!.name!.toUpperCase(),
-                style: Theme.of(context).textTheme.headline3,
-                textScaleFactor: _getScrollScale(5.0),
+                style: getCityNameTextStyle(context),
               ),
               Text(
-                forecast.getLocationText(),
-                style: Theme.of(context).textTheme.headline5,
-                textScaleFactor: _getScrollScale(3.0),
+                forecast.getLocationText(includeCityName: false),
+                style: getLocationTextStyle(context),
               ),
             ],
           ),
         ),
       );
 
-  bool isScrollable() =>
-      ((shrinkOffset != null) && (maxExtent != null) && (minExtent != null));
-
-  double? _getScrollScale(
-    double factor,
+  TextStyle getCityNameTextStyle(
+    BuildContext context,
   ) {
-    if (isScrollable()) {
-      return getScrollScale(
-        shrinkOffset: shrinkOffset!,
-        maxExtent: maxExtent!,
-        minExtent: minExtent!,
-        factor: factor,
+    TextStyle style = Theme.of(context).textTheme.headline3!;
+
+    if (resizeAnimation != null) {
+      return style.copyWith(
+        fontSize: (resizeAnimation == null)
+            ? null
+            : Tween<double>(
+                begin: (style.fontSize! - 14.0),
+                end: style.fontSize,
+              ).evaluate(resizeAnimation!),
       );
     }
 
-    return null;
+    return style;
   }
+
+  TextStyle getLocationTextStyle(
+    BuildContext context,
+  ) {
+    TextStyle style = Theme.of(context).textTheme.headline5!;
+
+    if (resizeAnimation != null) {
+      return style.copyWith(
+        fontSize: (resizeAnimation == null)
+            ? null
+            : Tween<double>(
+                begin: (style.fontSize! - 6.0),
+                end: style.fontSize,
+              ).evaluate(resizeAnimation!),
+      );
+    }
+
+    return style;
+  }
+
+  bool isScrollable() =>
+      ((shrinkOffset != null) && (maxExtent != null) && (minExtent != null));
 
   AlignmentGeometry _getAlignment() {
     if (isScrollable()) {
