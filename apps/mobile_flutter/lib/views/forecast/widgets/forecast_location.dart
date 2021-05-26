@@ -39,6 +39,7 @@ class ForecastLocation extends StatelessWidget {
             children: <Widget>[
               Text(
                 forecast.city!.name!.toUpperCase(),
+                overflow: TextOverflow.ellipsis,
                 style: getCityNameTextStyle(context),
               ),
               Text(
