@@ -286,6 +286,7 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: version.txt
+          trim: false
 
       - name: 'Update app version'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
