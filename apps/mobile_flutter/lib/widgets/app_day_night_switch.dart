@@ -41,7 +41,7 @@ class AppDayNightSwitch extends StatelessWidget {
           color: colorTheme ? Colors.white : Colors.grey[300]!,
           width: 2.0,
         ),
-        activeColor: AppTheme.secondaryColor,
+        activeColor: AppTheme.secondaryColor.withOpacity(0.5),
         inactiveColor: Colors.white.withOpacity(0.5),
         activeIcon: Icon(
           activeIcon,
