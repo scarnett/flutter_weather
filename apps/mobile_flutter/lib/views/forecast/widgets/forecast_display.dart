@@ -38,10 +38,14 @@ class ForecastDisplay extends StatefulWidget {
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
   late ScrollController _scrollController;
+  double _bottomFadeHeight = 50.0;
+  double _bottomFadeOpacity = 1.0;
 
   @override
   void initState() {
-    _scrollController = ScrollController();
+    _scrollController = ScrollController()
+      ..addListener(() => _setBottomFadeMargin());
+
     super.initState();
   }
 
@@ -158,15 +162,16 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [
-                      _fadeColor,
+                      _fadeColor.withOpacity(_bottomFadeOpacity),
                       _fadeColor.withOpacity(0.0),
                     ],
                     stops: [0.0, 1.0],
                   ),
                 ),
-                height: 50.0,
+                height: _bottomFadeHeight,
                 margin: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom),
+                  bottom: MediaQuery.of(context).padding.bottom,
+                ),
               ),
             ),
           ],
@@ -216,6 +221,14 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     return [];
   }
 
+  Color get _fadeColor {
+    if (widget.colorTheme && (widget.forecastDarkenedColor != null)) {
+      return widget.forecastDarkenedColor!;
+    }
+
+    return Theme.of(context).scaffoldBackgroundColor;
+  }
+
   void _snapHeader({
     double maxHeight: 260.0,
     double minHeight: 0.0,
@@ -238,11 +251,30 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     }
   }
 
-  Color get _fadeColor {
-    if (widget.colorTheme && (widget.forecastDarkenedColor != null)) {
-      return widget.forecastDarkenedColor!;
-    }
+  void _setBottomFadeMargin({
+    maxHeight: 50.0,
+  }) {
+    double maxScroll = _scrollController.position.maxScrollExtent;
+    double currentScroll = _scrollController.position.pixels;
+    if ((maxScroll - currentScroll) <= maxHeight) {
+      double deltaPercent =
+          ((maxHeight + (maxScroll - currentScroll)) - maxHeight);
 
-    return Theme.of(context).scaffoldBackgroundColor;
+      setState(() {
+        _bottomFadeHeight =
+            (maxScroll - currentScroll).clamp(0.0, maxHeight).toDouble();
+
+        _bottomFadeOpacity = (1.0 -
+                ((deltaPercent - maxHeight) /
+                    (deltaPercent + maxHeight) *
+                    -1.0))
+            .clamp(0.0, 1.0);
+      });
+    } else {
+      setState(() {
+        _bottomFadeHeight = maxHeight;
+        _bottomFadeOpacity = 1.0;
+      });
+    }
   }
 }
