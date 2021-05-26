@@ -116,47 +116,53 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   Widget _buildSliverContent(
     ForecastDay currentDay,
   ) =>
-      CustomScrollView(
-        controller: _scrollController,
-        physics: ClampingScrollPhysics(),
-        slivers: <Widget>[
-          SliverPersistentHeader(
-            pinned: true,
-            floating: false,
-            delegate: ForecastSliverHeader(
-              context: context,
-              forecastColor: widget.forecastColor,
-              temperatureUnit: widget.temperatureUnit,
-              colorTheme: widget.colorTheme,
-              forecast: widget.forecast,
+      NotificationListener<ScrollEndNotification>(
+        onNotification: (ScrollEndNotification notification) {
+          _snapHeader();
+          return false;
+        },
+        child: CustomScrollView(
+          controller: _scrollController,
+          physics: ClampingScrollPhysics(),
+          slivers: <Widget>[
+            SliverPersistentHeader(
+              pinned: true,
+              floating: false,
+              delegate: ForecastSliverHeader(
+                context: context,
+                forecastColor: widget.forecastColor,
+                temperatureUnit: widget.temperatureUnit,
+                colorTheme: widget.colorTheme,
+                forecast: widget.forecast,
+              ),
             ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  _buildCurrentForecast(currentDay),
-                  ForecastDayScroller(
-                    forecast: widget.forecast,
-                    themeMode: widget.themeMode,
-                    colorTheme: widget.colorTheme,
-                    temperatureUnit: widget.temperatureUnit,
-                  ),
-                  if (widget.detailsEnabled &&
-                      (widget.forecast.details!.timezone != null))
-                    ForecastDetailDisplay(
-                      scrollController: _scrollController,
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    _buildCurrentForecast(currentDay),
+                    ForecastDayScroller(
                       forecast: widget.forecast,
                       themeMode: widget.themeMode,
                       colorTheme: widget.colorTheme,
                       temperatureUnit: widget.temperatureUnit,
                     ),
-                ],
+                    if (widget.detailsEnabled &&
+                        (widget.forecast.details!.timezone != null))
+                      ForecastDetailDisplay(
+                        scrollController: _scrollController,
+                        forecast: widget.forecast,
+                        themeMode: widget.themeMode,
+                        colorTheme: widget.colorTheme,
+                        temperatureUnit: widget.temperatureUnit,
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
 
   Widget _buildCurrentForecast(
@@ -178,4 +184,26 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           ),
         ],
       );
+
+  void _snapHeader({
+    double maxHeight: 260.0,
+    double minHeight: 0.0,
+    double minDistance: 0.3,
+  }) {
+    final double scrollDistance = (maxHeight - minHeight);
+
+    if ((_scrollController.offset > 0) &&
+        (_scrollController.offset < scrollDistance)) {
+      final double snapOffset =
+          ((_scrollController.offset / scrollDistance) > minDistance)
+              ? scrollDistance
+              : 0;
+
+      Future.microtask(() => _scrollController.animateTo(
+            snapOffset,
+            duration: Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+          ));
+    }
+  }
 }
