@@ -96,10 +96,6 @@ class _ForecastPageViewState extends State<ForecastView>
     AppState state = context.read<AppBloc>().state;
     _colorTheme = state.colorTheme;
 
-    context.read<AppBloc>()
-      ..add(SetThemeMode(state.themeMode))
-      ..add(SetColorTheme(state.colorTheme));
-
     _pageController = PageController(
       initialPage: state.selectedForecastIndex,
       keepPage: true,
@@ -107,6 +103,7 @@ class _ForecastPageViewState extends State<ForecastView>
         _currentPage = _pageController.page;
 
         if (isInteger(_currentPage)) {
+          _hideFabAnimationController.forward();
           _currentForecastNotifier.value = _currentPage!.toInt();
 
           context.read<AppBloc>()
@@ -173,8 +170,6 @@ class _ForecastPageViewState extends State<ForecastView>
 
       context.read<AppBloc>().add(ClearCRUDStatus());
     }
-
-    print(state.scrollDirection);
 
     if (state.scrollDirection != null) {
       switch (state.scrollDirection!) {
