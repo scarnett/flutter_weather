@@ -27,9 +27,14 @@ class AppTheme {
               : secondaryColor.withOpacity(0.1);
 
   static Color? getHintColor(
-    ThemeMode themeMode,
-  ) =>
-      (themeMode == ThemeMode.dark) ? Colors.grey[500] : Colors.grey[400];
+    ThemeMode themeMode, {
+    bool colorTheme: false,
+  }) =>
+      colorTheme
+          ? Colors.white.withOpacity(0.7)
+          : (themeMode == ThemeMode.dark)
+              ? Colors.grey[500]
+              : Colors.grey[400];
 
   static Color? getSectionColor(
     ThemeMode themeMode,

@@ -117,6 +117,7 @@ class _ForecastHoursState extends State<ForecastHours> {
             ForecastHourTile(
               hour: hour,
               temperatureUnit: widget.temperatureUnit,
+              themeMode: widget.themeMode,
               colorTheme: widget.colorTheme,
             ),
           );

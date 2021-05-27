@@ -4,17 +4,20 @@ import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_hour_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
 
 class ForecastHourTile extends StatelessWidget {
   final ForecastHour hour;
   final TemperatureUnit temperatureUnit;
+  final ThemeMode themeMode;
   final bool colorTheme;
 
   ForecastHourTile({
     required this.hour,
     required this.temperatureUnit,
+    required this.themeMode,
     this.colorTheme: false,
   });
 
@@ -28,14 +31,13 @@ class ForecastHourTile extends StatelessWidget {
         contentPadding: const EdgeInsets.all(0.0),
         horizontalTitleGap: 0.0,
         leading: Container(
-          width: 50.0,
+          width: 70.0,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              formatHour(hour.dt) ?? '',
-              style: Theme.of(context).textTheme.headline5!.copyWith(
-                    shadows: colorTheme ? commonTextShadow() : null,
-                  ),
+            child: ForecastHourDisplay(
+              hour: hour,
+              themeMode: themeMode,
+              colorTheme: colorTheme,
             ),
           ),
         ),
@@ -63,7 +65,7 @@ class ForecastHourTile extends StatelessWidget {
                         shadows: colorTheme ? commonTextShadow() : null,
                       ),
                   unit: temperatureUnit,
-                  unitSizeFactor: 2.0,
+                  unitSizeFactor: 1.5,
                 ),
               ),
             ),
