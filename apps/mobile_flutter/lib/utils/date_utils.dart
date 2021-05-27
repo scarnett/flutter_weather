@@ -7,6 +7,44 @@ extension DateHelpers on DateTime {
         (now.month == this.month) &&
         (now.year == this.year);
   }
+
+  DateTime startOfDay() => DateTime(this.year, this.month, this.day, 0, 0, 0);
+
+  DateTime endOfToday() =>
+      DateTime(this.year, this.month, this.day, 23, 59, 59);
+
+  DateTime endOfDay() =>
+      this.getDate().add(Duration(days: 1)).subtract(Duration(seconds: 1));
+
+  DateTime startOfWeek({
+    bool isMondayFirstDay: false,
+  }) =>
+      this
+          .getDate()
+          .subtract(Duration(days: this.weekday - (isMondayFirstDay ? 1 : 0)))
+          .startOfDay();
+
+  DateTime endOfWeek({
+    bool isMondayFirstDay: false,
+  }) {
+    DateTime lastDayOfWeek = this.add(Duration(
+        days: (DateTime.daysPerWeek -
+            this.weekday -
+            (isMondayFirstDay ? 0 : 1))));
+
+    return lastDayOfWeek.endOfDay();
+  }
+
+  DateTime startOfMonth() => DateTime(this.year, this.month, 1).startOfDay();
+
+  DateTime endOfMonth() {
+    // Providing a day value of zero for the next month
+    // gives you the previous month's last day
+    DateTime lastDayOfMonth = DateTime(this.year, (this.month + 1), 0);
+    return lastDayOfMonth.endOfDay();
+  }
+
+  DateTime getDate() => DateTime(this.year, this.month, this.day);
 }
 
 DateTime getNow() {
@@ -60,12 +98,25 @@ String? toIso8601String(
   return date.toIso8601String();
 }
 
-DateTime? fromIso8601String(String? date) {
+DateTime? fromIso8601String(
+  String? date,
+) {
   if (date == null) {
     return null;
   }
 
   return DateTime.parse(date).toUtc();
+}
+
+DateTime? fromString(
+  String? date,
+) {
+  print(date);
+  if (date == null) {
+    return null;
+  }
+
+  return DateTime.parse(date);
 }
 
 String? formatDateTime({

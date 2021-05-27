@@ -64,7 +64,6 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
           Container(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Container(
-              width: double.infinity,
               height: 60.0,
               child: PageView(
                 controller: _pageController,
@@ -91,7 +90,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
     List<Widget> forecasts = [];
 
     days.forEach((ForecastDay day) {
-      if (index % count == 0) {
+      if ((index % count) == 0) {
         int start = (index + 1);
         int end = ((index + 1) + 3);
         if (end > days.length) {
@@ -124,7 +123,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
       dayList.add(
         Container(
           padding:
-              EdgeInsets.only(right: (count + 1 == days.length) ? 0.0 : 20.0),
+              EdgeInsets.only(right: (count + 1 == days.length) ? 0.0 : 10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
