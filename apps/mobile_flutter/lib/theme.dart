@@ -215,8 +215,8 @@ TextTheme _darkTextTheme = TextTheme(
   ),
   subtitle2: TextStyle(
     color: AppTheme.secondaryColor.withOpacity(0.7),
-    fontSize: 12.0,
-    fontWeight: FontWeight.w600,
+    fontSize: 11.0,
+    fontWeight: FontWeight.w400,
     shadows: null,
   ),
 );
@@ -258,8 +258,8 @@ TextTheme _lightTextTheme = TextTheme(
   ),
   subtitle2: TextStyle(
     color: Colors.white.withOpacity(0.9),
-    fontSize: 12.0,
-    fontWeight: FontWeight.w600,
+    fontSize: 11.0,
+    fontWeight: FontWeight.w400,
     shadows: commonTextShadow(
       color: Colors.black12,
       blurRadius: 0.1,

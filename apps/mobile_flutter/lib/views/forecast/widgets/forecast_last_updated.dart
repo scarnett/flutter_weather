@@ -49,7 +49,7 @@ class ForecastLastUpdated extends StatelessWidget {
           color: (fillColor == null)
               ? Colors.black.withOpacity(0.1)
               : fillColor!.withOpacity(0.2),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         margin: EdgeInsets.only(

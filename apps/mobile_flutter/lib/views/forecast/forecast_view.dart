@@ -95,6 +95,11 @@ class _ForecastPageViewState extends State<ForecastView>
   void _initialize() {
     AppState state = context.read<AppBloc>().state;
     _colorTheme = state.colorTheme;
+
+    context.read<AppBloc>()
+      ..add(SetThemeMode(state.themeMode))
+      ..add(SetColorTheme(state.colorTheme));
+
     _pageController = PageController(
       initialPage: state.selectedForecastIndex,
       keepPage: true,

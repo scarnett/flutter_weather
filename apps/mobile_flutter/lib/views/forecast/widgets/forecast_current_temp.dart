@@ -119,11 +119,16 @@ class ForecastCurrentTemp extends StatelessWidget {
 
   double getTemperaturePadding(
     BuildContext context,
-  ) =>
-      Tween<double>(
-        begin: 10.0,
-        end: 40.0,
-      ).evaluate(resizeAnimation!);
+  ) {
+    if (resizeAnimation != null) {
+      return 40.0;
+    }
+
+    return Tween<double>(
+      begin: 10.0,
+      end: 40.0,
+    ).evaluate(resizeAnimation!);
+  }
 
   bool isScrollable() =>
       ((shrinkOffset != null) && (maxExtent != null) && (minExtent != null));
