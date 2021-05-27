@@ -111,7 +111,6 @@ DateTime? fromIso8601String(
 DateTime? fromString(
   String? date,
 ) {
-  print(date);
   if (date == null) {
     return null;
   }

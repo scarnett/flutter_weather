@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
@@ -17,8 +16,8 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_last_updated.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
-import 'package:flutter_weather/views/lookup/lookup_view.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/widgets/app_fab.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -80,18 +79,8 @@ class _ForecastPageViewState extends State<ForecastView>
         extendBodyBehindAppBar: true,
         floatingActionButtonLocation:
             AppFABLocation(FloatingActionButtonLocation.miniEndFloat, 6.0, 0.0),
-        floatingActionButton: FadeTransition(
-          opacity: _hideFabAnimationController,
-          child: ScaleTransition(
-            scale: _hideFabAnimationController,
-            child: FloatingActionButton(
-              key: Key(AppKeys.addLocationKey),
-              tooltip: AppLocalizations.of(context)!.addForecast,
-              onPressed: _tapAddLocation,
-              child: Icon(Icons.add),
-              mini: true,
-            ),
-          ),
+        floatingActionButton: AppFAB(
+          animationController: _hideFabAnimationController,
         ),
       );
 
@@ -106,12 +95,11 @@ class _ForecastPageViewState extends State<ForecastView>
         _currentPage = _pageController.page;
 
         if (isInteger(_currentPage)) {
-          _hideFabAnimationController.forward();
           _currentForecastNotifier.value = _currentPage!.toInt();
 
           context.read<AppBloc>()
             ..add(SelectedForecastIndex(_currentForecastNotifier.value))
-            ..add(SetScrollDirection(ScrollDirection.idle));
+            ..add(SetScrollDirection(ScrollDirection.forward));
 
           // If auto update is enabled then run the refresh
           if ((state.updatePeriod != null) &&
@@ -174,20 +162,23 @@ class _ForecastPageViewState extends State<ForecastView>
       context.read<AppBloc>().add(ClearCRUDStatus());
     }
 
-    if (state.scrollDirection != null) {
-      switch (state.scrollDirection!) {
-        case ScrollDirection.reverse:
+    switch (state.scrollDirection ?? null) {
+      case ScrollDirection.reverse:
+        if (_hideFabAnimationController.isCompleted) {
           _hideFabAnimationController.reverse();
-          break;
+        }
 
-        case ScrollDirection.forward:
-          // case ScrollDirection.idle:
+        break;
+
+      case ScrollDirection.forward:
+        if (_hideFabAnimationController.isDismissed) {
           _hideFabAnimationController.forward();
-          break;
+        }
 
-        default:
-          break;
-      }
+        break;
+
+      default:
+        break;
     }
 
     if (state.colorTheme) {
@@ -251,6 +242,7 @@ class _ForecastPageViewState extends State<ForecastView>
                   child: FadeTransition(
                     opacity: _hideFabAnimationController,
                     child: ScaleTransition(
+                      alignment: Alignment.centerRight,
                       scale: _hideFabAnimationController,
                       child: Container(
                         child: Column(
@@ -438,9 +430,4 @@ class _ForecastPageViewState extends State<ForecastView>
               state.temperatureUnit,
             ),
           );
-
-  void _tapAddLocation() {
-    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-    Navigator.push(context, LookupView.route());
-  }
 }
