@@ -120,7 +120,7 @@ class ForecastCurrentTemp extends StatelessWidget {
   double getTemperaturePadding(
     BuildContext context,
   ) {
-    if (resizeAnimation != null) {
+    if (resizeAnimation == null) {
       return 40.0;
     }
 
