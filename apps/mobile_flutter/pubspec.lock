@@ -16,19 +16,19 @@ packages:
     source: hosted
     version: "1.5.0"
   archive:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.2"
   args:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: args
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.0.0"
   async:
     dependency: transitive
     description:
@@ -142,7 +142,7 @@ packages:
     source: hosted
     version: "1.15.0"
   convert:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: convert
       url: "https://pub.dartlang.org"
@@ -156,7 +156,7 @@ packages:
     source: hosted
     version: "1.0.2"
   crypto:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -295,6 +295,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.36.1"
   flutter:
     dependency: "direct main"
     description: flutter

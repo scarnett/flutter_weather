@@ -22,6 +22,7 @@ dependencies:
   firebase_crashlytics: '^2.0.3'
   firebase_messaging: '^10.0.0'
   firebase_remote_config: '^0.10.0-dev.3'
+  fl_chart: '^0.36.1'
   flutter_bloc: '^7.0.0'
   flutter_form_bloc: '^0.20.1'
   flutter_switch: '^0.3.0'
@@ -61,12 +62,6 @@ dev_dependencies:
   injectable_generator: '^1.4.0'
   integration_test: '^1.0.2+3'
   mockito: '^5.0.3'
-
-dependency_overrides:
-  archive: ^3.1.2
-  args: ^2.0.0
-  convert: ^3.0.0
-  crypto: ^3.0.1
 
 flutter:
   uses-material-design: true
