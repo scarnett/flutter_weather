@@ -65,7 +65,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
               bottom: 10.0,
             ),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Stack(
                 children: [
                   ForecastLocation(

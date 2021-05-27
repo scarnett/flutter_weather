@@ -10,6 +10,7 @@ import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/fab_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -77,6 +78,8 @@ class _ForecastPageViewState extends State<ForecastView>
         ),
         extendBody: true,
         extendBodyBehindAppBar: true,
+        floatingActionButtonLocation:
+            AppFABLocation(FloatingActionButtonLocation.miniEndFloat, 6.0, 0.0),
         floatingActionButton: FadeTransition(
           opacity: _hideFabAnimationController,
           child: ScaleTransition(

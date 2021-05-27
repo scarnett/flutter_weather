@@ -17,7 +17,7 @@ class ForecastDivider extends StatelessWidget {
     BuildContext context,
   ) =>
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 0.0),
         child: Divider(
           thickness: 2.0,
           color: AppTheme.getBorderColor(

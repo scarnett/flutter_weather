@@ -21,8 +21,8 @@ class ForecastOptions extends StatelessWidget {
       Container(
         height: (ForecastOptions.height + MediaQuery.of(context).padding.top),
         padding: EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
+          left: 10.0,
+          right: 10.0,
           top: MediaQuery.of(context).padding.top,
         ),
         child: Row(
