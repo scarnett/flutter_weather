@@ -202,7 +202,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.only(bottom: 10.0),
         child: CirclePageIndicator(
           size: 4.0,
           dotColor: AppTheme.getHintColor(widget.themeMode),

@@ -63,10 +63,11 @@ class ForecastDayCharts extends StatelessWidget {
           ),
           minX: 0.0,
           maxX: (_getDays().length.toDouble() - 1.0),
-          minY: getTemperature(
-            forecast.getDayHighMin().temp!.min!.toDouble(),
-            temperatureUnit,
-          ).toDouble(),
+          minY: (getTemperature(
+                forecast.getDayHighMin().temp!.max!.toDouble(),
+                temperatureUnit,
+              ).toDouble() -
+              3.0), // Add some padding to keep it off of the x-axis border
           maxY: getTemperature(
             forecast.getDayHighMax().temp!.max!.toDouble(),
             temperatureUnit,
