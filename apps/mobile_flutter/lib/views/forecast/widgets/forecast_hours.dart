@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/utils/scroll_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hour_tile.dart';
 
 class ForecastHours extends StatefulWidget {
+  final ScrollController parentScrollController;
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
   final ThemeMode themeMode;
@@ -15,6 +17,7 @@ class ForecastHours extends StatefulWidget {
 
   ForecastHours({
     Key? key,
+    required this.parentScrollController,
     required this.forecast,
     required this.temperatureUnit,
     required this.themeMode,
@@ -27,7 +30,9 @@ class ForecastHours extends StatefulWidget {
 }
 
 class _ForecastHoursState extends State<ForecastHours> {
-  final Map<String, List<ForecastHour>> hourData = {};
+  final Map<String, List<ForecastHour>> _hourData = {};
+  late ScrollController _listViewScrollController;
+  late ScrollPhysics _listViewScrollPhysics;
 
   @override
   void initState() {
@@ -39,15 +44,52 @@ class _ForecastHoursState extends State<ForecastHours> {
   Widget build(
     BuildContext context,
   ) =>
-      ListView(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        children: _getHourTiles(),
-        padding: const EdgeInsets.all(0.0),
+      ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: 100.0,
+          maxHeight: 500.0,
+        ),
+        child: ListView(
+          primary: false,
+          shrinkWrap: true,
+          controller: _listViewScrollController,
+          physics: _listViewScrollPhysics,
+          children: _getHourTiles(),
+          padding: const EdgeInsets.all(0.0),
+        ),
       );
 
   void initialize() {
+    widget.parentScrollController.addListener(_parentScrollListener);
+
+    _listViewScrollController = ScrollController();
+    _listViewScrollController.addListener(_listViewScrollListener);
+    _listViewScrollPhysics = ScrollPhysics();
+
     _buildDataMap();
+  }
+
+  void _listViewScrollListener() => setState(() {
+        if ((isAtTop(_listViewScrollController) ||
+                isAtBottom(_listViewScrollController)) &&
+            isScrolling(widget.parentScrollController)) {
+          _listViewScrollPhysics = NeverScrollableScrollPhysics();
+        } else if (isAtBottom(widget.parentScrollController) &&
+            isAtTop(_listViewScrollController)) {
+          _listViewScrollPhysics = NeverScrollableScrollPhysics();
+        }
+      });
+
+  void _parentScrollListener() {
+    if ((isAtBottom(_listViewScrollController) &&
+        isAtBottom(widget.parentScrollController))) {
+      _listViewScrollPhysics = ScrollPhysics();
+    } else if (isScrolling(widget.parentScrollController)) {
+      _listViewScrollPhysics = ScrollPhysics();
+    } else if (isScrollingUp(widget.parentScrollController) &&
+        isAtTop(_listViewScrollController)) {
+      _listViewScrollPhysics = NeverScrollableScrollPhysics();
+    }
   }
 
   int get hourCount {
@@ -71,10 +113,10 @@ class _ForecastHoursState extends State<ForecastHours> {
       DateTime hourDate = epochToDateTime(hour.dt!).getDate();
       String? formatted = formatDateTime(date: hourDate, format: 'yyyyMMdd');
       if (formatted != null) {
-        if (hourData.containsKey(formatted)) {
-          hourData[formatted]!.add(hour);
+        if (_hourData.containsKey(formatted)) {
+          _hourData[formatted]!.add(hour);
         } else {
-          hourData[formatted] = [hour];
+          _hourData[formatted] = [hour];
         }
       }
 
@@ -89,8 +131,8 @@ class _ForecastHoursState extends State<ForecastHours> {
   List<Widget> _getHourTiles() {
     List<Widget> tiles = [];
 
-    if (hourData.length > 0) {
-      hourData.forEach((String day, List<ForecastHour> hours) {
+    if (_hourData.length > 0) {
+      _hourData.forEach((String day, List<ForecastHour> hours) {
         // Add day tile
         tiles.add(
           Container(

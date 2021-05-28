@@ -90,6 +90,7 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                 ),
               ),
               ForecastHours(
+                parentScrollController: widget.scrollController,
                 forecast: widget.forecast,
                 temperatureUnit: widget.temperatureUnit,
                 themeMode: widget.themeMode,
