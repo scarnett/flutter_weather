@@ -5,7 +5,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
-import 'package:flutter_weather/views/forecast/widgets/forecast_divider.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_day_charts.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hours.dart';
 
 class ForecastDetailDisplay extends StatefulWidget {
@@ -80,10 +80,14 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
           ),
           child: Column(
             children: [
-              ForecastDivider(
-                themeMode: widget.themeMode,
-                colorTheme: widget.colorTheme,
-                padding: const EdgeInsets.only(bottom: 10.0),
+              SizedBox(
+                height: 200.0,
+                child: ForecastDayCharts(
+                  forecast: widget.forecast,
+                  temperatureUnit: widget.temperatureUnit,
+                  themeMode: widget.themeMode,
+                  colorTheme: widget.colorTheme,
+                ),
               ),
               ForecastHours(
                 forecast: widget.forecast,

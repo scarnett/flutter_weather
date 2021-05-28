@@ -107,6 +107,64 @@ num getTemperature(
   }
 }
 
+String getTemperatureStr(
+  num temperature,
+  TemperatureUnit unit,
+) =>
+    '${temperature.round()}${getTemperatureUnitStr(unit)}';
+
+Color getTemperatureColor(
+  num temperature,
+) {
+  if (temperature > 100) {
+    return Colors.red[900]!;
+  } else if ((temperature > 90) && (temperature <= 100)) {
+    return Colors.red;
+  } else if ((temperature > 80) && (temperature <= 90)) {
+    return Colors.deepOrange;
+  } else if ((temperature > 70) && (temperature <= 80)) {
+    return Colors.orange;
+  } else if ((temperature > 60) && (temperature <= 70)) {
+    return Colors.amber;
+  } else if ((temperature > 50) && (temperature <= 60)) {
+    return Colors.yellow;
+  } else if ((temperature > 40) && (temperature <= 50)) {
+    return Colors.lightGreen;
+  } else if ((temperature > 30) && (temperature <= 40)) {
+    return Colors.green;
+  } else if ((temperature > 20) && (temperature <= 30)) {
+    return Colors.cyan;
+  } else if ((temperature > 10) && (temperature <= 20)) {
+    return Colors.blue;
+  } else if ((temperature > 0) && (temperature <= 10)) {
+    return Colors.indigo;
+  } else if ((temperature > -10) && (temperature <= 0)) {
+    return Colors.purple;
+  } else if ((temperature > -20) && (temperature <= -10)) {
+    return Colors.deepPurple;
+  } else if ((temperature > -30) && (temperature <= -20)) {
+    return Colors.deepPurple[100]!;
+  }
+
+  return Colors.blueGrey[50]!;
+}
+
+String getTemperatureUnitStr(
+  TemperatureUnit unit,
+) {
+  switch (unit) {
+    case TemperatureUnit.celsius:
+      return '°C';
+
+    case TemperatureUnit.kelvin:
+      return ' K';
+
+    case TemperatureUnit.fahrenheit:
+    default:
+      return '°F';
+  }
+}
+
 Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {

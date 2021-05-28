@@ -242,7 +242,7 @@ class _ForecastPageViewState extends State<ForecastView>
                   child: FadeTransition(
                     opacity: _hideFabAnimationController,
                     child: ScaleTransition(
-                      alignment: Alignment.centerRight,
+                      alignment: Alignment.center,
                       scale: _hideFabAnimationController,
                       child: Container(
                         child: Column(

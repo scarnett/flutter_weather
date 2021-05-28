@@ -10,6 +10,10 @@ class AppTheme {
   static Color get warningColor => Colors.yellow[700]!;
   static Color get dangerColor => Colors.red[700]!;
   static Color get infoColor => Colors.lightBlue;
+  static List<Color> get complimentaryColors => [
+        Color.fromRGBO(35, 182, 230, 1.0),
+        Color.fromRGBO(2, 211, 154, 1.0),
+      ];
 
   static Color? getFadedTextColor({
     bool colorTheme: false,
