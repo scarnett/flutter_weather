@@ -55,17 +55,17 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               strokeWidth: 1.0,
             ),
           ),
-          showingTooltipIndicators: (selectedSpot == null)
-              ? null
-              : [
-                  ShowingTooltipIndicators([
-                    LineBarSpot(
-                      lineChartData[0],
-                      lineChartData.indexOf(lineChartData[0]),
-                      lineChartData[0].spots[selectedSpot!],
-                    ),
-                  ]),
-                ],
+          // showingTooltipIndicators: (selectedSpot == null)
+          //     ? null
+          //     : [
+          //         ShowingTooltipIndicators([
+          //           LineBarSpot(
+          //             lineBarsData[0],
+          //             lineBarsData.indexOf(lineBarsData[0]),
+          //             lineBarsData[0].spots[selectedSpot!],
+          //           ),
+          //         ]),
+          //       ],
           titlesData: FlTitlesData(
             show: true,
             bottomTitles: buildBottomSideTitles(
@@ -91,13 +91,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             widget.forecast.getDayHighMax().temp!.max!.toDouble(),
             widget.temperatureUnit,
           ).toDouble(),
-          lineBarsData: [
-            getLineData(
-              spots: _getSpots(),
-              colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
-              showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
-            ),
-          ],
+          lineBarsData: lineBarsData,
           lineTouchData: getLineTouchData(
             context: context,
             enabled: widget.enabled,
@@ -114,11 +108,11 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         ),
       );
 
-  List<LineChartBarData> get lineChartData => [
+  List<LineChartBarData> get lineBarsData => [
         getLineData(
-          spots: _getSpots(),
+          spots: _getTempMaxSpots(),
           colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
-          showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
+          // showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
         ),
       ];
 
@@ -134,7 +128,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     return widget.forecast.details!.daily!.sublist(0, (count - 1));
   }
 
-  List<FlSpot> _getSpots() {
+  List<FlSpot> _getTempMaxSpots() {
     int index = 0;
     List<FlSpot> spots = [];
 
