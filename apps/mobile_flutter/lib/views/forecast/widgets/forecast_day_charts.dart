@@ -2,13 +2,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/enums.dart';
-import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/chart_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 
-class ForecastDayCharts extends StatelessWidget {
+class ForecastDayCharts extends StatefulWidget {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
   final ThemeMode themeMode;
@@ -23,6 +22,13 @@ class ForecastDayCharts extends StatelessWidget {
     this.colorTheme: false,
     this.gradientColors,
   }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ForecastDayChartsState();
+}
+
+class _ForecastDayChartsState extends State<ForecastDayCharts> {
+  int? selectedSpot;
 
   @override
   Widget build(
@@ -41,8 +47,8 @@ class ForecastDayCharts extends StatelessWidget {
             drawVerticalLine: true,
             getDrawingVerticalLine: (double value) => FlLine(
               color: getGridBorderColor(
-                themeMode: themeMode,
-                colorTheme: colorTheme,
+                themeMode: widget.themeMode,
+                colorTheme: widget.colorTheme,
               ),
               strokeWidth: 1.0,
             ),
@@ -51,36 +57,44 @@ class ForecastDayCharts extends StatelessWidget {
             show: true,
             bottomTitles: buildBottomSideTitles(
               context: context,
-              title: (double value) => getDayTitle(forecast, value),
+              title: (double value) => getDayTitle(widget.forecast, value),
             ),
             leftTitles: buildEmptySideTitles(),
             rightTitles: buildEmptySideTitles(),
             topTitles: buildEmptySideTitles(),
           ),
           borderData: getBorderData(
-            themeMode: themeMode,
-            colorTheme: colorTheme,
+            themeMode: widget.themeMode,
+            colorTheme: widget.colorTheme,
           ),
           minX: 0.0,
           maxX: (_getDays().length.toDouble() - 1.0),
           minY: (getTemperature(
-                forecast.getDayHighMin().temp!.max!.toDouble(),
-                temperatureUnit,
+                widget.forecast.getDayHighMin().temp!.max!.toDouble(),
+                widget.temperatureUnit,
               ).toDouble() -
               3.0), // Add some padding to keep it off of the x-axis border
           maxY: getTemperature(
-            forecast.getDayHighMax().temp!.max!.toDouble(),
-            temperatureUnit,
+            widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+            widget.temperatureUnit,
           ).toDouble(),
           lineBarsData: [
             getLineData(
               spots: _getSpots(),
-              colors: gradientColors ?? AppTheme.complimentaryColors,
+              colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
+              showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
             ),
           ],
           lineTouchData: getLineTouchData(
             context: context,
-            temperatureUnit: temperatureUnit,
+            temperatureUnit: widget.temperatureUnit,
+            callback: (int index) => setState(() {
+              if (selectedSpot == index) {
+                selectedSpot = null;
+              } else {
+                selectedSpot = index;
+              }
+            }),
           ),
         ),
       );
@@ -88,13 +102,13 @@ class ForecastDayCharts extends StatelessWidget {
   List<ForecastDaily> _getDays({
     int count: 8, // TODO! premium
   }) {
-    if (forecast.details!.daily == null) {
+    if (widget.forecast.details!.daily == null) {
       return [];
-    } else if (forecast.details!.daily!.length < count) {
-      return forecast.details!.daily!;
+    } else if (widget.forecast.details!.daily!.length < count) {
+      return widget.forecast.details!.daily!;
     }
 
-    return forecast.details!.daily!.sublist(0, (count - 1));
+    return widget.forecast.details!.daily!.sublist(0, (count - 1));
   }
 
   List<FlSpot> _getSpots() {
@@ -107,7 +121,7 @@ class ForecastDayCharts extends StatelessWidget {
           index.toDouble(),
           getTemperature(
             day.temp!.max!.toDouble(),
-            temperatureUnit,
+            widget.temperatureUnit,
           ).toDouble(),
         ),
       );

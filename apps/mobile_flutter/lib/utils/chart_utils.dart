@@ -24,10 +24,16 @@ String getDayTitle(
       '';
 }
 
+List<Color> getLineColors(
+  bool colorTheme,
+) =>
+    colorTheme ? [Colors.white] : AppTheme.complimentaryColors;
+
 LineChartBarData getLineData({
   List<FlSpot>? spots,
   List<Color>? colors,
   double barWidth: 3.0,
+  List<int> showingIndicators: const [],
 }) =>
     LineChartBarData(
       spots: spots,
@@ -35,7 +41,7 @@ LineChartBarData getLineData({
       colors: colors,
       barWidth: barWidth,
       isStrokeCapRound: true,
-      showingIndicators: [2],
+      showingIndicators: showingIndicators,
       dotData: FlDotData(
         show: true,
         getDotPainter: (
@@ -76,6 +82,8 @@ Color getGridBorderColor({
 
   if (themeMode == ThemeMode.dark) {
     return color.withOpacity(0.05);
+  } else if (colorTheme) {
+    return color.withOpacity(0.25);
   }
 
   return color;
@@ -112,19 +120,27 @@ FlDotCirclePainter getSpotPainter({
       radius: radius,
       color: Colors.white.withOpacity(0.9),
       strokeWidth: strokeWidth,
-      strokeColor: AppTheme.primaryColor,
+      strokeColor: AppTheme.primaryColor, // TODO! colorTheme white
     );
 
 LineTouchData getLineTouchData({
   required BuildContext context,
   required TemperatureUnit temperatureUnit,
+  required Function(int) callback,
 }) =>
     LineTouchData(
       enabled: true,
+      handleBuiltInTouches: false,
       touchTooltipData: getTooltipData(
         context: context,
         temperatureUnit: temperatureUnit,
       ),
+      touchCallback: (LineTouchResponse touchResponse) {
+        if (touchResponse.lineBarSpots != null) {
+          final int sectionIndex = touchResponse.lineBarSpots![0].spotIndex;
+          callback(sectionIndex);
+        }
+      },
       getTouchedSpotIndicator: getTouchedSpots,
     );
 
@@ -135,7 +151,7 @@ List<TouchedSpotIndicatorData?> getTouchedSpots(
     spotIndexes
         .map(
           (int index) => TouchedSpotIndicatorData(
-            FlLine(color: AppTheme.primaryColor),
+            FlLine(color: AppTheme.primaryColor), // TODO! colorTheme white
             FlDotData(
               show: true,
               getDotPainter: (
@@ -155,7 +171,7 @@ LineTouchTooltipData getTooltipData({
   required TemperatureUnit temperatureUnit,
 }) =>
     LineTouchTooltipData(
-      tooltipBgColor: AppTheme.primaryColor,
+      tooltipBgColor: AppTheme.primaryColor, // TODO! colorTheme white
       tooltipRoundedRadius: 8.0,
       fitInsideHorizontally: true,
       getTooltipItems: (
