@@ -45,15 +45,16 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
           clampLower: 0.2,
           speed: 2.0,
         );
+
+        if (_scrollDirection !=
+            widget.scrollController.position.userScrollDirection) {
+          _scrollDirection =
+              widget.scrollController.position.userScrollDirection;
+
+          BlocProvider.of<AppBloc>(context, listen: false)
+              .add(SetScrollDirection(_scrollDirection!));
+        }
       });
-
-      if (_scrollDirection !=
-          widget.scrollController.position.userScrollDirection) {
-        _scrollDirection = widget.scrollController.position.userScrollDirection;
-
-        BlocProvider.of<AppBloc>(context, listen: false)
-            .add(SetScrollDirection(_scrollDirection!));
-      }
     };
 
     widget.scrollController..addListener(_scrollListener!);
@@ -87,7 +88,8 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   temperatureUnit: widget.temperatureUnit,
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
-                  enabled: (scrollOffset == 1.0),
+                  enabled: (scrollOffset == 1.0) &&
+                      (_scrollDirection == ScrollDirection.idle),
                 ),
               ),
               ForecastHours(
