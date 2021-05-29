@@ -149,9 +149,10 @@ LineTouchData getLineTouchData({
   required TemperatureUnit temperatureUnit,
   required Function(int) callback,
   bool colorTheme: false,
+  bool enabled: true,
 }) =>
     LineTouchData(
-      enabled: true,
+      enabled: enabled,
       handleBuiltInTouches: false,
       touchTooltipData: getTooltipData(
         context: context,
@@ -159,7 +160,7 @@ LineTouchData getLineTouchData({
         colorTheme: colorTheme,
       ),
       touchCallback: (LineTouchResponse touchResponse) {
-        if (touchResponse.lineBarSpots != null) {
+        if (enabled && touchResponse.lineBarSpots != null) {
           final int sectionIndex = touchResponse.lineBarSpots![0].spotIndex;
           callback(sectionIndex);
         }
@@ -172,6 +173,7 @@ LineTouchData getLineTouchData({
         barData,
         spotIndexes,
         colorTheme: colorTheme,
+        enabled: enabled,
       ),
     );
 
@@ -179,6 +181,7 @@ List<TouchedSpotIndicatorData?> getTouchedSpots(
   LineChartBarData barData,
   List<int> spotIndexes, {
   bool colorTheme: false,
+  bool enabled: true,
 }) =>
     spotIndexes
         .map(

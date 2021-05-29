@@ -13,6 +13,7 @@ class ForecastDayCharts extends StatefulWidget {
   final ThemeMode themeMode;
   final bool colorTheme;
   final List<Color>? gradientColors;
+  final bool enabled;
 
   ForecastDayCharts({
     Key? key,
@@ -21,6 +22,7 @@ class ForecastDayCharts extends StatefulWidget {
     required this.themeMode,
     this.colorTheme: false,
     this.gradientColors,
+    this.enabled: true,
   }) : super(key: key);
 
   @override
@@ -98,6 +100,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           ],
           lineTouchData: getLineTouchData(
             context: context,
+            enabled: widget.enabled,
             temperatureUnit: widget.temperatureUnit,
             colorTheme: widget.colorTheme,
             callback: (int index) => setState(() {
