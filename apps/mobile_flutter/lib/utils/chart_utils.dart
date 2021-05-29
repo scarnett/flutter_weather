@@ -89,7 +89,7 @@ Color getTextColor({
   required bool colorTheme,
 }) {
   if (colorTheme) {
-    return AppTheme.primaryColor;
+    return AppTheme.secondaryColor;
   }
 
   return Colors.white;
@@ -143,9 +143,9 @@ FlDotCirclePainter getSpotPainter({
   double opacity: 1.0,
 }) =>
     FlDotCirclePainter(
-      radius: radius,
-      color: Colors.white.withOpacity(0.8),
-      strokeWidth: strokeWidth,
+      radius: colorTheme ? 2.0 : radius,
+      color: Colors.white,
+      strokeWidth: colorTheme ? 0.0 : strokeWidth,
       strokeColor: getPrimaryColor(colorTheme: colorTheme).withOpacity(opacity),
     );
 
