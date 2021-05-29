@@ -82,14 +82,13 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
           child: Column(
             children: [
               SizedBox(
-                height: 200.0,
+                height: 260.0,
                 child: ForecastDayCharts(
                   forecast: widget.forecast,
                   temperatureUnit: widget.temperatureUnit,
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
-                  enabled: (scrollOffset == 1.0) &&
-                      (_scrollDirection == ScrollDirection.idle),
+                  enabled: chartsEnabled,
                 ),
               ),
               ForecastHours(
@@ -103,4 +102,7 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
           ),
         ),
       );
+
+  get chartsEnabled =>
+      (scrollOffset == 1.0) && (_scrollDirection == ScrollDirection.idle);
 }

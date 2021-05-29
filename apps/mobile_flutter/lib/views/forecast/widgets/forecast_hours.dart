@@ -74,7 +74,8 @@ class _ForecastHoursState extends State<ForecastHours> {
                 isAtBottom(_listViewScrollController)) &&
             isScrolling(widget.parentScrollController)) {
           _listViewScrollPhysics = NeverScrollableScrollPhysics();
-        } else if (isAtBottom(widget.parentScrollController) &&
+        } else if ((isAtBottom(widget.parentScrollController) ||
+                isScrolling(widget.parentScrollController)) &&
             isAtTop(_listViewScrollController)) {
           _listViewScrollPhysics = NeverScrollableScrollPhysics();
         }
