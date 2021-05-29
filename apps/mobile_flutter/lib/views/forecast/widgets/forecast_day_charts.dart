@@ -55,17 +55,17 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               strokeWidth: 1.0,
             ),
           ),
-          // showingTooltipIndicators: (selectedSpot == null)
-          //     ? null
-          //     : [
-          //         ShowingTooltipIndicators([
-          //           LineBarSpot(
-          //             lineBarsData[0],
-          //             lineBarsData.indexOf(lineBarsData[0]),
-          //             lineBarsData[0].spots[selectedSpot!],
-          //           ),
-          //         ]),
-          //       ],
+          showingTooltipIndicators: (selectedSpot == null)
+              ? null
+              : [
+                  ShowingTooltipIndicators([
+                    LineBarSpot(
+                      lineBarsData[0],
+                      lineBarsData.indexOf(lineBarsData[0]),
+                      lineBarsData[0].spots[selectedSpot!],
+                    ),
+                  ]),
+                ],
           titlesData: FlTitlesData(
             show: true,
             bottomTitles: buildBottomSideTitles(
@@ -83,7 +83,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           minX: 0.0,
           maxX: (_getDays().length.toDouble() - 1.0),
           minY: (getTemperature(
-                widget.forecast.getDayHighMin().temp!.max!.toDouble(),
+                widget.forecast.getDayLowMin().temp!.min!.toDouble(),
                 widget.temperatureUnit,
               ).toDouble() -
               3.0), // Add some padding to keep it off of the x-axis border
@@ -114,6 +114,16 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
           // showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
         ),
+        getLineData(
+          opacity: 0.5,
+          spots: _getTempMinSpots(),
+          colors: widget.gradientColors ??
+              getLineColors(
+                widget.colorTheme,
+                opacity: 0.5,
+              ),
+          // showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
+        ),
       ];
 
   List<ForecastDaily> _getDays({
@@ -138,6 +148,27 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           index.toDouble(),
           getTemperature(
             day.temp!.max!.toDouble(),
+            widget.temperatureUnit,
+          ).toDouble(),
+        ),
+      );
+
+      index++;
+    }
+
+    return spots;
+  }
+
+  List<FlSpot> _getTempMinSpots() {
+    int index = 0;
+    List<FlSpot> spots = [];
+
+    for (ForecastDaily day in _getDays()) {
+      spots.add(
+        FlSpot(
+          index.toDouble(),
+          getTemperature(
+            day.temp!.min!.toDouble(),
             widget.temperatureUnit,
           ).toDouble(),
         ),

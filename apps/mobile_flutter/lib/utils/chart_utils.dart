@@ -25,14 +25,18 @@ String getDayTitle(
 }
 
 List<Color> getLineColors(
-  bool colorTheme,
-) =>
-    colorTheme ? [Colors.white] : AppTheme.complimentaryColors;
+  bool colorTheme, {
+  double opacity: 1.0,
+}) =>
+    colorTheme
+        ? [Colors.white.withOpacity(opacity)]
+        : AppTheme.getComplimentaryColors(opacity: opacity);
 
 LineChartBarData getLineData({
   List<FlSpot>? spots,
   List<Color>? colors,
   double barWidth: 3.0,
+  double opacity: 1.0,
   List<int> showingIndicators: const [],
 }) =>
     LineChartBarData(
@@ -50,7 +54,7 @@ LineChartBarData getLineData({
           LineChartBarData barData,
           int index,
         ) =>
-            getSpotPainter(),
+            getSpotPainter(opacity: opacity),
       ),
     );
 
@@ -136,12 +140,13 @@ FlDotCirclePainter getSpotPainter({
   double radius: 4.0,
   double strokeWidth: 2.0,
   bool colorTheme: false,
+  double opacity: 1.0,
 }) =>
     FlDotCirclePainter(
       radius: radius,
-      color: Colors.white.withOpacity(0.9),
+      color: Colors.white.withOpacity(0.8),
       strokeWidth: strokeWidth,
-      strokeColor: getPrimaryColor(colorTheme: colorTheme),
+      strokeColor: getPrimaryColor(colorTheme: colorTheme).withOpacity(opacity),
     );
 
 LineTouchData getLineTouchData({

@@ -60,7 +60,7 @@ extension ForecastExtension on Forecast {
       this.details!.daily!.reduce((ForecastDaily current, ForecastDaily next) =>
           (current.temp!.min! > next.temp!.min!) ? current : next);
 
-  ForecastDaily getDayLowMIn() =>
+  ForecastDaily getDayLowMin() =>
       this.details!.daily!.reduce((ForecastDaily current, ForecastDaily next) =>
           (current.temp!.min! < next.temp!.min!) ? current : next);
 
