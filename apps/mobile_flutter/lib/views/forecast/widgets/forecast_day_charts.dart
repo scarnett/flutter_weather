@@ -53,6 +53,17 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               strokeWidth: 1.0,
             ),
           ),
+          showingTooltipIndicators: (selectedSpot == null)
+              ? null
+              : [
+                  ShowingTooltipIndicators([
+                    LineBarSpot(
+                      lineChartData[0],
+                      lineChartData.indexOf(lineChartData[0]),
+                      lineChartData[0].spots[selectedSpot!],
+                    ),
+                  ]),
+                ],
           titlesData: FlTitlesData(
             show: true,
             bottomTitles: buildBottomSideTitles(
@@ -88,6 +99,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           lineTouchData: getLineTouchData(
             context: context,
             temperatureUnit: widget.temperatureUnit,
+            colorTheme: widget.colorTheme,
             callback: (int index) => setState(() {
               if (selectedSpot == index) {
                 selectedSpot = null;
@@ -98,6 +110,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           ),
         ),
       );
+
+  List<LineChartBarData> get lineChartData => [
+        getLineData(
+          spots: _getSpots(),
+          colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
+          showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
+        ),
+      ];
 
   List<ForecastDaily> _getDays({
     int count: 8, // TODO! premium

@@ -71,6 +71,26 @@ FlBorderData getBorderData({
       ),
     );
 
+Color getPrimaryColor({
+  required bool colorTheme,
+}) {
+  if (colorTheme) {
+    return Colors.white;
+  }
+
+  return AppTheme.primaryColor;
+}
+
+Color getTextColor({
+  required bool colorTheme,
+}) {
+  if (colorTheme) {
+    return AppTheme.primaryColor;
+  }
+
+  return Colors.white;
+}
+
 Color getGridBorderColor({
   required ThemeMode themeMode,
   required bool colorTheme,
@@ -115,18 +135,20 @@ SideTitles buildEmptySideTitles({
 FlDotCirclePainter getSpotPainter({
   double radius: 4.0,
   double strokeWidth: 2.0,
+  bool colorTheme: false,
 }) =>
     FlDotCirclePainter(
       radius: radius,
       color: Colors.white.withOpacity(0.9),
       strokeWidth: strokeWidth,
-      strokeColor: AppTheme.primaryColor, // TODO! colorTheme white
+      strokeColor: getPrimaryColor(colorTheme: colorTheme),
     );
 
 LineTouchData getLineTouchData({
   required BuildContext context,
   required TemperatureUnit temperatureUnit,
   required Function(int) callback,
+  bool colorTheme: false,
 }) =>
     LineTouchData(
       enabled: true,
@@ -134,6 +156,7 @@ LineTouchData getLineTouchData({
       touchTooltipData: getTooltipData(
         context: context,
         temperatureUnit: temperatureUnit,
+        colorTheme: colorTheme,
       ),
       touchCallback: (LineTouchResponse touchResponse) {
         if (touchResponse.lineBarSpots != null) {
@@ -141,17 +164,26 @@ LineTouchData getLineTouchData({
           callback(sectionIndex);
         }
       },
-      getTouchedSpotIndicator: getTouchedSpots,
+      getTouchedSpotIndicator: (
+        LineChartBarData barData,
+        List<int> spotIndexes,
+      ) =>
+          getTouchedSpots(
+        barData,
+        spotIndexes,
+        colorTheme: colorTheme,
+      ),
     );
 
 List<TouchedSpotIndicatorData?> getTouchedSpots(
   LineChartBarData barData,
-  List<int> spotIndexes,
-) =>
+  List<int> spotIndexes, {
+  bool colorTheme: false,
+}) =>
     spotIndexes
         .map(
           (int index) => TouchedSpotIndicatorData(
-            FlLine(color: AppTheme.primaryColor), // TODO! colorTheme white
+            FlLine(color: getPrimaryColor(colorTheme: colorTheme)),
             FlDotData(
               show: true,
               getDotPainter: (
@@ -169,9 +201,10 @@ List<TouchedSpotIndicatorData?> getTouchedSpots(
 LineTouchTooltipData getTooltipData({
   required BuildContext context,
   required TemperatureUnit temperatureUnit,
+  bool colorTheme: false,
 }) =>
     LineTouchTooltipData(
-      tooltipBgColor: AppTheme.primaryColor, // TODO! colorTheme white
+      tooltipBgColor: getPrimaryColor(colorTheme: colorTheme),
       tooltipRoundedRadius: 8.0,
       fitInsideHorizontally: true,
       getTooltipItems: (
@@ -185,7 +218,7 @@ LineTouchTooltipData getTooltipData({
                     temperatureUnit,
                   ),
                   Theme.of(context).textTheme.headline6!.copyWith(
-                        color: Colors.white,
+                        color: getTextColor(colorTheme: colorTheme),
                         height: 1.0,
                       ),
                 ),
