@@ -81,7 +81,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                 Padding(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: AppOptionButton(
-                    text: 'LINE',
+                    text: 'LINE', // TODO! i18n
                     themeMode: widget.themeMode,
                     colorTheme: widget.colorTheme,
                     active: (_currentPage == 0),
@@ -89,7 +89,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                   ),
                 ),
                 AppOptionButton(
-                  text: 'BAR',
+                  text: 'BAR', // TODO! i18n
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
                   active: (_currentPage == 1),
@@ -134,7 +134,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               show: true,
               drawHorizontalLine: true,
               getDrawingHorizontalLine: (double value) {
-                if (value % 5 == 0) {
+                if ((value % 5) == 0) {
                   return FlLine(
                     color: getGridBorderColor(
                       themeMode: widget.themeMode,
@@ -248,6 +248,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
 
                   return FlLine(color: Colors.transparent);
                 }),
+            groupsSpace: 15.0,
             barGroups: barGroups,
             titlesData: FlTitlesData(
               show: true,
@@ -294,11 +295,11 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
       rodData.add(
         BarChartGroupData(
           x: count,
-          barsSpace: 6.0,
+          barsSpace: 5.0,
           barRods: [
             BarChartRodData(
               y: tempMax,
-              width: 12.0,
+              width: 10.0,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
@@ -307,7 +308,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             ),
             BarChartRodData(
               y: tempMin,
-              width: 12.0,
+              width: 10.0,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
