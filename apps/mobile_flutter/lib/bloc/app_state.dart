@@ -8,6 +8,7 @@ class AppState extends Equatable {
   final ThemeMode themeMode;
   final bool colorTheme;
   final TemperatureUnit temperatureUnit;
+  final ChartType chartType;
   final int selectedForecastIndex;
   final List<Forecast> forecasts;
   final String? activeForecastId;
@@ -22,6 +23,7 @@ class AppState extends Equatable {
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
+    this.chartType: ChartType.line,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
     this.activeForecastId,
@@ -37,6 +39,7 @@ class AppState extends Equatable {
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
+    this.chartType: ChartType.line,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
     this.activeForecastId,
@@ -54,6 +57,7 @@ class AppState extends Equatable {
     ThemeMode? themeMode,
     bool? colorTheme,
     TemperatureUnit? temperatureUnit,
+    ChartType? chartType,
     int? selectedForecastIndex,
     Nullable<String>? selectedCountry,
     List<Forecast>? forecasts,
@@ -74,6 +78,7 @@ class AppState extends Equatable {
         themeMode: themeMode ?? this.themeMode,
         colorTheme: colorTheme ?? this.colorTheme,
         temperatureUnit: temperatureUnit ?? this.temperatureUnit,
+        chartType: chartType ?? this.chartType,
         selectedForecastIndex:
             selectedForecastIndex ?? this.selectedForecastIndex,
         forecasts: forecasts ?? this.forecasts,
@@ -96,6 +101,7 @@ class AppState extends Equatable {
         themeMode,
         colorTheme,
         temperatureUnit,
+        chartType,
         selectedForecastIndex,
         forecasts,
         activeForecastId,
@@ -110,7 +116,7 @@ class AppState extends Equatable {
       'pushNotification: $pushNotification, ' +
       'pushNotificationExtras: $pushNotificationExtras, ' +
       'themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit, ' +
+      'temperatureUnit: $temperatureUnit. chartType: $chartType, ' +
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus, scrollDirection: $scrollDirection}';

@@ -177,6 +177,7 @@ class _LookupPageViewState extends State<LookupPageView> {
             children: <Widget>[
               ForecastDisplay(
                 temperatureUnit: appState.temperatureUnit,
+                chartType: appState.chartType,
                 themeMode: appState.themeMode,
                 forecast: lookupForecast,
                 sliverView: false,

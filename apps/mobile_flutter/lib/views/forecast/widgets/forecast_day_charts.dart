@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/utils/chart_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 class ForecastDayCharts extends StatefulWidget {
   final Forecast forecast;
   final TemperatureUnit temperatureUnit;
+  final ChartType chartType;
   final ThemeMode themeMode;
   final bool colorTheme;
   final List<Color>? gradientColors;
@@ -23,6 +26,7 @@ class ForecastDayCharts extends StatefulWidget {
     Key? key,
     required this.forecast,
     required this.temperatureUnit,
+    required this.chartType,
     required this.themeMode,
     this.colorTheme: false,
     this.gradientColors,
@@ -40,7 +44,8 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
 
   @override
   void initState() {
-    _pageController = PageController(keepPage: true)
+    _currentPage = widget.chartType.index;
+    _pageController = PageController(initialPage: _currentPage!, keepPage: true)
       ..addListener(() {
         setState(() {
           if (isInteger(_pageController.page)) {
@@ -77,7 +82,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                     themeMode: widget.themeMode,
                     colorTheme: widget.colorTheme,
                     active: (_currentPage == 0),
-                    onTap: () => animatePage(_pageController, page: 0),
+                    onTap: () => _tapChartType(0),
                   ),
                 ),
                 AppOptionButton(
@@ -85,7 +90,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
                   active: (_currentPage == 1),
-                  onTap: () => animatePage(_pageController, page: 1),
+                  onTap: () => _tapChartType(1),
                 ),
               ],
             ),
@@ -372,5 +377,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     }
 
     return spots;
+  }
+
+  void _tapChartType(
+    int pageIndex,
+  ) {
+    BlocProvider.of<AppBloc>(context, listen: false)
+        .add(SetChartType(ChartType.values[pageIndex]));
+
+    animatePage(_pageController, page: pageIndex);
   }
 }

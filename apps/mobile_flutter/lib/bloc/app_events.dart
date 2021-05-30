@@ -96,6 +96,17 @@ class SetTemperatureUnit extends AppEvent {
   List<Object?> get props => [temperatureUnit];
 }
 
+class SetChartType extends AppEvent {
+  final ChartType? chartType;
+
+  const SetChartType(
+    this.chartType,
+  );
+
+  @override
+  List<Object?> get props => [chartType];
+}
+
 class AddForecast extends AppEvent {
   final Forecast forecast;
 

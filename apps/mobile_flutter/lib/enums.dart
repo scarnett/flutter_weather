@@ -10,6 +10,11 @@ enum TemperatureUnit {
   fahrenheit,
 }
 
+enum ChartType {
+  line,
+  bar,
+}
+
 extension TemperatureUnitExtension on TemperatureUnit {
   String get units {
     switch (this) {
@@ -53,6 +58,19 @@ TemperatureUnit getTemperatureUnit(
     case 'TemperatureUnit.fahrenheit':
     default:
       return TemperatureUnit.fahrenheit;
+  }
+}
+
+ChartType getChartType(
+  String? chartType,
+) {
+  switch (chartType) {
+    case 'ChartType.bar':
+      return ChartType.bar;
+
+    case 'ChartType.line':
+    default:
+      return ChartType.line;
   }
 }
 

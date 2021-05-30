@@ -17,6 +17,7 @@ import 'package:flutter_weather/views/forecast/widgets/forecast_sliver_header.da
 
 class ForecastDisplay extends StatefulWidget {
   final TemperatureUnit temperatureUnit;
+  final ChartType chartType;
   final ThemeMode themeMode;
   final bool colorTheme;
   final Forecast forecast;
@@ -27,6 +28,7 @@ class ForecastDisplay extends StatefulWidget {
 
   ForecastDisplay({
     required this.temperatureUnit,
+    required this.chartType,
     required this.themeMode,
     required this.forecast,
     this.colorTheme: false,
@@ -205,6 +207,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           themeMode: widget.themeMode,
           colorTheme: widget.colorTheme,
           temperatureUnit: widget.temperatureUnit,
+          chartType: widget.chartType,
         ),
       ];
     }
