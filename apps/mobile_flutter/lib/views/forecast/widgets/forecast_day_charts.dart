@@ -50,6 +50,9 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         setState(() {
           if (isInteger(_pageController.page)) {
             _currentPage = _pageController.page!.toInt();
+
+            BlocProvider.of<AppBloc>(context, listen: false)
+                .add(SetChartType(ChartType.values[_currentPage!]));
           }
         });
       });
@@ -82,7 +85,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                     themeMode: widget.themeMode,
                     colorTheme: widget.colorTheme,
                     active: (_currentPage == 0),
-                    onTap: () => _tapChartType(0),
+                    onTap: () => animatePage(_pageController, page: 0),
                   ),
                 ),
                 AppOptionButton(
@@ -90,7 +93,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
                   active: (_currentPage == 1),
-                  onTap: () => _tapChartType(1),
+                  onTap: () => animatePage(_pageController, page: 1),
                 ),
               ],
             ),
@@ -122,7 +125,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                   widget.forecast.getDayLowMin().temp!.min!.toDouble(),
                   widget.temperatureUnit,
                 ).toDouble() -
-                3.0), // Add some padding to keep it off of the x-axis border
+                5.0), // Add some padding to keep it off of the x-axis border
             maxY: getTemperature(
               widget.forecast.getDayHighMax().temp!.max!.toDouble(),
               widget.temperatureUnit,
@@ -377,14 +380,5 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     }
 
     return spots;
-  }
-
-  void _tapChartType(
-    int pageIndex,
-  ) {
-    BlocProvider.of<AppBloc>(context, listen: false)
-        .add(SetChartType(ChartType.values[pageIndex]));
-
-    animatePage(_pageController, page: pageIndex);
   }
 }
