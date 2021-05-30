@@ -204,6 +204,7 @@ BarTouchData getBarTouchData({
   bool enabled: true,
 }) =>
     BarTouchData(
+      enabled: enabled,
       touchTooltipData: getBarTooltipData(
         context: context,
         temperatureUnit: temperatureUnit,
