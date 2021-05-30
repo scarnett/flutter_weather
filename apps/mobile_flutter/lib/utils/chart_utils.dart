@@ -82,7 +82,7 @@ Color getPrimaryColor({
     return Colors.white;
   }
 
-  return AppTheme.primaryColor;
+  return AppTheme.primaryColor; // TODO! use color theme color
 }
 
 Color getTextColor({

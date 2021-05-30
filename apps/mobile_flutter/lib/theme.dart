@@ -49,7 +49,7 @@ class AppTheme {
   ) =>
       (themeMode == ThemeMode.dark)
           ? Colors.black.withOpacity(0.3)
-          : Colors.grey[100];
+          : Colors.grey[200];
 
   static Color? getRadioActiveColor(
     ThemeMode themeMode,

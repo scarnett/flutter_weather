@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/utils/chart_utils.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/utils/math_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/widgets/app_option_button.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 
 class ForecastDayCharts extends StatefulWidget {
@@ -32,11 +35,20 @@ class ForecastDayCharts extends StatefulWidget {
 
 class _ForecastDayChartsState extends State<ForecastDayCharts> {
   late PageController _pageController;
-  int? selectedSpot;
+  int? _selectedSpot;
+  int? _currentPage = 0;
 
   @override
   void initState() {
-    _pageController = PageController(keepPage: true);
+    _pageController = PageController(keepPage: true)
+      ..addListener(() {
+        setState(() {
+          if (isInteger(_pageController.page)) {
+            _currentPage = _pageController.page!.toInt();
+          }
+        });
+      });
+
     super.initState();
   }
 
@@ -50,13 +62,45 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   Widget build(
     BuildContext context,
   ) =>
-      PageView(
-        controller: _pageController,
-        physics: const AppPageViewScrollPhysics(),
-        clipBehavior: Clip.none,
+      Column(
         children: [
-          _buildLineChart(context),
-          _buildBarChart(),
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 5.0),
+                  child: AppOptionButton(
+                    text: 'LINE',
+                    themeMode: widget.themeMode,
+                    colorTheme: widget.colorTheme,
+                    active: (_currentPage == 0),
+                    onTap: () => animatePage(_pageController, page: 0),
+                  ),
+                ),
+                AppOptionButton(
+                  text: 'BAR',
+                  themeMode: widget.themeMode,
+                  colorTheme: widget.colorTheme,
+                  active: (_currentPage == 1),
+                  onTap: () => animatePage(_pageController, page: 1),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              physics: const AppPageViewScrollPhysics(),
+              clipBehavior: Clip.none,
+              children: [
+                _buildLineChart(context),
+                _buildBarChart(),
+              ],
+            ),
+          ),
         ],
       );
 
@@ -69,7 +113,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           LineChartData(
             minX: 0.0,
             maxX: (_getDays().length.toDouble() - 1.0),
-            minY: (getTemperature(
+            minY: round5(getTemperature(
                   widget.forecast.getDayLowMin().temp!.min!.toDouble(),
                   widget.temperatureUnit,
                 ).toDouble() -
@@ -103,14 +147,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                 strokeWidth: 1.0,
               ),
             ),
-            showingTooltipIndicators: (selectedSpot == null)
+            showingTooltipIndicators: (_selectedSpot == null)
                 ? null
                 : [
                     ShowingTooltipIndicators([
                       LineBarSpot(
                         lineBarsData[0],
                         lineBarsData.indexOf(lineBarsData[0]),
-                        lineBarsData[0].spots[selectedSpot!],
+                        lineBarsData[0].spots[_selectedSpot!],
                       ),
                     ]),
                   ],
@@ -138,10 +182,10 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               colorTheme: widget.colorTheme,
               enabled: widget.enabled,
               callback: (int index) => setState(() {
-                if (selectedSpot == index) {
-                  selectedSpot = null;
+                if (_selectedSpot == index) {
+                  _selectedSpot = null;
                 } else {
-                  selectedSpot = index;
+                  _selectedSpot = index;
                 }
               }),
             ),
@@ -170,20 +214,21 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         child: BarChart(
           BarChartData(
             alignment: BarChartAlignment.center,
-            minY: (getTemperature(
+            minY: round5(getTemperature(
                   widget.forecast.getDayLowMin().temp!.min!.toDouble(),
                   widget.temperatureUnit,
                 ).toDouble() -
-                3.0), // Add some padding to keep it off of the x-axis border
+                5.0), // Add some padding to keep it off of the x-axis border
             maxY: getTemperature(
               widget.forecast.getDayHighMax().temp!.max!.toDouble(),
               widget.temperatureUnit,
             ).toDouble(),
             gridData: FlGridData(
                 show: true,
+                horizontalInterval: 1.0,
                 drawHorizontalLine: true,
                 getDrawingHorizontalLine: (double value) {
-                  if (value % 5 == 0) {
+                  if ((value % 5) == 0) {
                     return FlLine(
                       color: getGridBorderColor(
                         themeMode: widget.themeMode,
