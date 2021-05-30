@@ -38,7 +38,6 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
     _pageController = PageController(keepPage: true)
       ..addListener(() {
         num? currentPage = _pageController.page;
-
         if (isInteger(currentPage)) {
           _dayForecastsNotifier.value = currentPage!.toInt();
         }

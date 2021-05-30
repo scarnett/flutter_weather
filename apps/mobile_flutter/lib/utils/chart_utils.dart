@@ -10,7 +10,7 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 String getDayTitle(
   Forecast forecast,
   double value, {
-  String format: 'MM/dd',
+  String format: 'M/d',
 }) {
   if ((value + 1.0) > forecast.details!.daily!.length) {
     return '';
@@ -107,11 +107,31 @@ Color getGridBorderColor({
   if (themeMode == ThemeMode.dark) {
     return color.withOpacity(0.05);
   } else if (colorTheme) {
-    return color.withOpacity(0.25);
+    return color.withOpacity(0.15);
   }
 
   return color;
 }
+
+SideTitles buildLeftSideTitles({
+  required BuildContext context,
+  required TemperatureUnit temperatureUnit,
+}) =>
+    SideTitles(
+      showTitles: true,
+      reservedSize: 30.0,
+      getTextStyles: (double value) => Theme.of(context)
+          .textTheme
+          .subtitle2!
+          .copyWith(fontWeight: FontWeight.bold),
+      getTitles: (double value) {
+        if ((value % 5) == 0) {
+          return '${value.round().toString()} ${temperatureUnit.unitSymbol}';
+        }
+
+        return '';
+      },
+    );
 
 SideTitles buildBottomSideTitles({
   required BuildContext context,
@@ -158,22 +178,11 @@ LineTouchData getLineTouchData({
 }) =>
     LineTouchData(
       enabled: enabled,
-      // handleBuiltInTouches: false,
-      touchTooltipData: getTooltipData(
+      touchTooltipData: getLineTooltipData(
         context: context,
         temperatureUnit: temperatureUnit,
         colorTheme: colorTheme,
       ),
-      // touchCallback: (LineTouchResponse touchResponse) {
-      //   final bool desiredTouch =
-      //       (touchResponse.touchInput is! PointerExitEvent) &&
-      //           (touchResponse.touchInput is! PointerUpEvent);
-
-      //   if (enabled && desiredTouch && (touchResponse.lineBarSpots != null)) {
-      //     final int sectionIndex = touchResponse.lineBarSpots![0].spotIndex;
-      //     callback(sectionIndex);
-      //   }
-      // },
       getTouchedSpotIndicator: (
         LineChartBarData barData,
         List<int> spotIndexes,
@@ -183,6 +192,20 @@ LineTouchData getLineTouchData({
         spotIndexes,
         colorTheme: colorTheme,
         enabled: enabled,
+      ),
+    );
+
+BarTouchData getBarTouchData({
+  required BuildContext context,
+  required TemperatureUnit temperatureUnit,
+  bool colorTheme: false,
+  bool enabled: true,
+}) =>
+    BarTouchData(
+      touchTooltipData: getBarTooltipData(
+        context: context,
+        temperatureUnit: temperatureUnit,
+        colorTheme: colorTheme,
       ),
     );
 
@@ -210,7 +233,7 @@ List<TouchedSpotIndicatorData?> getTouchedSpots(
         )
         .toList();
 
-LineTouchTooltipData getTooltipData({
+LineTouchTooltipData getLineTooltipData({
   required BuildContext context,
   required TemperatureUnit temperatureUnit,
   bool colorTheme: false,
@@ -236,4 +259,30 @@ LineTouchTooltipData getTooltipData({
                 ),
               )
               .toList(),
+    );
+
+BarTouchTooltipData getBarTooltipData({
+  required BuildContext context,
+  required TemperatureUnit temperatureUnit,
+  bool colorTheme: false,
+}) =>
+    BarTouchTooltipData(
+      tooltipBgColor: getPrimaryColor(colorTheme: colorTheme),
+      fitInsideHorizontally: true,
+      getTooltipItem: (
+        BarChartGroupData group,
+        int groupIndex,
+        BarChartRodData rod,
+        int rodIndex,
+      ) =>
+          BarTooltipItem(
+        getTemperatureStr(
+          rod.y.round(),
+          temperatureUnit,
+        ),
+        Theme.of(context).textTheme.headline6!.copyWith(
+              color: getTextColor(colorTheme: colorTheme),
+              height: 1.0,
+            ),
+      ),
     );

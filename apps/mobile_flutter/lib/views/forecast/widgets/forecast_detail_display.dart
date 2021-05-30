@@ -91,12 +91,15 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   enabled: chartsEnabled,
                 ),
               ),
-              ForecastHours(
-                parentScrollController: widget.scrollController,
-                forecast: widget.forecast,
-                temperatureUnit: widget.temperatureUnit,
-                themeMode: widget.themeMode,
-                colorTheme: widget.colorTheme,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: ForecastHours(
+                  parentScrollController: widget.scrollController,
+                  forecast: widget.forecast,
+                  temperatureUnit: widget.temperatureUnit,
+                  themeMode: widget.themeMode,
+                  colorTheme: widget.colorTheme,
+                ),
               ),
             ],
           ),

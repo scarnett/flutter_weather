@@ -199,15 +199,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   List<Widget> _buildDetailDisplay() {
     if (widget.detailsEnabled && (widget.forecast.details!.timezone != null)) {
       return [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: ForecastDetailDisplay(
-            scrollController: _scrollController,
-            forecast: widget.forecast,
-            themeMode: widget.themeMode,
-            colorTheme: widget.colorTheme,
-            temperatureUnit: widget.temperatureUnit,
-          ),
+        ForecastDetailDisplay(
+          scrollController: _scrollController,
+          forecast: widget.forecast,
+          themeMode: widget.themeMode,
+          colorTheme: widget.colorTheme,
+          temperatureUnit: widget.temperatureUnit,
         ),
       ];
     }

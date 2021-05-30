@@ -6,6 +6,7 @@ import 'package:flutter_weather/utils/chart_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 
 class ForecastDayCharts extends StatefulWidget {
   final Forecast forecast;
@@ -30,80 +31,120 @@ class ForecastDayCharts extends StatefulWidget {
 }
 
 class _ForecastDayChartsState extends State<ForecastDayCharts> {
+  late PageController _pageController;
   int? selectedSpot;
+
+  @override
+  void initState() {
+    _pageController = PageController(keepPage: true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(
     BuildContext context,
   ) =>
-      _buildLineChart(context);
+      PageView(
+        controller: _pageController,
+        physics: const AppPageViewScrollPhysics(),
+        clipBehavior: Clip.none,
+        children: [
+          _buildLineChart(context),
+          _buildBarChart(),
+        ],
+      );
 
   Widget _buildLineChart(
     BuildContext context,
   ) =>
-      LineChart(
-        LineChartData(
-          gridData: FlGridData(
-            show: true,
-            drawHorizontalLine: false,
-            drawVerticalLine: true,
-            getDrawingVerticalLine: (double value) => FlLine(
-              color: getGridBorderColor(
-                themeMode: widget.themeMode,
-                colorTheme: widget.colorTheme,
-              ),
-              strokeWidth: 1.0,
-            ),
-          ),
-          showingTooltipIndicators: (selectedSpot == null)
-              ? null
-              : [
-                  ShowingTooltipIndicators([
-                    LineBarSpot(
-                      lineBarsData[0],
-                      lineBarsData.indexOf(lineBarsData[0]),
-                      lineBarsData[0].spots[selectedSpot!],
+      Container(
+        padding: const EdgeInsets.only(left: 10.0),
+        child: LineChart(
+          LineChartData(
+            minX: 0.0,
+            maxX: (_getDays().length.toDouble() - 1.0),
+            minY: (getTemperature(
+                  widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+                  widget.temperatureUnit,
+                ).toDouble() -
+                3.0), // Add some padding to keep it off of the x-axis border
+            maxY: getTemperature(
+              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+              widget.temperatureUnit,
+            ).toDouble(),
+            gridData: FlGridData(
+              show: true,
+              drawHorizontalLine: true,
+              getDrawingHorizontalLine: (double value) {
+                if (value % 5 == 0) {
+                  return FlLine(
+                    color: getGridBorderColor(
+                      themeMode: widget.themeMode,
+                      colorTheme: widget.colorTheme,
                     ),
-                  ]),
-                ],
-          titlesData: FlTitlesData(
-            show: true,
-            bottomTitles: buildBottomSideTitles(
-              context: context,
-              title: (double value) => getDayTitle(widget.forecast, value),
+                    strokeWidth: 1.0,
+                  );
+                }
+
+                return FlLine(color: Colors.transparent);
+              },
+              drawVerticalLine: true,
+              getDrawingVerticalLine: (double value) => FlLine(
+                color: getGridBorderColor(
+                  themeMode: widget.themeMode,
+                  colorTheme: widget.colorTheme,
+                ),
+                strokeWidth: 1.0,
+              ),
             ),
-            leftTitles: buildEmptySideTitles(),
-            rightTitles: buildEmptySideTitles(),
-            topTitles: buildEmptySideTitles(),
-          ),
-          borderData: getBorderData(
-            themeMode: widget.themeMode,
-            colorTheme: widget.colorTheme,
-          ),
-          minX: 0.0,
-          maxX: (_getDays().length.toDouble() - 1.0),
-          minY: (getTemperature(
-                widget.forecast.getDayLowMin().temp!.min!.toDouble(),
-                widget.temperatureUnit,
-              ).toDouble() -
-              3.0), // Add some padding to keep it off of the x-axis border
-          maxY: getTemperature(
-            widget.forecast.getDayHighMax().temp!.max!.toDouble(),
-            widget.temperatureUnit,
-          ).toDouble(),
-          lineBarsData: lineBarsData,
-          lineTouchData: getLineTouchData(
-            context: context,
-            enabled: widget.enabled,
-            temperatureUnit: widget.temperatureUnit,
-            colorTheme: widget.colorTheme,
-            callback: (int index) => setState(() {
-              if (selectedSpot == index) {
-                selectedSpot = null;
-              } else {
-                selectedSpot = index;
-              }
-            }),
+            showingTooltipIndicators: (selectedSpot == null)
+                ? null
+                : [
+                    ShowingTooltipIndicators([
+                      LineBarSpot(
+                        lineBarsData[0],
+                        lineBarsData.indexOf(lineBarsData[0]),
+                        lineBarsData[0].spots[selectedSpot!],
+                      ),
+                    ]),
+                  ],
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: buildBottomSideTitles(
+                context: context,
+                title: (double value) => getDayTitle(widget.forecast, value),
+              ),
+              leftTitles: buildLeftSideTitles(
+                context: context,
+                temperatureUnit: widget.temperatureUnit,
+              ),
+              rightTitles: buildEmptySideTitles(),
+              topTitles: buildEmptySideTitles(),
+            ),
+            borderData: getBorderData(
+              themeMode: widget.themeMode,
+              colorTheme: widget.colorTheme,
+            ),
+            lineBarsData: lineBarsData,
+            lineTouchData: getLineTouchData(
+              context: context,
+              temperatureUnit: widget.temperatureUnit,
+              colorTheme: widget.colorTheme,
+              enabled: widget.enabled,
+              callback: (int index) => setState(() {
+                if (selectedSpot == index) {
+                  selectedSpot = null;
+                } else {
+                  selectedSpot = index;
+                }
+              }),
+            ),
           ),
         ),
       );
@@ -112,7 +153,6 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         getLineData(
           spots: _getTempMaxSpots(),
           colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
-          // showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
         ),
         getLineData(
           opacity: 0.5,
@@ -122,9 +162,118 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                 widget.colorTheme,
                 opacity: 0.5,
               ),
-          // showingIndicators: (selectedSpot == null) ? [] : [selectedSpot!],
         ),
       ];
+
+  Widget _buildBarChart() => Container(
+        padding: const EdgeInsets.only(left: 10.0),
+        child: BarChart(
+          BarChartData(
+            alignment: BarChartAlignment.center,
+            minY: (getTemperature(
+                  widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+                  widget.temperatureUnit,
+                ).toDouble() -
+                3.0), // Add some padding to keep it off of the x-axis border
+            maxY: getTemperature(
+              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+              widget.temperatureUnit,
+            ).toDouble(),
+            gridData: FlGridData(
+                show: true,
+                drawHorizontalLine: true,
+                getDrawingHorizontalLine: (double value) {
+                  if (value % 5 == 0) {
+                    return FlLine(
+                      color: getGridBorderColor(
+                        themeMode: widget.themeMode,
+                        colorTheme: widget.colorTheme,
+                      ),
+                      strokeWidth: 1.0,
+                    );
+                  }
+
+                  return FlLine(color: Colors.transparent);
+                }),
+            barGroups: barGroups,
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: buildBottomSideTitles(
+                context: context,
+                title: (double value) => getDayTitle(widget.forecast, value),
+              ),
+              leftTitles: buildLeftSideTitles(
+                context: context,
+                temperatureUnit: widget.temperatureUnit,
+              ),
+              rightTitles: buildEmptySideTitles(),
+              topTitles: buildEmptySideTitles(),
+            ),
+            borderData: getBorderData(
+              themeMode: widget.themeMode,
+              colorTheme: widget.colorTheme,
+            ),
+            barTouchData: getBarTouchData(
+              context: context,
+              temperatureUnit: widget.temperatureUnit,
+              colorTheme: widget.colorTheme,
+              enabled: widget.enabled,
+            ),
+          ),
+        ),
+      );
+
+  List<BarChartGroupData> get barGroups {
+    List<BarChartGroupData> rodData = <BarChartGroupData>[];
+    int count = 0;
+
+    for (ForecastDaily day in _getDays()) {
+      double tempMax = getTemperature(
+        day.temp!.max!.toDouble(),
+        widget.temperatureUnit,
+      ).toDouble();
+
+      double tempMin = getTemperature(
+        day.temp!.min!.toDouble(),
+        widget.temperatureUnit,
+      ).toDouble();
+
+      rodData.add(
+        BarChartGroupData(
+          x: count,
+          barsSpace: 6.0,
+          barRods: [
+            BarChartRodData(
+              y: tempMax,
+              width: 12.0,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+              ),
+              colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
+            ),
+            BarChartRodData(
+              y: tempMin,
+              width: 12.0,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+              ),
+              colors: widget.gradientColors ??
+                  getLineColors(
+                    widget.colorTheme,
+                    opacity: 0.5,
+                  ),
+            ),
+          ],
+        ),
+      );
+
+      count++;
+    }
+
+    return rodData;
+  }
 
   List<ForecastDaily> _getDays({
     int count: 8, // TODO! premium
@@ -179,39 +328,4 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
 
     return spots;
   }
-
-  // Widget _buildStackedChart() => BarChart(
-  //       BarChartData(
-  //         alignment: BarChartAlignment.center,
-  //         maxY: 20.0,
-  //         minY: -20.0,
-  //         groupsSpace: 12.0,
-  //         barTouchData: BarTouchData(
-  //           enabled: false,
-  //         ),
-  //         barGroups: [
-  //           BarChartGroupData(
-  //             x: 0,
-  //             barRods: [
-  //               BarChartRodData(
-  //                 y: 15.1,
-  //                 width: 20.0,
-  //                 borderRadius: const BorderRadius.only(
-  //                   topLeft: Radius.circular(6.0),
-  //                   topRight: Radius.circular(
-  //                     6.0,
-  //                   ),
-  //                 ),
-  //                 rodStackItems: [
-  //                   BarChartRodStackItem(0.0, 2.0, const Color(0xff2bdb90)),
-  //                   BarChartRodStackItem(2.0, 5.0, const Color(0xffffdd80)),
-  //                   BarChartRodStackItem(5.0, 7.5, const Color(0xffff4d94)),
-  //                   BarChartRodStackItem(7.5, 15.5, const Color(0xff19bfff)),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     );
 }
