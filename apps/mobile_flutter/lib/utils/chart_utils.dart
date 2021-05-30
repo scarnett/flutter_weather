@@ -131,6 +131,8 @@ SideTitles buildLeftSideTitles({
 
         return '';
       },
+      interval: 5.0,
+      margin: 15.0,
     );
 
 SideTitles buildBottomSideTitles({
