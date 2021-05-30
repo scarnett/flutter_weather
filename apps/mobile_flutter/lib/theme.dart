@@ -29,7 +29,7 @@ class AppTheme {
     bool? colorTheme: false,
   }) =>
       (themeMode == ThemeMode.dark)
-          ? Colors.white.withOpacity(0.15)
+          ? Colors.white.withOpacity(0.05)
           : colorTheme!
               ? Colors.white.withOpacity(0.35)
               : secondaryColor.withOpacity(0.1);
