@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/chart_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/math_utils.dart';
@@ -81,7 +82,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                 Padding(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: AppOptionButton(
-                    text: 'LINE', // TODO! i18n
+                    text: AppLocalizations.of(context)!.chartLine.toUpperCase(),
                     themeMode: widget.themeMode,
                     colorTheme: widget.colorTheme,
                     active: (_currentPage == 0),
@@ -89,7 +90,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                   ),
                 ),
                 AppOptionButton(
-                  text: 'BAR', // TODO! i18n
+                  text: AppLocalizations.of(context)!.chartBar.toUpperCase(),
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
                   active: (_currentPage == 1),
