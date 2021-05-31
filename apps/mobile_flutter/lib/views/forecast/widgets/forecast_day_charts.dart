@@ -132,6 +132,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             ).toDouble(),
             gridData: FlGridData(
               show: true,
+              horizontalInterval: 1.0,
               drawHorizontalLine: true,
               getDrawingHorizontalLine: (double value) {
                 if ((value % 5) == 0) {
@@ -232,22 +233,23 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               widget.temperatureUnit,
             ).toDouble(),
             gridData: FlGridData(
-                show: true,
-                horizontalInterval: 1.0,
-                drawHorizontalLine: true,
-                getDrawingHorizontalLine: (double value) {
-                  if ((value % 5) == 0) {
-                    return FlLine(
-                      color: getGridBorderColor(
-                        themeMode: widget.themeMode,
-                        colorTheme: widget.colorTheme,
-                      ),
-                      strokeWidth: 1.0,
-                    );
-                  }
+              show: true,
+              horizontalInterval: 1.0,
+              drawHorizontalLine: true,
+              getDrawingHorizontalLine: (double value) {
+                if ((value % 5) == 0) {
+                  return FlLine(
+                    color: getGridBorderColor(
+                      themeMode: widget.themeMode,
+                      colorTheme: widget.colorTheme,
+                    ),
+                    strokeWidth: 1.0,
+                  );
+                }
 
-                  return FlLine(color: Colors.transparent);
-                }),
+                return FlLine(color: Colors.transparent);
+              },
+            ),
             groupsSpace: 15.0,
             barGroups: barGroups,
             titlesData: FlTitlesData(
