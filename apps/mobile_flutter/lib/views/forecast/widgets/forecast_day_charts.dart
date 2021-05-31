@@ -6,6 +6,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/chart_utils.dart';
+import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/math_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
@@ -20,6 +21,7 @@ class ForecastDayCharts extends StatefulWidget {
   final ChartType chartType;
   final ThemeMode themeMode;
   final bool colorTheme;
+  final Color? forecastColor;
   final List<Color>? gradientColors;
   final bool enabled;
 
@@ -30,6 +32,7 @@ class ForecastDayCharts extends StatefulWidget {
     required this.chartType,
     required this.themeMode,
     this.colorTheme: false,
+    this.forecastColor,
     this.gradientColors,
     this.enabled: true,
   }) : super(key: key);
@@ -85,6 +88,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                     text: AppLocalizations.of(context)!.chartLine.toUpperCase(),
                     themeMode: widget.themeMode,
                     colorTheme: widget.colorTheme,
+                    colorThemeColor: widget.forecastColor?.darken(0.15),
                     active: (_currentPage == 0),
                     onTap: () => _tapChartType(0),
                   ),
@@ -93,6 +97,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                   text: AppLocalizations.of(context)!.chartBar.toUpperCase(),
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
+                  colorThemeColor: widget.forecastColor?.darken(0.15),
                   active: (_currentPage == 1),
                   onTap: () => _tapChartType(1),
                 ),
@@ -196,6 +201,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               context: context,
               temperatureUnit: widget.temperatureUnit,
               colorTheme: widget.colorTheme,
+              forecastColor: widget.forecastColor,
               enabled: widget.enabled,
               callback: (int index) => setState(() {
                 if (_selectedSpot == index) {
@@ -213,6 +219,8 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         getLineData(
           spots: _getTempMaxSpots(),
           colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
+          colorTheme: widget.colorTheme,
+          forecastColor: widget.forecastColor,
         ),
         getLineData(
           opacity: 0.5,
@@ -222,6 +230,8 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                 widget.colorTheme,
                 opacity: 0.5,
               ),
+          colorTheme: widget.colorTheme,
+          forecastColor: widget.forecastColor,
         ),
       ];
 

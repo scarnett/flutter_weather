@@ -8,6 +8,7 @@ class AppOptionButton extends StatelessWidget {
   final bool active;
   final ThemeMode themeMode;
   final bool colorTheme;
+  final Color? colorThemeColor;
 
   const AppOptionButton({
     Key? key,
@@ -16,6 +17,7 @@ class AppOptionButton extends StatelessWidget {
     this.onTap,
     this.active: false,
     this.colorTheme: false,
+    this.colorThemeColor,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class AppOptionButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
             color: active
-                ? AppTheme.primaryColor
+                ? colorThemeColor ?? AppTheme.primaryColor
                 : AppTheme.getSectionColor(themeMode),
           ),
           child: Row(
@@ -42,9 +44,10 @@ class AppOptionButton extends StatelessWidget {
                 ),
                 child: Text(
                   text,
-                  // TODO! use color theme color
                   style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                        color: active ? Colors.white : AppTheme.primaryColor,
+                        color: active
+                            ? Colors.white
+                            : (colorThemeColor ?? AppTheme.primaryColor),
                         fontWeight: FontWeight.w400,
                       ),
                 ),

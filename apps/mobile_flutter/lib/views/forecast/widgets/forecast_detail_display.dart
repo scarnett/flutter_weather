@@ -14,6 +14,7 @@ class ForecastDetailDisplay extends StatefulWidget {
   final bool colorTheme;
   final TemperatureUnit temperatureUnit;
   final ChartType chartType;
+  final Color? forecastColor;
 
   ForecastDetailDisplay({
     required this.scrollController,
@@ -22,6 +23,7 @@ class ForecastDetailDisplay extends StatefulWidget {
     this.colorTheme: false,
     required this.temperatureUnit,
     required this.chartType,
+    this.forecastColor,
   });
 
   @override
@@ -80,6 +82,7 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   chartType: widget.chartType,
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
+                  forecastColor: widget.forecastColor,
                   enabled: chartsEnabled,
                 ),
               ),

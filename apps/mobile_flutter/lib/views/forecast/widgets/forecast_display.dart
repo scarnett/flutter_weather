@@ -208,6 +208,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           colorTheme: widget.colorTheme,
           temperatureUnit: widget.temperatureUnit,
           chartType: widget.chartType,
+          forecastColor: widget.forecastColor,
         ),
       ];
     }

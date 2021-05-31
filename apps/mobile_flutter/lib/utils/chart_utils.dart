@@ -37,7 +37,8 @@ LineChartBarData getLineData({
   List<Color>? colors,
   double barWidth: 3.0,
   double opacity: 1.0,
-  List<int> showingIndicators: const [],
+  bool colorTheme: false,
+  Color? forecastColor,
 }) =>
     LineChartBarData(
       spots: spots,
@@ -45,7 +46,6 @@ LineChartBarData getLineData({
       colors: colors,
       barWidth: barWidth,
       isStrokeCapRound: true,
-      showingIndicators: showingIndicators,
       dotData: FlDotData(
         show: true,
         getDotPainter: (
@@ -54,7 +54,11 @@ LineChartBarData getLineData({
           LineChartBarData barData,
           int index,
         ) =>
-            getSpotPainter(opacity: opacity),
+            getSpotPainter(
+          opacity: opacity,
+          colorTheme: colorTheme,
+          colorThemeColor: forecastColor,
+        ),
       ),
     );
 
@@ -75,14 +79,35 @@ FlBorderData getBorderData({
       ),
     );
 
-Color getPrimaryColor({
+Color getSpotColor({
   required bool colorTheme,
 }) {
   if (colorTheme) {
     return Colors.white;
   }
 
-  return AppTheme.primaryColor; // TODO! use color theme color
+  return AppTheme.primaryColor;
+}
+
+Color getSpotStrokeColor({
+  required bool colorTheme,
+  Color? colorThemeColor,
+}) {
+  if (colorTheme) {
+    return colorThemeColor ?? Colors.white;
+  }
+
+  return AppTheme.primaryColor;
+}
+
+Color getTooltipColor({
+  required bool colorTheme,
+}) {
+  if (colorTheme) {
+    return Colors.white;
+  }
+
+  return AppTheme.primaryColor;
 }
 
 Color getTextColor({
@@ -162,13 +187,17 @@ FlDotCirclePainter getSpotPainter({
   double radius: 4.0,
   double strokeWidth: 2.0,
   bool colorTheme: false,
+  Color? colorThemeColor,
   double opacity: 1.0,
 }) =>
     FlDotCirclePainter(
-      radius: colorTheme ? 2.0 : radius,
+      radius: radius,
       color: Colors.white,
-      strokeWidth: colorTheme ? 0.0 : strokeWidth,
-      strokeColor: getPrimaryColor(colorTheme: colorTheme).withOpacity(opacity),
+      strokeWidth: strokeWidth,
+      strokeColor: getSpotStrokeColor(
+        colorTheme: colorTheme,
+        colorThemeColor: colorThemeColor,
+      ).withOpacity(opacity),
     );
 
 LineTouchData getLineTouchData({
@@ -176,6 +205,7 @@ LineTouchData getLineTouchData({
   required TemperatureUnit temperatureUnit,
   required Function(int) callback,
   bool colorTheme: false,
+  Color? forecastColor,
   bool enabled: true,
 }) =>
     LineTouchData(
@@ -193,6 +223,7 @@ LineTouchData getLineTouchData({
         barData,
         spotIndexes,
         colorTheme: colorTheme,
+        forecastColor: forecastColor,
         enabled: enabled,
       ),
     );
@@ -216,12 +247,13 @@ List<TouchedSpotIndicatorData?> getTouchedSpots(
   LineChartBarData barData,
   List<int> spotIndexes, {
   bool colorTheme: false,
+  Color? forecastColor,
   bool enabled: true,
 }) =>
     spotIndexes
         .map(
           (int index) => TouchedSpotIndicatorData(
-            FlLine(color: getPrimaryColor(colorTheme: colorTheme)),
+            FlLine(color: getSpotColor(colorTheme: colorTheme)),
             FlDotData(
               show: true,
               getDotPainter: (
@@ -230,7 +262,11 @@ List<TouchedSpotIndicatorData?> getTouchedSpots(
                 LineChartBarData barData,
                 int index,
               ) =>
-                  getSpotPainter(radius: 8.0),
+                  getSpotPainter(
+                radius: 8.0,
+                colorTheme: colorTheme,
+                colorThemeColor: forecastColor,
+              ),
             ),
           ),
         )
@@ -242,7 +278,7 @@ LineTouchTooltipData getLineTooltipData({
   bool colorTheme: false,
 }) =>
     LineTouchTooltipData(
-      tooltipBgColor: getPrimaryColor(colorTheme: colorTheme),
+      tooltipBgColor: getTooltipColor(colorTheme: colorTheme),
       tooltipRoundedRadius: 8.0,
       fitInsideHorizontally: true,
       getTooltipItems: (
@@ -270,7 +306,7 @@ BarTouchTooltipData getBarTooltipData({
   bool colorTheme: false,
 }) =>
     BarTouchTooltipData(
-      tooltipBgColor: getPrimaryColor(colorTheme: colorTheme),
+      tooltipBgColor: getTooltipColor(colorTheme: colorTheme),
       fitInsideHorizontally: true,
       getTooltipItem: (
         BarChartGroupData group,
