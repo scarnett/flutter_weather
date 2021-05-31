@@ -48,21 +48,46 @@ extension ForecastExtension on Forecast {
     return trimmedText;
   }
 
-  ForecastDaily getDayHighMax() =>
-      this.details!.daily!.reduce((ForecastDaily current, ForecastDaily next) =>
-          (current.temp!.max! > next.temp!.max!) ? current : next);
+  List<ForecastDaily> filterDays({
+    int? maxTemps,
+  }) =>
+      this
+          .details!
+          .daily!
+          .sublist(
+              0,
+              (maxTemps == null)
+                  ? (this.details!.daily!.length - 1)
+                  : (maxTemps - 1))
+          .toList();
 
-  ForecastDaily getDayHighMin() =>
-      this.details!.daily!.reduce((ForecastDaily current, ForecastDaily next) =>
-          (current.temp!.max! < next.temp!.max!) ? current : next);
+  ForecastDaily getDayHighMax({
+    int maxTemps: 8,
+  }) =>
+      filterDays(maxTemps: maxTemps).reduce(
+          (ForecastDaily current, ForecastDaily next) =>
+              (current.temp!.max! > next.temp!.max!) ? current : next);
 
-  ForecastDaily getDayLowMax() =>
-      this.details!.daily!.reduce((ForecastDaily current, ForecastDaily next) =>
-          (current.temp!.min! > next.temp!.min!) ? current : next);
+  ForecastDaily getDayHighMin({
+    int maxTemps: 7,
+  }) =>
+      filterDays(maxTemps: maxTemps).reduce(
+          (ForecastDaily current, ForecastDaily next) =>
+              (current.temp!.max! < next.temp!.max!) ? current : next);
 
-  ForecastDaily getDayLowMin() =>
-      this.details!.daily!.reduce((ForecastDaily current, ForecastDaily next) =>
-          (current.temp!.min! < next.temp!.min!) ? current : next);
+  ForecastDaily getDayLowMax({
+    int maxTemps: 7,
+  }) =>
+      filterDays(maxTemps: maxTemps).reduce(
+          (ForecastDaily current, ForecastDaily next) =>
+              (current.temp!.min! > next.temp!.min!) ? current : next);
+
+  ForecastDaily getDayLowMin({
+    int maxTemps: 7,
+  }) =>
+      filterDays(maxTemps: maxTemps).reduce(
+          (ForecastDaily current, ForecastDaily next) =>
+              (current.temp!.min! < next.temp!.min!) ? current : next);
 
   List<Color> getDayHighTemperatureColors() => this
       .details!
