@@ -49,7 +49,7 @@ extension ForecastExtension on Forecast {
   }
 
   List<ForecastDaily> filterDays({
-    int? maxTemps,
+    int? maxTemps: 8,
   }) =>
       this
           .details!
@@ -62,28 +62,28 @@ extension ForecastExtension on Forecast {
           .toList();
 
   ForecastDaily getDayHighMax({
-    int maxTemps: 8,
+    int? maxTemps,
   }) =>
       filterDays(maxTemps: maxTemps).reduce(
           (ForecastDaily current, ForecastDaily next) =>
               (current.temp!.max! > next.temp!.max!) ? current : next);
 
   ForecastDaily getDayHighMin({
-    int maxTemps: 7,
+    int? maxTemps,
   }) =>
       filterDays(maxTemps: maxTemps).reduce(
           (ForecastDaily current, ForecastDaily next) =>
               (current.temp!.max! < next.temp!.max!) ? current : next);
 
   ForecastDaily getDayLowMax({
-    int maxTemps: 7,
+    int? maxTemps,
   }) =>
       filterDays(maxTemps: maxTemps).reduce(
           (ForecastDaily current, ForecastDaily next) =>
               (current.temp!.min! > next.temp!.min!) ? current : next);
 
   ForecastDaily getDayLowMin({
-    int maxTemps: 7,
+    int? maxTemps,
   }) =>
       filterDays(maxTemps: maxTemps).reduce(
           (ForecastDaily current, ForecastDaily next) =>

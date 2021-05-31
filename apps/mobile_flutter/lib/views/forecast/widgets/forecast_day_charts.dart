@@ -86,7 +86,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                     themeMode: widget.themeMode,
                     colorTheme: widget.colorTheme,
                     active: (_currentPage == 0),
-                    onTap: () => animatePage(_pageController, page: 0),
+                    onTap: () => _tapChartType(0),
                   ),
                 ),
                 AppOptionButton(
@@ -94,7 +94,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
                   active: (_currentPage == 1),
-                  onTap: () => animatePage(_pageController, page: 1),
+                  onTap: () => _tapChartType(1),
                 ),
               ],
             ),
@@ -102,7 +102,9 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           Expanded(
             child: PageView(
               controller: _pageController,
-              physics: const AppPageViewScrollPhysics(),
+              physics: widget.enabled
+                  ? const AppPageViewScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
               clipBehavior: Clip.none,
               children: [
                 _buildLineChart(context),
@@ -392,5 +394,13 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     }
 
     return spots;
+  }
+
+  void _tapChartType(
+    int page,
+  ) {
+    if (widget.enabled) {
+      animatePage(_pageController, page: page);
+    }
   }
 }

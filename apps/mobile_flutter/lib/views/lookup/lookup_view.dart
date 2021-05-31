@@ -171,7 +171,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     Forecast? lookupForecast = context.read<LookupBloc>().state.lookupForecast;
     if (lookupForecast != null) {
       return SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: AppUiSafeArea(
           child: Column(
             children: <Widget>[

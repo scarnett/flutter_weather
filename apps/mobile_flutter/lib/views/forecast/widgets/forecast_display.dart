@@ -80,7 +80,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     ForecastDay currentDay,
   ) =>
       SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: Column(
           children: <Widget>[
             ForecastLocation(forecast: widget.forecast),
@@ -124,7 +124,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           children: [
             CustomScrollView(
               controller: _scrollController,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               slivers: <Widget>[
                 SliverPersistentHeader(
                   pinned: true,

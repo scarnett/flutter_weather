@@ -145,7 +145,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           child: AppUiSafeArea(
             child: Column(children: children),
           ),

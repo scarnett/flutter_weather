@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -55,67 +56,53 @@ class ForecastMetaRow extends StatelessWidget {
                       ),
                     ],
                   ),
-                  StreamBuilder<CompassEvent>(
-                    stream: FlutterCompass.events,
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<CompassEvent> snapshot,
-                    ) {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child:
-                                Icon(Icons.close, color: AppTheme.dangerColor),
-                          ),
-                        );
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        if (currentDay.deg != null) {
-                          return SizedBox(
-                            height: 20.0,
-                            width: 30.0,
-                            child: ForecastWindDirection(
-                              degree: getWindDirection(
-                                windDirection: currentDay.deg ?? 0,
-                              ),
-                              size: 20.0,
-                            ),
-                          );
-                        }
-
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: SizedBox(
-                              height: 10.0,
-                              width: 10.0,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.0,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  (themeMode == ThemeMode.dark) || colorTheme
-                                      ? Colors.white
-                                      : AppTheme.primaryColor,
+                  AppConfig.isRelease()
+                      ? StreamBuilder<CompassEvent>(
+                          stream: FlutterCompass.events,
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<CompassEvent> snapshot,
+                          ) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Icon(Icons.close,
+                                      color: AppTheme.dangerColor),
                                 ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
+                              );
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              if (currentDay.deg != null) {
+                                return _buildWindDirection();
+                              }
 
-                      return SizedBox(
-                        height: 20.0,
-                        width: 30.0,
-                        child: ForecastWindDirection(
-                          degree: getWindDirection(
-                            windDirection: currentDay.deg ?? 0,
-                            heading: snapshot.data!.heading ?? 0,
-                          ),
-                          size: 20.0,
-                        ),
-                      );
-                    },
-                  ),
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: SizedBox(
+                                    height: 10.0,
+                                    width: 10.0,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.0,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        (themeMode == ThemeMode.dark) ||
+                                                colorTheme
+                                            ? Colors.white
+                                            : AppTheme.primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+
+                            return _buildWindDirection(
+                              heading: snapshot.data!.heading,
+                            );
+                          },
+                        )
+                      : _buildWindDirection(),
                 ],
               ),
             ),
@@ -191,6 +178,21 @@ class ForecastMetaRow extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      );
+
+  Widget _buildWindDirection({
+    double? heading,
+  }) =>
+      SizedBox(
+        height: 20.0,
+        width: 30.0,
+        child: ForecastWindDirection(
+          degree: getWindDirection(
+            windDirection: currentDay.deg ?? 0.0,
+            heading: heading ?? 0.0,
+          ),
+          size: 20.0,
         ),
       );
 }

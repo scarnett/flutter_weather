@@ -113,6 +113,7 @@ class AppLocalizations {
   String get locationPermissionDenied =>
       addMessage('Location permission denied');
 
+  String get chartType => addMessage('Chart Type');
   String get chartLine => addMessage('Line');
   String get chartBar => addMessage('Bar');
 

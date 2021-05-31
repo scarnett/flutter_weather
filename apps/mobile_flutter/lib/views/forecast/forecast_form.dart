@@ -200,7 +200,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
       );
 
   Widget _buildForm() => SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: AppUiSafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
