@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
@@ -33,6 +35,7 @@ class ForecastDetailDisplay extends StatefulWidget {
 class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
   double _scrollOffset = 0.2;
   VoidCallback? _scrollListener;
+  ScrollDirection? _scrollDirection;
 
   @override
   void initState() {
@@ -47,6 +50,15 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
           clampLower: 0.2,
           speed: 2.0,
         );
+
+        if (_scrollDirection !=
+            widget.scrollController.position.userScrollDirection) {
+          _scrollDirection =
+              widget.scrollController.position.userScrollDirection;
+
+          BlocProvider.of<AppBloc>(context, listen: false)
+              .add(SetScrollDirection(_scrollDirection!));
+        }
       });
     };
 
@@ -110,5 +122,6 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
         ),
       );
 
-  get chartsEnabled => (_scrollOffset == 1.0);
+  get chartsEnabled =>
+      (_scrollOffset == 1.0); // (_scrollDirection == ScrollDirection.idle);
 }
