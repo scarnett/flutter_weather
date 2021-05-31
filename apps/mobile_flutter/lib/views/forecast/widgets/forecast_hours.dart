@@ -41,6 +41,12 @@ class _ForecastHoursState extends State<ForecastHours> {
   }
 
   @override
+  void dispose() {
+    _listViewScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(
     BuildContext context,
   ) =>
@@ -81,17 +87,17 @@ class _ForecastHoursState extends State<ForecastHours> {
         }
       });
 
-  void _parentScrollListener() {
-    if ((isAtBottom(_listViewScrollController) &&
-        isAtBottom(widget.parentScrollController))) {
-      _listViewScrollPhysics = ScrollPhysics();
-    } else if (isScrolling(widget.parentScrollController)) {
-      _listViewScrollPhysics = ScrollPhysics();
-    } else if (isScrollingUp(widget.parentScrollController) &&
-        isAtTop(_listViewScrollController)) {
-      _listViewScrollPhysics = NeverScrollableScrollPhysics();
-    }
-  }
+  void _parentScrollListener() => setState(() {
+        if ((isAtBottom(_listViewScrollController) &&
+            isAtBottom(widget.parentScrollController))) {
+          _listViewScrollPhysics = ScrollPhysics();
+        } else if (isScrolling(widget.parentScrollController)) {
+          _listViewScrollPhysics = ScrollPhysics();
+        } else if (isScrollingUp(widget.parentScrollController) &&
+            isAtTop(_listViewScrollController)) {
+          _listViewScrollPhysics = NeverScrollableScrollPhysics();
+        }
+      });
 
   int get hourCount {
     if (widget.forecast.details!.hourly != null) {

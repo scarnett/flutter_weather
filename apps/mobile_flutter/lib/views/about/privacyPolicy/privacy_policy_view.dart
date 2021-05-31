@@ -24,11 +24,6 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
   Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(
     BuildContext context,
   ) =>
