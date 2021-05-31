@@ -122,15 +122,19 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           LineChartData(
             minX: 0.0,
             maxX: (_getDays().length.toDouble() - 1.0),
-            minY: round5(getTemperature(
-                  widget.forecast.getDayLowMin().temp!.min!.toDouble(),
-                  widget.temperatureUnit,
-                ).toDouble() -
-                5.0), // Add some padding to keep it off of the x-axis border
-            maxY: getTemperature(
-              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
-              widget.temperatureUnit,
-            ).toDouble(),
+            minY: round5(
+              number: getTemperature(
+                widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+                widget.temperatureUnit,
+              ).toDouble(),
+              offset: -5.0,
+            ),
+            maxY: round5(
+              number: getTemperature(
+                widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+                widget.temperatureUnit,
+              ).toDouble(),
+            ),
             gridData: FlGridData(
               show: true,
               horizontalInterval: 1.0,
@@ -224,15 +228,19 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         child: BarChart(
           BarChartData(
             alignment: BarChartAlignment.center,
-            minY: round5(getTemperature(
-                  widget.forecast.getDayLowMin().temp!.min!.toDouble(),
-                  widget.temperatureUnit,
-                ).toDouble() -
-                5.0), // Add some padding to keep it off of the x-axis border
-            maxY: getTemperature(
-              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
-              widget.temperatureUnit,
-            ).toDouble(),
+            minY: round5(
+              number: getTemperature(
+                widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+                widget.temperatureUnit,
+              ).toDouble(),
+              offset: -5.0,
+            ),
+            maxY: round5(
+              number: getTemperature(
+                widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+                widget.temperatureUnit,
+              ).toDouble(),
+            ),
             gridData: FlGridData(
               show: true,
               horizontalInterval: 1.0,
