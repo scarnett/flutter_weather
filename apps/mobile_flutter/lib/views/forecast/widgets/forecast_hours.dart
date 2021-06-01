@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/scroll_utils.dart';
@@ -17,6 +18,7 @@ class ForecastHours extends StatefulWidget {
   final TemperatureUnit temperatureUnit;
   final ThemeMode themeMode;
   final bool colorTheme;
+  final Color? forecastColor;
   final ForecastHourRange forecastHourRange;
 
   ForecastHours({
@@ -27,6 +29,7 @@ class ForecastHours extends StatefulWidget {
     required this.themeMode,
     required this.forecastHourRange,
     this.colorTheme: false,
+    this.forecastColor,
   }) : super(key: key);
 
   @override
@@ -165,7 +168,7 @@ class _ForecastHoursState extends State<ForecastHours> {
                 text: AppLocalizations.of(context)!.hours12.toUpperCase(),
                 themeMode: widget.themeMode,
                 colorTheme: widget.colorTheme,
-                // colorThemeColor: widget.forecastColor?.darken(0.15),
+                colorThemeColor: widget.forecastColor?.darken(0.15),
                 active: (widget.forecastHourRange == ForecastHourRange.hours12),
                 onTap: (widget.forecastHourRange == ForecastHourRange.hours12)
                     ? null
@@ -176,7 +179,7 @@ class _ForecastHoursState extends State<ForecastHours> {
               text: AppLocalizations.of(context)!.hours24.toUpperCase(),
               themeMode: widget.themeMode,
               colorTheme: widget.colorTheme,
-              // colorThemeColor: widget.forecastColor?.darken(0.15),
+              colorThemeColor: widget.forecastColor?.darken(0.15),
               active: (widget.forecastHourRange == ForecastHourRange.hours24),
               onTap: (widget.forecastHourRange == ForecastHourRange.hours24)
                   ? null

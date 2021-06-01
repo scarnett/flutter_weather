@@ -114,6 +114,7 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   temperatureUnit: widget.temperatureUnit,
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
+                  forecastColor: widget.forecastColor,
                   forecastHourRange: widget.forecastHourRange,
                 ),
               ),
