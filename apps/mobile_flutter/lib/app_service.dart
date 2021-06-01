@@ -17,7 +17,7 @@ Future<http.Response?> savePushNotification({
     return null;
   }
 
-  http.post(
+  return http.post(
     Uri.parse(AppConfig.instance.appPushNotificationsSave!),
     body: {
       'device': deviceId,
