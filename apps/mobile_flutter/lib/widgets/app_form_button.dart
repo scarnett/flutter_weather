@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppFormButton extends StatelessWidget {
-  final Function? onTap;
+  final Function()? onTap;
   final String? text;
   final Widget? icon;
   final Color? buttonColor;
@@ -62,6 +62,6 @@ class AppFormButton extends StatelessWidget {
                           )),
                 ],
               ),
-        onPressed: onTap as void Function()?,
+        onPressed: onTap,
       );
 }
