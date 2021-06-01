@@ -81,9 +81,6 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
       Opacity(
         opacity: _scrollOffset,
         child: Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom,
-          ),
           child: Column(
             children: [
               SizedBox(

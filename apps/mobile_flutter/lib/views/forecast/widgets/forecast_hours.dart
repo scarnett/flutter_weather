@@ -55,13 +55,15 @@ class _ForecastHoursState extends State<ForecastHours> {
           minHeight: 100.0,
           maxHeight: 500.0,
         ),
-        child: ListView(
-          primary: false,
-          shrinkWrap: true,
-          controller: _listViewScrollController,
-          physics: _listViewScrollPhysics,
-          children: _getHourTiles(),
-          padding: const EdgeInsets.all(0.0),
+        child: Container(
+          child: ListView(
+            primary: false,
+            shrinkWrap: true,
+            controller: _listViewScrollController,
+            physics: _listViewScrollPhysics,
+            children: _getHourTiles(),
+            padding: const EdgeInsets.all(0.0),
+          ),
         ),
       );
 
@@ -137,6 +139,7 @@ class _ForecastHoursState extends State<ForecastHours> {
 
   List<Widget> _getHourTiles() {
     List<Widget> tiles = [];
+    int dayCount = 0;
 
     if (_hourData.length > 0) {
       _hourData.forEach((String day, List<ForecastHour> hours) {
@@ -160,17 +163,32 @@ class _ForecastHoursState extends State<ForecastHours> {
           ),
         );
 
+        int hourCount = 0;
+
         // Add hour tiles
         for (ForecastHour hour in hours) {
-          tiles.add(
-            ForecastHourTile(
-              hour: hour,
-              temperatureUnit: widget.temperatureUnit,
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-            ),
+          Widget hourTile = ForecastHourTile(
+            hour: hour,
+            temperatureUnit: widget.temperatureUnit,
+            themeMode: widget.themeMode,
+            colorTheme: widget.colorTheme,
           );
+
+          if (((dayCount + 1) == _hourData.length) &&
+              ((hourCount + 1) == hours.length)) {
+            hourTile = Container(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
+              child: hourTile,
+            );
+          }
+
+          tiles.add(hourTile);
+          hourCount++;
         }
+
+        dayCount++;
       });
     }
 
