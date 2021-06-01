@@ -44,6 +44,7 @@ class ForecastDisplay extends StatefulWidget {
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
   late ScrollController _scrollController;
+  double _headerHeight = 260.0;
   double _bottomFadeHeight = 75.0;
   double _bottomFadeOpacity = 1.0;
 
@@ -204,14 +205,21 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   List<Widget> _buildDetailDisplay() {
     if (widget.detailsEnabled && (widget.forecast.details!.timezone != null)) {
       return [
-        ForecastDetailDisplay(
-          scrollController: _scrollController,
-          forecast: widget.forecast,
-          themeMode: widget.themeMode,
-          colorTheme: widget.colorTheme,
-          temperatureUnit: widget.temperatureUnit,
-          chartType: widget.chartType,
-          forecastColor: widget.forecastColor,
+        GestureDetector(
+          onDoubleTap: () => _scrollController.animateTo(
+            _headerHeight,
+            duration: Duration(milliseconds: 150),
+            curve: Curves.linear,
+          ),
+          child: ForecastDetailDisplay(
+            scrollController: _scrollController,
+            forecast: widget.forecast,
+            themeMode: widget.themeMode,
+            colorTheme: widget.colorTheme,
+            temperatureUnit: widget.temperatureUnit,
+            chartType: widget.chartType,
+            forecastColor: widget.forecastColor,
+          ),
         ),
       ];
     }
@@ -228,11 +236,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   void _snapHeader({
-    double maxHeight: 260.0,
+    double? maxHeight: 260.0,
     double minHeight: 0.0,
     double minDistance: 0.5,
   }) {
-    final double scrollDistance = (maxHeight - minHeight);
+    final double scrollDistance = ((maxHeight ?? _headerHeight) - minHeight);
     if ((_scrollController.offset > 0.0) &&
         (_scrollController.offset < scrollDistance)) {
       final double snapOffset =
