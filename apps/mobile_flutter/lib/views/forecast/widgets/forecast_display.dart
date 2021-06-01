@@ -44,7 +44,7 @@ class ForecastDisplay extends StatefulWidget {
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
   late ScrollController _scrollController;
-  double _bottomFadeHeight = 50.0;
+  double _bottomFadeHeight = 75.0;
   double _bottomFadeOpacity = 1.0;
 
   @override
@@ -160,7 +160,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [
-                      _fadeColor.withOpacity(_bottomFadeOpacity),
+                      _fadeColor.withOpacity(
+                          (_bottomFadeOpacity < _fadeColor.opacity)
+                              ? _bottomFadeOpacity
+                              : _fadeColor.opacity),
                       _fadeColor.withOpacity(0.0),
                     ],
                     stops: [0.0, 1.0],
@@ -218,10 +221,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
   Color get _fadeColor {
     if (widget.colorTheme && (widget.forecastDarkenedColor != null)) {
-      return widget.forecastDarkenedColor!;
+      return widget.forecastDarkenedColor!.withOpacity(0.925);
     }
 
-    return Theme.of(context).scaffoldBackgroundColor;
+    return Theme.of(context).appBarTheme.color!;
   }
 
   void _snapHeader({
