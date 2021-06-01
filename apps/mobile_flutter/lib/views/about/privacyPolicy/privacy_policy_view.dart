@@ -24,11 +24,6 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
   Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(
     BuildContext context,
   ) =>
@@ -37,7 +32,7 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.privacyPolicy),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),

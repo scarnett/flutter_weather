@@ -78,7 +78,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
   }
 
   Widget _buildBody() => SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: StickyHeader(
           header: Column(
             children: [
@@ -125,7 +125,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
   Widget _buildListOfCountries() => Container(
         child: ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (
             BuildContext context,
             int index,

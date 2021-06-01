@@ -4,13 +4,13 @@ import 'package:flutter_weather/enums.dart';
 class AppConfig extends InheritedWidget {
   final Flavor flavor;
   final String? appVersion;
+  final String? appBuild;
   final String? appPushNotificationsSave;
   final String? appPushNotificationsRemove;
   final String? openWeatherMapApiKey;
   final String? openWeatherMapApiUri;
-  final String? openWeatherMapApiCurrentForecastPath;
   final String? openWeatherMapApiDailyForecastPath;
-  final String? openWeatherMapApiHourlyForecastPath;
+  final String? openWeatherMapApiOneCallPath;
   final int? refreshTimeout;
   final String? defaultCountryCode;
   final String? supportedLocales;
@@ -23,13 +23,13 @@ class AppConfig extends InheritedWidget {
   factory AppConfig({
     required flavor,
     appVersion,
+    appBuild,
     appPushNotificationsSave,
     appPushNotificationsRemove,
     openWeatherMapApiKey,
     openWeatherMapApiUri,
-    openWeatherMapApiCurrentForecastPath,
     openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiHourlyForecastPath,
+    openWeatherMapApiOneCallPath,
     refreshTimeout,
     defaultCountryCode,
     supportedLocales,
@@ -41,13 +41,13 @@ class AppConfig extends InheritedWidget {
     _instance = AppConfig._internal(
       flavor,
       appVersion,
+      appBuild,
       appPushNotificationsSave,
       appPushNotificationsRemove,
       openWeatherMapApiKey,
       openWeatherMapApiUri,
-      openWeatherMapApiCurrentForecastPath,
       openWeatherMapApiDailyForecastPath,
-      openWeatherMapApiHourlyForecastPath,
+      openWeatherMapApiOneCallPath,
       refreshTimeout,
       defaultCountryCode,
       supportedLocales,
@@ -63,13 +63,13 @@ class AppConfig extends InheritedWidget {
   AppConfig._internal(
     this.flavor,
     this.appVersion,
+    this.appBuild,
     this.appPushNotificationsSave,
     this.appPushNotificationsRemove,
     this.openWeatherMapApiKey,
     this.openWeatherMapApiUri,
-    this.openWeatherMapApiCurrentForecastPath,
     this.openWeatherMapApiDailyForecastPath,
-    this.openWeatherMapApiHourlyForecastPath,
+    this.openWeatherMapApiOneCallPath,
     this.refreshTimeout,
     this.defaultCountryCode,
     this.supportedLocales,

@@ -96,6 +96,28 @@ class SetTemperatureUnit extends AppEvent {
   List<Object?> get props => [temperatureUnit];
 }
 
+class SetChartType extends AppEvent {
+  final ChartType? chartType;
+
+  const SetChartType(
+    this.chartType,
+  );
+
+  @override
+  List<Object?> get props => [chartType];
+}
+
+class SetForecastHourRange extends AppEvent {
+  final ForecastHourRange? forecastHourRange;
+
+  const SetForecastHourRange(
+    this.forecastHourRange,
+  );
+
+  @override
+  List<Object?> get props => [forecastHourRange];
+}
+
 class AddForecast extends AppEvent {
   final Forecast forecast;
 
@@ -196,4 +218,15 @@ class ClearCRUDStatus extends AppEvent {
 
   @override
   List<Object> get props => [];
+}
+
+class SetScrollDirection extends AppEvent {
+  final ScrollDirection scrollDirection;
+
+  const SetScrollDirection(
+    this.scrollDirection,
+  );
+
+  @override
+  List<Object?> get props => [scrollDirection];
 }

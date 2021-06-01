@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/localization.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:package_info/package_info.dart';
 import 'package:store_redirect/store_redirect.dart';
 
-class AppUpdateDialog extends StatefulWidget {
+class AppUpdateDialog extends StatelessWidget {
   final PackageInfo packageInfo;
   final String appVersion;
 
@@ -17,11 +18,6 @@ class AppUpdateDialog extends StatefulWidget {
   });
 
   @override
-  _AppUpdateDialogState createState() => _AppUpdateDialogState();
-}
-
-class _AppUpdateDialogState extends State<AppUpdateDialog> {
-  @override
   Widget build(
     BuildContext context,
   ) {
@@ -30,8 +26,8 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
         title: Text(AppLocalizations.of(context)!.updateAvailable),
         content: Text(AppLocalizations.of(context)!.getUpdateAvailableText(
           AppLocalizations.appTitle,
-          widget.packageInfo.version,
-          widget.appVersion,
+          packageInfo.version,
+          appVersion,
         )),
         actions: <Widget>[
           CupertinoDialogAction(
@@ -40,7 +36,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
           ),
           CupertinoDialogAction(
             child: Text(AppLocalizations.of(context)!.later),
-            onPressed: _tapLater,
+            onPressed: () => _tapLater(context),
           ),
         ],
       );
@@ -50,8 +46,8 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
       title: Text(AppLocalizations.of(context)!.updateAvailable),
       content: Text(AppLocalizations.of(context)!.getUpdateAvailableText(
         AppLocalizations.appTitle,
-        widget.packageInfo.version,
-        widget.appVersion,
+        packageInfo.version,
+        appVersion,
       )),
       actions: <Widget>[
         AppFormButton(
@@ -69,10 +65,13 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
   }
 
   void _tapOpenPlayStore() =>
-      StoreRedirect.redirect(androidAppId: widget.packageInfo.packageName);
+      StoreRedirect.redirect(androidAppId: packageInfo.packageName);
 
   void _tapOpenAppStore() =>
-      StoreRedirect.redirect(iOSAppId: widget.packageInfo.packageName);
+      StoreRedirect.redirect(iOSAppId: packageInfo.packageName);
 
-  void _tapLater() => Navigator.pop(context);
+  void _tapLater(
+    BuildContext context,
+  ) =>
+      Navigator.pop(context);
 }

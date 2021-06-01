@@ -4,34 +4,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-class ForecastIcon extends StatefulWidget {
+class ForecastIcon extends StatelessWidget {
+  final double containerSize;
   final IconData? icon;
-  final double size;
+  final double iconSize;
   final Color? color;
   final Color shadowColor;
+  final Animation<double>? resizeAnimation;
 
   ForecastIcon({
+    this.containerSize: 90.0,
     this.icon,
-    this.size: 80.0,
+    this.iconSize: 60.0,
     this.color,
     this.shadowColor: Colors.black38,
+    this.resizeAnimation,
   });
 
-  @override
-  _ForecastIconState createState() => _ForecastIconState();
-}
-
-class _ForecastIconState extends State<ForecastIcon> {
   @override
   Widget build(
     BuildContext context,
   ) {
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
         !context.watch<AppBloc>().state.colorTheme) {
-      return BoxedIcon(
-        widget.icon!,
-        color: widget.color,
-        size: widget.size,
+      return SizedBox(
+        height: getContainerSize(),
+        child: BoxedIcon(
+          icon!,
+          color: color,
+          size: getIconSize(),
+        ),
       );
     }
 
@@ -41,17 +43,44 @@ class _ForecastIconState extends State<ForecastIcon> {
           top: 1.0,
           left: 1.0,
           child: BoxedIcon(
-            widget.icon!,
-            color: widget.shadowColor,
-            size: widget.size,
+            icon!,
+            color: shadowColor,
+            size: getIconSize(),
           ),
         ),
-        BoxedIcon(
-          widget.icon!,
-          color: widget.color,
-          size: widget.size,
+        Positioned(
+          child: SizedBox(
+            height: getContainerSize(),
+            child: BoxedIcon(
+              icon!,
+              color: color,
+              size: getIconSize(),
+            ),
+          ),
         ),
       ],
     );
+  }
+
+  double getIconSize() {
+    if (resizeAnimation == null) {
+      return iconSize;
+    }
+
+    return Tween<double>(
+      begin: (iconSize - 36.0),
+      end: iconSize,
+    ).evaluate(resizeAnimation!);
+  }
+
+  double getContainerSize() {
+    if (resizeAnimation == null) {
+      return containerSize;
+    }
+
+    return Tween<double>(
+      begin: (containerSize - 50.0),
+      end: containerSize,
+    ).evaluate(resizeAnimation!);
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info/package_info.dart';
+
 import '../../../test_utils.dart';
 
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
@@ -29,7 +30,6 @@ void main() {
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
-          bloc: _bloc,
           packageInfo: PackageInfo(
             version: '1.0.0',
             appName: 'flutter_weather',
@@ -52,7 +52,6 @@ void main() {
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
-          bloc: _bloc,
           packageInfo: PackageInfo(
             version: '1.0.0',
             appName: 'flutter_weather',
@@ -75,7 +74,6 @@ void main() {
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
-          bloc: _bloc,
           packageInfo: PackageInfo(
             version: '1.0.1',
             appName: 'flutter_weather',
@@ -97,7 +95,6 @@ void main() {
     await tester.pumpWidget(
       buildFrame(
         buildContent: (BuildContext context) => SettingsVersionStatusText(
-          bloc: _bloc,
           packageInfo: PackageInfo(
             version: 'unknown',
             appName: 'unknown',

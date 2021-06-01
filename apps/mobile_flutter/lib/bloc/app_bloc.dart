@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/app_service.dart';
 import 'package:flutter_weather/enums.dart';
@@ -49,6 +50,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapSetColorThemeToStates(event);
     } else if (event is SetTemperatureUnit) {
       yield* _mapSetTemperatureUnitToStates(event);
+    } else if (event is SetChartType) {
+      yield _mapSetChartTypeToStates(event);
+    } else if (event is SetForecastHourRange) {
+      yield _mapSetForecastHourRangeToStates(event);
     } else if (event is SelectedForecastIndex) {
       yield _mapSelectedForecastIndexToStates(event);
     } else if (event is AddForecast) {
@@ -67,6 +72,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapSetActiveForecastIdToState(event);
     } else if (event is ClearActiveForecastId) {
       yield _mapClearActiveForecastIdToState(event);
+    } else if (event is SetScrollDirection) {
+      yield _mapScrollDirectionToState(event);
     }
   }
 
@@ -248,12 +255,36 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     }
   }
 
-  AppState _mapSelectedForecastIndexToStates(
-    SelectedForecastIndex event,
+  AppState _mapSetChartTypeToStates(
+    SetChartType event,
   ) =>
       state.copyWith(
-        selectedForecastIndex: event.index,
+        chartType: event.chartType,
       );
+
+  AppState _mapSetForecastHourRangeToStates(
+    SetForecastHourRange event,
+  ) {
+    if (event.forecastHourRange == state.forecastHourRange) {
+      return state;
+    }
+
+    return state.copyWith(
+      forecastHourRange: event.forecastHourRange,
+    );
+  }
+
+  AppState _mapSelectedForecastIndexToStates(
+    SelectedForecastIndex event,
+  ) {
+    if (event.index == state.selectedForecastIndex) {
+      return state;
+    }
+
+    return state.copyWith(
+      selectedForecastIndex: event.index,
+    );
+  }
 
   Stream<AppState> _mapAddForecastToStates(
     AddForecast event,
@@ -342,13 +373,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     try {
       http.Response forecastResponse = await tryLookupForecast(lookupData);
       if (forecastResponse.statusCode == 200) {
-        // TODO! check for api errors
-
         List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
-        int forecastIndex = forecasts.indexWhere(
-          (Forecast forecast) =>
-              forecast.postalCode == event.forecast.postalCode,
-        );
+        int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
+            forecast.postalCode == event.forecast.postalCode);
 
         if (forecastIndex == -1) {
           showSnackbar(
@@ -360,6 +387,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         } else {
           Forecast forecast =
               Forecast.fromJson(jsonDecode(forecastResponse.body));
+
           forecasts[forecastIndex] = forecast.copyWith(
             id: event.forecast.id,
             cityName: Nullable<String?>(event.forecast.cityName),
@@ -368,6 +396,18 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             primary: Nullable<bool?>(event.forecast.primary),
             lastUpdated: getNow(),
           );
+
+          // TODO! premium
+          http.Response forecastDetailsResponse = await fetchDetailedForecast(
+            longitude: forecast.city!.coord!.lon!,
+            latitude: forecast.city!.coord!.lat!,
+          );
+
+          if (forecastDetailsResponse.statusCode == 200) {
+            forecasts[forecastIndex] = forecasts[forecastIndex].copyWith(
+                details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
+                    jsonDecode(forecastDetailsResponse.body))));
+          }
 
           yield state.copyWith(
             forecasts: forecasts,
@@ -436,6 +476,18 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         activeForecastId: Nullable<String?>(null),
       );
 
+  AppState _mapScrollDirectionToState(
+    SetScrollDirection event,
+  ) {
+    if (event.scrollDirection == state.scrollDirection) {
+      return state;
+    }
+
+    return state.copyWith(
+      scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
+    );
+  }
+
   @override
   AppState fromJson(
     Map<String, dynamic> jsonData,
@@ -449,6 +501,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         themeMode: getThemeMode(jsonData['themeMode']),
         colorTheme: jsonData['colorTheme'],
         temperatureUnit: getTemperatureUnit(jsonData['temperatureUnit']),
+        chartType: getChartType(jsonData['chartType']),
+        forecastHourRange: getForecastHourRange(jsonData['forecastHourRange']),
         forecasts: Forecast.fromJsonList(jsonData['forecasts']),
         selectedForecastIndex: jsonData['selectedForecastIndex'],
       );
@@ -466,6 +520,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         'themeMode': state.themeMode.toString(),
         'colorTheme': state.colorTheme,
         'temperatureUnit': state.temperatureUnit.toString(),
+        'chartType': state.chartType.toString(),
+        'forecastHourRange': state.forecastHourRange.toString(),
         'forecasts': Forecast.toJsonList(state.forecasts),
         'selectedForecastIndex': state.selectedForecastIndex,
       };

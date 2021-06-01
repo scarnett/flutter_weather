@@ -12,9 +12,9 @@ import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/utils/push_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_extension.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
-import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -67,7 +67,7 @@ class _SettingsPushNotificationPickerState
               ? appDarkThemeData
               : appLightThemeData,
           child: Scaffold(
-            body: _buildBody(),
+            body: _buildBody(context.watch<AppBloc>().state),
             extendBody: true,
             extendBodyBehindAppBar: true,
           ),
@@ -90,18 +90,23 @@ class _SettingsPushNotificationPickerState
     }
   }
 
-  Widget _buildBody() => ListView(
+  Widget _buildBody(
+    AppState state,
+  ) =>
+      ListView(
         children: [
           ..._buildListOfNotificationTile(PushNotification.OFF),
           ..._buildListOfNotificationTile(
             PushNotification.CURRENT_LOCATION,
             showDivider: false,
           ),
-          ..._buildListOfForecasts(),
+          ..._buildListOfForecasts(state),
         ],
       );
 
-  List<Widget> _buildListOfForecasts() {
+  List<Widget> _buildListOfForecasts(
+    AppState state,
+  ) {
     List<Forecast> forecasts = context.watch<AppBloc>().state.forecasts;
     if (forecasts.isNullOrZeroLength()) {
       return <Widget>[];
@@ -110,7 +115,8 @@ class _SettingsPushNotificationPickerState
     List<Widget> children = <Widget>[];
     children.add(
       AppSectionHeader(
-        bloc: context.read<AppBloc>(),
+        themeMode: state.themeMode,
+        colorTheme: state.colorTheme,
         text:
             PushNotification.SAVED_LOCATION.getInfo(context: context)!['text'],
       ),
@@ -147,7 +153,7 @@ class _SettingsPushNotificationPickerState
         title: _notificationTitleText(
           _id,
           (forecast != null)
-              ? getLocationText(forecast)
+              ? forecast.getLocationText()
               : notificationInfo['text'],
           notification,
         ),
@@ -233,7 +239,7 @@ class _SettingsPushNotificationPickerState
           notificationExtras = {
             'location': {
               'id': forecast.id,
-              'name': getLocationText(forecast),
+              'name': forecast.getLocationText(),
               'longitude': forecast.city?.coord?.lon,
               'latitude': forecast.city?.coord?.lat,
             },
@@ -258,14 +264,12 @@ class _SettingsPushNotificationPickerState
             );
 
             if (forecastResponse.statusCode == 200) {
-              // TODO! check for api errors
-
               Forecast forecast =
                   Forecast.fromJson(jsonDecode(forecastResponse.body));
 
               notificationExtras = {
                 'location': {
-                  'name': getLocationText(forecast),
+                  'name': forecast.getLocationText(),
                   'longitude': forecast.city?.coord?.lon,
                   'latitude': forecast.city?.coord?.lat,
                 },

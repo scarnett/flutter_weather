@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/theme.dart';
 
-class AppNoneFound extends StatefulWidget {
+class AppNoneFound extends StatelessWidget {
   final IconData icon;
   final double iconSize;
   final String? text;
@@ -13,38 +13,33 @@ class AppNoneFound extends StatefulWidget {
   });
 
   @override
-  _AppNoneFoundState createState() => _AppNoneFoundState();
-}
-
-class _AppNoneFoundState extends State<AppNoneFound> {
-  @override
   Widget build(
     BuildContext context,
   ) =>
       Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 20.0, top: 40.0),
+            padding: const EdgeInsets.only(bottom: 20.0),
             child: Container(
-              width: widget.iconSize,
-              height: widget.iconSize,
+              width: iconSize,
+              height: iconSize,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                widget.icon,
+                icon,
                 color: AppTheme.primaryColor,
-                size: widget.iconSize,
+                size: iconSize,
               ),
             ),
           ),
-          (widget.text == null)
+          (text == null)
               ? Container()
               : Text(
-                  widget.text!,
+                  text!,
                   style: Theme.of(context).textTheme.headline3!.copyWith(
                         fontSize: 30.0,
                       ),

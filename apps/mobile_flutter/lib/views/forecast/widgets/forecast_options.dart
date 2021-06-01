@@ -11,38 +11,45 @@ import 'package:flutter_weather/views/settings/settings_view.dart';
 import 'package:flutter_weather/widgets/app_color_theme.dart';
 import 'package:flutter_weather/widgets/app_day_night_switch.dart';
 
-class ForecastOptions extends StatefulWidget {
-  ForecastOptions();
+class ForecastOptions extends StatelessWidget {
+  static final double height = 50.0;
 
-  @override
-  _ForecastOptionsState createState() => _ForecastOptionsState();
-}
-
-class _ForecastOptionsState extends State<ForecastOptions> {
   @override
   Widget build(
     BuildContext context,
   ) =>
       Container(
-        padding: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
-          top: 20.0,
+        height: (ForecastOptions.height + MediaQuery.of(context).padding.top),
+        padding: EdgeInsets.only(
+          left: 10.0,
+          right: 10.0,
+          top: MediaQuery.of(context).padding.top,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            _buildEditButton(),
+            _buildEditButton(context),
             ForecastRefresh(),
             Expanded(child: Container()),
-            AppColorThemeToggle(bloc: context.watch<AppBloc>()),
-            AppDayNightSwitch(bloc: context.watch<AppBloc>()),
-            _buildSettingsButton(),
+            AppColorThemeToggle(
+              forecasts: context.watch<AppBloc>().state.forecasts,
+              themeMode: context.watch<AppBloc>().state.themeMode,
+              colorTheme: context.watch<AppBloc>().state.colorTheme,
+              callback: () => context.read<AppBloc>().add(ToggleColorTheme()),
+            ),
+            AppDayNightSwitch(
+              themeMode: context.watch<AppBloc>().state.themeMode,
+              colorTheme: context.watch<AppBloc>().state.colorTheme,
+              callback: () => context.read<AppBloc>().add(ToggleThemeMode()),
+            ),
+            _buildSettingsButton(context),
           ],
         ),
       );
 
-  Widget _buildEditButton() {
+  Widget _buildEditButton(
+    BuildContext context,
+  ) {
     AppState state = context.watch<AppBloc>().state;
     return !hasForecasts(state.forecasts)
         ? Container()
@@ -55,15 +62,18 @@ class _ForecastOptionsState extends State<ForecastOptions> {
                 width: 40.0,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(40.0),
-                  child: Icon(Icons.edit),
-                  onTap: () => _tapEdit(state),
+                  child: const Icon(Icons.edit),
+                  onTap: () => _tapEdit(context, state),
                 ),
               ),
             ),
           );
   }
 
-  Widget _buildSettingsButton() => Container(
+  Widget _buildSettingsButton(
+    BuildContext context,
+  ) =>
+      Container(
         padding: EdgeInsets.only(left: 10.0),
         child: Tooltip(
           message: AppLocalizations.of(context)!.settings,
@@ -74,8 +84,8 @@ class _ForecastOptionsState extends State<ForecastOptions> {
               width: 40.0,
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.0),
-                child: Icon(Icons.settings),
-                onTap: _tapSettings,
+                child: const Icon(Icons.settings),
+                onTap: () => _tapSettings(context),
               ),
             ),
           ),
@@ -83,6 +93,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
       );
 
   void _tapEdit(
+    BuildContext context,
     AppState state,
   ) {
     if (state.forecasts.length > state.selectedForecastIndex) {
@@ -93,7 +104,9 @@ class _ForecastOptionsState extends State<ForecastOptions> {
     }
   }
 
-  void _tapSettings() {
+  void _tapSettings(
+    BuildContext context,
+  ) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     Navigator.push(context, SettingsView.route());
   }

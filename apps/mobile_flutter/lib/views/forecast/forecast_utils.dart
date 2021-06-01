@@ -5,8 +5,21 @@ import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/views/forecast/forecast_extension.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
+
+Uri getDetailedUri(
+  Map<String, dynamic> params,
+) {
+  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
+
+  return Uri.https(
+    AppConfig.instance.openWeatherMapApiUri!,
+    AppConfig.instance.openWeatherMapApiOneCallPath!,
+    params.cast<String, String>(),
+  );
+}
 
 Uri getCurrentApiUri(
   Map<String, dynamic> params,
@@ -38,58 +51,122 @@ Uri getDailyApiUri(
   );
 }
 
+Map<String, dynamic> buildLookupParams(
+  Map<String, dynamic> lookupData,
+) {
+  Map<String, dynamic> params = Map<String, dynamic>();
+
+  if (lookupData.containsKey('postalCode') &&
+      (lookupData['postalCode'] != null) &&
+      !(lookupData['postalCode'] as String).isNullOrEmpty()) {
+    if (lookupData.containsKey('countryCode') &&
+        (lookupData['countryCode'] != null) &&
+        !(lookupData['countryCode'] as String).isNullOrEmpty()) {
+      params['zip'] =
+          '${lookupData['postalCode']},${lookupData['countryCode'].toLowerCase()}';
+    } else {
+      params['zip'] = lookupData['postalCode'];
+    }
+  } else if (lookupData.containsKey('cityName') &&
+      (lookupData['cityName'] != null) &&
+      !(lookupData['cityName'] as String).isNullOrEmpty()) {
+    String query = lookupData['cityName'];
+
+    if (lookupData.containsKey('stateCode') &&
+        (lookupData['stateCode'] != null) &&
+        !(lookupData['stateCode'] as String).isNullOrEmpty()) {
+      query += ',${lookupData['stateCode']}';
+    }
+
+    if (lookupData.containsKey('countryCode') &&
+        (lookupData['countryCode'] != null) &&
+        !(lookupData['countryCode'] as String).isNullOrEmpty()) {
+      query += ',${lookupData['countryCode']}';
+    }
+
+    params['q'] = query;
+  }
+
+  return params;
+}
+
 num getTemperature(
   num? temperature,
   TemperatureUnit unit,
 ) {
+  if (temperature == null) {
+    return 0;
+  }
+
   switch (unit) {
     case TemperatureUnit.fahrenheit:
-      return (temperature! * (9 / 5) - 459.67).round();
+      return (temperature * (9 / 5) - 459.67).round();
 
     case TemperatureUnit.celsius:
-      return (temperature! - 273.15).round();
+      return (temperature - 273.15).round();
 
     case TemperatureUnit.kelvin:
     default:
-      return temperature!.round();
+      return temperature.round();
   }
 }
 
+String getTemperatureStr(
+  num temperature,
+  TemperatureUnit unit,
+) =>
+    '${temperature.round()}${getTemperatureUnitStr(unit)}';
+
 Color getTemperatureColor(
-  num? temperature,
+  num temperature,
 ) {
-  num _temperature = getTemperature(temperature, TemperatureUnit.fahrenheit);
-  if (_temperature > 100) {
+  if (temperature > 100) {
     return Colors.red[900]!;
-  } else if ((_temperature > 90) && (_temperature <= 100)) {
+  } else if ((temperature > 90) && (temperature <= 100)) {
     return Colors.red;
-  } else if ((_temperature > 80) && (_temperature <= 90)) {
+  } else if ((temperature > 80) && (temperature <= 90)) {
     return Colors.deepOrange;
-  } else if ((_temperature > 70) && (_temperature <= 80)) {
+  } else if ((temperature > 70) && (temperature <= 80)) {
     return Colors.orange;
-  } else if ((_temperature > 60) && (_temperature <= 70)) {
+  } else if ((temperature > 60) && (temperature <= 70)) {
     return Colors.amber;
-  } else if ((_temperature > 50) && (_temperature <= 60)) {
+  } else if ((temperature > 50) && (temperature <= 60)) {
     return Colors.yellow;
-  } else if ((_temperature > 40) && (_temperature <= 50)) {
+  } else if ((temperature > 40) && (temperature <= 50)) {
     return Colors.lightGreen;
-  } else if ((_temperature > 30) && (_temperature <= 40)) {
+  } else if ((temperature > 30) && (temperature <= 40)) {
     return Colors.green;
-  } else if ((_temperature > 20) && (_temperature <= 30)) {
+  } else if ((temperature > 20) && (temperature <= 30)) {
     return Colors.cyan;
-  } else if ((_temperature > 10) && (_temperature <= 20)) {
+  } else if ((temperature > 10) && (temperature <= 20)) {
     return Colors.blue;
-  } else if ((_temperature > 0) && (_temperature <= 10)) {
+  } else if ((temperature > 0) && (temperature <= 10)) {
     return Colors.indigo;
-  } else if ((_temperature > -10) && (_temperature <= 0)) {
+  } else if ((temperature > -10) && (temperature <= 0)) {
     return Colors.purple;
-  } else if ((_temperature > -20) && (_temperature <= -10)) {
+  } else if ((temperature > -20) && (temperature <= -10)) {
     return Colors.deepPurple;
-  } else if ((_temperature > -30) && (_temperature <= -20)) {
+  } else if ((temperature > -30) && (temperature <= -20)) {
     return Colors.deepPurple[100]!;
   }
 
   return Colors.blueGrey[50]!;
+}
+
+String getTemperatureUnitStr(
+  TemperatureUnit unit,
+) {
+  switch (unit) {
+    case TemperatureUnit.celsius:
+      return '°C';
+
+    case TemperatureUnit.kelvin:
+      return ' K';
+
+    case TemperatureUnit.fahrenheit:
+    default:
+      return '°F';
+  }
 }
 
 Animatable<Color?>? buildForecastColorSequence(
@@ -100,12 +177,12 @@ Animatable<Color?>? buildForecastColorSequence(
   if (forecastList.isNotEmpty) {
     forecastList.asMap().forEach((int index, Forecast forecast) {
       Color? nextColor;
-      Color? thisColor = getTemperatureColor(forecast.list!.first.temp!.day);
+      Color? thisColor = forecast.getTemperatureColor();
 
       int nextForecastIndex = (index + 1);
       if (nextForecastIndex < forecastList.length) {
         Forecast nextForecast = forecastList[nextForecastIndex];
-        nextColor = getTemperatureColor(nextForecast.list!.first.temp!.day);
+        nextColor = nextForecast.getTemperatureColor();
       } else {
         nextColor = thisColor;
       }
@@ -127,63 +204,24 @@ Animatable<Color?>? buildForecastColorSequence(
   return TweenSequence<Color?>(colors);
 }
 
-String getLocationText(
-  Forecast forecast, {
-  bool includePostalCode: true,
-}) {
-  String text = '';
-
-  if (!forecast.cityName.isNullOrEmpty()) {
-    text += '${forecast.cityName}, ';
-  } else if ((forecast.city != null) && !forecast.city!.name.isNullOrEmpty()) {
-    text += '${forecast.city!.name}, ';
+String getHumidity(
+  num? humidity,
+) {
+  if (humidity == null) {
+    return '0%';
   }
 
-  if (includePostalCode && !forecast.postalCode.isNullOrEmpty()) {
-    text += '${forecast.postalCode!.toUpperCase()}, ';
-  }
-
-  if (!forecast.countryCode.isNullOrEmpty()) {
-    text += forecast.countryCode!.toUpperCase();
-  } else if ((forecast.city != null) &&
-      !forecast.city!.country.isNullOrEmpty()) {
-    text += forecast.city!.country!.toUpperCase();
-  }
-
-  String trimmedText = text.trim();
-  if (trimmedText.endsWith(',')) {
-    trimmedText = trimmedText.substring(0, (trimmedText.length - 1));
-  }
-
-  return trimmedText;
+  return '${humidity.toDouble().round()}%';
 }
 
-String getLocationCurrentForecastText(
-  Forecast forecast,
-  TemperatureUnit temperatureUnit,
+String getWind(
+  num? windSpeed,
 ) {
-  String text = '';
-
-  if ((forecast.list != null) && (forecast.list!.length > 0)) {
-    ForecastDay currentDay = forecast.list!.first;
-    num currentTemp =
-        getTemperature(currentDay.feelsLike!.day, temperatureUnit);
-
-    // num highTemp = getTemperature(currentDay.temp!.max, temperatureUnit);
-    // num lowTemp = getTemperature(currentDay.temp!.min, temperatureUnit);
-
-    // TODO! i18n
-    // TODO Custom message depending on temperature and conditions
-    // text += '. The current temperature is ' +
-    //     '$currentTemp${temperatureUnit.unitSymbol}. The high for today is ' +
-    //     '$highTemp${temperatureUnit.unitSymbol} with a low of ' +
-    //     '$lowTemp${temperatureUnit.unitSymbol}.';
-
-    text += 'Feels like $currentTemp${temperatureUnit.unitSymbol}. ';
-    text += currentDay.weather!.first.description!.capitalize();
+  if (windSpeed == null) {
+    return '0 mph'; // TODO! unit
   }
 
-  return text.trim();
+  return '${windSpeed.toDouble().round()} mph'; // TODO! unit
 }
 
 String getUnitSymbol(
@@ -317,4 +355,56 @@ bool forecastIndexExists(
   }
 
   return false;
+}
+
+double getScrollProgress({
+  required double shrinkOffset,
+  required double maxExtent,
+  required double minExtent,
+  double speed: 1.0,
+  double clampUpper: 1.0,
+  double clampLower: 0.0,
+}) =>
+    ((shrinkOffset * speed) / (maxExtent - minExtent))
+        .clamp(clampLower, clampUpper);
+
+double getScrollScale({
+  required double shrinkOffset,
+  required double maxExtent,
+  required double minExtent,
+  double factor: 4.0,
+}) {
+  double position = (getScrollProgress(
+        shrinkOffset: shrinkOffset,
+        maxExtent: maxExtent,
+        minExtent: minExtent,
+      ) /
+      factor);
+
+  return (1.0 - position);
+}
+
+/// Return wind direction relative to plane heading
+double getWindDirection({
+  required num windDirection,
+  num? heading,
+}) {
+  if (heading == null) {
+    return windDirection.toDouble();
+  }
+
+  return (((windDirection - heading + 180) % 360) - 180);
+}
+
+String? formatHour({
+  int? dateTime,
+  String format: 'h:mm',
+}) {
+  if (dateTime != null) {
+    DateTime dt = epochToDateTime(dateTime);
+    String? formatted = formatDateTime(date: dt, format: format);
+    return formatted;
+  }
+
+  return null;
 }

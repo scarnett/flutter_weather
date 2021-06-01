@@ -18,10 +18,13 @@ try:
 
     with open('firebase-remote-config.json', 'r+') as f:
       data = json.load(f)
-      data['parameters']['app_version']['defaultValue']['value'] = version.split('+')[0]
+      version_build_parts = version.split('+')
+      data['parameters']['app_version']['defaultValue']['value'] = version_build_parts[0]
+      data['parameters']['app_build']['defaultValue']['value'] = version_build_parts[1]
 
       # Example of using the device platform
-      # data['parameters']['app_version']['conditionalValues'][platform]['value'] = version
+      # data['parameters']['app_version']['conditionalValues'][platform]['value'] = version_build_parts[0]
+      # data['parameters']['app_build']['conditionalValues'][platform]['value'] = version_build_parts[1]
 
       f.seek(0)
       json.dump(data, f)

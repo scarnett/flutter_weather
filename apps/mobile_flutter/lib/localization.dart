@@ -113,6 +113,14 @@ class AppLocalizations {
   String get locationPermissionDenied =>
       addMessage('Location permission denied');
 
+  String get chartType => addMessage('Chart Type');
+  String get chartLine => addMessage('Line');
+  String get chartBar => addMessage('Bar');
+  String get hours12 => addMessage('12hr');
+  String get hours24 => addMessage('24hr');
+  String get hours36 => addMessage('36hr');
+  String get hours48 => addMessage('48hr');
+
   String getFeelsLike(
     String temp,
   ) =>

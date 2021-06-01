@@ -100,7 +100,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                     getTitle(AppLocalizations.of(context), _currentPage)!,
                   ),
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () => _handleBack(state),
                   ),
                 ),
@@ -167,24 +167,29 @@ class _LookupPageViewState extends State<LookupPageView> {
   }
 
   Widget _buildContent() {
+    AppState appState = context.read<AppBloc>().state;
     Forecast? lookupForecast = context.read<LookupBloc>().state.lookupForecast;
     if (lookupForecast != null) {
       return SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: AppUiSafeArea(
           child: Column(
             children: <Widget>[
               ForecastDisplay(
-                bloc: context.read<AppBloc>(),
+                temperatureUnit: appState.temperatureUnit,
+                chartType: appState.chartType,
+                forecastHourRange: appState.forecastHourRange,
+                themeMode: appState.themeMode,
                 forecast: lookupForecast,
-                showThreeDayForecast: true,
+                sliverView: false,
+                detailsEnabled: false,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 30.0),
                 child: AppFormButton(
                   key: Key(AppKeys.addThisForecastKey),
                   text: AppLocalizations.of(context)!.addThisForecast,
-                  icon: Icon(Icons.add, size: 16.0),
+                  icon: const Icon(Icons.add, size: 16.0),
                   onTap: _tapAddLocation,
                 ),
               ),

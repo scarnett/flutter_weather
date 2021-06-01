@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 
-class ForecastWindDirection extends StatefulWidget {
+class ForecastWindDirection extends StatelessWidget {
   final IconData icon;
   final double size;
   final Color? color;
@@ -19,22 +19,17 @@ class ForecastWindDirection extends StatefulWidget {
   });
 
   @override
-  _ForecastWindDirectionState createState() => _ForecastWindDirectionState();
-}
-
-class _ForecastWindDirectionState extends State<ForecastWindDirection> {
-  @override
   Widget build(
     BuildContext context,
   ) {
     if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
         !context.watch<AppBloc>().state.colorTheme) {
       return _rotate(
-        widget.degree!,
+        degree ?? 0.0,
         Icon(
           Icons.navigation,
-          color: widget.color,
-          size: widget.size,
+          color: color,
+          size: size,
         ),
       );
     }
@@ -47,20 +42,20 @@ class _ForecastWindDirectionState extends State<ForecastWindDirection> {
             top: 1.0,
             left: 1.0,
             child: _rotate(
-              widget.degree!,
+              degree ?? 0,
               Icon(
                 Icons.navigation,
-                color: widget.shadowColor,
-                size: widget.size,
+                color: shadowColor,
+                size: size,
               ),
             ),
           ),
           _rotate(
-            widget.degree!,
+            degree ?? 0.0,
             Icon(
               Icons.navigation,
-              color: widget.color,
-              size: widget.size,
+              color: color,
+              size: size,
             ),
           ),
         ],

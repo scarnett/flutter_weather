@@ -104,7 +104,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
                         angle: _refreshAnimation.value,
                         child: child,
                       ),
-                      child: Icon(Icons.refresh),
+                      child: const Icon(Icons.refresh),
                     ),
                     onTap: () => _tapRefresh(state),
                   ),

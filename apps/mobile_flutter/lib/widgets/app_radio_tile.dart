@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppRadioTile<T> extends StatelessWidget {
-  final AppBloc bloc;
+  final ThemeMode themeMode;
   final String title;
   final T value;
   final T? groupValue;
@@ -12,7 +11,7 @@ class AppRadioTile<T> extends StatelessWidget {
 
   const AppRadioTile({
     Key? key,
-    required this.bloc,
+    required this.themeMode,
     required this.title,
     required this.value,
     this.groupValue,
@@ -29,8 +28,8 @@ class AppRadioTile<T> extends StatelessWidget {
           title,
           style: TextStyle(
             color: (value == groupValue)
-                ? AppTheme.getRadioActiveColor(bloc.state.themeMode)
-                : AppTheme.getRadioInactiveColor(bloc.state.themeMode),
+                ? AppTheme.getRadioActiveColor(themeMode)
+                : AppTheme.getRadioInactiveColor(themeMode),
           ),
         ),
         value: value,

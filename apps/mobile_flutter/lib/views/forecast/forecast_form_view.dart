@@ -72,7 +72,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
           appBar: AppBar(
             title: Text(getTitle(context, _currentPage)),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: _tapBack,
             ),
           ),
