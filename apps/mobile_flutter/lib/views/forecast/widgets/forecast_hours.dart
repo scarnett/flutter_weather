@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
-import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -161,33 +160,39 @@ class _ForecastHoursState extends State<ForecastHours> {
         padding: const EdgeInsets.only(bottom: 10.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 5.0),
-              child: AppOptionButton(
-                text: AppLocalizations.of(context)!.hours12.toUpperCase(),
-                themeMode: widget.themeMode,
-                colorTheme: widget.colorTheme,
-                colorThemeColor: widget.forecastColor?.darken(0.15),
-                active: (widget.forecastHourRange == ForecastHourRange.hours12),
-                onTap: (widget.forecastHourRange == ForecastHourRange.hours12)
-                    ? null
-                    : () => _tapForecastHourRange(ForecastHourRange.hours12),
-              ),
-            ),
-            AppOptionButton(
-              text: AppLocalizations.of(context)!.hours24.toUpperCase(),
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-              colorThemeColor: widget.forecastColor?.darken(0.15),
-              active: (widget.forecastHourRange == ForecastHourRange.hours24),
-              onTap: (widget.forecastHourRange == ForecastHourRange.hours24)
-                  ? null
-                  : () => _tapForecastHourRange(ForecastHourRange.hours24),
-            ),
-          ],
+          children: _buildHourOptions(),
         ),
       );
+
+  List<Widget> _buildHourOptions() {
+    List<Widget> options = [];
+    int count = 0;
+
+    for (ForecastHourRange range in ForecastHourRange.values) {
+      Widget option = AppOptionButton(
+        text: range.getText(context).toUpperCase(),
+        themeMode: widget.themeMode,
+        colorTheme: widget.colorTheme,
+        colorThemeColor: widget.forecastColor?.darken(0.15),
+        active: (widget.forecastHourRange == range),
+        onTap: (widget.forecastHourRange == range)
+            ? null
+            : () => _tapForecastHourRange(range),
+      );
+
+      if (count > 0) {
+        option = Padding(
+          padding: const EdgeInsets.only(left: 5.0),
+          child: option,
+        );
+      }
+
+      options.add(option);
+      count++;
+    }
+
+    return options;
+  }
 
   List<Widget> _getHourTiles() {
     List<Widget> tiles = [];

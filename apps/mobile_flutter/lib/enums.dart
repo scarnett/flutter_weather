@@ -1,3 +1,6 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_weather/localization.dart';
+
 enum Flavor {
   dev,
   tst,
@@ -18,6 +21,8 @@ enum ChartType {
 enum ForecastHourRange {
   hours12,
   hours24,
+  hours36,
+  hours48,
 }
 
 extension TemperatureUnitExtension on TemperatureUnit {
@@ -85,9 +90,34 @@ extension ForecastHourRangeExtension on ForecastHourRange {
       case ForecastHourRange.hours24:
         return 24;
 
+      case ForecastHourRange.hours36:
+        return 36;
+
+      case ForecastHourRange.hours48:
+        return 48;
+
       case ForecastHourRange.hours12:
       default:
         return 12;
+    }
+  }
+
+  String getText(
+    BuildContext context,
+  ) {
+    switch (this) {
+      case ForecastHourRange.hours24:
+        return AppLocalizations.of(context)!.hours24;
+
+      case ForecastHourRange.hours36:
+        return AppLocalizations.of(context)!.hours36;
+
+      case ForecastHourRange.hours48:
+        return AppLocalizations.of(context)!.hours48;
+
+      case ForecastHourRange.hours12:
+      default:
+        return AppLocalizations.of(context)!.hours12;
     }
   }
 }
@@ -98,6 +128,12 @@ ForecastHourRange getForecastHourRange(
   switch (forecastHourRange) {
     case 'ForecastHourRange.hours24':
       return ForecastHourRange.hours24;
+
+    case 'ForecastHourRange.hours36':
+      return ForecastHourRange.hours36;
+
+    case 'ForecastHourRange.hours48':
+      return ForecastHourRange.hours48;
 
     case 'ForecastHourRange.hours12':
     default:
