@@ -15,6 +15,11 @@ enum ChartType {
   bar,
 }
 
+enum ForecastHourRange {
+  hours12,
+  hours24,
+}
+
 extension TemperatureUnitExtension on TemperatureUnit {
   String get units {
     switch (this) {
@@ -71,6 +76,32 @@ ChartType getChartType(
     case 'ChartType.line':
     default:
       return ChartType.line;
+  }
+}
+
+extension ForecastHourRangeExtension on ForecastHourRange {
+  int get hours {
+    switch (this) {
+      case ForecastHourRange.hours24:
+        return 24;
+
+      case ForecastHourRange.hours12:
+      default:
+        return 12;
+    }
+  }
+}
+
+ForecastHourRange getForecastHourRange(
+  String? forecastHourRange,
+) {
+  switch (forecastHourRange) {
+    case 'ForecastHourRange.hours24':
+      return ForecastHourRange.hours24;
+
+    case 'ForecastHourRange.hours12':
+    default:
+      return ForecastHourRange.hours12;
   }
 }
 

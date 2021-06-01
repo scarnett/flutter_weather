@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/scroll_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hour_tile.dart';
+import 'package:flutter_weather/widgets/app_option_button.dart';
 
 class ForecastHours extends StatefulWidget {
   final ScrollController parentScrollController;
@@ -13,7 +17,7 @@ class ForecastHours extends StatefulWidget {
   final TemperatureUnit temperatureUnit;
   final ThemeMode themeMode;
   final bool colorTheme;
-  final int maxHours;
+  final ForecastHourRange forecastHourRange;
 
   ForecastHours({
     Key? key,
@@ -21,8 +25,8 @@ class ForecastHours extends StatefulWidget {
     required this.forecast,
     required this.temperatureUnit,
     required this.themeMode,
+    required this.forecastHourRange,
     this.colorTheme: false,
-    this.maxHours: 24,
   }) : super(key: key);
 
   @override
@@ -55,15 +59,20 @@ class _ForecastHoursState extends State<ForecastHours> {
           minHeight: 100.0,
           maxHeight: 500.0,
         ),
-        child: Container(
-          child: ListView(
-            primary: false,
-            shrinkWrap: true,
-            controller: _listViewScrollController,
-            physics: _listViewScrollPhysics,
-            children: _getHourTiles(),
-            padding: const EdgeInsets.all(0.0),
-          ),
+        child: Column(
+          children: [
+            _buildOptions(),
+            Expanded(
+              child: ListView(
+                primary: false,
+                shrinkWrap: true,
+                controller: _listViewScrollController,
+                physics: _listViewScrollPhysics,
+                children: _getHourTiles(),
+                padding: const EdgeInsets.all(0.0),
+              ),
+            ),
+          ],
         ),
       );
 
@@ -74,7 +83,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     _listViewScrollController.addListener(_listViewScrollListener);
     _listViewScrollPhysics = ScrollPhysics();
 
-    _buildDataMap();
+    _buildDataMap(widget.forecastHourRange.hours);
   }
 
   void _listViewScrollListener() => setState(() {
@@ -101,22 +110,29 @@ class _ForecastHoursState extends State<ForecastHours> {
         }
       });
 
-  int get hourCount {
+  int getHourCount(
+    int hourCount,
+  ) {
     if (widget.forecast.details!.hourly != null) {
       int count = widget.forecast.details!.hourly!.length;
-      if (count < widget.maxHours) {
+      if (count < hourCount) {
         return count;
       }
 
-      return widget.maxHours;
+      return hourCount;
     }
 
     return 0;
   }
 
-  void _buildDataMap() {
+  void _buildDataMap(
+    int hourCount,
+  ) {
+    if (_hourData.length > 0) {
+      _hourData.clear();
+    }
+
     int count = 0;
-    int maxCount = hourCount;
 
     for (ForecastHour hour in widget.forecast.details!.hourly!) {
       DateTime hourDate = epochToDateTime(hour.dt!).getDate();
@@ -131,11 +147,44 @@ class _ForecastHoursState extends State<ForecastHours> {
 
       count++;
 
-      if (count == maxCount) {
+      if (count == hourCount) {
         break;
       }
     }
   }
+
+  Widget _buildOptions() => Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 5.0),
+              child: AppOptionButton(
+                text: AppLocalizations.of(context)!.hours12.toUpperCase(),
+                themeMode: widget.themeMode,
+                colorTheme: widget.colorTheme,
+                // colorThemeColor: widget.forecastColor?.darken(0.15),
+                active: (widget.forecastHourRange == ForecastHourRange.hours12),
+                onTap: (widget.forecastHourRange == ForecastHourRange.hours12)
+                    ? null
+                    : () => _tapForecastHourRange(ForecastHourRange.hours12),
+              ),
+            ),
+            AppOptionButton(
+              text: AppLocalizations.of(context)!.hours24.toUpperCase(),
+              themeMode: widget.themeMode,
+              colorTheme: widget.colorTheme,
+              // colorThemeColor: widget.forecastColor?.darken(0.15),
+              active: (widget.forecastHourRange == ForecastHourRange.hours24),
+              onTap: (widget.forecastHourRange == ForecastHourRange.hours24)
+                  ? null
+                  : () => _tapForecastHourRange(ForecastHourRange.hours24),
+            ),
+          ],
+        ),
+      );
 
   List<Widget> _getHourTiles() {
     List<Widget> tiles = [];
@@ -193,5 +242,14 @@ class _ForecastHoursState extends State<ForecastHours> {
     }
 
     return tiles;
+  }
+
+  void _tapForecastHourRange(
+    ForecastHourRange range,
+  ) {
+    BlocProvider.of<AppBloc>(context, listen: false)
+        .add(SetForecastHourRange(range));
+
+    _buildDataMap(range.hours);
   }
 }

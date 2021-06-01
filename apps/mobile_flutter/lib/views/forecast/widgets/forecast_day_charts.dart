@@ -82,34 +82,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   ) =>
       Column(
         children: [
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(top: 10.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 5.0),
-                  child: AppOptionButton(
-                    text: AppLocalizations.of(context)!.chartLine.toUpperCase(),
-                    themeMode: widget.themeMode,
-                    colorTheme: widget.colorTheme,
-                    colorThemeColor: widget.forecastColor?.darken(0.15),
-                    active: (_currentPage == 0),
-                    onTap: () => _tapChartType(0),
-                  ),
-                ),
-                AppOptionButton(
-                  text: AppLocalizations.of(context)!.chartBar.toUpperCase(),
-                  themeMode: widget.themeMode,
-                  colorTheme: widget.colorTheme,
-                  colorThemeColor: widget.forecastColor?.darken(0.15),
-                  active: (_currentPage == 1),
-                  onTap: () => _tapChartType(1),
-                ),
-              ],
-            ),
-          ),
+          _buildOptions(),
           Expanded(
             child: PageView(
               controller: _pageController,
@@ -125,6 +98,35 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           ),
           _buildCircleIndicator(),
         ],
+      );
+
+  Widget _buildOptions() => Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 5.0),
+              child: AppOptionButton(
+                text: AppLocalizations.of(context)!.chartLine.toUpperCase(),
+                themeMode: widget.themeMode,
+                colorTheme: widget.colorTheme,
+                colorThemeColor: widget.forecastColor?.darken(0.15),
+                active: (_currentPage == 0),
+                onTap: (_currentPage == 0) ? null : () => _tapChartType(0),
+              ),
+            ),
+            AppOptionButton(
+              text: AppLocalizations.of(context)!.chartBar.toUpperCase(),
+              themeMode: widget.themeMode,
+              colorTheme: widget.colorTheme,
+              colorThemeColor: widget.forecastColor?.darken(0.15),
+              active: (_currentPage == 1),
+              onTap: (_currentPage == 1) ? null : () => _tapChartType(1),
+            ),
+          ],
+        ),
       );
 
   Widget _buildLineChart(

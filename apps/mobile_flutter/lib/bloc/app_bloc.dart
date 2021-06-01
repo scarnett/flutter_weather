@@ -52,6 +52,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapSetTemperatureUnitToStates(event);
     } else if (event is SetChartType) {
       yield _mapSetChartTypeToStates(event);
+    } else if (event is SetForecastHourRange) {
+      yield _mapSetForecastHourRangeToStates(event);
     } else if (event is SelectedForecastIndex) {
       yield _mapSelectedForecastIndexToStates(event);
     } else if (event is AddForecast) {
@@ -259,6 +261,18 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       state.copyWith(
         chartType: event.chartType,
       );
+
+  AppState _mapSetForecastHourRangeToStates(
+    SetForecastHourRange event,
+  ) {
+    if (event.forecastHourRange == state.forecastHourRange) {
+      return state;
+    }
+
+    return state.copyWith(
+      forecastHourRange: event.forecastHourRange,
+    );
+  }
 
   AppState _mapSelectedForecastIndexToStates(
     SelectedForecastIndex event,
@@ -488,6 +502,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         colorTheme: jsonData['colorTheme'],
         temperatureUnit: getTemperatureUnit(jsonData['temperatureUnit']),
         chartType: getChartType(jsonData['chartType']),
+        forecastHourRange: getForecastHourRange(jsonData['forecastHourRange']),
         forecasts: Forecast.fromJsonList(jsonData['forecasts']),
         selectedForecastIndex: jsonData['selectedForecastIndex'],
       );
@@ -506,6 +521,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         'colorTheme': state.colorTheme,
         'temperatureUnit': state.temperatureUnit.toString(),
         'chartType': state.chartType.toString(),
+        'forecastHourRange': state.forecastHourRange.toString(),
         'forecasts': Forecast.toJsonList(state.forecasts),
         'selectedForecastIndex': state.selectedForecastIndex,
       };

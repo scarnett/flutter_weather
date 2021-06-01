@@ -16,6 +16,7 @@ class ForecastDetailDisplay extends StatefulWidget {
   final bool colorTheme;
   final TemperatureUnit temperatureUnit;
   final ChartType chartType;
+  final ForecastHourRange forecastHourRange;
   final Color? forecastColor;
 
   ForecastDetailDisplay({
@@ -25,6 +26,7 @@ class ForecastDetailDisplay extends StatefulWidget {
     this.colorTheme: false,
     required this.temperatureUnit,
     required this.chartType,
+    required this.forecastHourRange,
     this.forecastColor,
   });
 
@@ -112,6 +114,7 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   temperatureUnit: widget.temperatureUnit,
                   themeMode: widget.themeMode,
                   colorTheme: widget.colorTheme,
+                  forecastHourRange: widget.forecastHourRange,
                 ),
               ),
             ],

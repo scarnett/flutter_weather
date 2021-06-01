@@ -178,6 +178,7 @@ class _LookupPageViewState extends State<LookupPageView> {
               ForecastDisplay(
                 temperatureUnit: appState.temperatureUnit,
                 chartType: appState.chartType,
+                forecastHourRange: appState.forecastHourRange,
                 themeMode: appState.themeMode,
                 forecast: lookupForecast,
                 sliverView: false,

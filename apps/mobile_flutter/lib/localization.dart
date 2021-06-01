@@ -116,6 +116,8 @@ class AppLocalizations {
   String get chartType => addMessage('Chart Type');
   String get chartLine => addMessage('Line');
   String get chartBar => addMessage('Bar');
+  String get hours12 => addMessage('12hr');
+  String get hours24 => addMessage('24hr');
 
   String getFeelsLike(
     String temp,
