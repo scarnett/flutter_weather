@@ -33,7 +33,7 @@ class ForecastMetaRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: const EdgeInsets.only(right: 20.0),
               child: Row(
                 children: [
                   Column(
@@ -67,8 +67,10 @@ class ForecastMetaRow extends StatelessWidget {
                               return Center(
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
-                                  child: Icon(Icons.close,
-                                      color: AppTheme.dangerColor),
+                                  child: Icon(
+                                    Icons.close,
+                                    color: AppTheme.dangerColor,
+                                  ),
                                 ),
                               );
                             } else if (snapshot.connectionState ==
@@ -107,7 +109,7 @@ class ForecastMetaRow extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: const EdgeInsets.only(right: 20.0),
               child: Row(
                 children: [
                   Column(

@@ -62,7 +62,7 @@ class ForecastOptions extends StatelessWidget {
                 width: 40.0,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(40.0),
-                  child: Icon(Icons.edit),
+                  child: const Icon(Icons.edit),
                   onTap: () => _tapEdit(context, state),
                 ),
               ),
@@ -84,7 +84,7 @@ class ForecastOptions extends StatelessWidget {
               width: 40.0,
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.0),
-                child: Icon(Icons.settings),
+                child: const Icon(Icons.settings),
                 onTap: () => _tapSettings(context),
               ),
             ),

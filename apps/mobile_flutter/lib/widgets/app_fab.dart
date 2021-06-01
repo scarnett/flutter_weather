@@ -30,7 +30,7 @@ class _AppFABState extends State<AppFAB> with SingleTickerProviderStateMixin {
             key: Key(AppKeys.addLocationKey),
             tooltip: AppLocalizations.of(context)!.addForecast,
             onPressed: _tapAddLocation,
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
             mini: true,
           ),
         ),

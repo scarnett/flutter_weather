@@ -112,7 +112,7 @@ ThemeData appLightThemeData = ThemeData(
     },
   ),
   inputDecorationTheme: InputDecorationTheme(
-    contentPadding: EdgeInsets.all(10.0),
+    contentPadding: const EdgeInsets.all(10.0),
     isDense: true,
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(

@@ -32,7 +32,7 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.privacyPolicy),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),

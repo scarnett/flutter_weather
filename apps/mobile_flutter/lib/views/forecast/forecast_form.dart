@@ -284,7 +284,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : Icon(Icons.check, size: 16.0),
+                : const Icon(Icons.check, size: 16.0),
             onTap: _submitting ? null : _tapSubmit,
           ),
         ),
@@ -307,7 +307,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : Icon(Icons.close, size: 16.0),
+                : const Icon(Icons.close, size: 16.0),
             onTap: _deleting ? null : _tapDelete,
           ),
         ),

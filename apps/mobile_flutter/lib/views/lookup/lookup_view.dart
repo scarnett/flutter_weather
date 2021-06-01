@@ -100,7 +100,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                     getTitle(AppLocalizations.of(context), _currentPage)!,
                   ),
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () => _handleBack(state),
                   ),
                 ),
@@ -189,7 +189,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                 child: AppFormButton(
                   key: Key(AppKeys.addThisForecastKey),
                   text: AppLocalizations.of(context)!.addThisForecast,
-                  icon: Icon(Icons.add, size: 16.0),
+                  icon: const Icon(Icons.add, size: 16.0),
                   onTap: _tapAddLocation,
                 ),
               ),

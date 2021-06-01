@@ -26,7 +26,7 @@ class AppColorThemeToggle extends StatelessWidget {
       (themeMode == ThemeMode.dark) || !hasForecasts(forecasts)
           ? Container()
           : Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Tooltip(
                 message: colorTheme
                     ? AppLocalizations.of(context)!.colorThemeDisable

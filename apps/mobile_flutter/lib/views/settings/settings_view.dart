@@ -91,7 +91,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           appBar: AppBar(
             title: Text(settingsUtils.getTitle(context, _currentPage)),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: _handleBack,
             ),
           ),
