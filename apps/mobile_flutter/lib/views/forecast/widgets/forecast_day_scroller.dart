@@ -204,7 +204,10 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
         padding: const EdgeInsets.only(bottom: 10.0),
         child: CirclePageIndicator(
           size: 4.0,
-          dotColor: AppTheme.getHintColor(widget.themeMode),
+          dotColor: AppTheme.getBorderColor(
+            widget.themeMode,
+            colorTheme: widget.colorTheme,
+          ),
           selectedDotColor:
               widget.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 6.0,

@@ -405,8 +405,9 @@ class _ForecastPageViewState extends State<ForecastView>
         padding: const EdgeInsets.all(4.0),
         margin: const EdgeInsets.only(bottom: 6.0),
         child: CirclePageIndicator(
-          dotColor: AppTheme.getHintColor(
+          dotColor: AppTheme.getBorderColor(
             state.themeMode,
+            colorTheme: state.colorTheme,
           ),
           selectedDotColor:
               state.colorTheme ? Colors.white : AppTheme.primaryColor,
