@@ -101,9 +101,10 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                 themeMode: widget.themeMode,
                 colorTheme: widget.colorTheme,
                 padding: const EdgeInsets.only(
+                  top: 10.0,
                   left: 10.0,
                   right: 10.0,
-                  bottom: 10.0,
+                  bottom: 20.0,
                 ),
               ),
               Padding(
