@@ -77,11 +77,15 @@ class _ForecastPageViewState extends State<ForecastView>
         ),
         extendBody: true,
         extendBodyBehindAppBar: true,
-        floatingActionButtonLocation:
-            AppFABLocation(FloatingActionButtonLocation.miniEndFloat, 6.0, 0.0),
+        floatingActionButtonLocation: AppFABLocation(
+          location: FloatingActionButtonLocation.miniEndFloat,
+          offsetX: 6.0,
+          offsetY: 0.0,
+        ),
         floatingActionButton: AppFAB(
           animationController: _hideFabAnimationController,
         ),
+        floatingActionButtonAnimator: AppFABNoScalingAnimation(),
       );
 
   void _initialize() {
@@ -396,7 +400,7 @@ class _ForecastPageViewState extends State<ForecastView>
           color: (forecastColor == null)
               ? Colors.black.withOpacity(0.1)
               : forecastColor.withOpacity(0.2),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         padding: const EdgeInsets.all(4.0),
         margin: const EdgeInsets.only(bottom: 6.0),

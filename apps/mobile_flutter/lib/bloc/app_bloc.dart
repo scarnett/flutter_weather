@@ -262,10 +262,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   AppState _mapSelectedForecastIndexToStates(
     SelectedForecastIndex event,
-  ) =>
-      state.copyWith(
-        selectedForecastIndex: event.index,
-      );
+  ) {
+    if (event.index == state.selectedForecastIndex) {
+      return state;
+    }
+
+    return state.copyWith(
+      selectedForecastIndex: event.index,
+    );
+  }
 
   Stream<AppState> _mapAddForecastToStates(
     AddForecast event,
@@ -459,10 +464,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   AppState _mapScrollDirectionToState(
     SetScrollDirection event,
-  ) =>
-      state.copyWith(
-        scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
-      );
+  ) {
+    if (event.scrollDirection == state.scrollDirection) {
+      return state;
+    }
+
+    return state.copyWith(
+      scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
+    );
+  }
 
   @override
   AppState fromJson(
