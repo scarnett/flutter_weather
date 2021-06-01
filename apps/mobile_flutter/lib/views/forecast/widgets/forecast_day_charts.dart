@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/chart_utils.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/widgets/app_option_button.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
+import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class ForecastDayCharts extends StatefulWidget {
   final Forecast forecast;
@@ -43,6 +45,7 @@ class ForecastDayCharts extends StatefulWidget {
 
 class _ForecastDayChartsState extends State<ForecastDayCharts> {
   late PageController _pageController;
+  late ValueNotifier<int> _chartTypeNotifier;
   int? _selectedSpot;
   int? _currentPage = 0;
 
@@ -54,6 +57,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         setState(() {
           if (isInteger(_pageController.page)) {
             _currentPage = _pageController.page!.toInt();
+            _chartTypeNotifier.value = _currentPage!.toInt();
 
             BlocProvider.of<AppBloc>(context, listen: false)
                 .add(SetChartType(ChartType.values[_currentPage!]));
@@ -61,12 +65,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         });
       });
 
+    _chartTypeNotifier = ValueNotifier<int>(_currentPage!);
     super.initState();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _chartTypeNotifier.dispose();
     super.dispose();
   }
 
@@ -117,6 +123,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               ],
             ),
           ),
+          _buildCircleIndicator(),
         ],
       );
 
@@ -300,6 +307,26 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         ),
       );
 
+  Widget _buildCircleIndicator() => Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: CirclePageIndicator(
+            size: 4.0,
+            dotColor: AppTheme.getBorderColor(
+              widget.themeMode,
+              colorTheme: widget.colorTheme,
+            ),
+            selectedDotColor:
+                widget.colorTheme ? Colors.white : AppTheme.primaryColor,
+            selectedSize: 6.0,
+            itemCount: ChartType.values.length,
+            currentPageNotifier: _chartTypeNotifier,
+            onPageSelected: _tapChartType,
+          ),
+        ),
+      );
+
   List<BarChartGroupData> get barGroups {
     List<BarChartGroupData> rodData = <BarChartGroupData>[];
     int count = 0;
@@ -410,6 +437,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     int page,
   ) {
     if (widget.enabled) {
+      _chartTypeNotifier.value = page;
       animatePage(_pageController, page: page);
     }
   }
