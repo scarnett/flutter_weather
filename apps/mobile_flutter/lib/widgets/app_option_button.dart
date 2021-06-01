@@ -31,8 +31,12 @@ class AppOptionButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
             color: active
-                ? colorThemeColor ?? AppTheme.primaryColor
-                : AppTheme.getSectionColor(themeMode),
+                ? colorTheme
+                    ? Colors.white
+                    : AppTheme.primaryColor
+                : colorTheme
+                    ? (colorThemeColor ?? AppTheme.primaryColor)
+                    : AppTheme.getSectionColor(themeMode),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -46,8 +50,12 @@ class AppOptionButton extends StatelessWidget {
                   text,
                   style: Theme.of(context).textTheme.subtitle2!.copyWith(
                         color: active
-                            ? Colors.white
-                            : (colorThemeColor ?? AppTheme.primaryColor),
+                            ? colorTheme
+                                ? (colorThemeColor ?? AppTheme.primaryColor)
+                                : Colors.white
+                            : colorTheme
+                                ? Colors.white
+                                : AppTheme.primaryColor,
                         fontWeight: FontWeight.w400,
                       ),
                 ),

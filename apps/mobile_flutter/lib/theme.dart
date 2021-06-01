@@ -31,7 +31,7 @@ class AppTheme {
       (themeMode == ThemeMode.dark)
           ? Colors.white.withOpacity(0.05)
           : colorTheme!
-              ? Colors.white.withOpacity(0.35)
+              ? Colors.white.withOpacity(0.1)
               : secondaryColor.withOpacity(0.1);
 
   static Color? getHintColor(
