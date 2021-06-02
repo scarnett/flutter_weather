@@ -128,8 +128,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   Widget _buildContent() {
     AppState state = context.read<AppBloc>().state;
     List<Widget> children = []
+      ..addAll(_buildApplicationSection())
       ..addAll(_buildAutoUpdatePeriodSection())
-      ..addAll(_buildThemeModeSection())
       ..addAll(_buildTemperatureUnitSection());
 
     if (AppConfig.instance.privacyPolicyUrl != '') {
@@ -149,33 +149,61 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             child: Column(children: children),
           ),
         ),
-        SettingsUpdatePeriodPicker(
-          selectedPeriod: state.updatePeriod,
-          onTap: (UpdatePeriod period) => _tapUpdatePeriod(period),
-        ),
+        SettingsUpdatePeriodPicker(selectedPeriod: state.updatePeriod),
         SettingsPushNotificationPicker(
           selectedNotification: state.pushNotification,
           selectedNotificationExtras: state.pushNotificationExtras,
-          onTap: (
-            PushNotification? notification,
-            Map<String, dynamic>? extras,
-          ) async =>
-              await _tapPushNotification(notification, extras: extras),
         ),
-        SettingsThemeModePicker(
-          onTapThemeMode: (ThemeMode? themeMode) async =>
-              await _tapThemeMode(themeMode),
-          onTapColorized: (bool? colorized) async =>
-              await _tapColorized(colorized),
+        SettingsThemeModePicker(),
+        SettingsChartTypePicker(),
+        SettingsHourRangePicker(),
+      ],
+    );
+  }
+
+  List<Widget> _buildApplicationSection() {
+    List<Widget> widgets = <Widget>[];
+    widgets.addAll(
+      [
+        AppSectionHeader(
+          text: AppLocalizations.of(context)!.application,
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 4.0,
+            top: 16.0,
+            bottom: 16.0,
+          ),
         ),
-        SettingsChartTypePicker(
-          onTap: (ChartType? chartType) => _tapChartType(chartType),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.themeMode,
+          trailingText: settingsUtils.getThemeModeText(
+            context,
+            themeMode: context.read<AppBloc>().state.themeMode,
+            colorized: context.read<AppBloc>().state.colorTheme,
+          ),
+          pageIndex: 3,
         ),
-        SettingsHourRangePicker(
-          onTap: (ForecastHourRange? hourRange) => _tapHourRange(hourRange),
+        Divider(),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.chartType,
+          trailingText:
+              context.read<AppBloc>().state.chartType.getText(context),
+          pageIndex: 4,
+        ),
+        Divider(),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.hourRange,
+          trailingText:
+              context.read<AppBloc>().state.forecastHourRange.getText(context),
+          pageIndex: 5,
         ),
       ],
     );
+
+    return widgets;
   }
 
   List<Widget> _buildAutoUpdatePeriodSection() {
@@ -233,51 +261,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         ),
       ]);
     }
-
-    return widgets;
-  }
-
-  List<Widget> _buildThemeModeSection() {
-    List<Widget> widgets = <Widget>[];
-    widgets.addAll(
-      [
-        AppSectionHeader(
-          text: AppLocalizations.of(context)!.forecast,
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 4.0,
-            top: 16.0,
-            bottom: 16.0,
-          ),
-        ),
-        SettingsOption(
-          pageController: _pageController!,
-          title: AppLocalizations.of(context)!.themeMode,
-          trailingText: settingsUtils.getThemeModeText(
-            context,
-            themeMode: context.read<AppBloc>().state.themeMode,
-            colorized: context.read<AppBloc>().state.colorTheme,
-          ),
-          pageIndex: 3,
-        ),
-        Divider(),
-        SettingsOption(
-          pageController: _pageController!,
-          title: AppLocalizations.of(context)!.chartType,
-          trailingText:
-              context.read<AppBloc>().state.chartType.getText(context),
-          pageIndex: 4,
-        ),
-        Divider(),
-        SettingsOption(
-          pageController: _pageController!,
-          title: AppLocalizations.of(context)!.hourRange,
-          trailingText:
-              context.read<AppBloc>().state.forecastHourRange.getText(context),
-          pageIndex: 5,
-        ),
-      ],
-    );
 
     return widgets;
   }
@@ -368,69 +351,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             },
           ),
         );
-  }
-
-  Future<void> _tapPushNotification(
-    PushNotification? notification, {
-    Map<String, dynamic>? extras,
-    bool redirect: true,
-  }) async {
-    context.read<AppBloc>().add(
-          SetPushNotification(
-            context: context,
-            pushNotification: notification,
-            pushNotificationExtras: extras,
-            callback: () async {
-              if (redirect) {
-                await animatePage(_pageController!, page: 0);
-              }
-            },
-          ),
-        );
-  }
-
-  Future<void> _tapThemeMode(
-    ThemeMode? themeMode, {
-    bool redirect: true,
-  }) async {
-    context.read<AppBloc>().add(SetThemeMode(themeMode));
-
-    if (redirect) {
-      await animatePage(_pageController!, page: 0, pauseMilliseconds: 1000);
-    }
-  }
-
-  Future<void> _tapColorized(
-    bool? colorized, {
-    bool redirect: true,
-  }) async {
-    context.read<AppBloc>().add(SetColorTheme(colorized));
-
-    if (redirect) {
-      await animatePage(_pageController!, page: 0, pauseMilliseconds: 1000);
-    }
-  }
-
-  Future<void> _tapChartType(
-    ChartType? chartType, {
-    bool redirect: true,
-  }) async {
-    context.read<AppBloc>().add(SetChartType(chartType));
-
-    if (redirect) {
-      await animatePage(_pageController!, page: 0, pauseMilliseconds: 500);
-    }
-  }
-
-  Future<void> _tapHourRange(
-    ForecastHourRange? hourRange, {
-    bool redirect: true,
-  }) async {
-    context.read<AppBloc>().add(SetForecastHourRange(hourRange));
-
-    if (redirect) {
-      await animatePage(_pageController!, page: 0, pauseMilliseconds: 500);
-    }
   }
 
   void _tapTemperatureUnit(

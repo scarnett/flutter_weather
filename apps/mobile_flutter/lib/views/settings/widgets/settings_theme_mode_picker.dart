@@ -14,18 +14,8 @@ import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsThemeModePicker extends StatefulWidget {
-  final Function(
-    ThemeMode? themeMode,
-  ) onTapThemeMode;
-
-  final Function(
-    bool? colorized,
-  ) onTapColorized;
-
   SettingsThemeModePicker({
     Key? key,
-    required this.onTapThemeMode,
-    required this.onTapColorized,
   }) : super(key: key);
 
   @override
@@ -95,10 +85,10 @@ class _SettingsThemeModePickerState extends State<SettingsThemeModePicker> {
   void _tapThemeMode(
     ThemeMode? themeMode,
   ) =>
-      widget.onTapThemeMode(themeMode ?? null);
+      context.read<AppBloc>().add(SetThemeMode(themeMode));
 
   void _tapColorized(
     bool? colorized,
   ) =>
-      widget.onTapColorized(colorized ?? false);
+      context.read<AppBloc>().add(SetColorTheme(colorized));
 }

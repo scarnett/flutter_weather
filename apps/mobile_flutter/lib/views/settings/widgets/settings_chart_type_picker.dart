@@ -10,13 +10,8 @@ import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsChartTypePicker extends StatefulWidget {
-  final Function(
-    ChartType? chartType,
-  ) onTap;
-
   SettingsChartTypePicker({
     Key? key,
-    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -72,5 +67,5 @@ class _SettingsChartTypePickerState extends State<SettingsChartTypePicker> {
   void _tapChartType(
     ChartType? chartType,
   ) =>
-      widget.onTap(chartType ?? null);
+      context.read<AppBloc>().add(SetChartType(chartType));
 }

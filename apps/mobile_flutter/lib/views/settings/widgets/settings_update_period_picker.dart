@@ -12,14 +12,9 @@ import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 class SettingsUpdatePeriodPicker extends StatefulWidget {
   final UpdatePeriod? selectedPeriod;
 
-  final Function(
-    UpdatePeriod period,
-  ) onTap;
-
   SettingsUpdatePeriodPicker({
     Key? key,
     this.selectedPeriod,
-    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -102,7 +97,10 @@ class _SettingsUpdatePeriodPickerState
     UpdatePeriod period,
   ) async {
     closeKeyboard(context);
-    widget.onTap(period);
+    context.read<AppBloc>().add(SetUpdatePeriod(
+          context: context,
+          updatePeriod: period,
+        ));
   }
 
   Color? _getPeriodColor(

@@ -26,16 +26,10 @@ class SettingsPushNotificationPicker extends StatefulWidget {
   final PushNotification? selectedNotification;
   final Map<String, dynamic>? selectedNotificationExtras;
 
-  final Function(
-    PushNotification? notification,
-    Map<String, dynamic>? extras,
-  ) onTap;
-
   SettingsPushNotificationPicker({
     Key? key,
     this.selectedNotification,
     this.selectedNotificationExtras,
-    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -295,7 +289,11 @@ class _SettingsPushNotificationPickerState
     closeKeyboard(context);
 
     if (!processing && !error) {
-      widget.onTap(notification, notificationExtras);
+      context.read<AppBloc>().add(SetPushNotification(
+            context: context,
+            pushNotification: notification,
+            pushNotificationExtras: notificationExtras,
+          ));
     }
   }
 

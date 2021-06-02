@@ -10,13 +10,8 @@ import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsHourRangePicker extends StatefulWidget {
-  final Function(
-    ForecastHourRange? hourRange,
-  ) onTap;
-
   SettingsHourRangePicker({
     Key? key,
-    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -73,5 +68,5 @@ class _SettingsHourRangePickerState extends State<SettingsHourRangePicker> {
   void _tapHourRange(
     ForecastHourRange? hourRange,
   ) =>
-      widget.onTap(hourRange ?? null);
+      context.read<AppBloc>().add(SetForecastHourRange(hourRange));
 }
