@@ -1,10 +1,10 @@
 enum CRUDStatus {
-  CREATING,
-  CREATED,
-  READING,
-  READ,
-  UPDATING,
-  UPDATED,
-  DELETING,
-  DELETED,
+  creating,
+  created,
+  reading,
+  read,
+  updating,
+  updated,
+  deleting,
+  deleted,
 }

@@ -65,6 +65,11 @@ class AppLocalizations {
   String get hi => addMessage('Hi');
   String get low => addMessage('Low');
   String get wind => addMessage('Wind');
+  String get windSpeed => addMessage('Wind Speed');
+  String get windSpeedUnits => addMessage('Wind Speed Units');
+  String get speedMph => addMessage('mph');
+  String get speedKmh => addMessage('km/h');
+  String get speedMs => addMessage('m/s');
   String get pressure => addMessage('Pressure');
   String get humidity => addMessage('Humidity');
   String get forecast => addMessage('Forecast');

@@ -171,11 +171,11 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   ) {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
-        case CRUDStatus.DELETING:
+        case CRUDStatus.deleting:
           setState(() => _deleting = true);
           break;
 
-        case CRUDStatus.DELETED:
+        case CRUDStatus.deleted:
           Navigator.of(context).pop();
           setState(() => _deleting = false);
           break;

@@ -57,7 +57,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
     BuildContext context,
     AppState state,
   ) {
-    if (state.refreshStatus == RefreshStatus.REFRESHING) {
+    if (state.refreshStatus == RefreshStatus.refreshing) {
       _refreshAnimationController
         ..reset()
         ..forward();

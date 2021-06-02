@@ -92,13 +92,13 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
-        case CRUDStatus.UPDATED:
+        case CRUDStatus.updated:
           closeKeyboard(context);
           Navigator.of(context)
               .pushAndRemoveUntil(ForecastView.route(), (route) => false);
           break;
 
-        case CRUDStatus.DELETED:
+        case CRUDStatus.deleted:
           closeKeyboard(context);
           Navigator.of(context).pop();
           break;

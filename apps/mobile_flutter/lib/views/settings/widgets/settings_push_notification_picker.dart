@@ -87,9 +87,9 @@ class _SettingsPushNotificationPickerState
   ) =>
       ListView(
         children: [
-          ..._buildListOfNotificationTile(PushNotification.OFF),
+          ..._buildListOfNotificationTile(PushNotification.off),
           ..._buildListOfNotificationTile(
-            PushNotification.CURRENT_LOCATION,
+            PushNotification.currentLocation,
             showDivider: false,
           ),
           ..._buildListOfForecasts(state),
@@ -107,15 +107,14 @@ class _SettingsPushNotificationPickerState
     List<Widget> children = <Widget>[];
     children.add(
       AppSectionHeader(
-        text:
-            PushNotification.SAVED_LOCATION.getInfo(context: context)!['text'],
+        text: PushNotification.savedLocation.getInfo(context: context)!['text'],
       ),
     );
 
     for (int i = 0; i < forecasts.length; i++) {
       children.addAll(
         _buildListOfNotificationTile(
-          PushNotification.SAVED_LOCATION,
+          PushNotification.savedLocation,
           forecast: forecasts[i],
           showDivider: ((i + 1) < forecasts.length),
         ),
@@ -188,7 +187,7 @@ class _SettingsPushNotificationPickerState
     PushNotification notification,
   ) {
     switch (notification) {
-      case PushNotification.CURRENT_LOCATION:
+      case PushNotification.currentLocation:
         if (processing) {
           return SizedBox(
             height: 20.0,
@@ -220,7 +219,7 @@ class _SettingsPushNotificationPickerState
     Map<String, dynamic>? notificationExtras;
 
     switch (notification) {
-      case PushNotification.SAVED_LOCATION:
+      case PushNotification.savedLocation:
         if (!await requestPushNotificationPermission()) {
           break;
         }
@@ -238,7 +237,7 @@ class _SettingsPushNotificationPickerState
 
         break;
 
-      case PushNotification.CURRENT_LOCATION:
+      case PushNotification.currentLocation:
         if (!await requestPushNotificationPermission()) {
           break;
         }

@@ -8,6 +8,7 @@ class AppState extends Equatable {
   final ThemeMode themeMode;
   final bool colorTheme;
   final TemperatureUnit temperatureUnit;
+  final SpeedUnit speedUnit;
   final ChartType chartType;
   final HourRange hourRange;
   final int selectedForecastIndex;
@@ -24,6 +25,7 @@ class AppState extends Equatable {
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
+    this.speedUnit: SpeedUnit.mph,
     this.chartType: ChartType.line,
     this.hourRange: HourRange.hours12,
     this.selectedForecastIndex: 0,
@@ -41,6 +43,7 @@ class AppState extends Equatable {
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
+    this.speedUnit: SpeedUnit.mph,
     this.chartType: ChartType.line,
     this.hourRange: HourRange.hours12,
     this.selectedForecastIndex: 0,
@@ -60,6 +63,7 @@ class AppState extends Equatable {
     ThemeMode? themeMode,
     bool? colorTheme,
     TemperatureUnit? temperatureUnit,
+    SpeedUnit? speedUnit,
     ChartType? chartType,
     HourRange? hourRange,
     int? selectedForecastIndex,
@@ -82,6 +86,7 @@ class AppState extends Equatable {
         themeMode: themeMode ?? this.themeMode,
         colorTheme: colorTheme ?? this.colorTheme,
         temperatureUnit: temperatureUnit ?? this.temperatureUnit,
+        speedUnit: speedUnit ?? this.speedUnit,
         chartType: chartType ?? this.chartType,
         hourRange: hourRange ?? this.hourRange,
         selectedForecastIndex:
@@ -106,6 +111,7 @@ class AppState extends Equatable {
         themeMode,
         colorTheme,
         temperatureUnit,
+        speedUnit,
         chartType,
         hourRange,
         selectedForecastIndex,
@@ -122,8 +128,8 @@ class AppState extends Equatable {
       'pushNotification: $pushNotification, ' +
       'pushNotificationExtras: $pushNotificationExtras, ' +
       'themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit, chartType: $chartType, ' +
-      'hourRange: $hourRange, ' +
+      'temperatureUnit: $temperatureUnit, speedUnit: $speedUnit, ' +
+      'chartType: $chartType, hourRange: $hourRange, ' +
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus, scrollDirection: $scrollDirection}';

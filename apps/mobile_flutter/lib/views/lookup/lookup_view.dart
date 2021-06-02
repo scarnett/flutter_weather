@@ -119,7 +119,7 @@ class _LookupPageViewState extends State<LookupPageView> {
   ) {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
-        case CRUDStatus.CREATED:
+        case CRUDStatus.created:
           closeKeyboard(context);
           Navigator.of(context).pop();
           break;
@@ -138,7 +138,7 @@ class _LookupPageViewState extends State<LookupPageView> {
       AppLocalizations? i18n = AppLocalizations.of(context);
 
       switch (state.status) {
-        case LookupStatus.FORECAST_NOT_FOUND:
+        case LookupStatus.forecastNotFound:
           closeKeyboard(context);
           showSnackbar(context, i18n!.lookupFailure);
           break;

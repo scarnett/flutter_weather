@@ -9,17 +9,16 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
-class SettingsTemperatureUnitsPicker extends StatefulWidget {
-  SettingsTemperatureUnitsPicker({
+class SettingsSpeedUnitsPicker extends StatefulWidget {
+  SettingsSpeedUnitsPicker({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _SettingsTemperatureUnitsPickerState();
+  State<StatefulWidget> createState() => _SettingsSpeedUnitsPickerState();
 }
 
-class _SettingsTemperatureUnitsPickerState
-    extends State<SettingsTemperatureUnitsPicker> {
+class _SettingsSpeedUnitsPickerState extends State<SettingsSpeedUnitsPicker> {
   @override
   Widget build(
     BuildContext context,
@@ -41,22 +40,21 @@ class _SettingsTemperatureUnitsPickerState
 
   Widget _buildBody() {
     int count = 0;
-    List<TemperatureUnit> temperatureUnits = TemperatureUnit.values;
+    List<SpeedUnit> speedUnits = SpeedUnit.values;
     List<Widget> widgets = <Widget>[];
-    TemperatureUnit _temperatureUnit =
-        context.read<AppBloc>().state.temperatureUnit;
+    SpeedUnit _temperatureUnit = context.read<AppBloc>().state.speedUnit;
 
-    for (TemperatureUnit temperatureUnit in temperatureUnits) {
+    for (SpeedUnit speedUnit in speedUnits) {
       widgets.add(
-        AppRadioTile<TemperatureUnit>(
-          title: temperatureUnit.getText(context),
-          value: temperatureUnit,
+        AppRadioTile<SpeedUnit>(
+          title: speedUnit.getText(context),
+          value: speedUnit,
           groupValue: _temperatureUnit,
-          onTap: _tapTemperatureUnit,
+          onTap: _tapSpeedUnit,
         ),
       );
 
-      if ((count + 1) < temperatureUnits.length) {
+      if ((count + 1) < speedUnits.length) {
         widgets.add(Divider());
       }
 
@@ -66,8 +64,8 @@ class _SettingsTemperatureUnitsPickerState
     return ListView(children: widgets);
   }
 
-  void _tapTemperatureUnit(
-    TemperatureUnit? temperatureUnit,
+  void _tapSpeedUnit(
+    SpeedUnit? speedUnit,
   ) =>
-      context.read<AppBloc>().add(SetTemperatureUnit(temperatureUnit));
+      context.read<AppBloc>().add(SetSpeedUnit(speedUnit));
 }

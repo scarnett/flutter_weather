@@ -20,6 +20,7 @@ exports = module.exports = functions.https
                 admin.firestore.FieldValue.delete() :
                 JSON.parse(pushNotificationExtras),
             'temperatureUnit': data['temperatureUnit'],
+            'speedUnit': data['speedUnit'],
             'fcm': {
               'token': data['fcmToken'],
             },

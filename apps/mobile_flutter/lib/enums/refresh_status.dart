@@ -1,3 +1,3 @@
 enum RefreshStatus {
-  REFRESHING,
+  refreshing,
 }

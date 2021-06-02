@@ -2,9 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
 
 enum PushNotification {
-  OFF,
-  CURRENT_LOCATION,
-  SAVED_LOCATION,
+  off,
+  currentLocation,
+  savedLocation,
 }
 
 extension PushNotificationExtension on PushNotification {
@@ -12,7 +12,7 @@ extension PushNotificationExtension on PushNotification {
     BuildContext? context,
   }) {
     switch (this) {
-      case PushNotification.CURRENT_LOCATION:
+      case PushNotification.currentLocation:
         return {
           'id': 'current_location',
           'text': (context == null)
@@ -23,7 +23,7 @@ extension PushNotificationExtension on PushNotification {
               : AppLocalizations.of(context)!.pushNotificationCurrentTap,
         };
 
-      case PushNotification.SAVED_LOCATION:
+      case PushNotification.savedLocation:
         return {
           'id': 'saved_location',
           'text': (context == null)
@@ -31,7 +31,7 @@ extension PushNotificationExtension on PushNotification {
               : AppLocalizations.of(context)!.pushNotificationSaved,
         };
 
-      case PushNotification.OFF:
+      case PushNotification.off:
       default:
         return {
           'id': 'off',

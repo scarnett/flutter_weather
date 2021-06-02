@@ -62,18 +62,18 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
           countryCode: Nullable<String?>(event.lookupData['countryCode']),
           primary: Nullable<bool?>(event.lookupData['primary']),
           lookupForecast: Nullable<Forecast>(forecast),
-          status: Nullable<LookupStatus>(LookupStatus.FORECAST_FOUND),
+          status: Nullable<LookupStatus>(LookupStatus.forecastFound),
         );
       } else {
         yield state.copyWith(
-          status: Nullable<LookupStatus>(LookupStatus.FORECAST_NOT_FOUND),
+          status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
         );
       }
     } on Exception catch (exception, stackTrace) {
       await Sentry.captureException(exception, stackTrace: stackTrace);
 
       yield state.copyWith(
-        status: Nullable<LookupStatus>(LookupStatus.FORECAST_NOT_FOUND),
+        status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
       );
     }
   }

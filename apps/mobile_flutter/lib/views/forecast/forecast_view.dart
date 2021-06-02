@@ -146,15 +146,15 @@ class _ForecastPageViewState extends State<ForecastView>
       AppLocalizations? i18n = AppLocalizations.of(context);
 
       switch (state.crudStatus) {
-        case CRUDStatus.CREATED:
+        case CRUDStatus.created:
           showSnackbar(context, i18n!.forecastAdded);
           break;
 
-        case CRUDStatus.UPDATED:
+        case CRUDStatus.updated:
           showSnackbar(context, i18n!.forecastUpdated);
           break;
 
-        case CRUDStatus.DELETED:
+        case CRUDStatus.deleted:
           showSnackbar(context, i18n!.forecastDeleted);
           break;
 

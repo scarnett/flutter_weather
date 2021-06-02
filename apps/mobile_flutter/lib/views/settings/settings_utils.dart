@@ -48,6 +48,8 @@ String getTitle(
     return AppLocalizations.of(context)!.hourRange;
   } else if (_currentPage.toInt() == 6) {
     return AppLocalizations.of(context)!.temperatureUnits;
+  } else if (_currentPage.toInt() == 7) {
+    return AppLocalizations.of(context)!.windSpeedUnits;
   }
 
   return AppLocalizations.of(context)!.settings;
@@ -59,8 +61,8 @@ String? getPushNotificationText(
   Map<String, dynamic>? extras,
 }) {
   switch (notification) {
-    case PushNotification.CURRENT_LOCATION:
-    case PushNotification.SAVED_LOCATION:
+    case PushNotification.currentLocation:
+    case PushNotification.savedLocation:
       if (extras != null) {
         if (extras.containsKey('location')) {
           return extras['location']['name'];
@@ -69,7 +71,7 @@ String? getPushNotificationText(
 
       return null;
 
-    case PushNotification.OFF:
+    case PushNotification.off:
       return notification?.getInfo(context: context)!['text'];
 
     default:

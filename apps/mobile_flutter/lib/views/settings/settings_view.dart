@@ -17,6 +17,7 @@ import 'package:flutter_weather/views/settings/widgets/settings_hour_range_picke
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_option.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_speed_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_temperature_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_theme_mode_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
@@ -157,6 +158,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsChartTypePicker(),
         SettingsHourRangePicker(),
         SettingsTemperatureUnitsPicker(),
+        SettingsSpeedUnitsPicker(),
       ],
     );
   }
@@ -224,7 +226,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               height: 16.0,
               child: Switch(
                 onChanged: (bool value) async => await _tapUpdatePeriod(
-                  value ? UpdatePeriod.HOUR2 : null,
+                  value ? UpdatePeriod.hour2 : null,
                   redirect: false,
                 ),
                 value: (updatePeriod != null),
@@ -265,23 +267,26 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     return widgets;
   }
 
-  List<Widget> _buildTemperatureUnitSection() {
-    TemperatureUnit _temperatureUnit =
-        context.read<AppBloc>().state.temperatureUnit;
-
-    return [
-      AppSectionHeader(
-        text: AppLocalizations.of(context)!.units,
-      ),
-      SettingsOption(
-        pageController: _pageController!,
-        title: AppLocalizations.of(context)!.temperature,
-        trailingText:
-            context.read<AppBloc>().state.temperatureUnit.getText(context),
-        pageIndex: 6,
-      ),
-    ];
-  }
+  List<Widget> _buildTemperatureUnitSection() => [
+        AppSectionHeader(
+          text: AppLocalizations.of(context)!.units,
+        ),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.temperature,
+          trailingText:
+              context.read<AppBloc>().state.temperatureUnit.getText(context),
+          pageIndex: 6,
+        ),
+        Divider(),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.windSpeed,
+          trailingText:
+              context.read<AppBloc>().state.speedUnit.getText(context),
+          pageIndex: 7,
+        ),
+      ];
 
   List<Widget> _buildAboutSection() => [
         AppSectionHeader(
