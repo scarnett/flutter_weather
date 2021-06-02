@@ -14,7 +14,9 @@ import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart'
     as settingsUtils;
 import 'package:flutter_weather/views/settings/widgets/settings_chart_type_picker.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_hour_range_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_option.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_theme_mode_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
@@ -169,6 +171,9 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsChartTypePicker(
           onTap: (ChartType? chartType) => _tapChartType(chartType),
         ),
+        SettingsHourRangePicker(
+          onTap: (ForecastHourRange? hourRange) => _tapHourRange(hourRange),
+        ),
       ],
     );
   }
@@ -205,37 +210,27 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     if (updatePeriod != null) {
       widgets.addAll([
         Divider(),
-        ListTile(
-          title: Text(
-            AppLocalizations.of(context)!.updatePeriod,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          trailing: Text(
-            context
-                .read<AppBloc>()
-                .state
-                .updatePeriod!
-                .getInfo(context: context)!['text'],
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          onTap: () async => await animatePage(_pageController!, page: 1),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.updatePeriod,
+          trailingText: context
+              .read<AppBloc>()
+              .state
+              .updatePeriod!
+              .getInfo(context: context)!['text'],
+          pageIndex: 1,
         ),
         Divider(),
-        ListTile(
-          title: Text(
-            AppLocalizations.of(context)!.pushNotification,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          trailing: Text(
-            settingsUtils.getPushNotificationText(
-                  context,
-                  context.read<AppBloc>().state.pushNotification,
-                  extras: context.read<AppBloc>().state.pushNotificationExtras,
-                ) ??
-                '',
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          onTap: () async => await animatePage(_pageController!, page: 2),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.pushNotification,
+          trailingText: settingsUtils.getPushNotificationText(
+                context,
+                context.read<AppBloc>().state.pushNotification,
+                extras: context.read<AppBloc>().state.pushNotificationExtras,
+              ) ??
+              '',
+          pageIndex: 2,
         ),
       ]);
     }
@@ -256,44 +251,31 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             bottom: 16.0,
           ),
         ),
-        ListTile(
-          title: Text(
-            AppLocalizations.of(context)!.themeMode,
-            style: Theme.of(context).textTheme.subtitle1,
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.themeMode,
+          trailingText: settingsUtils.getThemeModeText(
+            context,
+            themeMode: context.read<AppBloc>().state.themeMode,
+            colorized: context.read<AppBloc>().state.colorTheme,
           ),
-          trailing: Text(
-            settingsUtils.getThemeModeText(
-              context,
-              themeMode: context.read<AppBloc>().state.themeMode,
-              colorized: context.read<AppBloc>().state.colorTheme,
-            ),
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          onTap: () async => await animatePage(_pageController!, page: 3),
+          pageIndex: 3,
         ),
         Divider(),
-        ListTile(
-          title: Text(
-            AppLocalizations.of(context)!.chartType,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          trailing: Text(
-            context.read<AppBloc>().state.chartType.getText(context),
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          onTap: () async => await animatePage(_pageController!, page: 4),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.chartType,
+          trailingText:
+              context.read<AppBloc>().state.chartType.getText(context),
+          pageIndex: 4,
         ),
         Divider(),
-        ListTile(
-          title: Text(
-            AppLocalizations.of(context)!.hourRange,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          trailing: Text(
-            context.read<AppBloc>().state.forecastHourRange.getText(context),
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          onTap: () async => await animatePage(_pageController!, page: 5),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.hourRange,
+          trailingText:
+              context.read<AppBloc>().state.forecastHourRange.getText(context),
+          pageIndex: 5,
         ),
       ],
     );
@@ -436,6 +418,17 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     bool redirect: true,
   }) async {
     context.read<AppBloc>().add(SetChartType(chartType));
+
+    if (redirect) {
+      await animatePage(_pageController!, page: 0, pauseMilliseconds: 500);
+    }
+  }
+
+  Future<void> _tapHourRange(
+    ForecastHourRange? hourRange, {
+    bool redirect: true,
+  }) async {
+    context.read<AppBloc>().add(SetForecastHourRange(hourRange));
 
     if (redirect) {
       await animatePage(_pageController!, page: 0, pauseMilliseconds: 500);
