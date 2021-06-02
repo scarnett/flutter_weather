@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

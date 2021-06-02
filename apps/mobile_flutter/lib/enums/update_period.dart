@@ -9,12 +9,6 @@ enum UpdatePeriod {
   HOUR5,
 }
 
-enum PushNotification {
-  OFF,
-  CURRENT_LOCATION,
-  SAVED_LOCATION,
-}
-
 extension UpdatePeriodExtension on UpdatePeriod {
   Map<String, dynamic>? getInfo({
     BuildContext? context,
@@ -67,42 +61,6 @@ extension UpdatePeriodExtension on UpdatePeriod {
 
       default:
         return null;
-    }
-  }
-}
-
-extension PushNotificationExtension on PushNotification {
-  Map<String, dynamic>? getInfo({
-    BuildContext? context,
-  }) {
-    switch (this) {
-      case PushNotification.CURRENT_LOCATION:
-        return {
-          'id': 'current_location',
-          'text': (context == null)
-              ? 'Current Location'
-              : AppLocalizations.of(context)!.pushNotificationCurrent,
-          'subText': (context == null)
-              ? 'Tap to update'
-              : AppLocalizations.of(context)!.pushNotificationCurrentTap,
-        };
-
-      case PushNotification.SAVED_LOCATION:
-        return {
-          'id': 'saved_location',
-          'text': (context == null)
-              ? 'Saved Locations'
-              : AppLocalizations.of(context)!.pushNotificationSaved,
-        };
-
-      case PushNotification.OFF:
-      default:
-        return {
-          'id': 'off',
-          'text': (context == null)
-              ? 'Off'
-              : AppLocalizations.of(context)!.pushNotificationOff,
-        };
     }
   }
 }

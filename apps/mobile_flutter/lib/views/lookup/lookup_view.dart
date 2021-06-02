@@ -15,7 +15,6 @@ import 'package:flutter_weather/views/forecast/forecast_form.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
-import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:flutter_weather/views/lookup/lookup_utils.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';

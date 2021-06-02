@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_weather/config.dart';
-import 'package:flutter_weather/enums/temperature_unit.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:http/http.dart' as http;
 
 Future<http.Response?> savePushNotification({

@@ -16,7 +16,6 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_last_updated.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_fab.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';

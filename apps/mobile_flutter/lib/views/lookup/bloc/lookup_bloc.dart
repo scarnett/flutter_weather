@@ -6,7 +6,6 @@ import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
-import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
