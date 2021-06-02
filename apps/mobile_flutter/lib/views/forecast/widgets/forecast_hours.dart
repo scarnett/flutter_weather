@@ -31,6 +31,7 @@ class _ForecastHoursState extends State<ForecastHours> {
   final Map<String, List<ForecastHour>> _hourData = {};
   late ScrollController _listViewScrollController;
   late ScrollPhysics _listViewScrollPhysics;
+  late int _selectedHourRange;
 
   @override
   void initState() {
@@ -48,25 +49,32 @@ class _ForecastHoursState extends State<ForecastHours> {
   Widget build(
     BuildContext context,
   ) =>
-      ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: 100.0,
-          maxHeight: 500.0,
-        ),
-        child: Column(
-          children: [
-            _buildOptions(),
-            Expanded(
-              child: ListView(
-                primary: false,
-                shrinkWrap: true,
-                controller: _listViewScrollController,
-                physics: _listViewScrollPhysics,
-                children: _getHourTiles(),
-                padding: const EdgeInsets.all(0.0),
+      BlocListener<AppBloc, AppState>(
+        listener: (
+          BuildContext context,
+          AppState state,
+        ) async =>
+            await _blocListener(context, state),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: 100.0,
+            maxHeight: 500.0,
+          ),
+          child: Column(
+            children: [
+              _buildOptions(),
+              Expanded(
+                child: ListView(
+                  primary: false,
+                  shrinkWrap: true,
+                  controller: _listViewScrollController,
+                  physics: _listViewScrollPhysics,
+                  children: _getHourTiles(),
+                  padding: const EdgeInsets.all(0.0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 
@@ -77,7 +85,17 @@ class _ForecastHoursState extends State<ForecastHours> {
     _listViewScrollController.addListener(_listViewScrollListener);
     _listViewScrollPhysics = ScrollPhysics();
 
-    _buildDataMap(context.read<AppBloc>().state.forecastHourRange.hours);
+    _selectedHourRange = context.read<AppBloc>().state.forecastHourRange.hours;
+    _buildDataMap(_selectedHourRange);
+  }
+
+  Future<void> _blocListener(
+    BuildContext context,
+    AppState state,
+  ) async {
+    if (_selectedHourRange != state.forecastHourRange.hours) {
+      _buildDataMap(state.forecastHourRange.hours);
+    }
   }
 
   void _listViewScrollListener() => setState(() {
@@ -242,7 +260,8 @@ class _ForecastHoursState extends State<ForecastHours> {
   void _tapForecastHourRange(
     ForecastHourRange range,
   ) {
+    _selectedHourRange = range.hours;
     context.read<AppBloc>().add(SetForecastHourRange(range));
-    _buildDataMap(range.hours);
+    _buildDataMap(_selectedHourRange);
   }
 }
