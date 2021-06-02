@@ -62,8 +62,6 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
             (context.watch<AppBloc>().state.colorTheme)
                 ? Brightness.dark
@@ -73,7 +71,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
             title: Text(getTitle(context, _currentPage)),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () async => await _tapBack,
+              onPressed: () async => await _tapBack(),
             ),
           ),
           body: BlocListener<AppBloc, AppState>(

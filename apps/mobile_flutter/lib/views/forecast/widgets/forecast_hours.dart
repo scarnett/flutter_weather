@@ -14,20 +14,12 @@ import 'package:flutter_weather/widgets/app_option_button.dart';
 class ForecastHours extends StatefulWidget {
   final ScrollController parentScrollController;
   final Forecast forecast;
-  final TemperatureUnit temperatureUnit;
-  final ThemeMode themeMode;
-  final bool colorTheme;
   final Color? forecastColor;
-  final ForecastHourRange forecastHourRange;
 
   ForecastHours({
     Key? key,
     required this.parentScrollController,
     required this.forecast,
-    required this.temperatureUnit,
-    required this.themeMode,
-    required this.forecastHourRange,
-    this.colorTheme: false,
     this.forecastColor,
   }) : super(key: key);
 
@@ -85,7 +77,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     _listViewScrollController.addListener(_listViewScrollListener);
     _listViewScrollPhysics = ScrollPhysics();
 
-    _buildDataMap(widget.forecastHourRange.hours);
+    _buildDataMap(context.read<AppBloc>().state.forecastHourRange.hours);
   }
 
   void _listViewScrollListener() => setState(() {
@@ -165,17 +157,16 @@ class _ForecastHoursState extends State<ForecastHours> {
       );
 
   List<Widget> _buildHourOptions() {
+    AppState state = context.read<AppBloc>().state;
     List<Widget> options = [];
     int count = 0;
 
     for (ForecastHourRange range in ForecastHourRange.values) {
       Widget option = AppOptionButton(
         text: range.getText(context).toUpperCase(),
-        themeMode: widget.themeMode,
-        colorTheme: widget.colorTheme,
         colorThemeColor: widget.forecastColor?.darken(0.15),
-        active: (widget.forecastHourRange == range),
-        onTap: (widget.forecastHourRange == range)
+        active: (state.forecastHourRange == range),
+        onTap: (state.forecastHourRange == range)
             ? null
             : () => _tapForecastHourRange(range),
       );
@@ -195,6 +186,7 @@ class _ForecastHoursState extends State<ForecastHours> {
   }
 
   List<Widget> _getHourTiles() {
+    AppState state = context.read<AppBloc>().state;
     List<Widget> tiles = [];
     int dayCount = 0;
 
@@ -212,7 +204,7 @@ class _ForecastHoursState extends State<ForecastHours> {
                 addSuffix: true,
               )!,
               style: Theme.of(context).textTheme.headline4!.copyWith(
-                    shadows: (widget.themeMode == ThemeMode.dark)
+                    shadows: (state.themeMode == ThemeMode.dark)
                         ? commonTextShadow()
                         : null,
                   ),
@@ -224,12 +216,7 @@ class _ForecastHoursState extends State<ForecastHours> {
 
         // Add hour tiles
         for (ForecastHour hour in hours) {
-          Widget hourTile = ForecastHourTile(
-            hour: hour,
-            temperatureUnit: widget.temperatureUnit,
-            themeMode: widget.themeMode,
-            colorTheme: widget.colorTheme,
-          );
+          Widget hourTile = ForecastHourTile(hour: hour);
 
           if (((dayCount + 1) == _hourData.length) &&
               ((hourCount + 1) == hours.length)) {
@@ -255,9 +242,7 @@ class _ForecastHoursState extends State<ForecastHours> {
   void _tapForecastHourRange(
     ForecastHourRange range,
   ) {
-    BlocProvider.of<AppBloc>(context, listen: false)
-        .add(SetForecastHourRange(range));
-
+    context.read<AppBloc>().add(SetForecastHourRange(range));
     _buildDataMap(range.hours);
   }
 }

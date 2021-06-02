@@ -26,6 +26,17 @@ enum ForecastHourRange {
   hours48,
 }
 
+enum CRUDStatus {
+  CREATING,
+  CREATED,
+  READING,
+  READ,
+  UPDATING,
+  UPDATED,
+  DELETING,
+  DELETED,
+}
+
 extension TemperatureUnitExtension on TemperatureUnit {
   String get units {
     switch (this) {
@@ -56,32 +67,18 @@ extension TemperatureUnitExtension on TemperatureUnit {
   }
 }
 
-TemperatureUnit getTemperatureUnit(
-  String? temperatureUnit,
-) {
-  switch (temperatureUnit) {
-    case 'TemperatureUnit.kelvin':
-      return TemperatureUnit.kelvin;
+extension ChartTypeExtension on ChartType {
+  String getText(
+    BuildContext context,
+  ) {
+    switch (this) {
+      case ChartType.bar:
+        return AppLocalizations.of(context)!.chartBar;
 
-    case 'TemperatureUnit.celsius':
-      return TemperatureUnit.celsius;
-
-    case 'TemperatureUnit.fahrenheit':
-    default:
-      return TemperatureUnit.fahrenheit;
-  }
-}
-
-ChartType getChartType(
-  String? chartType,
-) {
-  switch (chartType) {
-    case 'ChartType.bar':
-      return ChartType.bar;
-
-    case 'ChartType.line':
-    default:
-      return ChartType.line;
+      case ChartType.line:
+      default:
+        return AppLocalizations.of(context)!.chartLine;
+    }
   }
 }
 
@@ -138,6 +135,35 @@ extension ThemeModeExtension on ThemeMode {
   }
 }
 
+TemperatureUnit getTemperatureUnit(
+  String? temperatureUnit,
+) {
+  switch (temperatureUnit) {
+    case 'TemperatureUnit.kelvin':
+      return TemperatureUnit.kelvin;
+
+    case 'TemperatureUnit.celsius':
+      return TemperatureUnit.celsius;
+
+    case 'TemperatureUnit.fahrenheit':
+    default:
+      return TemperatureUnit.fahrenheit;
+  }
+}
+
+ChartType getChartType(
+  String? chartType,
+) {
+  switch (chartType) {
+    case 'ChartType.bar':
+      return ChartType.bar;
+
+    case 'ChartType.line':
+    default:
+      return ChartType.line;
+  }
+}
+
 ForecastHourRange getForecastHourRange(
   String? forecastHourRange,
 ) {
@@ -155,15 +181,4 @@ ForecastHourRange getForecastHourRange(
     default:
       return ForecastHourRange.hours12;
   }
-}
-
-enum CRUDStatus {
-  CREATING,
-  CREATED,
-  READING,
-  READ,
-  UPDATING,
-  UPDATED,
-  DELETING,
-  DELETED,
 }

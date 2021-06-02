@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppSectionHeader extends StatelessWidget {
-  final ThemeMode themeMode;
-  final bool colorTheme;
   final String text;
   final bool borderTop;
   final bool borderBottom;
@@ -11,8 +11,6 @@ class AppSectionHeader extends StatelessWidget {
   final EdgeInsets padding;
 
   AppSectionHeader({
-    required this.themeMode,
-    required this.colorTheme,
     required this.text,
     this.borderTop: false,
     this.borderBottom: false,
@@ -26,30 +24,32 @@ class AppSectionHeader extends StatelessWidget {
   @override
   Widget build(
     BuildContext context,
-  ) =>
-      Container(
-        decoration: BoxDecoration(
-          color: AppTheme.getSectionColor(themeMode),
-          border: Border(
-            bottom: BorderSide(
-              color: AppTheme.getBorderColor(
-                themeMode,
-                colorTheme: colorTheme,
-              ),
-              width: borderBottom ? 1.0 : 0.0,
+  ) {
+    AppState state = context.read<AppBloc>().state;
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.getSectionColor(state.themeMode),
+        border: Border(
+          bottom: BorderSide(
+            color: AppTheme.getBorderColor(
+              state.themeMode,
+              colorTheme: state.colorTheme,
             ),
-            top: BorderSide(
-              color: AppTheme.getBorderColor(
-                themeMode,
-                colorTheme: colorTheme,
-              ),
-              width: borderTop ? 1.0 : 0.0,
+            width: borderBottom ? 1.0 : 0.0,
+          ),
+          top: BorderSide(
+            color: AppTheme.getBorderColor(
+              state.themeMode,
+              colorTheme: state.colorTheme,
             ),
+            width: borderTop ? 1.0 : 0.0,
           ),
         ),
-        padding: padding,
-        child: _buildContent(context),
-      );
+      ),
+      padding: padding,
+      child: _buildContent(context),
+    );
+  }
 
   Widget _buildContent(
     BuildContext context,

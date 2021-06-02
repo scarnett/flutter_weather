@@ -64,6 +64,7 @@ class AppLocalizations {
   String get wind => addMessage('Wind');
   String get pressure => addMessage('Pressure');
   String get humidity => addMessage('Humidity');
+  String get forecast => addMessage('Forecast');
   String get addForecast => addMessage('Add Forecast');
   String get addThisForecast => addMessage('Add This Forecast');
   String get editForecast => addMessage('Edit Forecast');
@@ -116,6 +117,7 @@ class AppLocalizations {
   String get chartType => addMessage('Chart Type');
   String get chartLine => addMessage('Line');
   String get chartBar => addMessage('Bar');
+  String get hourRange => addMessage('Hour Range');
   String get hours12 => addMessage('12hr');
   String get hours24 => addMessage('24hr');
   String get hours36 => addMessage('36hr');

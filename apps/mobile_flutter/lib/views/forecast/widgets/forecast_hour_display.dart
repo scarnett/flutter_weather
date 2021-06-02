@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -7,14 +9,10 @@ import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 
 class ForecastHourDisplay extends StatelessWidget {
   final ForecastHour hour;
-  final ThemeMode themeMode;
-  final bool colorTheme;
 
   const ForecastHourDisplay({
     Key? key,
     required this.hour,
-    required this.themeMode,
-    this.colorTheme: false,
   }) : super(key: key);
 
   @override
@@ -26,7 +24,9 @@ class ForecastHourDisplay extends StatelessWidget {
           Text(
             formatHour(dateTime: hour.dt) ?? '',
             style: Theme.of(context).textTheme.headline5!.copyWith(
-                  shadows: colorTheme ? commonTextShadow() : null,
+                  shadows: context.read<AppBloc>().state.colorTheme
+                      ? commonTextShadow()
+                      : null,
                 ),
           ),
           Padding(
@@ -35,8 +35,8 @@ class ForecastHourDisplay extends StatelessWidget {
               formatHour(dateTime: hour.dt, format: 'a') ?? '',
               style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: AppTheme.getHintColor(
-                      themeMode,
-                      colorTheme: colorTheme,
+                      context.read<AppBloc>().state.themeMode,
+                      colorTheme: context.read<AppBloc>().state.colorTheme,
                     ),
                     fontWeight: FontWeight.bold,
                   ),

@@ -19,10 +19,6 @@ import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class ForecastDayCharts extends StatefulWidget {
   final Forecast forecast;
-  final TemperatureUnit temperatureUnit;
-  final ChartType chartType;
-  final ThemeMode themeMode;
-  final bool colorTheme;
   final Color? forecastColor;
   final List<Color>? gradientColors;
   final bool enabled;
@@ -30,10 +26,6 @@ class ForecastDayCharts extends StatefulWidget {
   ForecastDayCharts({
     Key? key,
     required this.forecast,
-    required this.temperatureUnit,
-    required this.chartType,
-    required this.themeMode,
-    this.colorTheme: false,
     this.forecastColor,
     this.gradientColors,
     this.enabled: true,
@@ -51,15 +43,15 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
 
   @override
   void initState() {
-    _currentPage = widget.chartType.index;
+    _currentPage = context.read<AppBloc>().state.chartType.index;
     _pageController = PageController(initialPage: _currentPage!, keepPage: true)
       ..addListener(() {
         setState(() {
           if (isInteger(_pageController.page)) {
             _currentPage = _pageController.page!.toInt();
             _chartTypeNotifier.value = _currentPage!.toInt();
-
-            BlocProvider.of<AppBloc>(context, listen: false)
+            context
+                .read<AppBloc>()
                 .add(SetChartType(ChartType.values[_currentPage!]));
           }
         });
@@ -110,8 +102,6 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               padding: const EdgeInsets.only(right: 5.0),
               child: AppOptionButton(
                 text: AppLocalizations.of(context)!.chartLine.toUpperCase(),
-                themeMode: widget.themeMode,
-                colorTheme: widget.colorTheme,
                 colorThemeColor: widget.forecastColor?.darken(0.15),
                 active: (_currentPage == 0),
                 onTap: (_currentPage == 0) ? null : () => _tapChartType(0),
@@ -119,8 +109,6 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             ),
             AppOptionButton(
               text: AppLocalizations.of(context)!.chartBar.toUpperCase(),
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
               colorThemeColor: widget.forecastColor?.darken(0.15),
               active: (_currentPage == 1),
               onTap: (_currentPage == 1) ? null : () => _tapChartType(1),
@@ -131,104 +119,111 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
 
   Widget _buildLineChart(
     BuildContext context,
-  ) =>
-      Container(
-        padding: const EdgeInsets.only(left: 10.0),
-        child: LineChart(
-          LineChartData(
-            minX: 0.0,
-            maxX: (_getDays().length.toDouble() - 1.0),
-            minY: round5(
-              number: getTemperature(
-                widget.forecast.getDayLowMin().temp!.min!.toDouble(),
-                widget.temperatureUnit,
-              ).toDouble(),
-              offset: -5.0,
-            ),
-            maxY: round5(
-              number: getTemperature(
-                widget.forecast.getDayHighMax().temp!.max!.toDouble(),
-                widget.temperatureUnit,
-              ).toDouble(),
-            ),
-            gridData: FlGridData(
-              show: true,
-              horizontalInterval: 1.0,
-              drawHorizontalLine: true,
-              getDrawingHorizontalLine: (double value) {
-                if ((value % 5) == 0) {
-                  return FlLine(
-                    color: getGridBorderColor(
-                      themeMode: widget.themeMode,
-                      colorTheme: widget.colorTheme,
-                    ),
-                    strokeWidth: 1.0,
-                  );
-                }
+  ) {
+    AppState state = context.read<AppBloc>().state;
+    List<LineChartBarData> lineBarsData = getLineBarsData(state);
 
-                return FlLine(color: Colors.transparent);
-              },
-              drawVerticalLine: true,
-              getDrawingVerticalLine: (double value) => FlLine(
-                color: getGridBorderColor(
-                  themeMode: widget.themeMode,
-                  colorTheme: widget.colorTheme,
-                ),
-                strokeWidth: 1.0,
+    return Container(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: LineChart(
+        LineChartData(
+          minX: 0.0,
+          maxX: (_getDays().length.toDouble() - 1.0),
+          minY: round5(
+            number: getTemperature(
+              widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+              state.temperatureUnit,
+            ).toDouble(),
+            offset: -5.0,
+          ),
+          maxY: round5(
+            number: getTemperature(
+              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+              state.temperatureUnit,
+            ).toDouble(),
+          ),
+          gridData: FlGridData(
+            show: true,
+            horizontalInterval: 1.0,
+            drawHorizontalLine: true,
+            getDrawingHorizontalLine: (double value) {
+              if ((value % 5) == 0) {
+                return FlLine(
+                  color: getGridBorderColor(
+                    themeMode: state.themeMode,
+                    colorTheme: state.colorTheme,
+                  ),
+                  strokeWidth: 1.0,
+                );
+              }
+
+              return FlLine(color: Colors.transparent);
+            },
+            drawVerticalLine: true,
+            getDrawingVerticalLine: (double value) => FlLine(
+              color: getGridBorderColor(
+                themeMode: state.themeMode,
+                colorTheme: state.colorTheme,
               ),
-            ),
-            showingTooltipIndicators: (_selectedSpot == null)
-                ? null
-                : [
-                    ShowingTooltipIndicators([
-                      LineBarSpot(
-                        lineBarsData[0],
-                        lineBarsData.indexOf(lineBarsData[0]),
-                        lineBarsData[0].spots[_selectedSpot!],
-                      ),
-                    ]),
-                  ],
-            titlesData: FlTitlesData(
-              show: true,
-              bottomTitles: buildBottomSideTitles(
-                context: context,
-                title: (double value) => getDayTitle(widget.forecast, value),
-              ),
-              leftTitles: buildLeftSideTitles(
-                context: context,
-                temperatureUnit: widget.temperatureUnit,
-              ),
-              rightTitles: buildEmptySideTitles(),
-              topTitles: buildEmptySideTitles(),
-            ),
-            borderData: getBorderData(
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-            ),
-            lineBarsData: lineBarsData,
-            lineTouchData: getLineTouchData(
-              context: context,
-              temperatureUnit: widget.temperatureUnit,
-              colorTheme: widget.colorTheme,
-              forecastColor: widget.forecastColor,
-              enabled: widget.enabled,
-              callback: (int index) => setState(() {
-                if (_selectedSpot == index) {
-                  _selectedSpot = null;
-                } else {
-                  _selectedSpot = index;
-                }
-              }),
+              strokeWidth: 1.0,
             ),
           ),
+          showingTooltipIndicators: (_selectedSpot == null)
+              ? null
+              : [
+                  ShowingTooltipIndicators([
+                    LineBarSpot(
+                      lineBarsData[0],
+                      lineBarsData.indexOf(lineBarsData[0]),
+                      lineBarsData[0].spots[_selectedSpot!],
+                    ),
+                  ]),
+                ],
+          titlesData: FlTitlesData(
+            show: true,
+            bottomTitles: buildBottomSideTitles(
+              context: context,
+              title: (double value) => getDayTitle(widget.forecast, value),
+            ),
+            leftTitles: buildLeftSideTitles(
+              context: context,
+              temperatureUnit: state.temperatureUnit,
+            ),
+            rightTitles: buildEmptySideTitles(),
+            topTitles: buildEmptySideTitles(),
+          ),
+          borderData: getBorderData(
+            themeMode: state.themeMode,
+            colorTheme: state.colorTheme,
+          ),
+          lineBarsData: lineBarsData,
+          lineTouchData: getLineTouchData(
+            context: context,
+            temperatureUnit: state.temperatureUnit,
+            colorTheme: state.colorTheme,
+            forecastColor: widget.forecastColor,
+            enabled: widget.enabled,
+            callback: (int index) => setState(() {
+              if (_selectedSpot == index) {
+                _selectedSpot = null;
+              } else {
+                _selectedSpot = index;
+              }
+            }),
+          ),
         ),
-      );
+      ),
+    );
+  }
 
-  List<LineChartBarData> get lineBarsData => [
+  List<LineChartBarData> getLineBarsData(
+    AppState state,
+  ) =>
+      [
         getLineData(
           spots: _getTempMaxSpots(),
-          colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
-          colorTheme: widget.colorTheme,
+          colors: widget.gradientColors ?? getLineColors(state.colorTheme),
+          colorTheme: state.colorTheme,
           forecastColor: widget.forecastColor,
         ),
         getLineData(
@@ -236,112 +231,120 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           spots: _getTempMinSpots(),
           colors: widget.gradientColors ??
               getLineColors(
-                widget.colorTheme,
+                state.colorTheme,
                 opacity: 0.5,
               ),
-          colorTheme: widget.colorTheme,
+          colorTheme: state.colorTheme,
           forecastColor: widget.forecastColor,
         ),
       ];
 
-  Widget _buildBarChart() => Container(
-        padding: const EdgeInsets.only(left: 10.0),
-        child: BarChart(
-          BarChartData(
-            alignment: BarChartAlignment.center,
-            minY: round5(
-              number: getTemperature(
-                widget.forecast.getDayLowMin().temp!.min!.toDouble(),
-                widget.temperatureUnit,
-              ).toDouble(),
-              offset: -5.0,
-            ),
-            maxY: round5(
-              number: getTemperature(
-                widget.forecast.getDayHighMax().temp!.max!.toDouble(),
-                widget.temperatureUnit,
-              ).toDouble(),
-            ),
-            gridData: FlGridData(
-              show: true,
-              horizontalInterval: 1.0,
-              drawHorizontalLine: true,
-              getDrawingHorizontalLine: (double value) {
-                if ((value % 5) == 0) {
-                  return FlLine(
-                    color: getGridBorderColor(
-                      themeMode: widget.themeMode,
-                      colorTheme: widget.colorTheme,
-                    ),
-                    strokeWidth: 1.0,
-                  );
-                }
+  Widget _buildBarChart() {
+    AppState state = context.read<AppBloc>().state;
+    return Container(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: BarChart(
+        BarChartData(
+          alignment: BarChartAlignment.center,
+          minY: round5(
+            number: getTemperature(
+              widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+              state.temperatureUnit,
+            ).toDouble(),
+            offset: -5.0,
+          ),
+          maxY: round5(
+            number: getTemperature(
+              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+              state.temperatureUnit,
+            ).toDouble(),
+          ),
+          gridData: FlGridData(
+            show: true,
+            horizontalInterval: 1.0,
+            drawHorizontalLine: true,
+            getDrawingHorizontalLine: (double value) {
+              if ((value % 5) == 0) {
+                return FlLine(
+                  color: getGridBorderColor(
+                    themeMode: state.themeMode,
+                    colorTheme: state.colorTheme,
+                  ),
+                  strokeWidth: 1.0,
+                );
+              }
 
-                return FlLine(color: Colors.transparent);
-              },
-            ),
-            groupsSpace: 15.0,
-            barGroups: barGroups,
-            titlesData: FlTitlesData(
-              show: true,
-              bottomTitles: buildBottomSideTitles(
-                context: context,
-                title: (double value) => getDayTitle(widget.forecast, value),
-              ),
-              leftTitles: buildLeftSideTitles(
-                context: context,
-                temperatureUnit: widget.temperatureUnit,
-              ),
-              rightTitles: buildEmptySideTitles(),
-              topTitles: buildEmptySideTitles(),
-            ),
-            borderData: getBorderData(
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-            ),
-            barTouchData: getBarTouchData(
+              return FlLine(color: Colors.transparent);
+            },
+          ),
+          groupsSpace: 15.0,
+          barGroups: getBarGroups(state),
+          titlesData: FlTitlesData(
+            show: true,
+            bottomTitles: buildBottomSideTitles(
               context: context,
-              temperatureUnit: widget.temperatureUnit,
-              colorTheme: widget.colorTheme,
-              enabled: widget.enabled,
+              title: (double value) => getDayTitle(widget.forecast, value),
             ),
+            leftTitles: buildLeftSideTitles(
+              context: context,
+              temperatureUnit: state.temperatureUnit,
+            ),
+            rightTitles: buildEmptySideTitles(),
+            topTitles: buildEmptySideTitles(),
+          ),
+          borderData: getBorderData(
+            themeMode: state.themeMode,
+            colorTheme: state.colorTheme,
+          ),
+          barTouchData: getBarTouchData(
+            context: context,
+            temperatureUnit: state.temperatureUnit,
+            colorTheme: state.colorTheme,
+            enabled: widget.enabled,
           ),
         ),
-      );
+      ),
+    );
+  }
 
-  Widget _buildCircleIndicator() => Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: CirclePageIndicator(
-            size: 4.0,
-            dotColor: AppTheme.getBorderColor(
-              widget.themeMode,
-              colorTheme: widget.colorTheme,
-            ),
-            selectedDotColor:
-                widget.colorTheme ? Colors.white : AppTheme.primaryColor,
-            selectedSize: 6.0,
-            itemCount: ChartType.values.length,
-            currentPageNotifier: _chartTypeNotifier,
-            onPageSelected: (int page) async => await _tapChartType(page),
+  Widget _buildCircleIndicator() {
+    AppState state = context.read<AppBloc>().state;
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: CirclePageIndicator(
+          size: 4.0,
+          dotColor: AppTheme.getBorderColor(
+            state.themeMode,
+            colorTheme: state.colorTheme,
           ),
+          selectedDotColor:
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
+          selectedSize: 6.0,
+          itemCount: ChartType.values.length,
+          currentPageNotifier: _chartTypeNotifier,
+          onPageSelected: (int page) async => await _tapChartType(page),
         ),
-      );
+      ),
+    );
+  }
 
-  List<BarChartGroupData> get barGroups {
+  List<BarChartGroupData> getBarGroups(
+    AppState state,
+  ) {
     List<BarChartGroupData> rodData = <BarChartGroupData>[];
     int count = 0;
 
     for (ForecastDaily day in _getDays()) {
       double tempMax = getTemperature(
         day.temp!.max!.toDouble(),
-        widget.temperatureUnit,
+        state.temperatureUnit,
       ).toDouble();
 
       double tempMin = getTemperature(
         day.temp!.min!.toDouble(),
-        widget.temperatureUnit,
+        state.temperatureUnit,
       ).toDouble();
 
       rodData.add(
@@ -356,7 +359,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
               ),
-              colors: widget.gradientColors ?? getLineColors(widget.colorTheme),
+              colors: widget.gradientColors ?? getLineColors(state.colorTheme),
             ),
             BarChartRodData(
               y: tempMin,
@@ -367,7 +370,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               ),
               colors: widget.gradientColors ??
                   getLineColors(
-                    widget.colorTheme,
+                    state.colorTheme,
                     opacity: 0.5,
                   ),
             ),
@@ -396,15 +399,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   List<FlSpot> _getTempMaxSpots() {
     int index = 0;
     List<FlSpot> spots = [];
+    TemperatureUnit temperatureUnit =
+        context.read<AppBloc>().state.temperatureUnit;
 
     for (ForecastDaily day in _getDays()) {
       spots.add(
         FlSpot(
           index.toDouble(),
-          getTemperature(
-            day.temp!.max!.toDouble(),
-            widget.temperatureUnit,
-          ).toDouble(),
+          getTemperature(day.temp!.max!.toDouble(), temperatureUnit).toDouble(),
         ),
       );
 
@@ -417,15 +419,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   List<FlSpot> _getTempMinSpots() {
     int index = 0;
     List<FlSpot> spots = [];
+    TemperatureUnit temperatureUnit =
+        context.read<AppBloc>().state.temperatureUnit;
 
     for (ForecastDaily day in _getDays()) {
       spots.add(
         FlSpot(
           index.toDouble(),
-          getTemperature(
-            day.temp!.min!.toDouble(),
-            widget.temperatureUnit,
-          ).toDouble(),
+          getTemperature(day.temp!.min!.toDouble(), temperatureUnit).toDouble(),
         ),
       );
 

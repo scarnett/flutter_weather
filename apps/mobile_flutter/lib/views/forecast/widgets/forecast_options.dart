@@ -32,14 +32,9 @@ class ForecastOptions extends StatelessWidget {
             ForecastRefresh(),
             Expanded(child: Container()),
             AppColorThemeToggle(
-              forecasts: context.watch<AppBloc>().state.forecasts,
-              themeMode: context.watch<AppBloc>().state.themeMode,
-              colorTheme: context.watch<AppBloc>().state.colorTheme,
               callback: () => context.read<AppBloc>().add(ToggleColorTheme()),
             ),
             AppDayNightSwitch(
-              themeMode: context.watch<AppBloc>().state.themeMode,
-              colorTheme: context.watch<AppBloc>().state.colorTheme,
               callback: () => context.read<AppBloc>().add(ToggleThemeMode()),
             ),
             _buildSettingsButton(context),

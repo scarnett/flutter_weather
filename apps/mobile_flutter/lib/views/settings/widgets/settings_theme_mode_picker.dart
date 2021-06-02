@@ -14,8 +14,6 @@ import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsThemeModePicker extends StatefulWidget {
-  final ThemeMode? selectedThemeMode;
-
   final Function(
     ThemeMode? themeMode,
   ) onTapThemeMode;
@@ -26,7 +24,6 @@ class SettingsThemeModePicker extends StatefulWidget {
 
   SettingsThemeModePicker({
     Key? key,
-    this.selectedThemeMode,
     required this.onTapThemeMode,
     required this.onTapColorized,
   }) : super(key: key);
@@ -41,8 +38,6 @@ class _SettingsThemeModePickerState extends State<SettingsThemeModePicker> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
             context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Theme(
@@ -61,7 +56,6 @@ class _SettingsThemeModePickerState extends State<SettingsThemeModePicker> {
     ThemeMode themeMode = context.read<AppBloc>().state.themeMode;
     List<Widget> widgets = <Widget>[]..addAll([
         AppRadioTile<ThemeMode>(
-          themeMode: themeMode,
           title: ThemeMode.light.getText(context),
           value: ThemeMode.light,
           groupValue: themeMode,
@@ -75,7 +69,6 @@ class _SettingsThemeModePickerState extends State<SettingsThemeModePicker> {
       widgets.addAll(
         [
           AppCheckboxTile(
-            themeMode: themeMode,
             title: AppLocalizations.of(context)!.colorized,
             checked: context.read<AppBloc>().state.colorTheme,
             onTap: _tapColorized,
@@ -87,7 +80,6 @@ class _SettingsThemeModePickerState extends State<SettingsThemeModePicker> {
 
     widgets.add(
       AppRadioTile<ThemeMode>(
-        themeMode: themeMode,
         title: ThemeMode.dark.getText(context),
         value: ThemeMode.dark,
         groupValue: themeMode,

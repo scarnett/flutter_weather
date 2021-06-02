@@ -58,8 +58,6 @@ class _SettingsPushNotificationPickerState
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
             context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Theme(
@@ -115,8 +113,6 @@ class _SettingsPushNotificationPickerState
     List<Widget> children = <Widget>[];
     children.add(
       AppSectionHeader(
-        themeMode: state.themeMode,
-        colorTheme: state.colorTheme,
         text:
             PushNotification.SAVED_LOCATION.getInfo(context: context)!['text'],
       ),

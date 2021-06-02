@@ -43,6 +43,10 @@ String getTitle(
     return AppLocalizations.of(context)!.pushNotification;
   } else if (_currentPage.toInt() == 3) {
     return AppLocalizations.of(context)!.themeMode;
+  } else if (_currentPage.toInt() == 4) {
+    return AppLocalizations.of(context)!.chartType;
+  } else if (_currentPage.toInt() == 5) {
+    return AppLocalizations.of(context)!.hourRange;
   }
 
   return AppLocalizations.of(context)!.settings;

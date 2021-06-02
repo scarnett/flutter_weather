@@ -55,7 +55,7 @@ class _ForecastPageViewState extends State<ForecastView>
 
   @override
   void dispose() {
-    context.read<AppBloc>().add(SetScrollDirection(ScrollDirection.idle));
+    // context.read<AppBloc>().add(SetScrollDirection(ScrollDirection.idle));
     _pageController.dispose();
     _hideFabAnimationController.dispose();
     _currentForecastNotifier.dispose();
@@ -303,8 +303,6 @@ class _ForecastPageViewState extends State<ForecastView>
           Color _forecastDarkenedColor = _forecastColor!.darken(0.25);
 
           return AppUiOverlayStyle(
-            themeMode: state.themeMode,
-            colorTheme: state.colorTheme,
             systemNavigationBarColor: _forecastDarkenedColor,
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -338,8 +336,6 @@ class _ForecastPageViewState extends State<ForecastView>
     AppState state,
   ) =>
       AppUiOverlayStyle(
-        themeMode: state.themeMode,
-        colorTheme: state.colorTheme,
         child: AppUiSafeArea(
           bottom: false,
           top: false,
@@ -366,11 +362,6 @@ class _ForecastPageViewState extends State<ForecastView>
         child: ForecastDisplay(
           forecastColor: forecastColor,
           forecastDarkenedColor: forecastDarkenedColor,
-          temperatureUnit: state.temperatureUnit,
-          chartType: state.chartType,
-          forecastHourRange: state.forecastHourRange,
-          themeMode: state.themeMode,
-          colorTheme: state.colorTheme,
           forecast: state.forecasts[position],
         ),
       );
@@ -379,11 +370,6 @@ class _ForecastPageViewState extends State<ForecastView>
     return ForecastDisplay(
       forecastColor: forecastColor,
       forecastDarkenedColor: forecastDarkenedColor,
-      temperatureUnit: state.temperatureUnit,
-      chartType: state.chartType,
-      forecastHourRange: state.forecastHourRange,
-      themeMode: state.themeMode,
-      colorTheme: state.colorTheme,
       forecast: state.forecasts[position],
     );
   }
@@ -416,7 +402,7 @@ class _ForecastPageViewState extends State<ForecastView>
           selectedSize: 10.0,
           itemCount: state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
-          onPageSelected: (int page) async => await _onPageSelected,
+          onPageSelected: (int page) async => await _onPageSelected(page),
         ),
       ),
     );

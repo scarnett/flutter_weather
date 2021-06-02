@@ -46,8 +46,6 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
             context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Theme(

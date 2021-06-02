@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_condition.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_current_temp.dart';
@@ -16,11 +15,6 @@ import 'package:flutter_weather/views/forecast/widgets/forecast_meta_row.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_sliver_header.dart';
 
 class ForecastDisplay extends StatefulWidget {
-  final TemperatureUnit temperatureUnit;
-  final ChartType chartType;
-  final ForecastHourRange forecastHourRange;
-  final ThemeMode themeMode;
-  final bool colorTheme;
   final Forecast forecast;
   final bool sliverView;
   final Color? forecastColor;
@@ -28,12 +22,7 @@ class ForecastDisplay extends StatefulWidget {
   final bool detailsEnabled;
 
   ForecastDisplay({
-    required this.temperatureUnit,
-    required this.chartType,
-    required this.forecastHourRange,
-    required this.themeMode,
     required this.forecast,
-    this.colorTheme: false,
     this.sliverView: true,
     this.forecastColor,
     this.forecastDarkenedColor,
@@ -88,28 +77,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           children: <Widget>[
             ForecastLocation(forecast: widget.forecast),
             SizedBox(height: 10.0),
-            ForecastCurrentTemp(
-              currentDay: widget.forecast.list!.first,
-              temperatureUnit: widget.temperatureUnit,
-            ),
+            ForecastCurrentTemp(currentDay: widget.forecast.list!.first),
             ForecastCondition(currentDay: currentDay),
-            ForecastHiLo(
-              currentDay: currentDay,
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-              temperatureUnit: widget.temperatureUnit,
-            ),
-            ForecastMetaRow(
-              currentDay: currentDay,
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-            ),
-            ForecastDayScroller(
-              forecast: widget.forecast,
-              themeMode: widget.themeMode,
-              colorTheme: widget.colorTheme,
-              temperatureUnit: widget.temperatureUnit,
-            ),
+            ForecastHiLo(currentDay: currentDay),
+            ForecastMetaRow(currentDay: currentDay),
+            ForecastDayScroller(forecast: widget.forecast),
           ]..addAll(_buildDetailDisplay()),
         ),
       );
@@ -133,10 +105,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   pinned: true,
                   floating: false,
                   delegate: ForecastSliverHeader(
-                    context: context,
+                    parentContext: context,
                     forecastColor: widget.forecastColor,
-                    temperatureUnit: widget.temperatureUnit,
-                    colorTheme: widget.colorTheme,
                     forecast: widget.forecast,
                   ),
                 ),
@@ -144,12 +114,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   delegate: SliverChildListDelegate(
                     [
                       _buildCurrentForecast(currentDay),
-                      ForecastDayScroller(
-                        forecast: widget.forecast,
-                        themeMode: widget.themeMode,
-                        colorTheme: widget.colorTheme,
-                        temperatureUnit: widget.temperatureUnit,
-                      ),
+                      ForecastDayScroller(forecast: widget.forecast),
                     ]..addAll(_buildDetailDisplay()),
                   ),
                 ),
@@ -190,17 +155,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       Column(
         children: <Widget>[
           ForecastCondition(currentDay: currentDay),
-          ForecastHiLo(
-            currentDay: currentDay,
-            themeMode: widget.themeMode,
-            colorTheme: widget.colorTheme,
-            temperatureUnit: widget.temperatureUnit,
-          ),
-          ForecastMetaRow(
-            currentDay: currentDay,
-            themeMode: widget.themeMode,
-            colorTheme: widget.colorTheme,
-          ),
+          ForecastHiLo(currentDay: currentDay),
+          ForecastMetaRow(currentDay: currentDay),
         ],
       );
 
@@ -216,11 +172,6 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           child: ForecastDetailDisplay(
             scrollController: _scrollController,
             forecast: widget.forecast,
-            themeMode: widget.themeMode,
-            colorTheme: widget.colorTheme,
-            temperatureUnit: widget.temperatureUnit,
-            chartType: widget.chartType,
-            forecastHourRange: widget.forecastHourRange,
             forecastColor: widget.forecastColor,
           ),
         ),
@@ -231,7 +182,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
   }
 
   Color get _fadeColor {
-    if (widget.colorTheme && (widget.forecastDarkenedColor != null)) {
+    if (context.read<AppBloc>().state.colorTheme &&
+        (widget.forecastDarkenedColor != null)) {
       return widget.forecastDarkenedColor!.withOpacity(0.925);
     }
 
@@ -258,7 +210,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           ));
 
       if (snapOffset == 0.0) {
-        BlocProvider.of<AppBloc>(context, listen: false)
+        context
+            .read<AppBloc>()
             .add(SetScrollDirection(ScrollDirection.forward));
       }
     }

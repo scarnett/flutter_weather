@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
@@ -12,14 +14,10 @@ import 'package:weather_icons/weather_icons.dart';
 
 class ForecastMetaRow extends StatelessWidget {
   final ForecastDay currentDay;
-  final ThemeMode themeMode;
-  final bool colorTheme;
 
   const ForecastMetaRow({
     Key? key,
     required this.currentDay,
-    required this.themeMode,
-    required this.colorTheme,
   }) : super(key: key);
 
   @override
@@ -88,8 +86,15 @@ class ForecastMetaRow extends StatelessWidget {
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2.0,
                                       valueColor: AlwaysStoppedAnimation<Color>(
-                                        (themeMode == ThemeMode.dark) ||
-                                                colorTheme
+                                        (context
+                                                        .read<AppBloc>()
+                                                        .state
+                                                        .themeMode ==
+                                                    ThemeMode.dark) ||
+                                                context
+                                                    .read<AppBloc>()
+                                                    .state
+                                                    .colorTheme
                                             ? Colors.white
                                             : AppTheme.primaryColor,
                                       ),
