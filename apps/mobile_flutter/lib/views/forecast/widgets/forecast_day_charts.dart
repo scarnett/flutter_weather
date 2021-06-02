@@ -72,25 +72,45 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   Widget build(
     BuildContext context,
   ) =>
-      Column(
-        children: [
-          _buildOptions(),
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              physics: widget.enabled
-                  ? const AppPageViewScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
-              clipBehavior: Clip.none,
-              children: [
-                _buildLineChart(context),
-                _buildBarChart(),
-              ],
+      BlocListener<AppBloc, AppState>(
+        listener: (
+          BuildContext context,
+          AppState state,
+        ) async =>
+            await _blocListener(context, state),
+        child: Column(
+          children: [
+            _buildOptions(),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                physics: widget.enabled
+                    ? const AppPageViewScrollPhysics()
+                    : const NeverScrollableScrollPhysics(),
+                clipBehavior: Clip.none,
+                children: [
+                  _buildLineChart(context),
+                  _buildBarChart(),
+                ],
+              ),
             ),
-          ),
-          _buildCircleIndicator(),
-        ],
+            _buildCircleIndicator(),
+          ],
+        ),
       );
+
+  Future<void> _blocListener(
+    BuildContext context,
+    AppState state,
+  ) async {
+    if (_chartTypeNotifier.value != state.chartType.index) {
+      setState(() async {
+        _currentPage = state.chartType.index;
+        _chartTypeNotifier.value = state.chartType.index;
+        await animatePage(_pageController, page: state.chartType.index);
+      });
+    }
+  }
 
   Widget _buildOptions() => Container(
         alignment: Alignment.center,

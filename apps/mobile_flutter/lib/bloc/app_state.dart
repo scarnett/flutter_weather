@@ -122,7 +122,7 @@ class AppState extends Equatable {
       'pushNotification: $pushNotification, ' +
       'pushNotificationExtras: $pushNotificationExtras, ' +
       'themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit. chartType: $chartType, ' +
+      'temperatureUnit: $temperatureUnit, chartType: $chartType, ' +
       'forecastHourRange: $forecastHourRange, ' +
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
