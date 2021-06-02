@@ -107,15 +107,15 @@ class SetChartType extends AppEvent {
   List<Object?> get props => [chartType];
 }
 
-class SetForecastHourRange extends AppEvent {
-  final ForecastHourRange? forecastHourRange;
+class SetHourRange extends AppEvent {
+  final HourRange? hourRange;
 
-  const SetForecastHourRange(
-    this.forecastHourRange,
+  const SetHourRange(
+    this.hourRange,
   );
 
   @override
-  List<Object?> get props => [forecastHourRange];
+  List<Object?> get props => [hourRange];
 }
 
 class AddForecast extends AppEvent {

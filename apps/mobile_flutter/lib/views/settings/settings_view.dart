@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -197,7 +197,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.hourRange,
           trailingText:
-              context.read<AppBloc>().state.forecastHourRange.getText(context),
+              context.read<AppBloc>().state.hourRange.getText(context),
           pageIndex: 5,
         ),
       ],

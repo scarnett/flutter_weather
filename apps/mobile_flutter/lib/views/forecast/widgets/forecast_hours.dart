@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -85,7 +85,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     _listViewScrollController.addListener(_listViewScrollListener);
     _listViewScrollPhysics = ScrollPhysics();
 
-    _selectedHourRange = context.read<AppBloc>().state.forecastHourRange.hours;
+    _selectedHourRange = context.read<AppBloc>().state.hourRange.hours;
     _buildDataMap(_selectedHourRange);
   }
 
@@ -93,8 +93,8 @@ class _ForecastHoursState extends State<ForecastHours> {
     BuildContext context,
     AppState state,
   ) async {
-    if (_selectedHourRange != state.forecastHourRange.hours) {
-      _buildDataMap(state.forecastHourRange.hours);
+    if (_selectedHourRange != state.hourRange.hours) {
+      _buildDataMap(state.hourRange.hours);
     }
   }
 
@@ -179,14 +179,12 @@ class _ForecastHoursState extends State<ForecastHours> {
     List<Widget> options = [];
     int count = 0;
 
-    for (ForecastHourRange range in ForecastHourRange.values) {
+    for (HourRange range in HourRange.values) {
       Widget option = AppOptionButton(
         text: range.getText(context).toUpperCase(),
         colorThemeColor: widget.forecastColor?.darken(0.15),
-        active: (state.forecastHourRange == range),
-        onTap: (state.forecastHourRange == range)
-            ? null
-            : () => _tapForecastHourRange(range),
+        active: (state.hourRange == range),
+        onTap: (state.hourRange == range) ? null : () => _tapHourRange(range),
       );
 
       if (count > 0) {
@@ -257,11 +255,11 @@ class _ForecastHoursState extends State<ForecastHours> {
     return tiles;
   }
 
-  void _tapForecastHourRange(
-    ForecastHourRange range,
+  void _tapHourRange(
+    HourRange range,
   ) {
     _selectedHourRange = range.hours;
-    context.read<AppBloc>().add(SetForecastHourRange(range));
+    context.read<AppBloc>().add(SetHourRange(range));
     _buildDataMap(_selectedHourRange);
   }
 }

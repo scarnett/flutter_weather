@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_weather/app_prefs.dart';
 import 'package:flutter_weather/app_service.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
@@ -52,8 +52,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapSetTemperatureUnitToStates(event);
     } else if (event is SetChartType) {
       yield _mapSetChartTypeToStates(event);
-    } else if (event is SetForecastHourRange) {
-      yield _mapSetForecastHourRangeToStates(event);
+    } else if (event is SetHourRange) {
+      yield _mapSetHourRangeToStates(event);
     } else if (event is SelectedForecastIndex) {
       yield _mapSelectedForecastIndexToStates(event);
     } else if (event is AddForecast) {
@@ -262,15 +262,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         chartType: event.chartType,
       );
 
-  AppState _mapSetForecastHourRangeToStates(
-    SetForecastHourRange event,
+  AppState _mapSetHourRangeToStates(
+    SetHourRange event,
   ) {
-    if (event.forecastHourRange == state.forecastHourRange) {
+    if (event.hourRange == state.hourRange) {
       return state;
     }
 
     return state.copyWith(
-      forecastHourRange: event.forecastHourRange,
+      hourRange: event.hourRange,
     );
   }
 
@@ -502,7 +502,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         colorTheme: jsonData['colorTheme'],
         temperatureUnit: getTemperatureUnit(jsonData['temperatureUnit']),
         chartType: getChartType(jsonData['chartType']),
-        forecastHourRange: getForecastHourRange(jsonData['forecastHourRange']),
+        hourRange: getForecastHourRange(jsonData['hourRange']),
         forecasts: Forecast.fromJsonList(jsonData['forecasts']),
         selectedForecastIndex: jsonData['selectedForecastIndex'],
       );
@@ -521,7 +521,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         'colorTheme': state.colorTheme,
         'temperatureUnit': state.temperatureUnit.toString(),
         'chartType': state.chartType.toString(),
-        'forecastHourRange': state.forecastHourRange.toString(),
+        'hourRange': state.hourRange.toString(),
         'forecasts': Forecast.toJsonList(state.forecasts),
         'selectedForecastIndex': state.selectedForecastIndex,
       };

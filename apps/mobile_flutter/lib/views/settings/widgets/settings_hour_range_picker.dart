@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -40,14 +40,13 @@ class _SettingsHourRangePickerState extends State<SettingsHourRangePicker> {
 
   Widget _buildBody() {
     int count = 0;
-    List<ForecastHourRange> hourRanges = ForecastHourRange.values;
+    List<HourRange> hourRanges = HourRange.values;
     List<Widget> widgets = <Widget>[];
-    ForecastHourRange _hourRange =
-        context.read<AppBloc>().state.forecastHourRange;
+    HourRange _hourRange = context.read<AppBloc>().state.hourRange;
 
-    for (ForecastHourRange hourRange in hourRanges) {
+    for (HourRange hourRange in hourRanges) {
       widgets.add(
-        AppRadioTile<ForecastHourRange>(
+        AppRadioTile<HourRange>(
           title: hourRange.getText(context),
           value: hourRange,
           groupValue: _hourRange,
@@ -66,7 +65,7 @@ class _SettingsHourRangePickerState extends State<SettingsHourRangePicker> {
   }
 
   void _tapHourRange(
-    ForecastHourRange? hourRange,
+    HourRange? hourRange,
   ) =>
-      context.read<AppBloc>().add(SetForecastHourRange(hourRange));
+      context.read<AppBloc>().add(SetHourRange(hourRange));
 }
