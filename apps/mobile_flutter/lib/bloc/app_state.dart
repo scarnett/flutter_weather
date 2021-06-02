@@ -8,7 +8,7 @@ class AppState extends Equatable {
   final ThemeMode themeMode;
   final bool colorTheme;
   final TemperatureUnit temperatureUnit;
-  final SpeedUnit speedUnit;
+  final WindSpeedUnit windSpeedUnit;
   final ChartType chartType;
   final HourRange hourRange;
   final int selectedForecastIndex;
@@ -25,7 +25,7 @@ class AppState extends Equatable {
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
-    this.speedUnit: SpeedUnit.mph,
+    this.windSpeedUnit: WindSpeedUnit.mph,
     this.chartType: ChartType.line,
     this.hourRange: HourRange.hours12,
     this.selectedForecastIndex: 0,
@@ -43,7 +43,7 @@ class AppState extends Equatable {
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
     this.temperatureUnit: TemperatureUnit.fahrenheit,
-    this.speedUnit: SpeedUnit.mph,
+    this.windSpeedUnit: WindSpeedUnit.mph,
     this.chartType: ChartType.line,
     this.hourRange: HourRange.hours12,
     this.selectedForecastIndex: 0,
@@ -63,7 +63,7 @@ class AppState extends Equatable {
     ThemeMode? themeMode,
     bool? colorTheme,
     TemperatureUnit? temperatureUnit,
-    SpeedUnit? speedUnit,
+    WindSpeedUnit? windSpeedUnit,
     ChartType? chartType,
     HourRange? hourRange,
     int? selectedForecastIndex,
@@ -86,7 +86,7 @@ class AppState extends Equatable {
         themeMode: themeMode ?? this.themeMode,
         colorTheme: colorTheme ?? this.colorTheme,
         temperatureUnit: temperatureUnit ?? this.temperatureUnit,
-        speedUnit: speedUnit ?? this.speedUnit,
+        windSpeedUnit: windSpeedUnit ?? this.windSpeedUnit,
         chartType: chartType ?? this.chartType,
         hourRange: hourRange ?? this.hourRange,
         selectedForecastIndex:
@@ -111,7 +111,7 @@ class AppState extends Equatable {
         themeMode,
         colorTheme,
         temperatureUnit,
-        speedUnit,
+        windSpeedUnit,
         chartType,
         hourRange,
         selectedForecastIndex,
@@ -128,7 +128,7 @@ class AppState extends Equatable {
       'pushNotification: $pushNotification, ' +
       'pushNotificationExtras: $pushNotificationExtras, ' +
       'themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit, speedUnit: $speedUnit, ' +
+      'temperatureUnit: $temperatureUnit, windSpeedUnit: $windSpeedUnit, ' +
       'chartType: $chartType, hourRange: $hourRange, ' +
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +

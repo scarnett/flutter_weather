@@ -9,16 +9,17 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
-class SettingsSpeedUnitsPicker extends StatefulWidget {
-  SettingsSpeedUnitsPicker({
+class WindSettingsSpeedUnitsPicker extends StatefulWidget {
+  WindSettingsSpeedUnitsPicker({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _SettingsSpeedUnitsPickerState();
+  State<StatefulWidget> createState() => _WindSettingsSpeedUnitsPickerState();
 }
 
-class _SettingsSpeedUnitsPickerState extends State<SettingsSpeedUnitsPicker> {
+class _WindSettingsSpeedUnitsPickerState
+    extends State<WindSettingsSpeedUnitsPicker> {
   @override
   Widget build(
     BuildContext context,
@@ -40,21 +41,21 @@ class _SettingsSpeedUnitsPickerState extends State<SettingsSpeedUnitsPicker> {
 
   Widget _buildBody() {
     int count = 0;
-    List<SpeedUnit> speedUnits = SpeedUnit.values;
+    List<WindSpeedUnit> windSpeedUnits = WindSpeedUnit.values;
     List<Widget> widgets = <Widget>[];
-    SpeedUnit _temperatureUnit = context.read<AppBloc>().state.speedUnit;
+    WindSpeedUnit _windSpeedUnit = context.read<AppBloc>().state.windSpeedUnit;
 
-    for (SpeedUnit speedUnit in speedUnits) {
+    for (WindSpeedUnit windSpeedUnit in windSpeedUnits) {
       widgets.add(
-        AppRadioTile<SpeedUnit>(
-          title: speedUnit.getText(context),
-          value: speedUnit,
-          groupValue: _temperatureUnit,
-          onTap: _tapSpeedUnit,
+        AppRadioTile<WindSpeedUnit>(
+          title: windSpeedUnit.getText(context),
+          value: windSpeedUnit,
+          groupValue: _windSpeedUnit,
+          onTap: _tapWindSpeedUnit,
         ),
       );
 
-      if ((count + 1) < speedUnits.length) {
+      if ((count + 1) < windSpeedUnits.length) {
         widgets.add(Divider());
       }
 
@@ -64,8 +65,8 @@ class _SettingsSpeedUnitsPickerState extends State<SettingsSpeedUnitsPicker> {
     return ListView(children: widgets);
   }
 
-  void _tapSpeedUnit(
-    SpeedUnit? speedUnit,
+  void _tapWindSpeedUnit(
+    WindSpeedUnit? windSpeedUnit,
   ) =>
-      context.read<AppBloc>().add(SetSpeedUnit(speedUnit));
+      context.read<AppBloc>().add(SetWindSpeedUnit(windSpeedUnit));
 }

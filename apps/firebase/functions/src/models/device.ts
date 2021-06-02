@@ -12,7 +12,7 @@ export class Device extends BaseModel {
   pushNotification?: string
   pushNotificationExtras?: PushNotificationExtras
   temperatureUnit?: 'imperial' | 'metric' | 'standard'
-  speedUnit?: 'mph' | 'kmh'
+  windSpeedUnit?: 'mph' | 'kmh'
   lastUpdated?: admin.firestore.Timestamp
   lastPushDate?: admin.firestore.Timestamp
 }

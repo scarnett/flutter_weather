@@ -10,7 +10,7 @@ const String updatePeriodKey = 'updatePeriod';
 const String pushNotificationKey = 'pushNotification';
 const String pushNotificationExtrasKey = 'pushNotificationExtras';
 const String temperatureUnitKey = 'temperatureUnit';
-const String speedUnitKey = 'speedUnitKey';
+const String windSpeedUnitKey = 'windSpeedUnitKey';
 
 class AppPrefs {
   static late SharedPreferences _sharedPrefs;
@@ -91,11 +91,12 @@ class AppPrefs {
     _sharedPrefs.setString(temperatureUnitKey, temperatureUnit.toString());
   }
 
-  SpeedUnit get speedUnit => getSpeedUnit(_sharedPrefs.getString(speedUnitKey));
+  WindSpeedUnit get windSpeedUnit =>
+      getWindSpeedUnit(_sharedPrefs.getString(windSpeedUnitKey));
 
-  set speedUnit(
-    SpeedUnit? speedUnit,
+  set windSpeedUnit(
+    WindSpeedUnit? speedUnit,
   ) {
-    _sharedPrefs.setString(speedUnitKey, speedUnit.toString());
+    _sharedPrefs.setString(windSpeedUnitKey, speedUnit.toString());
   }
 }

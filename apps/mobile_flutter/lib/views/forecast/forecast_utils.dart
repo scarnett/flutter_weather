@@ -169,6 +169,27 @@ String getTemperatureUnitStr(
   }
 }
 
+num getWindSpeed(
+  num? temperature,
+  TemperatureUnit unit,
+) {
+  if (temperature == null) {
+    return 0;
+  }
+
+  switch (unit) {
+    case TemperatureUnit.fahrenheit:
+      return (temperature * (9 / 5) - 459.67).round();
+
+    case TemperatureUnit.celsius:
+      return (temperature - 273.15).round();
+
+    case TemperatureUnit.kelvin:
+    default:
+      return temperature.round();
+  }
+}
+
 Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {

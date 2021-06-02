@@ -5,7 +5,7 @@ export 'hour_range.dart';
 export 'lookup_status.dart';
 export 'push_notifications.dart';
 export 'refresh_status.dart';
-export 'speed_unit.dart';
 export 'temperature_unit.dart';
 export 'theme_mode.dart';
 export 'update_period.dart';
+export 'wind_speed_unit.dart';

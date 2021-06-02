@@ -17,11 +17,11 @@ import 'package:flutter_weather/views/settings/widgets/settings_hour_range_picke
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_option.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_speed_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_temperature_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_theme_mode_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_wind_speed_units_picker.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
@@ -158,7 +158,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsChartTypePicker(),
         SettingsHourRangePicker(),
         SettingsTemperatureUnitsPicker(),
-        SettingsSpeedUnitsPicker(),
+        WindSettingsSpeedUnitsPicker(),
       ],
     );
   }
@@ -283,7 +283,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.windSpeed,
           trailingText:
-              context.read<AppBloc>().state.speedUnit.getText(context),
+              context.read<AppBloc>().state.windSpeedUnit.getText(context),
           pageIndex: 7,
         ),
       ];

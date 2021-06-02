@@ -96,15 +96,15 @@ class SetTemperatureUnit extends AppEvent {
   List<Object?> get props => [temperatureUnit];
 }
 
-class SetSpeedUnit extends AppEvent {
-  final SpeedUnit? speedUnit;
+class SetWindSpeedUnit extends AppEvent {
+  final WindSpeedUnit? windSpeedUnit;
 
-  const SetSpeedUnit(
-    this.speedUnit,
+  const SetWindSpeedUnit(
+    this.windSpeedUnit,
   );
 
   @override
-  List<Object?> get props => [speedUnit];
+  List<Object?> get props => [windSpeedUnit];
 }
 
 class SetChartType extends AppEvent {
