@@ -17,10 +17,10 @@ import 'package:flutter_weather/views/settings/widgets/settings_hour_range_picke
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_option.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_temperature_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_theme_mode_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
-import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
@@ -156,6 +156,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsThemeModePicker(),
         SettingsChartTypePicker(),
         SettingsHourRangePicker(),
+        SettingsTemperatureUnitsPicker(),
       ],
     );
   }
@@ -270,27 +271,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
     return [
       AppSectionHeader(
-        text: AppLocalizations.of(context)!.temperatureUnit,
+        text: AppLocalizations.of(context)!.units,
       ),
-      AppRadioTile<TemperatureUnit>(
-        title: AppLocalizations.of(context)!.celsius,
-        value: TemperatureUnit.celsius,
-        groupValue: _temperatureUnit,
-        onTap: _tapTemperatureUnit,
-      ),
-      Divider(),
-      AppRadioTile<TemperatureUnit>(
-        title: AppLocalizations.of(context)!.fahrenheit,
-        value: TemperatureUnit.fahrenheit,
-        groupValue: _temperatureUnit,
-        onTap: _tapTemperatureUnit,
-      ),
-      Divider(),
-      AppRadioTile<TemperatureUnit>(
-        title: AppLocalizations.of(context)!.kelvin,
-        value: TemperatureUnit.kelvin,
-        groupValue: _temperatureUnit,
-        onTap: _tapTemperatureUnit,
+      SettingsOption(
+        pageController: _pageController!,
+        title: AppLocalizations.of(context)!.temperature,
+        trailingText:
+            context.read<AppBloc>().state.temperatureUnit.getText(context),
+        pageIndex: 6,
       ),
     ];
   }

@@ -56,7 +56,9 @@ class AppLocalizations {
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
   String get colorized => addMessage('Colorized');
-  String get temperatureUnit => addMessage('Temperature Unit');
+  String get units => addMessage('Units');
+  String get temperature => addMessage('Temperature');
+  String get temperatureUnits => addMessage('Temperature Units');
   String get kelvin => addMessage('Kelvin');
   String get celsius => addMessage('Celsius');
   String get fahrenheit => addMessage('Fahrenheit');

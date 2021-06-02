@@ -46,6 +46,8 @@ String getTitle(
     return AppLocalizations.of(context)!.chartType;
   } else if (_currentPage.toInt() == 5) {
     return AppLocalizations.of(context)!.hourRange;
+  } else if (_currentPage.toInt() == 6) {
+    return AppLocalizations.of(context)!.temperatureUnits;
   }
 
   return AppLocalizations.of(context)!.settings;
