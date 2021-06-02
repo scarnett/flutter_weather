@@ -209,7 +209,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
     if (updatePeriod != null) {
       widgets.addAll([
-        Divider(),
         SettingsOption(
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.updatePeriod,
@@ -330,7 +329,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             ),
           ),
         ),
-        Divider(),
       ];
 
   List<Widget> _buildBuildInfoSection() => [
