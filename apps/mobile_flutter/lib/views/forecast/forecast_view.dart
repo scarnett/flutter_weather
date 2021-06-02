@@ -416,17 +416,17 @@ class _ForecastPageViewState extends State<ForecastView>
           selectedSize: 10.0,
           itemCount: state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
-          onPageSelected: _onPageSelected,
+          onPageSelected: (int page) async => await _onPageSelected,
         ),
       ),
     );
   }
 
-  void _onPageSelected(
+  Future<void> _onPageSelected(
     int page,
-  ) {
+  ) async {
     _currentForecastNotifier.value = page;
-    animatePage(_pageController, page: page);
+    await animatePage(_pageController, page: page);
   }
 
   Future<void> _pullRefresh(

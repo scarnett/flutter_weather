@@ -16,7 +16,7 @@ import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 
 class ForecastFormController {
-  Function(num page)? animateToPage;
+  Future<void> Function(num page)? animateToPage;
 
   void dispose() {
     animateToPage = null;
@@ -194,7 +194,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
           ForecastCountryPicker(
             selectedCountryCode:
                 context.watch<ForecastFormBloc>().countryCode.value,
-            onTap: _tapCountry,
+            onTap: (Country country) async => await _tapCountry(country),
           ),
         ],
       );
@@ -350,10 +350,10 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
 
   void _tapSubmit() => context.read<ForecastFormBloc>().submit();
 
-  void _animateToPage(
+  Future<void> _animateToPage(
     num page,
-  ) =>
-      animatePage(_pageController!, page: page);
+  ) async =>
+      await animatePage(_pageController!, page: page);
 
   void _tapDelete() {
     Widget noButton = TextButton(
@@ -388,16 +388,16 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
     );
   }
 
-  void _tapCountry(
+  Future<void> _tapCountry(
     Country? country,
-  ) {
+  ) async {
     if (country != null) {
       context
           .read<ForecastFormBloc>()
           .countryCode
           .updateInitialValue(country.countryCode);
 
-      animatePage(_pageController!, page: 0);
+      await animatePage(_pageController!, page: 0);
     }
   }
 

@@ -10,16 +10,14 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/version_utils.dart';
 import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.dart';
-import 'package:flutter_weather/views/forecast/forecast_utils.dart'
-    as forecastUtils;
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart'
     as settingsUtils;
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_theme_mode_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
-import 'package:flutter_weather/widgets/app_checkbox_tile.dart';
 import 'package:flutter_weather/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -111,7 +109,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
   Future<void> _handleBack() async {
     if (_currentPage > 0) {
-      animatePage(_pageController!, page: 0);
+      await animatePage(_pageController!, page: 0);
     } else {
       Navigator.of(context).pop();
     }
@@ -119,7 +117,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
   Future<bool> _willPopCallback() async {
     if (_currentPage > 0) {
-      animatePage(_pageController!, page: 0);
+      await animatePage(_pageController!, page: 0);
       return Future.value(false);
     }
 
@@ -160,8 +158,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           onTap: (
             PushNotification? notification,
             Map<String, dynamic>? extras,
-          ) =>
-              _tapPushNotification(notification, extras: extras),
+          ) async =>
+              await _tapPushNotification(notification, extras: extras),
+        ),
+        SettingsThemeModePicker(
+          onTapThemeMode: (ThemeMode? themeMode) async =>
+              await _tapThemeMode(themeMode),
+          onTapColorized: (bool? colorized) async =>
+              await _tapColorized(colorized),
         ),
       ],
     );
@@ -188,12 +192,10 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             SizedBox(
               height: 16.0,
               child: Switch(
-                onChanged: (bool value) {
-                  return _tapUpdatePeriod(
-                    value ? UpdatePeriod.HOUR2 : null,
-                    redirect: false,
-                  );
-                },
+                onChanged: (bool value) async => await _tapUpdatePeriod(
+                  value ? UpdatePeriod.HOUR2 : null,
+                  redirect: false,
+                ),
                 value: (updatePeriod != null),
               ),
             ),
@@ -218,7 +220,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
                 .getInfo(context: context)!['text'],
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          onTap: () => animatePage(_pageController!, page: 1),
+          onTap: () async => await animatePage(_pageController!, page: 1),
         ),
         Divider(),
         ListTile(
@@ -235,7 +237,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
                 '',
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          onTap: () => animatePage(_pageController!, page: 2),
+          onTap: () async => await animatePage(_pageController!, page: 2),
         ),
       ]);
     }
@@ -246,49 +248,36 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   List<Widget> _buildThemeModeSection(
     AppState state,
   ) {
-    ThemeMode _themeMode = context.read<AppBloc>().state.themeMode;
     List<Widget> widgets = <Widget>[];
     widgets.addAll(
       [
         AppSectionHeader(
           themeMode: state.themeMode,
           colorTheme: state.colorTheme,
-          text: AppLocalizations.of(context)!.themeMode,
-        ),
-        AppRadioTile<ThemeMode>(
-          themeMode: state.themeMode,
-          title: AppLocalizations.of(context)!.light,
-          value: ThemeMode.light,
-          groupValue: _themeMode,
-          onTap: _tapThemeMode,
-        ),
-        Divider(),
-      ],
-    );
-
-    if ((_themeMode == ThemeMode.light) &&
-        forecastUtils.hasForecasts(context.read<AppBloc>().state.forecasts)) {
-      widgets.addAll(
-        [
-          AppCheckboxTile(
-            themeMode: state.themeMode,
-            title: AppLocalizations.of(context)!.colorized,
-            checked: context.read<AppBloc>().state.colorTheme,
-            onTap: _tapColorized,
+          text: 'Application', // TODO!
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 4.0,
+            top: 16.0,
+            bottom: 16.0,
           ),
-          Divider(),
-        ],
-      );
-    }
-
-    widgets.add(
-      AppRadioTile<ThemeMode>(
-        themeMode: state.themeMode,
-        title: AppLocalizations.of(context)!.dark,
-        value: ThemeMode.dark,
-        groupValue: _themeMode,
-        onTap: _tapThemeMode,
-      ),
+        ),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.themeMode,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          trailing: Text(
+            settingsUtils.getThemeModeText(
+              context,
+              themeMode: context.read<AppBloc>().state.themeMode,
+              colorized: context.read<AppBloc>().state.colorTheme,
+            ),
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          onTap: () async => await animatePage(_pageController!, page: 3),
+        ),
+      ],
     );
 
     return widgets;
@@ -383,51 +372,63 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     setState(() => _currentPage = currentPage);
   }
 
-  void _tapUpdatePeriod(
+  Future<void> _tapUpdatePeriod(
     UpdatePeriod? period, {
     bool redirect: true,
-  }) {
+  }) async {
     context.read<AppBloc>().add(
           SetUpdatePeriod(
             context: context,
             updatePeriod: period,
-            callback: () {
+            callback: () async {
               if (redirect) {
-                animatePage(_pageController!, page: 0);
+                await animatePage(_pageController!, page: 0);
               }
             },
           ),
         );
   }
 
-  void _tapPushNotification(
+  Future<void> _tapPushNotification(
     PushNotification? notification, {
     Map<String, dynamic>? extras,
     bool redirect: true,
-  }) {
+  }) async {
     context.read<AppBloc>().add(
           SetPushNotification(
             context: context,
             pushNotification: notification,
             pushNotificationExtras: extras,
-            callback: () {
+            callback: () async {
               if (redirect) {
-                animatePage(_pageController!, page: 0);
+                await animatePage(_pageController!, page: 0);
               }
             },
           ),
         );
   }
 
-  void _tapThemeMode(
-    ThemeMode? themeMode,
-  ) =>
-      context.read<AppBloc>().add(SetThemeMode(themeMode));
+  Future<void> _tapThemeMode(
+    ThemeMode? themeMode, {
+    bool redirect: true,
+  }) async {
+    context.read<AppBloc>().add(SetThemeMode(themeMode));
 
-  void _tapColorized(
-    bool? checked,
-  ) =>
-      context.read<AppBloc>().add(SetColorTheme(checked));
+    if (redirect) {
+      await animatePage(_pageController!, page: 0, pauseMilliseconds: 1000);
+    }
+  }
+
+  Future<void> _tapColorized(
+    bool? colorized, {
+    bool redirect: true,
+  }) async {
+    context.read<AppBloc>().add(SetColorTheme(colorized));
+
+    if (redirect) {
+      await animatePage(_pageController!, page: 0, pauseMilliseconds: 1000);
+    }
+  }
 
   void _tapTemperatureUnit(
     TemperatureUnit? temperatureUnit,

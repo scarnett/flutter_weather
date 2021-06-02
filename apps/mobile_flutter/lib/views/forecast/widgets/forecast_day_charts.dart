@@ -324,7 +324,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             selectedSize: 6.0,
             itemCount: ChartType.values.length,
             currentPageNotifier: _chartTypeNotifier,
-            onPageSelected: _tapChartType,
+            onPageSelected: (int page) async => await _tapChartType(page),
           ),
         ),
       );
@@ -435,12 +435,12 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     return spots;
   }
 
-  void _tapChartType(
+  Future<void> _tapChartType(
     int page,
-  ) {
+  ) async {
     if (widget.enabled) {
       _chartTypeNotifier.value = page;
-      animatePage(_pageController, page: page);
+      await animatePage(_pageController, page: page);
     }
   }
 }

@@ -21,7 +21,8 @@ class SettingsOpenSourceInfo extends StatelessWidget {
           if (AppConfig.instance.githubUrl != null)
             Expanded(
               child: InkWell(
-                onTap: () => launchURL(AppConfig.instance.githubUrl),
+                onTap: () async =>
+                    await launchURL(AppConfig.instance.githubUrl),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Image.asset(
@@ -36,7 +37,7 @@ class SettingsOpenSourceInfo extends StatelessWidget {
             ),
           Expanded(
             child: InkWell(
-              onTap: () => launchURL('https://flutter.dev/'),
+              onTap: () async => await launchURL('https://flutter.dev/'),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: FlutterLogo(size: 50.0),
@@ -45,7 +46,7 @@ class SettingsOpenSourceInfo extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: () => launchURL('https://opensource.org/'),
+              onTap: () async => await launchURL('https://opensource.org/'),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Image.asset(

@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_weather/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/views/settings/settings_enums.dart';
 
@@ -39,6 +41,8 @@ String getTitle(
     return AppLocalizations.of(context)!.updatePeriod;
   } else if (_currentPage.toInt() == 2) {
     return AppLocalizations.of(context)!.pushNotification;
+  } else if (_currentPage.toInt() == 3) {
+    return AppLocalizations.of(context)!.themeMode;
   }
 
   return AppLocalizations.of(context)!.settings;
@@ -66,4 +70,16 @@ String? getPushNotificationText(
     default:
       return null;
   }
+}
+
+String getThemeModeText(
+  BuildContext context, {
+  required ThemeMode themeMode,
+  bool colorized: false,
+}) {
+  if (colorized) {
+    return AppLocalizations.of(context)!.colorized;
+  }
+
+  return themeMode.getText(context);
 }

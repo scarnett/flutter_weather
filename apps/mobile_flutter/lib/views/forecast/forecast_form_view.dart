@@ -73,7 +73,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
             title: Text(getTitle(context, _currentPage)),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: _tapBack,
+              onPressed: () async => await _tapBack,
             ),
           ),
           body: BlocListener<AppBloc, AppState>(
@@ -115,7 +115,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     AppState state,
   ) async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
       return Future.value(false);
     }
 
@@ -140,9 +140,9 @@ class _ForecastFormViewState extends State<ForecastPageView> {
         onPageChange: _onPageChange,
       );
 
-  _tapBack() {
+  Future<void> _tapBack() async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
     } else {
       context.read<AppBloc>().add(ClearActiveForecastId());
       Navigator.of(context).pop();

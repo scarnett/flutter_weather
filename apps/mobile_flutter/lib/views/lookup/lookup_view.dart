@@ -101,11 +101,11 @@ class _LookupPageViewState extends State<LookupPageView> {
                   ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: () => _handleBack(state),
+                    onPressed: () async => await _handleBack(state),
                   ),
                 ),
                 body: WillPopScope(
-                  onWillPop: () => _willPopCallback(state),
+                  onWillPop: () async => await _willPopCallback(state),
                   child: _buildContent(),
                 ),
                 extendBody: true,
@@ -154,9 +154,9 @@ class _LookupPageViewState extends State<LookupPageView> {
 
   Future<bool> _willPopCallback(
     LookupState state,
-  ) {
+  ) async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
       return Future.value(false);
     } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
@@ -210,11 +210,11 @@ class _LookupPageViewState extends State<LookupPageView> {
     );
   }
 
-  void _handleBack(
+  Future<void> _handleBack(
     LookupState state,
-  ) {
+  ) async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
     } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
     } else {

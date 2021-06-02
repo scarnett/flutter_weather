@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
 
@@ -118,6 +119,21 @@ extension ForecastHourRangeExtension on ForecastHourRange {
       case ForecastHourRange.hours12:
       default:
         return AppLocalizations.of(context)!.hours12;
+    }
+  }
+}
+
+extension ThemeModeExtension on ThemeMode {
+  String getText(
+    BuildContext context,
+  ) {
+    switch (this) {
+      case ThemeMode.light:
+        return AppLocalizations.of(context)!.light;
+
+      case ThemeMode.dark:
+      default:
+        return AppLocalizations.of(context)!.dark;
     }
   }
 }

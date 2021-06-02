@@ -213,16 +213,16 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
           selectedSize: 6.0,
           itemCount: pageCount,
           currentPageNotifier: _dayForecastsNotifier,
-          onPageSelected: _onPageSelected,
+          onPageSelected: (int page) async => await _onPageSelected(page),
         ),
       ),
     );
   }
 
-  void _onPageSelected(
+  Future<void> _onPageSelected(
     int page,
-  ) {
+  ) async {
     _dayForecastsNotifier.value = page;
-    animatePage(_pageController, page: page);
+    await animatePage(_pageController, page: page);
   }
 }
