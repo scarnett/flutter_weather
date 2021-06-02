@@ -58,7 +58,7 @@ class AppUpdateDialog extends StatelessWidget {
           text: AppLocalizations.of(context)!.later,
           textColor: AppTheme.disabledColor,
           buttonColor: Colors.transparent,
-          onTap: _tapLater,
+          onTap: () => _tapLater(context),
         ),
       ],
     );
