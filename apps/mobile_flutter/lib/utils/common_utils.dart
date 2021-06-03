@@ -35,6 +35,14 @@ extension StringExtension on String {
   }
 }
 
+extension DoubleExtension on double {
+  double formatDecimal({
+    int decimals: 2,
+  }) =>
+      double.parse(this
+          .toStringAsFixed((this.truncateToDouble() == this) ? 0 : decimals));
+}
+
 List<Shadow> commonTextShadow({
   color: Colors.black38,
   blurRadius: 1.0,

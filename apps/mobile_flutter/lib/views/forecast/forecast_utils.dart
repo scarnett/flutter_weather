@@ -107,7 +107,7 @@ num getTemperature(
 
     case TemperatureUnit.kelvin:
     default:
-      return temperature.round();
+      return temperature.toDouble().formatDecimal();
   }
 }
 
@@ -170,23 +170,23 @@ String getTemperatureUnitStr(
 }
 
 num getWindSpeed(
-  num? temperature,
-  TemperatureUnit unit,
+  num? windSpeed,
+  WindSpeedUnit unit,
 ) {
-  if (temperature == null) {
+  if (windSpeed == null) {
     return 0;
   }
 
   switch (unit) {
-    case TemperatureUnit.fahrenheit:
-      return (temperature * (9 / 5) - 459.67).round();
+    case WindSpeedUnit.kmh:
+      return (windSpeed * 1.609344).formatDecimal(decimals: 1);
 
-    case TemperatureUnit.celsius:
-      return (temperature - 273.15).round();
+    case WindSpeedUnit.ms:
+      return (windSpeed / 2.2369362920544).formatDecimal(decimals: 1);
 
-    case TemperatureUnit.kelvin:
+    case WindSpeedUnit.mph:
     default:
-      return temperature.round();
+      return windSpeed.round();
   }
 }
 
