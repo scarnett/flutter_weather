@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';

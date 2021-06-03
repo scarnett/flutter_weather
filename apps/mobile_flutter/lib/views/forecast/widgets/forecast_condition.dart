@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/models/models.dart';
 
 class ForecastCondition extends StatelessWidget {
   final ForecastDay currentDay;

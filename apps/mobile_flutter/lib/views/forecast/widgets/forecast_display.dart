@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_condition.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_current_temp.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_day_scroller.dart';

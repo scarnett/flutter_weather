@@ -16,7 +16,6 @@ import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/device_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';

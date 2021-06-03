@@ -3,10 +3,10 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 Uri getDetailedUri(
