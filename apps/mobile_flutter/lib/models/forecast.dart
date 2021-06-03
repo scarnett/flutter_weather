@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/utils/date_utils.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/date_utils.dart';
 
 class Forecast extends Equatable {
   final String? id;

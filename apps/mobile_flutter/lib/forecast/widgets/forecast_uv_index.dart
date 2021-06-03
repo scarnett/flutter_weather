@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_weather/app/app_localization.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
 import 'package:flutter_weather/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/forecast/widgets/forecast_meta_info.dart';
-import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class ForecastUVIndex extends StatelessWidget {

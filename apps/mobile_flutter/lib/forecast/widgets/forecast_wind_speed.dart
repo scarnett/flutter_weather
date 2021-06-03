@@ -3,15 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/app/app_config.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
+import 'package:flutter_weather/app/widgets/app_progress_indicator.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast_utils.dart';
 import 'package:flutter_weather/forecast/widgets/forecast_meta_info.dart';
 import 'package:flutter_weather/forecast/widgets/forecast_wind_direction.dart';
-import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:flutter_weather/widgets/app_progress_indicator.dart';
 
 class ForecastWindSpeed extends StatelessWidget {
   final ForecastDay currentDay;

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
-import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/utils/version_utils.dart';
-import 'package:flutter_weather/widgets/app_update_dialog.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/version_utils.dart';
+import 'package:flutter_weather/app/widgets/app_update_dialog.dart';
 import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 

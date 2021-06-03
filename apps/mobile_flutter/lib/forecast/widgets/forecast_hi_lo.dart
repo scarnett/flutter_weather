@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
+import 'package:flutter_weather/app/widgets/app_temperature_display.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast_utils.dart';
-import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:flutter_weather/widgets/app_temperature_display.dart';
 
 class ForecastHiLo extends StatelessWidget {
   final ForecastDay currentDay;

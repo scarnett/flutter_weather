@@ -1,4 +1,4 @@
-import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/about/view/privacy_policy_view.dart';
 import 'package:flutter_weather/app/app_config.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/version_utils.dart';
+import 'package:flutter_weather/app/widgets/app_section_header.dart';
+import 'package:flutter_weather/app/widgets/app_ui_overlay_style.dart';
+import 'package:flutter_weather/app/widgets/app_ui_safe_area.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/settings/settings_utils.dart' as settingsUtils;
 import 'package:flutter_weather/settings/widgets/settings_chart_type_picker.dart';
 import 'package:flutter_weather/settings/widgets/settings_distance_units_picker.dart';
@@ -21,11 +26,6 @@ import 'package:flutter_weather/settings/widgets/settings_theme_mode_picker.dart
 import 'package:flutter_weather/settings/widgets/settings_update_period_picker.dart';
 import 'package:flutter_weather/settings/widgets/settings_version_status_text.dart';
 import 'package:flutter_weather/settings/widgets/settings_wind_speed_units_picker.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/utils/version_utils.dart';
-import 'package:flutter_weather/widgets/app_section_header.dart';
-import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
-import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:package_info/package_info.dart';
 
 class SettingsView extends StatelessWidget {

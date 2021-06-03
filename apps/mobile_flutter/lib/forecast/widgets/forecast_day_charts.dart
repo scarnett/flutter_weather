@@ -2,19 +2,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
+import 'package:flutter_weather/app/utils/chart_utils.dart';
+import 'package:flutter_weather/app/utils/color_utils.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/math_utils.dart';
+import 'package:flutter_weather/app/widgets/app_option_button.dart';
+import 'package:flutter_weather/app/widgets/app_pageview_scroll_physics.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast_extension.dart';
 import 'package:flutter_weather/forecast/forecast_utils.dart';
-import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:flutter_weather/utils/chart_utils.dart';
-import 'package:flutter_weather/utils/color_utils.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/utils/math_utils.dart';
-import 'package:flutter_weather/widgets/app_option_button.dart';
-import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class ForecastDayCharts extends StatefulWidget {

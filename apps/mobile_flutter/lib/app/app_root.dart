@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_config.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/view/forecast_view.dart';
-import 'package:flutter_weather/localization.dart';
 
 class WeatherApp extends StatelessWidget {
   WeatherApp({

@@ -1,4 +1,4 @@
-import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/lookup/lookup_utils.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

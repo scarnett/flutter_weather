@@ -1,4 +1,4 @@
-import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 
 String? getTitle(
   AppLocalizations? localization,

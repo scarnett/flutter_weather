@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
 
 class AppTheme {
   static Color get primaryColor => Colors.deepPurple[400]!;

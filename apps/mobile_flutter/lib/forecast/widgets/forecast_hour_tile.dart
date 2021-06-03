@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/widgets/app_temperature_display.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast_utils.dart';
 import 'package:flutter_weather/forecast/widgets/forecast_hour_display.dart';
 import 'package:flutter_weather/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/widgets/app_temperature_display.dart';
 
 class ForecastHourTile extends StatelessWidget {
   final ForecastHour hour;

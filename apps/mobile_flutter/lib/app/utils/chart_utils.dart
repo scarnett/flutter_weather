@@ -2,10 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/app/app_theme.dart';
+import 'package:flutter_weather/app/utils/date_utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast_utils.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:flutter_weather/utils/date_utils.dart';
 
 String getDayTitle(
   Forecast forecast,

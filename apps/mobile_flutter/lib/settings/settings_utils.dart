@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/localization.dart';
 
 UpdatePeriod? getPeriod({
   BuildContext? context,
