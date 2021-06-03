@@ -44,7 +44,7 @@ class _SettingsTemperatureUnitsPickerState
     List<TemperatureUnit> temperatureUnits = TemperatureUnit.values;
     List<Widget> widgets = <Widget>[];
     TemperatureUnit _temperatureUnit =
-        context.read<AppBloc>().state.temperatureUnit;
+        context.read<AppBloc>().state.units.temperature;
 
     for (TemperatureUnit temperatureUnit in temperatureUnits) {
       widgets.add(

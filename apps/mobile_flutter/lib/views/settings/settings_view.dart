@@ -275,7 +275,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.temperature,
           trailingText:
-              context.read<AppBloc>().state.temperatureUnit.getText(context),
+              context.read<AppBloc>().state.units.temperature.getText(context),
           pageIndex: 6,
         ),
         Divider(),
@@ -283,7 +283,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.windSpeed,
           trailingText:
-              context.read<AppBloc>().state.windSpeedUnit.getText(context),
+              context.read<AppBloc>().state.units.windSpeed.getText(context),
           pageIndex: 7,
         ),
       ];

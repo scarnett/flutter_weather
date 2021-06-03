@@ -256,7 +256,7 @@ class _LookupPageViewState extends State<LookupPageView> {
 
     context.read<LookupBloc>().add(LookupForecast(
           lookupData,
-          context.read<AppBloc>().state.temperatureUnit,
+          context.read<AppBloc>().state.units.temperature,
         ));
   }
 

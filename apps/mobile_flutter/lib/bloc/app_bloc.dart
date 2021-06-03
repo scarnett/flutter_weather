@@ -9,6 +9,7 @@ import 'package:flutter_weather/app_service.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/enums/wind_speed_unit.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
@@ -120,7 +121,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         period: event.updatePeriod ?? null,
         pushNotification: state.pushNotification ?? null,
         pushNotificationExtras: state.pushNotificationExtras ?? null,
-        temperatureUnit: state.temperatureUnit,
+        units: state.units,
         fcmToken: token,
       );
     }
@@ -196,7 +197,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         period: state.updatePeriod,
         pushNotification: state.pushNotification,
         pushNotificationExtras: state.pushNotificationExtras,
-        temperatureUnit: state.temperatureUnit,
+        units: state.units,
         fcmToken: token,
       );
     } else {
@@ -238,7 +239,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     prefs.temperatureUnit = event.temperatureUnit;
 
     yield state.copyWith(
-      temperatureUnit: event.temperatureUnit,
+      units: state.units.copyWith(
+        temperature: event.temperatureUnit,
+      ),
     );
 
     if ((prefs.pushNotification != null) &&
@@ -251,7 +254,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         period: state.updatePeriod,
         pushNotification: state.pushNotification,
         pushNotificationExtras: state.pushNotificationExtras,
-        temperatureUnit: event.temperatureUnit,
+        units: state.units,
         fcmToken: token,
       );
     }
@@ -264,8 +267,25 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     prefs.windSpeedUnit = event.windSpeedUnit;
 
     yield state.copyWith(
-      windSpeedUnit: event.windSpeedUnit,
+      units: state.units.copyWith(
+        windSpeed: event.windSpeedUnit,
+      ),
     );
+
+    if ((prefs.pushNotification != null) &&
+        (prefs.pushNotification != PushNotification.off)) {
+      String? deviceId = await getDeviceId();
+      String? token = await FirebaseMessaging.instance.getToken();
+
+      await savePushNotification(
+        deviceId: deviceId,
+        period: state.updatePeriod,
+        pushNotification: state.pushNotification,
+        pushNotificationExtras: state.pushNotificationExtras,
+        units: state.units,
+        fcmToken: token,
+      );
+    }
   }
 
   AppState _mapSetChartTypeToStates(
@@ -349,7 +369,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       RefreshForecast(
         event.context,
         forecasts[state.selectedForecastIndex],
-        state.temperatureUnit,
+        state.units.temperature,
       ),
     );
   }
@@ -513,8 +533,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             : null,
         themeMode: getThemeMode(jsonData['themeMode']),
         colorTheme: jsonData['colorTheme'],
-        temperatureUnit: getTemperatureUnit(jsonData['temperatureUnit']),
-        windSpeedUnit: getWindSpeedUnit(jsonData['windSpeedUnit']),
+        units: Units.fromJson(jsonData['units']),
         chartType: getChartType(jsonData['chartType']),
         hourRange: getForecastHourRange(jsonData['hourRange']),
         forecasts: Forecast.fromJsonList(jsonData['forecasts']),
@@ -533,8 +552,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             : null,
         'themeMode': state.themeMode.toString(),
         'colorTheme': state.colorTheme,
-        'temperatureUnit': state.temperatureUnit.toString(),
-        'windSpeedUnit': state.windSpeedUnit.toString(),
+        'units': state.units.toJson(),
         'chartType': state.chartType.toString(),
         'hourRange': state.hourRange.toString(),
         'forecasts': Forecast.toJsonList(state.forecasts),

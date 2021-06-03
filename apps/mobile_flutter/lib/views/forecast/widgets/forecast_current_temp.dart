@@ -50,7 +50,7 @@ class ForecastCurrentTemp extends StatelessWidget {
                 AppTemperatureDisplay(
                   temperature: getTemperature(
                     currentDay.temp!.day,
-                    state.temperatureUnit,
+                    state.units.temperature,
                   ).toString(),
                   style: getTemperatureTextStyle(context),
                 ),
@@ -58,7 +58,7 @@ class ForecastCurrentTemp extends StatelessWidget {
                   temperature:
                       AppLocalizations.of(context)!.getFeelsLike(getTemperature(
                     currentDay.feelsLike!.day,
-                    state.temperatureUnit,
+                    state.units.temperature,
                   ).toString()),
                   style: getFeelsLikeTextStyle(context),
                   unitSizeFactor: 1.5,

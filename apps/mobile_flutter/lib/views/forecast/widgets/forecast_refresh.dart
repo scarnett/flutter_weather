@@ -120,7 +120,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
             RefreshForecast(
               context,
               state.forecasts[state.selectedForecastIndex],
-              context.read<AppBloc>().state.temperatureUnit,
+              context.read<AppBloc>().state.units.temperature,
             ),
           );
 }

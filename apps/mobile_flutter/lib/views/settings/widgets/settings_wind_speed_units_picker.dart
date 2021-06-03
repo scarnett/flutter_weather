@@ -43,7 +43,8 @@ class _WindSettingsSpeedUnitsPickerState
     int count = 0;
     List<WindSpeedUnit> windSpeedUnits = WindSpeedUnit.values;
     List<Widget> widgets = <Widget>[];
-    WindSpeedUnit _windSpeedUnit = context.read<AppBloc>().state.windSpeedUnit;
+    WindSpeedUnit _windSpeedUnit =
+        context.read<AppBloc>().state.units.windSpeed;
 
     for (WindSpeedUnit windSpeedUnit in windSpeedUnits) {
       widgets.add(

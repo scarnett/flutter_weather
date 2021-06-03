@@ -53,7 +53,7 @@ class ForecastMetaRow extends StatelessWidget {
                           Text(
                             getWindSpeed(
                               currentDay.speed,
-                              context.read<AppBloc>().state.windSpeedUnit,
+                              context.read<AppBloc>().state.units.windSpeed,
                             ).toString(),
                             style:
                                 Theme.of(context).textTheme.headline4!.copyWith(
@@ -66,7 +66,8 @@ class ForecastMetaRow extends StatelessWidget {
                               context
                                   .read<AppBloc>()
                                   .state
-                                  .windSpeedUnit
+                                  .units
+                                  .windSpeed
                                   .getText(context),
                               style: Theme.of(context)
                                   .textTheme

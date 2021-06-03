@@ -117,7 +117,7 @@ class _ForecastPageViewState extends State<ForecastView>
                     RefreshForecast(
                       context,
                       state.forecasts[_currentForecastNotifier.value],
-                      state.temperatureUnit,
+                      state.units.temperature,
                     ),
                   );
             }
@@ -421,7 +421,7 @@ class _ForecastPageViewState extends State<ForecastView>
             RefreshForecast(
               context,
               state.forecasts[state.selectedForecastIndex],
-              state.temperatureUnit,
+              state.units.temperature,
             ),
           );
 }

@@ -52,7 +52,7 @@ class ForecastHiLo extends StatelessWidget {
                 AppTemperatureDisplay(
                   temperature: getTemperature(
                     currentDay.temp!.max,
-                    state.temperatureUnit,
+                    state.units.temperature,
                   ).toString(),
                   style: Theme.of(context)
                       .textTheme
@@ -79,7 +79,7 @@ class ForecastHiLo extends StatelessWidget {
                 AppTemperatureDisplay(
                   temperature: getTemperature(
                     currentDay.temp!.min,
-                    state.temperatureUnit,
+                    state.units.temperature,
                   ).toString(),
                   style: Theme.of(context)
                       .textTheme

@@ -152,14 +152,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           minY: round5(
             number: getTemperature(
               widget.forecast.getDayLowMin().temp!.min!.toDouble(),
-              state.temperatureUnit,
+              state.units.temperature,
             ).toDouble(),
             offset: -5.0,
           ),
           maxY: round5(
             number: getTemperature(
               widget.forecast.getDayHighMax().temp!.max!.toDouble(),
-              state.temperatureUnit,
+              state.units.temperature,
             ).toDouble(),
           ),
           gridData: FlGridData(
@@ -207,7 +207,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             ),
             leftTitles: buildLeftSideTitles(
               context: context,
-              temperatureUnit: state.temperatureUnit,
+              temperatureUnit: state.units.temperature,
             ),
             rightTitles: buildEmptySideTitles(),
             topTitles: buildEmptySideTitles(),
@@ -219,7 +219,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           lineBarsData: lineBarsData,
           lineTouchData: getLineTouchData(
             context: context,
-            temperatureUnit: state.temperatureUnit,
+            temperatureUnit: state.units.temperature,
             colorTheme: state.colorTheme,
             forecastColor: widget.forecastColor,
             enabled: widget.enabled,
@@ -269,14 +269,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           minY: round5(
             number: getTemperature(
               widget.forecast.getDayLowMin().temp!.min!.toDouble(),
-              state.temperatureUnit,
+              state.units.temperature,
             ).toDouble(),
             offset: -5.0,
           ),
           maxY: round5(
             number: getTemperature(
               widget.forecast.getDayHighMax().temp!.max!.toDouble(),
-              state.temperatureUnit,
+              state.units.temperature,
             ).toDouble(),
           ),
           gridData: FlGridData(
@@ -307,7 +307,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             ),
             leftTitles: buildLeftSideTitles(
               context: context,
-              temperatureUnit: state.temperatureUnit,
+              temperatureUnit: state.units.temperature,
             ),
             rightTitles: buildEmptySideTitles(),
             topTitles: buildEmptySideTitles(),
@@ -318,7 +318,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           ),
           barTouchData: getBarTouchData(
             context: context,
-            temperatureUnit: state.temperatureUnit,
+            temperatureUnit: state.units.temperature,
             colorTheme: state.colorTheme,
             enabled: widget.enabled,
           ),
@@ -359,12 +359,12 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     for (ForecastDaily day in _getDays()) {
       double tempMax = getTemperature(
         day.temp!.max!.toDouble(),
-        state.temperatureUnit,
+        state.units.temperature,
       ).toDouble();
 
       double tempMin = getTemperature(
         day.temp!.min!.toDouble(),
-        state.temperatureUnit,
+        state.units.temperature,
       ).toDouble();
 
       rodData.add(
@@ -420,7 +420,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     int index = 0;
     List<FlSpot> spots = [];
     TemperatureUnit temperatureUnit =
-        context.read<AppBloc>().state.temperatureUnit;
+        context.read<AppBloc>().state.units.temperature;
 
     for (ForecastDaily day in _getDays()) {
       spots.add(
@@ -440,7 +440,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     int index = 0;
     List<FlSpot> spots = [];
     TemperatureUnit temperatureUnit =
-        context.read<AppBloc>().state.temperatureUnit;
+        context.read<AppBloc>().state.units.temperature;
 
     for (ForecastDaily day in _getDays()) {
       spots.add(

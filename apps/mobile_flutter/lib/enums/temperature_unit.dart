@@ -57,13 +57,13 @@ TemperatureUnit getTemperatureUnit(
   String? temperatureUnit,
 ) {
   switch (temperatureUnit) {
-    case 'TemperatureUnit.celsius':
+    case 'celsius':
       return TemperatureUnit.celsius;
 
-    case 'TemperatureUnit.kelvin':
+    case 'kelvin':
       return TemperatureUnit.kelvin;
 
-    case 'TemperatureUnit.fahrenheit':
+    case 'fahrenheit':
     default:
       return TemperatureUnit.fahrenheit;
   }

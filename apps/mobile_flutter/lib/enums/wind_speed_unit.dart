@@ -8,6 +8,20 @@ enum WindSpeedUnit {
 }
 
 extension WindSpeedUnitExtension on WindSpeedUnit {
+  String get units {
+    switch (this) {
+      case WindSpeedUnit.kmh:
+        return 'kmh';
+
+      case WindSpeedUnit.ms:
+        return 'ms';
+
+      case WindSpeedUnit.mph:
+      default:
+        return 'mph';
+    }
+  }
+
   String getText(
     BuildContext context,
   ) {
@@ -29,13 +43,13 @@ WindSpeedUnit getWindSpeedUnit(
   String? windSpeedUnit,
 ) {
   switch (windSpeedUnit) {
-    case 'WindSpeedUnit.kmh':
+    case 'kmh':
       return WindSpeedUnit.kmh;
 
-    case 'WindSpeedUnit.ms':
+    case 'ms':
       return WindSpeedUnit.ms;
 
-    case 'WindSpeedUnit.mph':
+    case 'mph':
     default:
       return WindSpeedUnit.mph;
   }

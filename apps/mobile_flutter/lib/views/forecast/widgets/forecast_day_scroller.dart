@@ -150,7 +150,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
                     ),
                     AppTemperatureDisplay(
                       temperature:
-                          getTemperature(day.temp!.max, state.temperatureUnit)
+                          getTemperature(day.temp!.max, state.units.temperature)
                               .toString(),
                       style: Theme.of(context).textTheme.headline4,
                       unitSizeFactor: 2,

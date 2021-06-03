@@ -11,6 +11,7 @@ exports = module.exports = functions.https
           const now: admin.firestore.Timestamp = admin.firestore.Timestamp.now()
           const lastPushDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
           const pushNotificationExtras: string = data['pushNotificationExtras']
+          const units: string = data['units']
 
           // Save the device to firestore
           promises.push(admin.firestore().doc(`devices/${data['device']}`).set({
@@ -19,8 +20,9 @@ exports = module.exports = functions.https
             'pushNotificationExtras': (pushNotificationExtras == null) ?
                 admin.firestore.FieldValue.delete() :
                 JSON.parse(pushNotificationExtras),
-            'temperatureUnit': data['temperatureUnit'],
-            'windSpeedUnit': data['windSpeedUnit'],
+            'units': (units == null) ?
+                admin.firestore.FieldValue.delete() :
+                JSON.parse(units),
             'fcm': {
               'token': data['fcmToken'],
             },

@@ -51,8 +51,8 @@ class ForecastHourTile extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: AppTemperatureDisplay(
-                temperature:
-                    getTemperature(hour.temp, state.temperatureUnit).toString(),
+                temperature: getTemperature(hour.temp, state.units.temperature)
+                    .toString(),
                 style: Theme.of(context).textTheme.headline5!.copyWith(
                       shadows: state.colorTheme ? commonTextShadow() : null,
                     ),
@@ -78,7 +78,7 @@ class ForecastHourTile extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerRight,
           child: Text(
-            getWindSpeedText(context, hour.windSpeed, state.windSpeedUnit),
+            getWindSpeedText(context, hour.windSpeed, state.units.windSpeed),
             style: Theme.of(context).textTheme.headline5!.copyWith(
                   shadows: state.colorTheme ? commonTextShadow() : null,
                 ),

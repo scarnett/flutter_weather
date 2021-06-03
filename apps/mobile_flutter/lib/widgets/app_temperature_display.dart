@@ -31,7 +31,7 @@ class AppTemperatureDisplay extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              getUnitSymbol(context.read<AppBloc>().state.temperatureUnit),
+              getUnitSymbol(context.read<AppBloc>().state.units.temperature),
               style: style!.copyWith(
                 fontSize: (style!.fontSize! / unitSizeFactor),
               ),
