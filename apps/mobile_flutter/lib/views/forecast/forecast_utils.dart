@@ -202,6 +202,36 @@ String getWindSpeedText(
   return '${getWindSpeed(windSpeed, unit)} ${unit.getText(context)}';
 }
 
+num getPressure(
+  num? pressure,
+  PressureUnit unit,
+) {
+  if (pressure == null) {
+    return 0;
+  }
+
+  switch (unit) {
+    case PressureUnit.inhg:
+      return (pressure / 33.863886666667).formatDecimal(decimals: 2);
+
+    case PressureUnit.hpa:
+    default:
+      return pressure.round();
+  }
+}
+
+String getPressureText(
+  BuildContext context,
+  num? pressure,
+  PressureUnit unit,
+) {
+  if (pressure == null) {
+    return '0 ${unit.getText(context)}';
+  }
+
+  return '${getPressure(pressure, unit)} ${unit.getText(context)}';
+}
+
 Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {

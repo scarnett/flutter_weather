@@ -51,6 +51,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapSetTemperatureUnitToStates(event);
     } else if (event is SetWindSpeedUnit) {
       yield* _mapSetWindSpeedUnitToStates(event);
+    } else if (event is SetPressureUnit) {
+      yield* _mapSetPressureUnitToStates(event);
     } else if (event is SetChartType) {
       yield _mapSetChartTypeToStates(event);
     } else if (event is SetHourRange) {
@@ -112,16 +114,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       prefs.pushNotification = PushNotification.off;
       await removePushNotification(deviceId: deviceId);
     } else if (prefs.pushNotification != PushNotification.off) {
-      String? token = await FirebaseMessaging.instance.getToken();
-
-      await savePushNotification(
-        deviceId: deviceId,
-        period: event.updatePeriod ?? null,
-        pushNotification: state.pushNotification ?? null,
-        pushNotificationExtras: state.pushNotificationExtras ?? null,
-        units: state.units,
-        fcmToken: token,
-      );
+      await _saveDeviceInfo(prefs.pushNotification);
     }
 
     if (event.callback != null) {
@@ -184,23 +177,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
     );
 
-    String? deviceId = await getDeviceId();
-
-    if ((event.pushNotification != null) &&
-        (event.pushNotification != PushNotification.off)) {
-      String? token = await FirebaseMessaging.instance.getToken();
-
-      await savePushNotification(
-        deviceId: deviceId,
-        period: state.updatePeriod,
-        pushNotification: state.pushNotification,
-        pushNotificationExtras: state.pushNotificationExtras,
-        units: state.units,
-        fcmToken: token,
-      );
-    } else {
-      await removePushNotification(deviceId: deviceId);
-    }
+    await _saveDeviceInfo(event.pushNotification);
 
     showSnackbar(
       event.context,
@@ -242,20 +219,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       ),
     );
 
-    if ((prefs.pushNotification != null) &&
-        (prefs.pushNotification != PushNotification.off)) {
-      String? deviceId = await getDeviceId();
-      String? token = await FirebaseMessaging.instance.getToken();
-
-      await savePushNotification(
-        deviceId: deviceId,
-        period: state.updatePeriod,
-        pushNotification: state.pushNotification,
-        pushNotificationExtras: state.pushNotificationExtras,
-        units: state.units,
-        fcmToken: token,
-      );
-    }
+    await _saveDeviceInfo(prefs.pushNotification);
   }
 
   Stream<AppState> _mapSetWindSpeedUnitToStates(
@@ -270,20 +234,22 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       ),
     );
 
-    if ((prefs.pushNotification != null) &&
-        (prefs.pushNotification != PushNotification.off)) {
-      String? deviceId = await getDeviceId();
-      String? token = await FirebaseMessaging.instance.getToken();
+    await _saveDeviceInfo(prefs.pushNotification);
+  }
 
-      await savePushNotification(
-        deviceId: deviceId,
-        period: state.updatePeriod,
-        pushNotification: state.pushNotification,
-        pushNotificationExtras: state.pushNotificationExtras,
-        units: state.units,
-        fcmToken: token,
-      );
-    }
+  Stream<AppState> _mapSetPressureUnitToStates(
+    SetPressureUnit event,
+  ) async* {
+    AppPrefs prefs = AppPrefs();
+    prefs.pressureUnit = event.pressureUnit;
+
+    yield state.copyWith(
+      units: state.units.copyWith(
+        pressure: event.pressureUnit,
+      ),
+    );
+
+    await _saveDeviceInfo(prefs.pushNotification);
   }
 
   AppState _mapSetChartTypeToStates(
@@ -517,6 +483,26 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     return state.copyWith(
       scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
     );
+  }
+
+  Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
+    if ((pushNotification != null) &&
+        (pushNotification != PushNotification.off)) {
+      String? deviceId = await getDeviceId();
+      String? token = await FirebaseMessaging.instance.getToken();
+
+      await savePushNotification(
+        deviceId: deviceId,
+        period: state.updatePeriod,
+        pushNotification: state.pushNotification,
+        pushNotificationExtras: state.pushNotificationExtras,
+        units: state.units,
+        fcmToken: token,
+      );
+    } else {
+      String? deviceId = await getDeviceId();
+      await removePushNotification(deviceId: deviceId);
+    }
   }
 
   @override

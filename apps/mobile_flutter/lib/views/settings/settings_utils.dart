@@ -50,6 +50,8 @@ String getTitle(
     return AppLocalizations.of(context)!.temperatureUnits;
   } else if (_currentPage.toInt() == 7) {
     return AppLocalizations.of(context)!.windSpeedUnits;
+  } else if (_currentPage.toInt() == 8) {
+    return AppLocalizations.of(context)!.pressureUnits;
   }
 
   return AppLocalizations.of(context)!.settings;

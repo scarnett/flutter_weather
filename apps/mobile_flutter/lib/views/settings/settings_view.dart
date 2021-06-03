@@ -16,6 +16,7 @@ import 'package:flutter_weather/views/settings/widgets/settings_chart_type_picke
 import 'package:flutter_weather/views/settings/widgets/settings_hour_range_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_option.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_pressure_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_push_notification_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_temperature_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_theme_mode_picker.dart';
@@ -130,7 +131,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     List<Widget> children = []
       ..addAll(_buildApplicationSection())
       ..addAll(_buildAutoUpdatePeriodSection())
-      ..addAll(_buildTemperatureUnitSection());
+      ..addAll(_buildUnitsSection());
 
     if (AppConfig.instance.privacyPolicyUrl != '') {
       children..addAll(_buildAboutSection());
@@ -158,7 +159,8 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsChartTypePicker(),
         SettingsHourRangePicker(),
         SettingsTemperatureUnitsPicker(),
-        WindSettingsSpeedUnitsPicker(),
+        SettingsWindSpeedUnitsPicker(),
+        SettingsPressureUnitsPicker(),
       ],
     );
   }
@@ -267,7 +269,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     return widgets;
   }
 
-  List<Widget> _buildTemperatureUnitSection() => [
+  List<Widget> _buildUnitsSection() => [
         AppSectionHeader(
           text: AppLocalizations.of(context)!.units,
         ),
@@ -285,6 +287,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           trailingText:
               context.read<AppBloc>().state.units.windSpeed.getText(context),
           pageIndex: 7,
+        ),
+        Divider(),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.pressure,
+          trailingText:
+              context.read<AppBloc>().state.units.pressure.getText(context),
+          pageIndex: 8,
         ),
       ];
 

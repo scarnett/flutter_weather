@@ -88,4 +88,17 @@ void main() {
   test('Wind speed should be 4.5 m/s', () {
     expect(getWindSpeed(10.0, WindSpeedUnit.ms), 4.5); // 10mph
   });
+
+  test('Pressure should be 0', () {
+    expect(getPressure(null, PressureUnit.hpa), 0.0);
+    expect(getPressure(null, PressureUnit.inhg), 0.0);
+  });
+
+  test('Pressure should be 1003 hPa', () {
+    expect(getPressure(1003, PressureUnit.hpa), 1003); // 29.62 inHg
+  });
+
+  test('Pressure should be 29.62 inHg', () {
+    expect(getPressure(1003, PressureUnit.inhg), 29.62); // 29.62 inHg
+  });
 }

@@ -47,44 +47,18 @@ class ForecastMetaRow extends StatelessWidget {
                                   ),
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            getWindSpeed(
-                              currentDay.speed,
-                              context.read<AppBloc>().state.units.windSpeed,
-                            ).toString(),
-                            style:
-                                Theme.of(context).textTheme.headline4!.copyWith(
-                                      fontSize: 16.0,
-                                    ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 2.0),
-                            child: Text(
-                              context
-                                  .read<AppBloc>()
-                                  .state
-                                  .units
-                                  .windSpeed
-                                  .getText(context),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2!
-                                  .copyWith(
-                                    color: AppTheme.getHintColor(
-                                      context.read<AppBloc>().state.themeMode,
-                                      colorTheme: context
-                                          .read<AppBloc>()
-                                          .state
-                                          .colorTheme,
-                                    ),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                        ],
+                      _buildMetaInfo(
+                        context: context,
+                        value: getWindSpeed(
+                          currentDay.speed,
+                          context.read<AppBloc>().state.units.windSpeed,
+                        ).toString(),
+                        unit: context
+                            .read<AppBloc>()
+                            .state
+                            .units
+                            .windSpeed
+                            .getText(context),
                       ),
                     ],
                   ),
@@ -163,11 +137,18 @@ class ForecastMetaRow extends StatelessWidget {
                                   ),
                         ),
                       ),
-                      Text(
-                        currentDay.pressure.toString(),
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                              fontSize: 16.0,
-                            ),
+                      _buildMetaInfo(
+                        context: context,
+                        value: getPressure(
+                          currentDay.pressure,
+                          context.read<AppBloc>().state.units.pressure,
+                        ).toString(),
+                        unit: context
+                            .read<AppBloc>()
+                            .state
+                            .units
+                            .pressure
+                            .getText(context),
                       ),
                     ],
                   ),
@@ -198,11 +179,10 @@ class ForecastMetaRow extends StatelessWidget {
                                   ),
                         ),
                       ),
-                      Text(
-                        currentDay.humidity.toString(),
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                              fontSize: 16.0,
-                            ),
+                      _buildMetaInfo(
+                        context: context,
+                        value: currentDay.humidity.toString(),
+                        unit: '%',
                       ),
                     ],
                   ),
@@ -235,5 +215,35 @@ class ForecastMetaRow extends StatelessWidget {
           ),
           size: 20.0,
         ),
+      );
+
+  Widget _buildMetaInfo({
+    required BuildContext context,
+    required String value,
+    required String unit,
+  }) =>
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            value,
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  fontSize: 16.0,
+                ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: Text(
+              unit,
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    color: AppTheme.getHintColor(
+                      context.read<AppBloc>().state.themeMode,
+                      colorTheme: context.read<AppBloc>().state.colorTheme,
+                    ),
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+        ],
       );
 }

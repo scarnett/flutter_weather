@@ -71,6 +71,9 @@ class AppLocalizations {
   String get speedKmh => addMessage('km/h');
   String get speedMs => addMessage('m/s');
   String get pressure => addMessage('Pressure');
+  String get pressureUnits => addMessage('Pressure Units');
+  String get pressureHpa => addMessage('hPa');
+  String get pressureInhg => addMessage('inHg');
   String get humidity => addMessage('Humidity');
   String get forecast => addMessage('Forecast');
   String get addForecast => addMessage('Add Forecast');
