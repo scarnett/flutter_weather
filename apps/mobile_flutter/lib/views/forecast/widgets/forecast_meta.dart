@@ -87,9 +87,6 @@ class ForecastMeta extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  border: Border(right: _getBorder(context)),
-                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
