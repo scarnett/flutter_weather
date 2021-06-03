@@ -75,6 +75,9 @@ class AppLocalizations {
   String get pressureHpa => addMessage('hPa');
   String get pressureInhg => addMessage('inHg');
   String get humidity => addMessage('Humidity');
+  String get visibility => addMessage('Visibility');
+  String get dewPoint => addMessage('Dew Point');
+  String get uvIndex => addMessage('UV Index');
   String get forecast => addMessage('Forecast');
   String get addForecast => addMessage('Add Forecast');
   String get addThisForecast => addMessage('Add This Forecast');

@@ -7,10 +7,12 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_condition.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_current_temp.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_day_scroller.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_detail_display.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_divider.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hi_lo.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_location.dart';
-import 'package:flutter_weather/views/forecast/widgets/forecast_meta_row.dart';
+import 'package:flutter_weather/views/forecast/widgets/forecast_meta.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_sliver_header.dart';
 
 class ForecastDisplay extends StatefulWidget {
@@ -79,8 +81,11 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             ForecastCurrentTemp(currentDay: widget.forecast.list!.first),
             ForecastCondition(currentDay: currentDay),
             ForecastHiLo(currentDay: currentDay),
-            ForecastMetaRow(currentDay: currentDay),
-            // ForecastDayScroller(forecast: widget.forecast),
+            ForecastDayScroller(forecast: widget.forecast),
+            ForecastMeta(
+              details: widget.forecast.details!,
+              currentDay: currentDay,
+            ),
           ]..addAll(_buildDetailDisplay()),
         ),
       );
@@ -113,7 +118,15 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   delegate: SliverChildListDelegate(
                     [
                       _buildCurrentForecast(currentDay),
-                      // ForecastDayScroller(forecast: widget.forecast),
+                      ForecastDivider(
+                        padding: const EdgeInsets.only(
+                          top: 10.0,
+                          left: 10.0,
+                          right: 10.0,
+                          bottom: 20.0,
+                        ),
+                      ),
+                      ForecastDayScroller(forecast: widget.forecast),
                     ]..addAll(_buildDetailDisplay()),
                   ),
                 ),
@@ -155,7 +168,10 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         children: <Widget>[
           ForecastCondition(currentDay: currentDay),
           ForecastHiLo(currentDay: currentDay),
-          ForecastMetaRow(currentDay: currentDay),
+          ForecastMeta(
+            details: widget.forecast.details!,
+            currentDay: currentDay,
+          ),
         ],
       );
 
