@@ -56,6 +56,7 @@ class SettingsPageView extends StatefulWidget {
 class _SettingsPageViewState extends State<SettingsPageView> {
   PageController? _pageController;
   num _currentPage = 0;
+  int? _pageListIndex;
 
   PackageInfo _packageInfo = PackageInfo(
     appName: 'unknown',
@@ -90,7 +91,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(settingsUtils.getTitle(context, _currentPage)),
+            title: Text(settingsUtils.getTitle(context, _pageListIndex)),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: _handleBack,
@@ -112,6 +113,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
   Future<void> _handleBack() async {
     if (_currentPage > 0) {
+      setState(() => _pageListIndex = null);
       await animatePage(_pageController!, page: 0);
     } else {
       Navigator.of(context).pop();
@@ -120,6 +122,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
 
   Future<bool> _willPopCallback() async {
     if (_currentPage > 0) {
+      setState(() => _pageListIndex = null);
       await animatePage(_pageController!, page: 0);
       return Future.value(false);
     }
@@ -128,7 +131,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   }
 
   Widget _buildContent() {
-    AppState state = context.read<AppBloc>().state;
     List<Widget> children = []
       ..addAll(_buildApplicationSection())
       ..addAll(_buildAutoUpdatePeriodSection())
@@ -151,18 +153,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             child: Column(children: children),
           ),
         ),
-        SettingsUpdatePeriodPicker(selectedPeriod: state.updatePeriod),
-        SettingsPushNotificationPicker(
-          selectedNotification: state.pushNotification,
-          selectedNotificationExtras: state.pushNotificationExtras,
-        ),
-        SettingsThemeModePicker(),
-        SettingsChartTypePicker(),
-        SettingsHourRangePicker(),
-        SettingsTemperatureUnitsPicker(),
-        SettingsWindSpeedUnitsPicker(),
-        SettingsPressureUnitsPicker(),
-        SettingsDistanceUnitsPicker(),
+        _getPage(context.read<AppBloc>().state),
       ],
     );
   }
@@ -188,7 +179,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             themeMode: context.read<AppBloc>().state.themeMode,
             colorized: context.read<AppBloc>().state.colorTheme,
           ),
-          pageIndex: 3,
+          onTapCallback: () => _setPageListIndex(2),
         ),
         Divider(),
         SettingsOption(
@@ -196,7 +187,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           title: AppLocalizations.of(context)!.chartType,
           trailingText:
               context.read<AppBloc>().state.chartType.getText(context),
-          pageIndex: 4,
+          onTapCallback: () => _setPageListIndex(3),
         ),
         Divider(),
         SettingsOption(
@@ -204,7 +195,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           title: AppLocalizations.of(context)!.hourRange,
           trailingText:
               context.read<AppBloc>().state.hourRange.getText(context),
-          pageIndex: 5,
+          onTapCallback: () => _setPageListIndex(4),
         ),
       ],
     );
@@ -251,7 +242,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               .state
               .updatePeriod!
               .getInfo(context: context)!['text'],
-          pageIndex: 1,
+          onTapCallback: () => _setPageListIndex(0),
         ),
         Divider(),
         SettingsOption(
@@ -263,7 +254,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
                 extras: context.read<AppBloc>().state.pushNotificationExtras,
               ) ??
               '',
-          pageIndex: 2,
+          onTapCallback: () => _setPageListIndex(1),
         ),
       ]);
     }
@@ -280,7 +271,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           title: AppLocalizations.of(context)!.temperature,
           trailingText:
               context.read<AppBloc>().state.units.temperature.getText(context),
-          pageIndex: 6,
+          onTapCallback: () => _setPageListIndex(5),
         ),
         Divider(),
         SettingsOption(
@@ -288,7 +279,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           title: AppLocalizations.of(context)!.windSpeed,
           trailingText:
               context.read<AppBloc>().state.units.windSpeed.getText(context),
-          pageIndex: 7,
+          onTapCallback: () => _setPageListIndex(6),
         ),
         Divider(),
         SettingsOption(
@@ -296,7 +287,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           title: AppLocalizations.of(context)!.pressure,
           trailingText:
               context.read<AppBloc>().state.units.pressure.getText(context),
-          pageIndex: 8,
+          onTapCallback: () => _setPageListIndex(7),
         ),
         Divider(),
         SettingsOption(
@@ -304,7 +295,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           title: AppLocalizations.of(context)!.distance,
           trailingText:
               context.read<AppBloc>().state.units.distance.getText(context),
-          pageIndex: 9,
+          onTapCallback: () => _setPageListIndex(8),
         ),
       ];
 
@@ -380,11 +371,34 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         );
   }
 
-  void _tapTemperatureUnit(
-    TemperatureUnit? temperatureUnit,
-  ) =>
-      context.read<AppBloc>().add(SetTemperatureUnit(temperatureUnit));
-
   void _tapPrivacyPolicy() =>
       Navigator.push(context, PrivacyPolicyView.route());
+
+  List<Widget> _getPages(
+    AppState state,
+  ) =>
+      [
+        SettingsUpdatePeriodPicker(selectedPeriod: state.updatePeriod),
+        SettingsPushNotificationPicker(
+          selectedNotification: state.pushNotification,
+          selectedNotificationExtras: state.pushNotificationExtras,
+        ),
+        SettingsThemeModePicker(),
+        SettingsChartTypePicker(),
+        SettingsHourRangePicker(),
+        SettingsTemperatureUnitsPicker(),
+        SettingsWindSpeedUnitsPicker(),
+        SettingsPressureUnitsPicker(),
+        SettingsDistanceUnitsPicker(),
+      ];
+
+  Widget _getPage(
+    AppState state,
+  ) =>
+      _getPages(state)[_pageListIndex ?? 0];
+
+  void _setPageListIndex(
+    int pageIndex,
+  ) =>
+      setState(() => _pageListIndex = pageIndex);
 }

@@ -10,13 +10,15 @@ class SettingsOption extends StatelessWidget {
   final String title;
   final String trailingText;
   final int pageIndex;
+  final Function()? onTapCallback;
 
   const SettingsOption({
     Key? key,
     required this.pageController,
     required this.title,
     required this.trailingText,
-    required this.pageIndex,
+    this.pageIndex: 1,
+    this.onTapCallback,
   }) : super(key: key);
 
   @override
@@ -48,6 +50,12 @@ class SettingsOption extends StatelessWidget {
             ),
           ],
         ),
-        onTap: () async => await animatePage(pageController, page: pageIndex),
+        onTap: () async {
+          if (onTapCallback != null) {
+            onTapCallback!();
+          }
+
+          await animatePage(pageController, page: pageIndex);
+        },
       );
 }

@@ -34,25 +34,29 @@ PushNotification? getPushNotification(
 
 String getTitle(
   BuildContext context,
-  num _currentPage,
+  num? _currentPage,
 ) {
-  if (_currentPage.toInt() == 1) {
+  if (_currentPage == null) {
+    return AppLocalizations.of(context)!.settings;
+  }
+
+  if (_currentPage.toInt() == 0) {
     return AppLocalizations.of(context)!.updatePeriod;
-  } else if (_currentPage.toInt() == 2) {
+  } else if (_currentPage.toInt() == 1) {
     return AppLocalizations.of(context)!.pushNotification;
-  } else if (_currentPage.toInt() == 3) {
+  } else if (_currentPage.toInt() == 2) {
     return AppLocalizations.of(context)!.themeMode;
-  } else if (_currentPage.toInt() == 4) {
+  } else if (_currentPage.toInt() == 3) {
     return AppLocalizations.of(context)!.chartType;
-  } else if (_currentPage.toInt() == 5) {
+  } else if (_currentPage.toInt() == 4) {
     return AppLocalizations.of(context)!.hourRange;
-  } else if (_currentPage.toInt() == 6) {
+  } else if (_currentPage.toInt() == 5) {
     return AppLocalizations.of(context)!.temperatureUnits;
-  } else if (_currentPage.toInt() == 7) {
+  } else if (_currentPage.toInt() == 6) {
     return AppLocalizations.of(context)!.windSpeedUnits;
-  } else if (_currentPage.toInt() == 8) {
+  } else if (_currentPage.toInt() == 7) {
     return AppLocalizations.of(context)!.pressureUnits;
-  } else if (_currentPage.toInt() == 9) {
+  } else if (_currentPage.toInt() == 8) {
     return AppLocalizations.of(context)!.distanceUnits;
   }
 
