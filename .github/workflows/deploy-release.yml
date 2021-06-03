@@ -6,7 +6,7 @@ on:
       flutterVersion:
         description: 'Flutter Version'
         required: true
-        default: '2.2.0'
+        default: '2.2.1'
 
 # on:
 #   push:
