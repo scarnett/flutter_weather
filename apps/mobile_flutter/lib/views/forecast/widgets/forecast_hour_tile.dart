@@ -78,7 +78,7 @@ class ForecastHourTile extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerRight,
           child: Text(
-            getWind(hour.windSpeed),
+            getWindSpeedText(context, hour.windSpeed, state.windSpeedUnit),
             style: Theme.of(context).textTheme.headline5!.copyWith(
                   shadows: state.colorTheme ? commonTextShadow() : null,
                 ),

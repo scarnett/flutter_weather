@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
 
 enum WindSpeedUnit {
-  mph,
   kmh,
+  mph,
   ms,
 }
 

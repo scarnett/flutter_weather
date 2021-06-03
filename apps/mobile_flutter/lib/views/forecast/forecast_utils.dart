@@ -190,6 +190,18 @@ num getWindSpeed(
   }
 }
 
+String getWindSpeedText(
+  BuildContext context,
+  num? windSpeed,
+  WindSpeedUnit unit,
+) {
+  if (windSpeed == null) {
+    return '0 ${unit.getText(context)}';
+  }
+
+  return '${getWindSpeed(windSpeed, unit)} ${unit.getText(context)}';
+}
+
 Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {
@@ -233,16 +245,6 @@ String getHumidity(
   }
 
   return '${humidity.toDouble().round()}%';
-}
-
-String getWind(
-  num? windSpeed,
-) {
-  if (windSpeed == null) {
-    return '0 mph'; // TODO! unit
-  }
-
-  return '${windSpeed.toDouble().round()} mph'; // TODO! unit
 }
 
 String getUnitSymbol(

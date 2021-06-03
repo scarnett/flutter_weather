@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/forecast_model.dart';
@@ -46,11 +47,43 @@ class ForecastMetaRow extends StatelessWidget {
                                   ),
                         ),
                       ),
-                      Text(
-                        currentDay.speed.toString(),
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                              fontSize: 16.0,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            getWindSpeed(
+                              currentDay.speed,
+                              context.read<AppBloc>().state.windSpeedUnit,
+                            ).toString(),
+                            style:
+                                Theme.of(context).textTheme.headline4!.copyWith(
+                                      fontSize: 16.0,
+                                    ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 2.0),
+                            child: Text(
+                              context
+                                  .read<AppBloc>()
+                                  .state
+                                  .windSpeedUnit
+                                  .getText(context),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
+                                    color: AppTheme.getHintColor(
+                                      context.read<AppBloc>().state.themeMode,
+                                      colorTheme: context
+                                          .read<AppBloc>()
+                                          .state
+                                          .colorTheme,
+                                    ),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
