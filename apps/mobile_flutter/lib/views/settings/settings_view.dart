@@ -311,9 +311,24 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           text: AppLocalizations.of(context)!.buildInformation,
         ),
         ListTile(
-          title: Text(
-            scrubVersion(_packageInfo.version),
-            style: Theme.of(context).textTheme.subtitle1,
+          title: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                scrubVersion(_packageInfo.version),
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(
+                scrubVersion(_packageInfo.buildNumber),
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                      color: AppTheme.getHintColor(
+                        context.read<AppBloc>().state.themeMode,
+                        colorTheme: context.read<AppBloc>().state.colorTheme,
+                      ),
+                    ),
+              ),
+            ],
           ),
           trailing: SettingsVersionStatusText(
             packageInfo: _packageInfo,
