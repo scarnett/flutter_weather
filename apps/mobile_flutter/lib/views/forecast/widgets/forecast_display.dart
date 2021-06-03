@@ -179,11 +179,17 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     if (widget.detailsEnabled && (widget.forecast.details!.timezone != null)) {
       return [
         GestureDetector(
-          onDoubleTap: () => _scrollController.animateTo(
-            _headerHeight,
-            duration: Duration(milliseconds: 150),
-            curve: Curves.linear,
-          ),
+          onDoubleTap: () {
+            _scrollController.animateTo(
+              _headerHeight,
+              duration: Duration(milliseconds: 150),
+              curve: Curves.linear,
+            );
+
+            context
+                .read<AppBloc>()
+                .add(SetScrollDirection(ScrollDirection.reverse));
+          },
           child: ForecastDetailDisplay(
             scrollController: _scrollController,
             forecast: widget.forecast,
