@@ -11,6 +11,7 @@ import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_wind_direction.dart';
+import 'package:flutter_weather/widgets/app_progress_indicator.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class ForecastMetaRow extends StatelessWidget {
@@ -26,9 +27,10 @@ class ForecastMetaRow extends StatelessWidget {
     BuildContext context,
   ) =>
       Container(
-        padding: const EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
@@ -91,22 +93,7 @@ class ForecastMetaRow extends StatelessWidget {
                                   child: SizedBox(
                                     height: 10.0,
                                     width: 10.0,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        (context
-                                                        .read<AppBloc>()
-                                                        .state
-                                                        .themeMode ==
-                                                    ThemeMode.dark) ||
-                                                context
-                                                    .read<AppBloc>()
-                                                    .state
-                                                    .colorTheme
-                                            ? Colors.white
-                                            : AppTheme.primaryColor,
-                                      ),
-                                    ),
+                                    child: AppProgressIndicator(),
                                   ),
                                 ),
                               );

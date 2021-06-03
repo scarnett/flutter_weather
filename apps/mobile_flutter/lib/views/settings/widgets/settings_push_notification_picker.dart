@@ -16,6 +16,7 @@ import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/utils/push_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
+import 'package:flutter_weather/widgets/app_progress_indicator.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:geolocator/geolocator.dart';
@@ -192,10 +193,7 @@ class _SettingsPushNotificationPickerState
           return SizedBox(
             height: 20.0,
             width: 20.0,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.0,
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
-            ),
+            child: AppProgressIndicator(color: AppTheme.primaryColor),
           );
         } else if (error) {
           return SizedBox(

@@ -7,7 +7,6 @@ import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_condition.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_current_temp.dart';
-import 'package:flutter_weather/views/forecast/widgets/forecast_day_scroller.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_detail_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hi_lo.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_location.dart';
@@ -81,7 +80,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             ForecastCondition(currentDay: currentDay),
             ForecastHiLo(currentDay: currentDay),
             ForecastMetaRow(currentDay: currentDay),
-            ForecastDayScroller(forecast: widget.forecast),
+            // ForecastDayScroller(forecast: widget.forecast),
           ]..addAll(_buildDetailDisplay()),
         ),
       );
@@ -114,7 +113,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   delegate: SliverChildListDelegate(
                     [
                       _buildCurrentForecast(currentDay),
-                      ForecastDayScroller(forecast: widget.forecast),
+                      // ForecastDayScroller(forecast: widget.forecast),
                     ]..addAll(_buildDetailDisplay()),
                   ),
                 ),

@@ -12,6 +12,7 @@ import 'package:flutter_weather/utils/input_utils.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_country_picker.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
+import 'package:flutter_weather/widgets/app_progress_indicator.dart';
 import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 
@@ -279,10 +280,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 ? SizedBox(
                     height: 20.0,
                     width: 20.0,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
+                    child: AppProgressIndicator(color: Colors.white),
                   )
                 : const Icon(Icons.check, size: 16.0),
             onTap: _submitting ? null : _tapSubmit,
@@ -302,10 +300,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 ? SizedBox(
                     height: 20.0,
                     width: 20.0,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
+                    child: AppProgressIndicator(color: Colors.white),
                   )
                 : const Icon(Icons.close, size: 16.0),
             onTap: _deleting ? null : _tapDelete,
