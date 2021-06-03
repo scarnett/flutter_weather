@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/widgets/app_temperature_display.dart';
 
 class ForecastCurrentTemp extends StatelessWidget {
   final ForecastDay currentDay;
-  final TemperatureUnit temperatureUnit;
   final double? shrinkOffset;
   final double? maxExtent;
   final double? minExtent;
@@ -23,7 +23,6 @@ class ForecastCurrentTemp extends StatelessWidget {
   ForecastCurrentTemp({
     Key? key,
     required this.currentDay,
-    required this.temperatureUnit,
     this.shrinkOffset,
     this.maxExtent,
     this.minExtent,
@@ -33,51 +32,51 @@ class ForecastCurrentTemp extends StatelessWidget {
   @override
   Widget build(
     BuildContext context,
-  ) =>
-      Container(
-        child: Align(
-          alignment: _getAlignment(),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AppTemperatureDisplay(
-                    temperature: getTemperature(
-                      currentDay.temp!.day,
-                      temperatureUnit,
-                    ).toString(),
-                    style: getTemperatureTextStyle(context),
-                    unit: temperatureUnit,
-                  ),
-                  AppTemperatureDisplay(
-                    temperature: AppLocalizations.of(context)!
-                        .getFeelsLike(getTemperature(
-                      currentDay.feelsLike!.day,
-                      temperatureUnit,
-                    ).toString()),
-                    style: getFeelsLikeTextStyle(context),
-                    unit: temperatureUnit,
-                    unitSizeFactor: 1.5,
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: getTemperaturePadding(context)),
-                child: ForecastIcon(
-                  icon: getForecastIconData(currentDay.weather!.first.icon),
-                  resizeAnimation: resizeAnimation,
+  ) {
+    AppState state = context.read<AppBloc>().state;
+    return Container(
+      child: Align(
+        alignment: _getAlignment(),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AppTemperatureDisplay(
+                  temperature: getTemperature(
+                    currentDay.temp!.day,
+                    state.units.temperature,
+                  ).toString(),
+                  style: getTemperatureTextStyle(context),
                 ),
+                AppTemperatureDisplay(
+                  temperature:
+                      AppLocalizations.of(context)!.getFeelsLike(getTemperature(
+                    currentDay.feelsLike!.day,
+                    state.units.temperature,
+                  ).toString()),
+                  style: getFeelsLikeTextStyle(context),
+                  unitSizeFactor: 1.5,
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: getTemperaturePadding(context)),
+              child: ForecastIcon(
+                icon: getForecastIconData(currentDay.weather!.first.icon),
+                resizeAnimation: resizeAnimation,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   TextStyle getTemperatureTextStyle(
     BuildContext context,

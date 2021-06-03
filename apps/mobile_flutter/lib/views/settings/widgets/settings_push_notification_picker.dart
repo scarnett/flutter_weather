@@ -6,16 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
+import 'package:flutter_weather/services/services.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/utils/push_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
-import 'package:flutter_weather/views/forecast/forecast_service.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/widgets/app_progress_indicator.dart';
 import 'package:flutter_weather/widgets/app_section_header.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,16 +27,10 @@ class SettingsPushNotificationPicker extends StatefulWidget {
   final PushNotification? selectedNotification;
   final Map<String, dynamic>? selectedNotificationExtras;
 
-  final Function(
-    PushNotification? notification,
-    Map<String, dynamic>? extras,
-  ) onTap;
-
   SettingsPushNotificationPicker({
     Key? key,
     this.selectedNotification,
     this.selectedNotificationExtras,
-    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -58,8 +53,6 @@ class _SettingsPushNotificationPickerState
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
             context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Theme(
@@ -95,9 +88,9 @@ class _SettingsPushNotificationPickerState
   ) =>
       ListView(
         children: [
-          ..._buildListOfNotificationTile(PushNotification.OFF),
+          ..._buildListOfNotificationTile(PushNotification.off),
           ..._buildListOfNotificationTile(
-            PushNotification.CURRENT_LOCATION,
+            PushNotification.currentLocation,
             showDivider: false,
           ),
           ..._buildListOfForecasts(state),
@@ -115,17 +108,14 @@ class _SettingsPushNotificationPickerState
     List<Widget> children = <Widget>[];
     children.add(
       AppSectionHeader(
-        themeMode: state.themeMode,
-        colorTheme: state.colorTheme,
-        text:
-            PushNotification.SAVED_LOCATION.getInfo(context: context)!['text'],
+        text: PushNotification.savedLocation.getInfo(context: context)!['text'],
       ),
     );
 
     for (int i = 0; i < forecasts.length; i++) {
       children.addAll(
         _buildListOfNotificationTile(
-          PushNotification.SAVED_LOCATION,
+          PushNotification.savedLocation,
           forecast: forecasts[i],
           showDivider: ((i + 1) < forecasts.length),
         ),
@@ -198,15 +188,12 @@ class _SettingsPushNotificationPickerState
     PushNotification notification,
   ) {
     switch (notification) {
-      case PushNotification.CURRENT_LOCATION:
+      case PushNotification.currentLocation:
         if (processing) {
           return SizedBox(
             height: 20.0,
             width: 20.0,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.0,
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
-            ),
+            child: AppProgressIndicator(color: AppTheme.primaryColor),
           );
         } else if (error) {
           return SizedBox(
@@ -230,7 +217,7 @@ class _SettingsPushNotificationPickerState
     Map<String, dynamic>? notificationExtras;
 
     switch (notification) {
-      case PushNotification.SAVED_LOCATION:
+      case PushNotification.savedLocation:
         if (!await requestPushNotificationPermission()) {
           break;
         }
@@ -248,7 +235,7 @@ class _SettingsPushNotificationPickerState
 
         break;
 
-      case PushNotification.CURRENT_LOCATION:
+      case PushNotification.currentLocation:
         if (!await requestPushNotificationPermission()) {
           break;
         }
@@ -299,7 +286,11 @@ class _SettingsPushNotificationPickerState
     closeKeyboard(context);
 
     if (!processing && !error) {
-      widget.onTap(notification, notificationExtras);
+      context.read<AppBloc>().add(SetPushNotification(
+            context: context,
+            pushNotification: notification,
+            pushNotificationExtras: notificationExtras,
+          ));
     }
   }
 

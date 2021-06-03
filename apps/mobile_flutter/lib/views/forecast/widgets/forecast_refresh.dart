@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:timer_builder/timer_builder.dart';
 
@@ -57,7 +57,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
     BuildContext context,
     AppState state,
   ) {
-    if (state.refreshStatus == RefreshStatus.REFRESHING) {
+    if (state.refreshStatus == RefreshStatus.refreshing) {
       _refreshAnimationController
         ..reset()
         ..forward();
@@ -120,7 +120,7 @@ class _ForecastRefreshState extends State<ForecastRefresh>
             RefreshForecast(
               context,
               state.forecasts[state.selectedForecastIndex],
-              context.read<AppBloc>().state.temperatureUnit,
+              context.read<AppBloc>().state.units.temperature,
             ),
           );
 }

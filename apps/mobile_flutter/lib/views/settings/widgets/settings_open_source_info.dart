@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 
 class SettingsOpenSourceInfo extends StatelessWidget {
-  final ThemeMode themeMode;
-
   const SettingsOpenSourceInfo({
     Key? key,
-    required this.themeMode,
   }) : super(key: key);
 
   @override
@@ -21,13 +21,12 @@ class SettingsOpenSourceInfo extends StatelessWidget {
           if (AppConfig.instance.githubUrl != null)
             Expanded(
               child: InkWell(
-                onTap: () => launchURL(AppConfig.instance.githubUrl),
+                onTap: () async =>
+                    await launchURL(AppConfig.instance.githubUrl),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Image.asset(
-                    (themeMode == ThemeMode.light)
-                        ? 'assets/images/github_dark.png'
-                        : 'assets/images/github_light.png',
+                    _getGitHubImagePath(context),
                     width: 50.0,
                     height: 50.0,
                   ),
@@ -36,7 +35,7 @@ class SettingsOpenSourceInfo extends StatelessWidget {
             ),
           Expanded(
             child: InkWell(
-              onTap: () => launchURL('https://flutter.dev/'),
+              onTap: () async => await launchURL('https://flutter.dev/'),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: FlutterLogo(size: 50.0),
@@ -45,7 +44,7 @@ class SettingsOpenSourceInfo extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: () => launchURL('https://opensource.org/'),
+              onTap: () async => await launchURL('https://opensource.org/'),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Image.asset(
@@ -58,4 +57,11 @@ class SettingsOpenSourceInfo extends StatelessWidget {
           ),
         ],
       );
+
+  String _getGitHubImagePath(
+    BuildContext context,
+  ) =>
+      (context.read<AppBloc>().state.themeMode == ThemeMode.light)
+          ? 'assets/images/github_dark.png'
+          : 'assets/images/github_light.png';
 }

@@ -96,6 +96,7 @@ ThemeData appLightThemeData = ThemeData(
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.light),
+    thickness: 2.0,
     space: 1.0,
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -182,6 +183,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.dark),
+    thickness: 2.0,
     space: 1.0,
   ),
   iconTheme: IconThemeData(

@@ -4,19 +4,18 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/fab_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_last_updated.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_options.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_fab.dart';
 import 'package:flutter_weather/widgets/app_none_found.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
@@ -55,7 +54,7 @@ class _ForecastPageViewState extends State<ForecastView>
 
   @override
   void dispose() {
-    context.read<AppBloc>().add(SetScrollDirection(ScrollDirection.idle));
+    // context.read<AppBloc>().add(SetScrollDirection(ScrollDirection.idle));
     _pageController.dispose();
     _hideFabAnimationController.dispose();
     _currentForecastNotifier.dispose();
@@ -118,7 +117,7 @@ class _ForecastPageViewState extends State<ForecastView>
                     RefreshForecast(
                       context,
                       state.forecasts[_currentForecastNotifier.value],
-                      state.temperatureUnit,
+                      state.units.temperature,
                     ),
                   );
             }
@@ -147,15 +146,15 @@ class _ForecastPageViewState extends State<ForecastView>
       AppLocalizations? i18n = AppLocalizations.of(context);
 
       switch (state.crudStatus) {
-        case CRUDStatus.CREATED:
+        case CRUDStatus.created:
           showSnackbar(context, i18n!.forecastAdded);
           break;
 
-        case CRUDStatus.UPDATED:
+        case CRUDStatus.updated:
           showSnackbar(context, i18n!.forecastUpdated);
           break;
 
-        case CRUDStatus.DELETED:
+        case CRUDStatus.deleted:
           showSnackbar(context, i18n!.forecastDeleted);
           break;
 
@@ -303,8 +302,6 @@ class _ForecastPageViewState extends State<ForecastView>
           Color _forecastDarkenedColor = _forecastColor!.darken(0.25);
 
           return AppUiOverlayStyle(
-            themeMode: state.themeMode,
-            colorTheme: state.colorTheme,
             systemNavigationBarColor: _forecastDarkenedColor,
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -338,8 +335,6 @@ class _ForecastPageViewState extends State<ForecastView>
     AppState state,
   ) =>
       AppUiOverlayStyle(
-        themeMode: state.themeMode,
-        colorTheme: state.colorTheme,
         child: AppUiSafeArea(
           bottom: false,
           top: false,
@@ -366,11 +361,6 @@ class _ForecastPageViewState extends State<ForecastView>
         child: ForecastDisplay(
           forecastColor: forecastColor,
           forecastDarkenedColor: forecastDarkenedColor,
-          temperatureUnit: state.temperatureUnit,
-          chartType: state.chartType,
-          forecastHourRange: state.forecastHourRange,
-          themeMode: state.themeMode,
-          colorTheme: state.colorTheme,
           forecast: state.forecasts[position],
         ),
       );
@@ -379,11 +369,6 @@ class _ForecastPageViewState extends State<ForecastView>
     return ForecastDisplay(
       forecastColor: forecastColor,
       forecastDarkenedColor: forecastDarkenedColor,
-      temperatureUnit: state.temperatureUnit,
-      chartType: state.chartType,
-      forecastHourRange: state.forecastHourRange,
-      themeMode: state.themeMode,
-      colorTheme: state.colorTheme,
       forecast: state.forecasts[position],
     );
   }
@@ -416,17 +401,17 @@ class _ForecastPageViewState extends State<ForecastView>
           selectedSize: 10.0,
           itemCount: state.forecasts.length,
           currentPageNotifier: _currentForecastNotifier,
-          onPageSelected: _onPageSelected,
+          onPageSelected: (int page) async => await _onPageSelected(page),
         ),
       ),
     );
   }
 
-  void _onPageSelected(
+  Future<void> _onPageSelected(
     int page,
-  ) {
+  ) async {
     _currentForecastNotifier.value = page;
-    animatePage(_pageController, page: page);
+    await animatePage(_pageController, page: page);
   }
 
   Future<void> _pullRefresh(
@@ -436,7 +421,7 @@ class _ForecastPageViewState extends State<ForecastView>
             RefreshForecast(
               context,
               state.forecasts[state.selectedForecastIndex],
-              state.temperatureUnit,
+              state.units.temperature,
             ),
           );
 }

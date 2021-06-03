@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/models/models.dart';
+import 'package:flutter_weather/services/services.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
-import 'package:flutter_weather/views/forecast/forecast_service.dart';
-import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
@@ -63,18 +62,18 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
           countryCode: Nullable<String?>(event.lookupData['countryCode']),
           primary: Nullable<bool?>(event.lookupData['primary']),
           lookupForecast: Nullable<Forecast>(forecast),
-          status: Nullable<LookupStatus>(LookupStatus.FORECAST_FOUND),
+          status: Nullable<LookupStatus>(LookupStatus.forecastFound),
         );
       } else {
         yield state.copyWith(
-          status: Nullable<LookupStatus>(LookupStatus.FORECAST_NOT_FOUND),
+          status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
         );
       }
     } on Exception catch (exception, stackTrace) {
       await Sentry.captureException(exception, stackTrace: stackTrace);
 
       yield state.copyWith(
-        status: Nullable<LookupStatus>(LookupStatus.FORECAST_NOT_FOUND),
+        status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
       );
     }
   }

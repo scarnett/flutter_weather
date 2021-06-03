@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/config.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_extension.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 Uri getDetailedUri(
@@ -107,7 +107,7 @@ num getTemperature(
 
     case TemperatureUnit.kelvin:
     default:
-      return temperature.round();
+      return temperature.toDouble().formatDecimal();
   }
 }
 
@@ -169,6 +169,87 @@ String getTemperatureUnitStr(
   }
 }
 
+num getWindSpeed(
+  num? windSpeed,
+  WindSpeedUnit unit,
+) {
+  if (windSpeed == null) {
+    return 0;
+  }
+
+  switch (unit) {
+    case WindSpeedUnit.kmh:
+      return (windSpeed * 1.609344).formatDecimal(decimals: 1);
+
+    case WindSpeedUnit.ms:
+      return (windSpeed / 2.2369362920544).formatDecimal(decimals: 1);
+
+    case WindSpeedUnit.mph:
+    default:
+      return windSpeed.round();
+  }
+}
+
+String getWindSpeedText(
+  BuildContext context,
+  num? windSpeed,
+  WindSpeedUnit unit,
+) {
+  if (windSpeed == null) {
+    return '0 ${unit.getText(context)}';
+  }
+
+  return '${getWindSpeed(windSpeed, unit)} ${unit.getText(context)}';
+}
+
+num getPressure(
+  num? pressure,
+  PressureUnit unit,
+) {
+  if (pressure == null) {
+    return 0;
+  }
+
+  switch (unit) {
+    case PressureUnit.inhg:
+      return (pressure / 33.863886666667).formatDecimal(decimals: 2);
+
+    case PressureUnit.hpa:
+    default:
+      return pressure.round();
+  }
+}
+
+num getDistance(
+  num? distance,
+  DistanceUnit unit,
+) {
+  if (distance == null) {
+    return 0;
+  }
+
+  switch (unit) {
+    case DistanceUnit.km:
+      return (distance * 0.001).formatDecimal(decimals: 2);
+
+    case DistanceUnit.mi:
+    default:
+      return (distance * 0.00062137).formatDecimal(decimals: 2);
+  }
+}
+
+String getPressureText(
+  BuildContext context,
+  num? pressure,
+  PressureUnit unit,
+) {
+  if (pressure == null) {
+    return '0 ${unit.getText(context)}';
+  }
+
+  return '${getPressure(pressure, unit)} ${unit.getText(context)}';
+}
+
 Animatable<Color?>? buildForecastColorSequence(
   List<Forecast> forecastList,
 ) {
@@ -212,16 +293,6 @@ String getHumidity(
   }
 
   return '${humidity.toDouble().round()}%';
-}
-
-String getWind(
-  num? windSpeed,
-) {
-  if (windSpeed == null) {
-    return '0 mph'; // TODO! unit
-  }
-
-  return '${windSpeed.toDouble().round()} mph'; // TODO! unit
 }
 
 String getUnitSymbol(

@@ -24,6 +24,7 @@ class AppLocalizations {
 
   static String get appTitle => 'Flutter Weather';
 
+  String get application => addMessage('Application');
   String get settings => addMessage('Settings');
   String get buildInformation => addMessage('Build Information');
   String get about => addMessage('About');
@@ -55,15 +56,33 @@ class AppLocalizations {
   String get light => addMessage('Light');
   String get dark => addMessage('Dark');
   String get colorized => addMessage('Colorized');
-  String get temperatureUnit => addMessage('Temperature Unit');
+  String get units => addMessage('Units');
+  String get temperature => addMessage('Temperature');
+  String get temperatureUnits => addMessage('Temperature Units');
   String get kelvin => addMessage('Kelvin');
   String get celsius => addMessage('Celsius');
   String get fahrenheit => addMessage('Fahrenheit');
   String get hi => addMessage('Hi');
   String get low => addMessage('Low');
   String get wind => addMessage('Wind');
+  String get windSpeed => addMessage('Wind Speed');
+  String get windSpeedUnits => addMessage('Wind Speed Units');
+  String get speedMph => addMessage('mph');
+  String get speedKmh => addMessage('km/h');
+  String get speedMs => addMessage('m/s');
   String get pressure => addMessage('Pressure');
+  String get pressureUnits => addMessage('Pressure Units');
+  String get pressureHpa => addMessage('hPa');
+  String get pressureInhg => addMessage('inHg');
   String get humidity => addMessage('Humidity');
+  String get visibility => addMessage('Visibility');
+  String get dewPoint => addMessage('Dew Point');
+  String get uvIndex => addMessage('UV Index');
+  String get distance => addMessage('Distance');
+  String get distanceUnits => addMessage('Distance Units');
+  String get distanceMi => addMessage('mi');
+  String get distanceKm => addMessage('km');
+  String get forecast => addMessage('Forecast');
   String get addForecast => addMessage('Add Forecast');
   String get addThisForecast => addMessage('Add This Forecast');
   String get editForecast => addMessage('Edit Forecast');
@@ -116,6 +135,7 @@ class AppLocalizations {
   String get chartType => addMessage('Chart Type');
   String get chartLine => addMessage('Line');
   String get chartBar => addMessage('Bar');
+  String get hourRange => addMessage('Hour Range');
   String get hours12 => addMessage('12hr');
   String get hours24 => addMessage('24hr');
   String get hours36 => addMessage('36hr');

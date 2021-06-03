@@ -5,19 +5,18 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_weather/app_prefs.dart';
-import 'package:flutter_weather/app_service.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/enums/wind_speed_unit.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
+import 'package:flutter_weather/services/services.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/device_utils.dart';
 import 'package:flutter_weather/utils/geolocator_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
-import 'package:flutter_weather/views/forecast/forecast_service.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -50,10 +49,16 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapSetColorThemeToStates(event);
     } else if (event is SetTemperatureUnit) {
       yield* _mapSetTemperatureUnitToStates(event);
+    } else if (event is SetWindSpeedUnit) {
+      yield* _mapSetWindSpeedUnitToStates(event);
+    } else if (event is SetPressureUnit) {
+      yield* _mapSetPressureUnitToStates(event);
+    } else if (event is SetDistanceUnit) {
+      yield* _mapSetDistanceUnitToStates(event);
     } else if (event is SetChartType) {
       yield _mapSetChartTypeToStates(event);
-    } else if (event is SetForecastHourRange) {
-      yield _mapSetForecastHourRangeToStates(event);
+    } else if (event is SetHourRange) {
+      yield _mapSetHourRangeToStates(event);
     } else if (event is SelectedForecastIndex) {
       yield _mapSelectedForecastIndexToStates(event);
     } else if (event is AddForecast) {
@@ -100,7 +105,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       pushNotification: (event.updatePeriod == null)
           ? Nullable<PushNotification?>(null)
           : (state.pushNotification == null)
-              ? Nullable<PushNotification?>(PushNotification.OFF)
+              ? Nullable<PushNotification?>(PushNotification.off)
               : Nullable<PushNotification?>(state.pushNotification),
     );
 
@@ -108,19 +113,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       prefs.pushNotification = null;
       await removePushNotification(deviceId: deviceId);
     } else if (state.pushNotification == null) {
-      prefs.pushNotification = PushNotification.OFF;
+      prefs.pushNotification = PushNotification.off;
       await removePushNotification(deviceId: deviceId);
-    } else if (prefs.pushNotification != PushNotification.OFF) {
-      String? token = await FirebaseMessaging.instance.getToken();
-
-      await savePushNotification(
-        deviceId: deviceId,
-        period: event.updatePeriod ?? null,
-        pushNotification: state.pushNotification ?? null,
-        pushNotificationExtras: state.pushNotificationExtras ?? null,
-        temperatureUnit: state.temperatureUnit,
-        fcmToken: token,
-      );
+    } else if (prefs.pushNotification != PushNotification.off) {
+      await _saveDeviceInfo(prefs.pushNotification);
     }
 
     if (event.callback != null) {
@@ -141,10 +137,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     prefs.pushNotificationExtras = event.pushNotificationExtras;
 
     if ((prefs.pushNotification != null) &&
-        (prefs.pushNotification != PushNotification.OFF)) {
+        (prefs.pushNotification != PushNotification.off)) {
       bool accessGranted = true;
 
-      if (prefs.pushNotification == PushNotification.CURRENT_LOCATION) {
+      if (prefs.pushNotification == PushNotification.currentLocation) {
         accessGranted = await requestLocationPermission();
         if (accessGranted) {
           yield* _updatePushNotificationState(event);
@@ -154,10 +150,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             AppLocalizations.of(event.context)!.locationPermissionDenied,
           );
 
-          if (state.pushNotification == PushNotification.CURRENT_LOCATION) {
+          if (state.pushNotification == PushNotification.currentLocation) {
             yield state.copyWith(
               pushNotification:
-                  Nullable<PushNotification?>(PushNotification.OFF),
+                  Nullable<PushNotification?>(PushNotification.off),
               pushNotificationExtras: Nullable<Map<String, dynamic>?>(null),
             );
           }
@@ -183,23 +179,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
     );
 
-    String? deviceId = await getDeviceId();
-
-    if ((event.pushNotification != null) &&
-        (event.pushNotification != PushNotification.OFF)) {
-      String? token = await FirebaseMessaging.instance.getToken();
-
-      await savePushNotification(
-        deviceId: deviceId,
-        period: state.updatePeriod,
-        pushNotification: state.pushNotification,
-        pushNotificationExtras: state.pushNotificationExtras,
-        temperatureUnit: state.temperatureUnit,
-        fcmToken: token,
-      );
-    } else {
-      await removePushNotification(deviceId: deviceId);
-    }
+    await _saveDeviceInfo(event.pushNotification);
 
     showSnackbar(
       event.context,
@@ -236,23 +216,57 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     prefs.temperatureUnit = event.temperatureUnit;
 
     yield state.copyWith(
-      temperatureUnit: event.temperatureUnit,
+      units: state.units.copyWith(
+        temperature: event.temperatureUnit,
+      ),
     );
 
-    if ((prefs.pushNotification != null) &&
-        (prefs.pushNotification != PushNotification.OFF)) {
-      String? deviceId = await getDeviceId();
-      String? token = await FirebaseMessaging.instance.getToken();
+    await _saveDeviceInfo(prefs.pushNotification);
+  }
 
-      await savePushNotification(
-        deviceId: deviceId,
-        period: state.updatePeriod,
-        pushNotification: state.pushNotification,
-        pushNotificationExtras: state.pushNotificationExtras,
-        temperatureUnit: event.temperatureUnit,
-        fcmToken: token,
-      );
-    }
+  Stream<AppState> _mapSetWindSpeedUnitToStates(
+    SetWindSpeedUnit event,
+  ) async* {
+    AppPrefs prefs = AppPrefs();
+    prefs.windSpeedUnit = event.windSpeedUnit;
+
+    yield state.copyWith(
+      units: state.units.copyWith(
+        windSpeed: event.windSpeedUnit,
+      ),
+    );
+
+    await _saveDeviceInfo(prefs.pushNotification);
+  }
+
+  Stream<AppState> _mapSetPressureUnitToStates(
+    SetPressureUnit event,
+  ) async* {
+    AppPrefs prefs = AppPrefs();
+    prefs.pressureUnit = event.pressureUnit;
+
+    yield state.copyWith(
+      units: state.units.copyWith(
+        pressure: event.pressureUnit,
+      ),
+    );
+
+    await _saveDeviceInfo(prefs.pushNotification);
+  }
+
+  Stream<AppState> _mapSetDistanceUnitToStates(
+    SetDistanceUnit event,
+  ) async* {
+    AppPrefs prefs = AppPrefs();
+    prefs.distanceUnit = event.distanceUnit;
+
+    yield state.copyWith(
+      units: state.units.copyWith(
+        distance: event.distanceUnit,
+      ),
+    );
+
+    await _saveDeviceInfo(prefs.pushNotification);
   }
 
   AppState _mapSetChartTypeToStates(
@@ -262,15 +276,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         chartType: event.chartType,
       );
 
-  AppState _mapSetForecastHourRangeToStates(
-    SetForecastHourRange event,
+  AppState _mapSetHourRangeToStates(
+    SetHourRange event,
   ) {
-    if (event.forecastHourRange == state.forecastHourRange) {
+    if (event.hourRange == state.hourRange) {
       return state;
     }
 
     return state.copyWith(
-      forecastHourRange: event.forecastHourRange,
+      hourRange: event.hourRange,
     );
   }
 
@@ -290,7 +304,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     AddForecast event,
   ) async* {
     yield state.copyWith(
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.CREATING),
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.creating),
     );
 
     // TODO! sort
@@ -300,7 +314,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     yield state.copyWith(
       forecasts: forecasts,
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.CREATED),
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.created),
       selectedForecastIndex: forecasts.indexWhere((Forecast forecast) =>
           (forecast.postalCode == event.forecast.postalCode)),
     );
@@ -310,7 +324,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     UpdateForecast event,
   ) async* {
     yield state.copyWith(
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATING),
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.updating),
     );
 
     List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
@@ -329,14 +343,14 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     yield state.copyWith(
       activeForecastId: Nullable<String?>(null),
       forecasts: forecasts,
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.UPDATED),
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.updated),
     );
 
     add(
       RefreshForecast(
         event.context,
         forecasts[state.selectedForecastIndex],
-        state.temperatureUnit,
+        state.units.temperature,
       ),
     );
   }
@@ -361,7 +375,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     RefreshForecast event,
   ) async* {
     yield state.copyWith(
-      refreshStatus: Nullable<RefreshStatus>(RefreshStatus.REFRESHING),
+      refreshStatus: Nullable<RefreshStatus>(RefreshStatus.refreshing),
     );
 
     Map<String, String?> lookupData = {
@@ -438,7 +452,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     DeleteForecast event,
   ) async* {
     yield state.copyWith(
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETING),
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.deleting),
     );
 
     int _forecastIndex = state.forecasts
@@ -453,7 +467,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       selectedForecastIndex: (state.selectedForecastIndex > 0)
           ? (state.selectedForecastIndex - 1)
           : 0,
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.DELETED),
+      crudStatus: Nullable<CRUDStatus>(CRUDStatus.deleted),
     );
   }
 
@@ -488,6 +502,26 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
   }
 
+  Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
+    if ((pushNotification != null) &&
+        (pushNotification != PushNotification.off)) {
+      String? deviceId = await getDeviceId();
+      String? token = await FirebaseMessaging.instance.getToken();
+
+      await savePushNotification(
+        deviceId: deviceId,
+        period: state.updatePeriod,
+        pushNotification: state.pushNotification,
+        pushNotificationExtras: state.pushNotificationExtras,
+        units: state.units,
+        fcmToken: token,
+      );
+    } else {
+      String? deviceId = await getDeviceId();
+      await removePushNotification(deviceId: deviceId);
+    }
+  }
+
   @override
   AppState fromJson(
     Map<String, dynamic> jsonData,
@@ -500,9 +534,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             : null,
         themeMode: getThemeMode(jsonData['themeMode']),
         colorTheme: jsonData['colorTheme'],
-        temperatureUnit: getTemperatureUnit(jsonData['temperatureUnit']),
+        units: Units.fromJson(jsonData['units']),
         chartType: getChartType(jsonData['chartType']),
-        forecastHourRange: getForecastHourRange(jsonData['forecastHourRange']),
+        hourRange: getForecastHourRange(jsonData['hourRange']),
         forecasts: Forecast.fromJsonList(jsonData['forecasts']),
         selectedForecastIndex: jsonData['selectedForecastIndex'],
       );
@@ -519,9 +553,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             : null,
         'themeMode': state.themeMode.toString(),
         'colorTheme': state.colorTheme,
-        'temperatureUnit': state.temperatureUnit.toString(),
+        'units': state.units.toJson(),
         'chartType': state.chartType.toString(),
-        'forecastHourRange': state.forecastHourRange.toString(),
+        'hourRange': state.hourRange.toString(),
         'forecasts': Forecast.toJsonList(state.forecasts),
         'selectedForecastIndex': state.selectedForecastIndex,
       };

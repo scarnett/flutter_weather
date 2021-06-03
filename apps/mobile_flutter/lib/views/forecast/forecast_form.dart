@@ -3,20 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/input_utils.dart';
 import 'package:flutter_weather/views/forecast/bloc/forecast_form_bloc.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_country_picker.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
+import 'package:flutter_weather/widgets/app_progress_indicator.dart';
 import 'package:flutter_weather/widgets/app_ui_safe_area.dart';
 import 'package:iso_countries/country.dart';
 
 class ForecastFormController {
-  Function(num page)? animateToPage;
+  Future<void> Function(num page)? animateToPage;
 
   void dispose() {
     animateToPage = null;
@@ -171,11 +172,11 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
   ) {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
-        case CRUDStatus.DELETING:
+        case CRUDStatus.deleting:
           setState(() => _deleting = true);
           break;
 
-        case CRUDStatus.DELETED:
+        case CRUDStatus.deleted:
           Navigator.of(context).pop();
           setState(() => _deleting = false);
           break;
@@ -194,7 +195,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
           ForecastCountryPicker(
             selectedCountryCode:
                 context.watch<ForecastFormBloc>().countryCode.value,
-            onTap: _tapCountry,
+            onTap: (Country country) async => await _tapCountry(country),
           ),
         ],
       );
@@ -279,10 +280,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 ? SizedBox(
                     height: 20.0,
                     width: 20.0,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
+                    child: AppProgressIndicator(color: Colors.white),
                   )
                 : const Icon(Icons.check, size: 16.0),
             onTap: _submitting ? null : _tapSubmit,
@@ -302,10 +300,7 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 ? SizedBox(
                     height: 20.0,
                     width: 20.0,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
+                    child: AppProgressIndicator(color: Colors.white),
                   )
                 : const Icon(Icons.close, size: 16.0),
             onTap: _deleting ? null : _tapDelete,
@@ -350,10 +345,10 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
 
   void _tapSubmit() => context.read<ForecastFormBloc>().submit();
 
-  void _animateToPage(
+  Future<void> _animateToPage(
     num page,
-  ) =>
-      animatePage(_pageController!, page: page);
+  ) async =>
+      await animatePage(_pageController!, page: page);
 
   void _tapDelete() {
     Widget noButton = TextButton(
@@ -388,16 +383,16 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
     );
   }
 
-  void _tapCountry(
+  Future<void> _tapCountry(
     Country? country,
-  ) {
+  ) async {
     if (country != null) {
       context
           .read<ForecastFormBloc>()
           .countryCode
           .updateInitialValue(country.countryCode);
 
-      animatePage(_pageController!, page: 0);
+      await animatePage(_pageController!, page: 0);
     }
   }
 

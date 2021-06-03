@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/widgets/app_pageview_scroll_physics.dart';
@@ -13,16 +14,10 @@ import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class ForecastDayScroller extends StatefulWidget {
   final Forecast forecast;
-  final ThemeMode themeMode;
-  final bool colorTheme;
-  final TemperatureUnit temperatureUnit;
 
   const ForecastDayScroller({
     Key? key,
     required this.forecast,
-    required this.themeMode,
-    this.colorTheme: false,
-    required this.temperatureUnit,
   }) : super(key: key);
 
   @override
@@ -115,6 +110,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
     BuildContext context,
     List<ForecastDay> days,
   ) {
+    AppState state = context.read<AppBloc>().state;
     int count = 0;
     List<Widget> dayList = <Widget>[];
 
@@ -147,17 +143,16 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
                         style: Theme.of(context).textTheme.headline5!.copyWith(
                               fontSize: 8.0,
                               color: AppTheme.getFadedTextColor(
-                                colorTheme: widget.colorTheme,
+                                colorTheme: state.colorTheme,
                               ),
                             ),
                       ),
                     ),
                     AppTemperatureDisplay(
                       temperature:
-                          getTemperature(day.temp!.max, widget.temperatureUnit)
+                          getTemperature(day.temp!.max, state.units.temperature)
                               .toString(),
                       style: Theme.of(context).textTheme.headline4,
-                      unit: widget.temperatureUnit,
                       unitSizeFactor: 2,
                     ),
                   ],
@@ -187,6 +182,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
     List<ForecastDay>? days,
     int dayCount: 3, // TODO! parameter?
   }) {
+    AppState state = context.read<AppBloc>().state;
     int pageCount = 0;
 
     if (days == null) {
@@ -205,24 +201,24 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
         child: CirclePageIndicator(
           size: 4.0,
           dotColor: AppTheme.getBorderColor(
-            widget.themeMode,
-            colorTheme: widget.colorTheme,
+            state.themeMode,
+            colorTheme: state.colorTheme,
           ),
           selectedDotColor:
-              widget.colorTheme ? Colors.white : AppTheme.primaryColor,
+              state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 6.0,
           itemCount: pageCount,
           currentPageNotifier: _dayForecastsNotifier,
-          onPageSelected: _onPageSelected,
+          onPageSelected: (int page) async => await _onPageSelected(page),
         ),
       ),
     );
   }
 
-  void _onPageSelected(
+  Future<void> _onPageSelected(
     int page,
-  ) {
+  ) async {
     _dayForecastsNotifier.value = page;
-    animatePage(_pageController, page: page);
+    await animatePage(_pageController, page: page);
   }
 }

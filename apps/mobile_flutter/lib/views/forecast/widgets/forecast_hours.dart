@@ -2,32 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/utils/color_utils.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/scroll_utils.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_hour_tile.dart';
 import 'package:flutter_weather/widgets/app_option_button.dart';
 
 class ForecastHours extends StatefulWidget {
   final ScrollController parentScrollController;
   final Forecast forecast;
-  final TemperatureUnit temperatureUnit;
-  final ThemeMode themeMode;
-  final bool colorTheme;
   final Color? forecastColor;
-  final ForecastHourRange forecastHourRange;
 
   ForecastHours({
     Key? key,
     required this.parentScrollController,
     required this.forecast,
-    required this.temperatureUnit,
-    required this.themeMode,
-    required this.forecastHourRange,
-    this.colorTheme: false,
     this.forecastColor,
   }) : super(key: key);
 
@@ -39,6 +31,7 @@ class _ForecastHoursState extends State<ForecastHours> {
   final Map<String, List<ForecastHour>> _hourData = {};
   late ScrollController _listViewScrollController;
   late ScrollPhysics _listViewScrollPhysics;
+  late int _selectedHourRange;
 
   @override
   void initState() {
@@ -56,25 +49,32 @@ class _ForecastHoursState extends State<ForecastHours> {
   Widget build(
     BuildContext context,
   ) =>
-      ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: 100.0,
-          maxHeight: 500.0,
-        ),
-        child: Column(
-          children: [
-            _buildOptions(),
-            Expanded(
-              child: ListView(
-                primary: false,
-                shrinkWrap: true,
-                controller: _listViewScrollController,
-                physics: _listViewScrollPhysics,
-                children: _getHourTiles(),
-                padding: const EdgeInsets.all(0.0),
+      BlocListener<AppBloc, AppState>(
+        listener: (
+          BuildContext context,
+          AppState state,
+        ) async =>
+            await _blocListener(context, state),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: 100.0,
+            maxHeight: 500.0,
+          ),
+          child: Column(
+            children: [
+              _buildOptions(),
+              Expanded(
+                child: ListView(
+                  primary: false,
+                  shrinkWrap: true,
+                  controller: _listViewScrollController,
+                  physics: _listViewScrollPhysics,
+                  children: _getHourTiles(),
+                  padding: const EdgeInsets.all(0.0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 
@@ -85,7 +85,17 @@ class _ForecastHoursState extends State<ForecastHours> {
     _listViewScrollController.addListener(_listViewScrollListener);
     _listViewScrollPhysics = ScrollPhysics();
 
-    _buildDataMap(widget.forecastHourRange.hours);
+    _selectedHourRange = context.read<AppBloc>().state.hourRange.hours;
+    _buildDataMap(_selectedHourRange);
+  }
+
+  Future<void> _blocListener(
+    BuildContext context,
+    AppState state,
+  ) async {
+    if (_selectedHourRange != state.hourRange.hours) {
+      _buildDataMap(state.hourRange.hours);
+    }
   }
 
   void _listViewScrollListener() => setState(() {
@@ -165,19 +175,16 @@ class _ForecastHoursState extends State<ForecastHours> {
       );
 
   List<Widget> _buildHourOptions() {
+    AppState state = context.read<AppBloc>().state;
     List<Widget> options = [];
     int count = 0;
 
-    for (ForecastHourRange range in ForecastHourRange.values) {
+    for (HourRange range in HourRange.values) {
       Widget option = AppOptionButton(
         text: range.getText(context).toUpperCase(),
-        themeMode: widget.themeMode,
-        colorTheme: widget.colorTheme,
         colorThemeColor: widget.forecastColor?.darken(0.15),
-        active: (widget.forecastHourRange == range),
-        onTap: (widget.forecastHourRange == range)
-            ? null
-            : () => _tapForecastHourRange(range),
+        active: (state.hourRange == range),
+        onTap: (state.hourRange == range) ? null : () => _tapHourRange(range),
       );
 
       if (count > 0) {
@@ -195,6 +202,7 @@ class _ForecastHoursState extends State<ForecastHours> {
   }
 
   List<Widget> _getHourTiles() {
+    AppState state = context.read<AppBloc>().state;
     List<Widget> tiles = [];
     int dayCount = 0;
 
@@ -212,7 +220,7 @@ class _ForecastHoursState extends State<ForecastHours> {
                 addSuffix: true,
               )!,
               style: Theme.of(context).textTheme.headline4!.copyWith(
-                    shadows: (widget.themeMode == ThemeMode.dark)
+                    shadows: (state.themeMode == ThemeMode.dark)
                         ? commonTextShadow()
                         : null,
                   ),
@@ -224,12 +232,7 @@ class _ForecastHoursState extends State<ForecastHours> {
 
         // Add hour tiles
         for (ForecastHour hour in hours) {
-          Widget hourTile = ForecastHourTile(
-            hour: hour,
-            temperatureUnit: widget.temperatureUnit,
-            themeMode: widget.themeMode,
-            colorTheme: widget.colorTheme,
-          );
+          Widget hourTile = ForecastHourTile(hour: hour);
 
           if (((dayCount + 1) == _hourData.length) &&
               ((hourCount + 1) == hours.length)) {
@@ -252,12 +255,11 @@ class _ForecastHoursState extends State<ForecastHours> {
     return tiles;
   }
 
-  void _tapForecastHourRange(
-    ForecastHourRange range,
+  void _tapHourRange(
+    HourRange range,
   ) {
-    BlocProvider.of<AppBloc>(context, listen: false)
-        .add(SetForecastHourRange(range));
-
-    _buildDataMap(range.hours);
+    _selectedHourRange = range.hours;
+    context.read<AppBloc>().add(SetHourRange(range));
+    _buildDataMap(_selectedHourRange);
   }
 }

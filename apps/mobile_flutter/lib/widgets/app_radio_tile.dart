@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppRadioTile<T> extends StatelessWidget {
-  final ThemeMode themeMode;
   final String title;
   final T value;
   final T? groupValue;
@@ -11,7 +13,6 @@ class AppRadioTile<T> extends StatelessWidget {
 
   const AppRadioTile({
     Key? key,
-    required this.themeMode,
     required this.title,
     required this.value,
     this.groupValue,
@@ -22,20 +23,23 @@ class AppRadioTile<T> extends StatelessWidget {
   @override
   Widget build(
     BuildContext context,
-  ) =>
-      RadioListTile<T>(
-        title: Text(
-          title,
-          style: TextStyle(
-            color: (value == groupValue)
-                ? AppTheme.getRadioActiveColor(themeMode)
-                : AppTheme.getRadioInactiveColor(themeMode),
-          ),
+  ) {
+    ThemeMode themeMode = context.read<AppBloc>().state.themeMode;
+
+    return RadioListTile<T>(
+      title: Text(
+        title,
+        style: TextStyle(
+          color: (value == groupValue)
+              ? AppTheme.getRadioActiveColor(themeMode)
+              : AppTheme.getRadioInactiveColor(themeMode),
         ),
-        value: value,
-        groupValue: groupValue,
-        onChanged: onTap,
-        controlAffinity: ListTileControlAffinity.trailing,
-        activeColor: AppTheme.primaryColor,
-      );
+      ),
+      value: value,
+      groupValue: groupValue,
+      onChanged: onTap,
+      controlAffinity: ListTileControlAffinity.trailing,
+      activeColor: AppTheme.primaryColor,
+    );
+  }
 }

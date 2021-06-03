@@ -2,17 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
 
 enum UpdatePeriod {
-  HOUR1,
-  HOUR2,
-  HOUR3,
-  HOUR4,
-  HOUR5,
-}
-
-enum PushNotification {
-  OFF,
-  CURRENT_LOCATION,
-  SAVED_LOCATION,
+  hour1,
+  hour2,
+  hour3,
+  hour4,
+  hour5,
 }
 
 extension UpdatePeriodExtension on UpdatePeriod {
@@ -20,7 +14,7 @@ extension UpdatePeriodExtension on UpdatePeriod {
     BuildContext? context,
   }) {
     switch (this) {
-      case UpdatePeriod.HOUR1:
+      case UpdatePeriod.hour1:
         return {
           'id': '1hr',
           'text': (context == null)
@@ -29,7 +23,7 @@ extension UpdatePeriodExtension on UpdatePeriod {
           'minutes': 60,
         };
 
-      case UpdatePeriod.HOUR2:
+      case UpdatePeriod.hour2:
         return {
           'id': '2hrs',
           'text': (context == null)
@@ -38,7 +32,7 @@ extension UpdatePeriodExtension on UpdatePeriod {
           'minutes': 120,
         };
 
-      case UpdatePeriod.HOUR3:
+      case UpdatePeriod.hour3:
         return {
           'id': '3hrs',
           'text': (context == null)
@@ -47,7 +41,7 @@ extension UpdatePeriodExtension on UpdatePeriod {
           'minutes': 180,
         };
 
-      case UpdatePeriod.HOUR4:
+      case UpdatePeriod.hour4:
         return {
           'id': '4hrs',
           'text': (context == null)
@@ -56,7 +50,7 @@ extension UpdatePeriodExtension on UpdatePeriod {
           'minutes': 240,
         };
 
-      case UpdatePeriod.HOUR5:
+      case UpdatePeriod.hour5:
         return {
           'id': '5hrs',
           'text': (context == null)
@@ -67,42 +61,6 @@ extension UpdatePeriodExtension on UpdatePeriod {
 
       default:
         return null;
-    }
-  }
-}
-
-extension PushNotificationExtension on PushNotification {
-  Map<String, dynamic>? getInfo({
-    BuildContext? context,
-  }) {
-    switch (this) {
-      case PushNotification.CURRENT_LOCATION:
-        return {
-          'id': 'current_location',
-          'text': (context == null)
-              ? 'Current Location'
-              : AppLocalizations.of(context)!.pushNotificationCurrent,
-          'subText': (context == null)
-              ? 'Tap to update'
-              : AppLocalizations.of(context)!.pushNotificationCurrentTap,
-        };
-
-      case PushNotification.SAVED_LOCATION:
-        return {
-          'id': 'saved_location',
-          'text': (context == null)
-              ? 'Saved Locations'
-              : AppLocalizations.of(context)!.pushNotificationSaved,
-        };
-
-      case PushNotification.OFF:
-      default:
-        return {
-          'id': 'off',
-          'text': (context == null)
-              ? 'Off'
-              : AppLocalizations.of(context)!.pushNotificationOff,
-        };
     }
   }
 }

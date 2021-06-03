@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_weather/enums.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/views/settings/settings_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +10,9 @@ const String updatePeriodKey = 'updatePeriod';
 const String pushNotificationKey = 'pushNotification';
 const String pushNotificationExtrasKey = 'pushNotificationExtras';
 const String temperatureUnitKey = 'temperatureUnit';
+const String windSpeedUnitKey = 'windSpeedUnitKey';
+const String pressureUnitKey = 'pressureUnitKey';
+const String distanceUnitKey = 'distanceUnitKey';
 
 class AppPrefs {
   static late SharedPreferences _sharedPrefs;
@@ -89,5 +91,32 @@ class AppPrefs {
     TemperatureUnit? temperatureUnit,
   ) {
     _sharedPrefs.setString(temperatureUnitKey, temperatureUnit.toString());
+  }
+
+  WindSpeedUnit get windSpeedUnit =>
+      getWindSpeedUnit(_sharedPrefs.getString(windSpeedUnitKey));
+
+  set windSpeedUnit(
+    WindSpeedUnit? speedUnit,
+  ) {
+    _sharedPrefs.setString(windSpeedUnitKey, speedUnit.toString());
+  }
+
+  PressureUnit get pressureUnit =>
+      getPressureUnit(_sharedPrefs.getString(pressureUnitKey));
+
+  set pressureUnit(
+    PressureUnit? pressureUnit,
+  ) {
+    _sharedPrefs.setString(pressureUnitKey, pressureUnit.toString());
+  }
+
+  DistanceUnit get distanceUnit =>
+      getDistanceUnit(_sharedPrefs.getString(distanceUnitKey));
+
+  set distanceUnit(
+    DistanceUnit? pressureUnit,
+  ) {
+    _sharedPrefs.setString(distanceUnitKey, distanceUnit.toString());
   }
 }

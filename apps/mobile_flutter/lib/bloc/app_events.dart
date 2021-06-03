@@ -96,6 +96,39 @@ class SetTemperatureUnit extends AppEvent {
   List<Object?> get props => [temperatureUnit];
 }
 
+class SetWindSpeedUnit extends AppEvent {
+  final WindSpeedUnit? windSpeedUnit;
+
+  const SetWindSpeedUnit(
+    this.windSpeedUnit,
+  );
+
+  @override
+  List<Object?> get props => [windSpeedUnit];
+}
+
+class SetPressureUnit extends AppEvent {
+  final PressureUnit? pressureUnit;
+
+  const SetPressureUnit(
+    this.pressureUnit,
+  );
+
+  @override
+  List<Object?> get props => [pressureUnit];
+}
+
+class SetDistanceUnit extends AppEvent {
+  final DistanceUnit? distanceUnit;
+
+  const SetDistanceUnit(
+    this.distanceUnit,
+  );
+
+  @override
+  List<Object?> get props => [distanceUnit];
+}
+
 class SetChartType extends AppEvent {
   final ChartType? chartType;
 
@@ -107,15 +140,15 @@ class SetChartType extends AppEvent {
   List<Object?> get props => [chartType];
 }
 
-class SetForecastHourRange extends AppEvent {
-  final ForecastHourRange? forecastHourRange;
+class SetHourRange extends AppEvent {
+  final HourRange? hourRange;
 
-  const SetForecastHourRange(
-    this.forecastHourRange,
+  const SetHourRange(
+    this.hourRange,
   );
 
   @override
-  List<Object?> get props => [forecastHourRange];
+  List<Object?> get props => [hourRange];
 }
 
 class AddForecast extends AppEvent {

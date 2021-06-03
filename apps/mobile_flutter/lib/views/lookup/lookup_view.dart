@@ -5,17 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_display.dart';
 import 'package:flutter_weather/views/lookup/bloc/bloc.dart';
-import 'package:flutter_weather/views/lookup/lookup_model.dart';
 import 'package:flutter_weather/views/lookup/lookup_utils.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -83,8 +82,6 @@ class _LookupPageViewState extends State<LookupPageView> {
             LookupState state,
           ) =>
               AppUiOverlayStyle(
-            themeMode: context.watch<AppBloc>().state.themeMode,
-            colorTheme: (context.watch<AppBloc>().state.colorTheme),
             systemNavigationBarIconBrightness:
                 context.watch<AppBloc>().state.colorTheme
                     ? Brightness.dark
@@ -101,11 +98,11 @@ class _LookupPageViewState extends State<LookupPageView> {
                   ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: () => _handleBack(state),
+                    onPressed: () async => await _handleBack(state),
                   ),
                 ),
                 body: WillPopScope(
-                  onWillPop: () => _willPopCallback(state),
+                  onWillPop: () async => await _willPopCallback(state),
                   child: _buildContent(),
                 ),
                 extendBody: true,
@@ -122,7 +119,7 @@ class _LookupPageViewState extends State<LookupPageView> {
   ) {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
-        case CRUDStatus.CREATED:
+        case CRUDStatus.created:
           closeKeyboard(context);
           Navigator.of(context).pop();
           break;
@@ -141,7 +138,7 @@ class _LookupPageViewState extends State<LookupPageView> {
       AppLocalizations? i18n = AppLocalizations.of(context);
 
       switch (state.status) {
-        case LookupStatus.FORECAST_NOT_FOUND:
+        case LookupStatus.forecastNotFound:
           closeKeyboard(context);
           showSnackbar(context, i18n!.lookupFailure);
           break;
@@ -154,9 +151,9 @@ class _LookupPageViewState extends State<LookupPageView> {
 
   Future<bool> _willPopCallback(
     LookupState state,
-  ) {
+  ) async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
       return Future.value(false);
     } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
@@ -167,7 +164,6 @@ class _LookupPageViewState extends State<LookupPageView> {
   }
 
   Widget _buildContent() {
-    AppState appState = context.read<AppBloc>().state;
     Forecast? lookupForecast = context.read<LookupBloc>().state.lookupForecast;
     if (lookupForecast != null) {
       return SingleChildScrollView(
@@ -176,10 +172,6 @@ class _LookupPageViewState extends State<LookupPageView> {
           child: Column(
             children: <Widget>[
               ForecastDisplay(
-                temperatureUnit: appState.temperatureUnit,
-                chartType: appState.chartType,
-                forecastHourRange: appState.forecastHourRange,
-                themeMode: appState.themeMode,
                 forecast: lookupForecast,
                 sliverView: false,
                 detailsEnabled: false,
@@ -210,11 +202,11 @@ class _LookupPageViewState extends State<LookupPageView> {
     );
   }
 
-  void _handleBack(
+  Future<void> _handleBack(
     LookupState state,
-  ) {
+  ) async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
     } else if (state.lookupForecast != null) {
       context.read<LookupBloc>().add(ClearLookupForecast());
     } else {
@@ -264,7 +256,7 @@ class _LookupPageViewState extends State<LookupPageView> {
 
     context.read<LookupBloc>().add(LookupForecast(
           lookupData,
-          context.read<AppBloc>().state.temperatureUnit,
+          context.read<AppBloc>().state.units.temperature,
         ));
   }
 

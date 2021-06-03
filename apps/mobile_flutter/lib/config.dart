@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/flavor.dart';
 
 class AppConfig extends InheritedWidget {
   final Flavor flavor;

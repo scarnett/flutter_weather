@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppCheckboxTile extends StatelessWidget {
-  final ThemeMode themeMode;
   final String title;
   final bool checked;
   final Function(bool?)? onTap;
 
   const AppCheckboxTile({
     Key? key,
-    required this.themeMode,
     required this.title,
     required this.checked,
     this.onTap,
@@ -25,8 +25,10 @@ class AppCheckboxTile extends StatelessWidget {
           title,
           style: TextStyle(
             color: checked
-                ? AppTheme.getRadioActiveColor(themeMode)
-                : AppTheme.getRadioInactiveColor(themeMode),
+                ? AppTheme.getRadioActiveColor(
+                    context.read<AppBloc>().state.themeMode)
+                : AppTheme.getRadioInactiveColor(
+                    context.read<AppBloc>().state.themeMode),
           ),
         ),
         value: checked,

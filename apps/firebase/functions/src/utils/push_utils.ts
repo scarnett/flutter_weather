@@ -50,6 +50,9 @@ export async function pushMessage(
         return Promise.resolve('ok')
       })
       .catch((error: any) => {
+        functions.logger.debug(`[pushMessage] Push message failed; ` +
+          `fcmToken: ${device.fcm?.token}`)
+
         functions.logger.error(error)
         return Promise.resolve('error')
       })

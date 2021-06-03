@@ -1,22 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/theme.dart';
 
 class AppOptionButton extends StatelessWidget {
   final String text;
   final Function()? onTap;
   final bool active;
-  final ThemeMode themeMode;
-  final bool colorTheme;
   final Color? colorThemeColor;
 
   const AppOptionButton({
     Key? key,
     required this.text,
-    required this.themeMode,
     this.onTap,
     this.active: false,
-    this.colorTheme: false,
     this.colorThemeColor,
   }) : super(key: key);
 
@@ -31,12 +29,13 @@ class AppOptionButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
             color: active
-                ? colorTheme
+                ? context.read<AppBloc>().state.colorTheme
                     ? Colors.white
                     : AppTheme.primaryColor
-                : colorTheme
+                : context.read<AppBloc>().state.colorTheme
                     ? (colorThemeColor ?? AppTheme.primaryColor)
-                    : AppTheme.getSectionColor(themeMode),
+                    : AppTheme.getSectionColor(
+                        context.read<AppBloc>().state.themeMode),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -50,10 +49,10 @@ class AppOptionButton extends StatelessWidget {
                   text,
                   style: Theme.of(context).textTheme.subtitle2!.copyWith(
                         color: active
-                            ? colorTheme
+                            ? context.read<AppBloc>().state.colorTheme
                                 ? (colorThemeColor ?? AppTheme.primaryColor)
                                 : Colors.white
-                            : colorTheme
+                            : context.read<AppBloc>().state.colorTheme
                                 ? Colors.white
                                 : AppTheme.primaryColor,
                         fontWeight: FontWeight.w400,

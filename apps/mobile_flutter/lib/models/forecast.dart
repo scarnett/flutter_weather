@@ -2,10 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/date_utils.dart';
 
-enum RefreshStatus {
-  REFRESHING,
-}
-
 class Forecast extends Equatable {
   final String? id;
   final String? cityName;

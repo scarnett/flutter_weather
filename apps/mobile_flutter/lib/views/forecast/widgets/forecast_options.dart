@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/views/forecast/forecast_form_view.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_refresh.dart';
 import 'package:flutter_weather/views/settings/settings_view.dart';
@@ -32,14 +32,9 @@ class ForecastOptions extends StatelessWidget {
             ForecastRefresh(),
             Expanded(child: Container()),
             AppColorThemeToggle(
-              forecasts: context.watch<AppBloc>().state.forecasts,
-              themeMode: context.watch<AppBloc>().state.themeMode,
-              colorTheme: context.watch<AppBloc>().state.colorTheme,
               callback: () => context.read<AppBloc>().add(ToggleColorTheme()),
             ),
             AppDayNightSwitch(
-              themeMode: context.watch<AppBloc>().state.themeMode,
-              colorTheme: context.watch<AppBloc>().state.colorTheme,
               callback: () => context.read<AppBloc>().add(ToggleThemeMode()),
             ),
             _buildSettingsButton(context),

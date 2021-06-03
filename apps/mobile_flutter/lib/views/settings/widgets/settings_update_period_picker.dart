@@ -4,22 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
-import 'package:flutter_weather/views/settings/settings_enums.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
 
 class SettingsUpdatePeriodPicker extends StatefulWidget {
   final UpdatePeriod? selectedPeriod;
 
-  final Function(
-    UpdatePeriod period,
-  ) onTap;
-
   SettingsUpdatePeriodPicker({
     Key? key,
     this.selectedPeriod,
-    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -41,8 +36,6 @@ class _SettingsUpdatePeriodPickerState
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
             context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Theme(
@@ -104,7 +97,10 @@ class _SettingsUpdatePeriodPickerState
     UpdatePeriod period,
   ) async {
     closeKeyboard(context);
-    widget.onTap(period);
+    context.read<AppBloc>().add(SetUpdatePeriod(
+          context: context,
+          updatePeriod: period,
+        ));
   }
 
   Color? _getPeriodColor(

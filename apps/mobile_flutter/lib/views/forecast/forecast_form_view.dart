@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app_keys.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/utils/snackbar_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_form.dart';
-import 'package:flutter_weather/views/forecast/forecast_model.dart';
 import 'package:flutter_weather/views/forecast/forecast_utils.dart';
 import 'package:flutter_weather/views/forecast/forecast_view.dart';
 import 'package:flutter_weather/widgets/app_ui_overlay_style.dart';
@@ -62,8 +62,6 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        themeMode: context.watch<AppBloc>().state.themeMode,
-        colorTheme: (context.watch<AppBloc>().state.colorTheme),
         systemNavigationBarIconBrightness:
             (context.watch<AppBloc>().state.colorTheme)
                 ? Brightness.dark
@@ -73,7 +71,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
             title: Text(getTitle(context, _currentPage)),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: _tapBack,
+              onPressed: () async => await _tapBack(),
             ),
           ),
           body: BlocListener<AppBloc, AppState>(
@@ -94,13 +92,13 @@ class _ForecastFormViewState extends State<ForecastPageView> {
   ) {
     if (state.crudStatus != null) {
       switch (state.crudStatus) {
-        case CRUDStatus.UPDATED:
+        case CRUDStatus.updated:
           closeKeyboard(context);
           Navigator.of(context)
               .pushAndRemoveUntil(ForecastView.route(), (route) => false);
           break;
 
-        case CRUDStatus.DELETED:
+        case CRUDStatus.deleted:
           closeKeyboard(context);
           Navigator.of(context).pop();
           break;
@@ -115,7 +113,7 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     AppState state,
   ) async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
       return Future.value(false);
     }
 
@@ -140,9 +138,9 @@ class _ForecastFormViewState extends State<ForecastPageView> {
         onPageChange: _onPageChange,
       );
 
-  _tapBack() {
+  Future<void> _tapBack() async {
     if (_currentPage > 0) {
-      _formController!.animateToPage!(0);
+      await _formController!.animateToPage!(0);
     } else {
       context.read<AppBloc>().add(ClearActiveForecastId());
       Navigator.of(context).pop();

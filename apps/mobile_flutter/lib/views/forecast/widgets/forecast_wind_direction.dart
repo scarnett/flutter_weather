@@ -22,8 +22,8 @@ class ForecastWindDirection extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) {
-    if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
-        !context.watch<AppBloc>().state.colorTheme) {
+    AppState state = context.watch<AppBloc>().state;
+    if ((state.themeMode == ThemeMode.light) && !state.colorTheme) {
       return _rotate(
         degree ?? 0.0,
         Icon(
@@ -42,7 +42,7 @@ class ForecastWindDirection extends StatelessWidget {
             top: 1.0,
             left: 1.0,
             child: _rotate(
-              degree ?? 0,
+              degree ?? 0.0,
               Icon(
                 Icons.navigation,
                 color: shadowColor,

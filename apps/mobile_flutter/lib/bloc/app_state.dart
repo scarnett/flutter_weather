@@ -7,9 +7,9 @@ class AppState extends Equatable {
   final Map<String, dynamic>? pushNotificationExtras;
   final ThemeMode themeMode;
   final bool colorTheme;
-  final TemperatureUnit temperatureUnit;
+  final Units units;
   final ChartType chartType;
-  final ForecastHourRange forecastHourRange;
+  final HourRange hourRange;
   final int selectedForecastIndex;
   final List<Forecast> forecasts;
   final String? activeForecastId;
@@ -23,9 +23,9 @@ class AppState extends Equatable {
     this.pushNotificationExtras,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
-    this.temperatureUnit: TemperatureUnit.fahrenheit,
+    this.units: const Units.initial(),
     this.chartType: ChartType.line,
-    this.forecastHourRange: ForecastHourRange.hours12,
+    this.hourRange: HourRange.hours12,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
     this.activeForecastId,
@@ -40,9 +40,9 @@ class AppState extends Equatable {
     this.pushNotificationExtras,
     this.themeMode: ThemeMode.light,
     this.colorTheme: false,
-    this.temperatureUnit: TemperatureUnit.fahrenheit,
+    this.units: const Units.initial(),
     this.chartType: ChartType.line,
-    this.forecastHourRange: ForecastHourRange.hours12,
+    this.hourRange: HourRange.hours12,
     this.selectedForecastIndex: 0,
     this.forecasts: const [],
     this.activeForecastId,
@@ -59,9 +59,9 @@ class AppState extends Equatable {
     Nullable<Map<String, dynamic>?>? pushNotificationExtras,
     ThemeMode? themeMode,
     bool? colorTheme,
-    TemperatureUnit? temperatureUnit,
+    Units? units,
     ChartType? chartType,
-    ForecastHourRange? forecastHourRange,
+    HourRange? hourRange,
     int? selectedForecastIndex,
     Nullable<String>? selectedCountry,
     List<Forecast>? forecasts,
@@ -81,9 +81,9 @@ class AppState extends Equatable {
             : pushNotificationExtras.value,
         themeMode: themeMode ?? this.themeMode,
         colorTheme: colorTheme ?? this.colorTheme,
-        temperatureUnit: temperatureUnit ?? this.temperatureUnit,
+        units: units ?? this.units,
         chartType: chartType ?? this.chartType,
-        forecastHourRange: forecastHourRange ?? this.forecastHourRange,
+        hourRange: hourRange ?? this.hourRange,
         selectedForecastIndex:
             selectedForecastIndex ?? this.selectedForecastIndex,
         forecasts: forecasts ?? this.forecasts,
@@ -105,9 +105,9 @@ class AppState extends Equatable {
         pushNotificationExtras,
         themeMode,
         colorTheme,
-        temperatureUnit,
+        units,
         chartType,
-        forecastHourRange,
+        hourRange,
         selectedForecastIndex,
         forecasts,
         activeForecastId,
@@ -122,8 +122,7 @@ class AppState extends Equatable {
       'pushNotification: $pushNotification, ' +
       'pushNotificationExtras: $pushNotificationExtras, ' +
       'themeMode: $themeMode, colorTheme: $colorTheme, ' +
-      'temperatureUnit: $temperatureUnit. chartType: $chartType, ' +
-      'forecastHourRange: $forecastHourRange, ' +
+      'units: $units, chartType: $chartType, hourRange: $hourRange, ' +
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus, scrollDirection: $scrollDirection}';

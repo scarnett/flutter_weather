@@ -35,6 +35,14 @@ extension StringExtension on String {
   }
 }
 
+extension DoubleExtension on double {
+  double formatDecimal({
+    int decimals: 2,
+  }) =>
+      double.parse(this
+          .toStringAsFixed((this.truncateToDouble() == this) ? 0 : decimals));
+}
+
 List<Shadow> commonTextShadow({
   color: Colors.black38,
   blurRadius: 1.0,
@@ -54,7 +62,7 @@ bool isInteger(
 ) =>
     (value is int) || (value == value!.roundToDouble());
 
-launchURL(
+Future<void> launchURL(
   String? url,
 ) async {
   if (url == null) {
@@ -68,17 +76,28 @@ launchURL(
   }
 }
 
-animatePage(
+Future<void> animatePage(
   PageController pageController, {
   num page: 0,
   int duration: 150,
   Curve curve: Curves.linear,
-}) {
-  pageController.animateToPage(
-    page as int,
-    duration: Duration(milliseconds: duration),
-    curve: curve,
-  );
+  int pauseMilliseconds: 0,
+}) async {
+  if (pauseMilliseconds > 0) {
+    Future.delayed(Duration(milliseconds: pauseMilliseconds)).then(
+      (dynamic onValue) async => await pageController.animateToPage(
+        page as int,
+        duration: Duration(milliseconds: duration),
+        curve: curve,
+      ),
+    );
+  } else {
+    await pageController.animateToPage(
+      page as int,
+      duration: Duration(milliseconds: duration),
+      curve: curve,
+    );
+  }
 }
 
 void closeKeyboard(
