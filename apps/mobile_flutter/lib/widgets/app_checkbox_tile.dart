@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/theme.dart';
 
 class AppCheckboxTile extends StatelessWidget {
   final String title;

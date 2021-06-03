@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/app_keys.dart';
+import 'package:flutter_weather/app/app_keys.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/views/lookup/lookup_view.dart';
+import 'package:flutter_weather/lookup/view/lookup_view.dart';
 
 class AppFAB extends StatefulWidget {
   final AnimationController animationController;

@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart' as ft;
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/views/settings/widgets/settings_version_status_text.dart';
+import 'package:flutter_weather/settings/widgets/settings_version_status_text.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info/package_info.dart';
 

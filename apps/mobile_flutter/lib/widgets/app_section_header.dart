@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/theme.dart';
 
 class AppSectionHeader extends StatelessWidget {
   final String text;

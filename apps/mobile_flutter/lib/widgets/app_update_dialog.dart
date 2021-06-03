@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/localization.dart';
-import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/widgets/app_form_button.dart';
 import 'package:package_info/package_info.dart';
 import 'package:store_redirect/store_redirect.dart';
