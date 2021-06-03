@@ -27,6 +27,7 @@ class ForecastWindSpeed extends StatelessWidget {
   ) =>
       Container(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ForecastMetaInfo(
               label: AppLocalizations.of(context)!.wind,

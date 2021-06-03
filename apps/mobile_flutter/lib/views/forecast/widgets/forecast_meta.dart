@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/models/models.dart';
+import 'package:flutter_weather/theme.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_dew_point.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_humidity.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_pressure.dart';
@@ -29,37 +32,92 @@ class ForecastMeta extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: ForecastWindSpeed(currentDay: currentDay),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                decoration: BoxDecoration(
+                  border: Border(right: _getBorder(context)),
                 ),
-                ForecastVisibility(details: details),
-              ],
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      margin: const EdgeInsets.only(bottom: 10.0),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: _getBorder(context)),
+                      ),
+                      child: ForecastWindSpeed(currentDay: currentDay),
+                    ),
+                    ForecastVisibility(details: details),
+                  ],
+                ),
+              ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: ForecastPressure(currentDay: currentDay),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      color: AppTheme.getBorderColor(
+                        context.read<AppBloc>().state.themeMode,
+                        colorTheme: context.read<AppBloc>().state.colorTheme,
+                      ),
+                      width: 2.0,
+                    ),
+                  ),
                 ),
-                ForecastDewPoint(details: details),
-              ],
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      margin: const EdgeInsets.only(bottom: 10.0),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: _getBorder(context)),
+                      ),
+                      child: ForecastPressure(currentDay: currentDay),
+                    ),
+                    ForecastDewPoint(details: details),
+                  ],
+                ),
+              ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: ForecastHumidity(currentDay: currentDay),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                decoration: BoxDecoration(
+                  border: Border(right: _getBorder(context)),
                 ),
-                ForecastUVIndex(details: details),
-              ],
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      margin: const EdgeInsets.only(bottom: 10.0),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: _getBorder(context)),
+                      ),
+                      child: ForecastHumidity(currentDay: currentDay),
+                    ),
+                    ForecastUVIndex(details: details),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
+      );
+
+  BorderSide _getBorder(
+    BuildContext context,
+  ) =>
+      BorderSide(
+        color: AppTheme.getBorderColor(
+          context.read<AppBloc>().state.themeMode,
+          colorTheme: context.read<AppBloc>().state.colorTheme,
+        ),
+        width: 2.0,
       );
 }

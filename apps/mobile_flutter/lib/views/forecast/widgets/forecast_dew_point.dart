@@ -24,6 +24,7 @@ class ForecastDewPoint extends StatelessWidget {
     AppState state = context.read<AppBloc>().state;
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ForecastMetaInfo(
             label: AppLocalizations.of(context)!.dewPoint,
