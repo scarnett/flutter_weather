@@ -28,30 +28,18 @@ class ForecastWindSpeed extends StatelessWidget {
       Container(
         child: Row(
           children: [
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.wind,
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          fontSize: 10.0,
-                        ),
-                  ),
-                ),
-                ForecastMetaInfo(
-                  value: getWindSpeed(
-                    currentDay.speed,
-                    context.read<AppBloc>().state.units.windSpeed,
-                  ).toString(),
-                  unit: context
-                      .read<AppBloc>()
-                      .state
-                      .units
-                      .windSpeed
-                      .getText(context),
-                ),
-              ],
+            ForecastMetaInfo(
+              label: AppLocalizations.of(context)!.wind,
+              value: getWindSpeed(
+                currentDay.speed,
+                context.read<AppBloc>().state.units.windSpeed,
+              ).toString(),
+              unit: context
+                  .read<AppBloc>()
+                  .state
+                  .units
+                  .windSpeed
+                  .getText(context),
             ),
             AppConfig.isRelease()
                 ? StreamBuilder<CompassEvent>(

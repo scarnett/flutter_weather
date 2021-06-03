@@ -21,22 +21,10 @@ class ForecastVisibility extends StatelessWidget {
       Container(
         child: Row(
           children: [
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.visibility,
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          fontSize: 10.0,
-                        ),
-                  ),
-                ),
-                ForecastMetaInfo(
-                  value: details.current!.visibility.toString(),
-                  unit: 'mi',
-                ),
-              ],
+            ForecastMetaInfo(
+              label: AppLocalizations.of(context)!.visibility,
+              value: details.current!.visibility.toString(),
+              unit: 'mi',
             ),
             SizedBox(
               height: 30.0,

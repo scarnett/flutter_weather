@@ -21,22 +21,10 @@ class ForecastHumidity extends StatelessWidget {
       Container(
         child: Row(
           children: [
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.humidity,
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          fontSize: 10.0,
-                        ),
-                  ),
-                ),
-                ForecastMetaInfo(
-                  value: currentDay.humidity.toString(),
-                  unit: '%',
-                ),
-              ],
+            ForecastMetaInfo(
+              label: AppLocalizations.of(context)!.humidity,
+              value: currentDay.humidity.toString(),
+              unit: '%',
             ),
             SizedBox(
               height: 30.0,

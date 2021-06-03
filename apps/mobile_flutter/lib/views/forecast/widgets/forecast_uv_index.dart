@@ -21,22 +21,10 @@ class ForecastUVIndex extends StatelessWidget {
       Container(
         child: Row(
           children: [
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.uvIndex,
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          fontSize: 10.0,
-                        ),
-                  ),
-                ),
-                ForecastMetaInfo(
-                  value: details.current!.uvi.toString(),
-                  unit: '', // TODO!
-                ),
-              ],
+            ForecastMetaInfo(
+              label: AppLocalizations.of(context)!.uvIndex,
+              value: details.current!.uvi.toString(),
+              unit: '', // TODO!
             ),
             SizedBox(
               height: 30.0,

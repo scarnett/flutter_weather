@@ -25,30 +25,14 @@ class ForecastPressure extends StatelessWidget {
       Container(
         child: Row(
           children: [
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.pressure,
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          fontSize: 10.0,
-                        ),
-                  ),
-                ),
-                ForecastMetaInfo(
-                  value: getPressure(
-                    currentDay.pressure,
-                    context.read<AppBloc>().state.units.pressure,
-                  ).toString(),
-                  unit: context
-                      .read<AppBloc>()
-                      .state
-                      .units
-                      .pressure
-                      .getText(context),
-                ),
-              ],
+            ForecastMetaInfo(
+              label: AppLocalizations.of(context)!.pressure,
+              value: getPressure(
+                currentDay.pressure,
+                context.read<AppBloc>().state.units.pressure,
+              ).toString(),
+              unit:
+                  context.read<AppBloc>().state.units.pressure.getText(context),
             ),
             SizedBox(
               height: 30.0,
