@@ -13,6 +13,7 @@ import 'package:flutter_weather/views/about/privacyPolicy/privacy_policy_view.da
 import 'package:flutter_weather/views/settings/settings_utils.dart'
     as settingsUtils;
 import 'package:flutter_weather/views/settings/widgets/settings_chart_type_picker.dart';
+import 'package:flutter_weather/views/settings/widgets/settings_distance_units_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_hour_range_picker.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_open_source_info.dart';
 import 'package:flutter_weather/views/settings/widgets/settings_option.dart';
@@ -161,6 +162,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsTemperatureUnitsPicker(),
         SettingsWindSpeedUnitsPicker(),
         SettingsPressureUnitsPicker(),
+        SettingsDistanceUnitsPicker(),
       ],
     );
   }
@@ -295,6 +297,14 @@ class _SettingsPageViewState extends State<SettingsPageView> {
           trailingText:
               context.read<AppBloc>().state.units.pressure.getText(context),
           pageIndex: 8,
+        ),
+        Divider(),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.distance,
+          trailingText:
+              context.read<AppBloc>().state.units.distance.getText(context),
+          pageIndex: 9,
         ),
       ];
 

@@ -78,15 +78,21 @@ void main() {
   });
 
   test('Wind speed should be 10 mph', () {
-    expect(getWindSpeed(10.0, WindSpeedUnit.mph), 10.0); // 10mph
+    expect(getWindSpeed(10.0, WindSpeedUnit.mph), 10.0); // 16.1 km/h; 4.5 m/s
+    expect(getWindSpeed(10.0, WindSpeedUnit.kmh), 16.1);
+    expect(getWindSpeed(10.0, WindSpeedUnit.ms), 4.5);
   });
 
   test('Wind speed should be 16 km/h', () {
-    expect(getWindSpeed(10.0, WindSpeedUnit.kmh), 16.1); // 10mph
+    expect(getWindSpeed(10.0, WindSpeedUnit.kmh), 16.1); // 10 mph; 4.5 m/s
+    expect(getWindSpeed(10.0, WindSpeedUnit.mph), 10.0);
+    expect(getWindSpeed(10.0, WindSpeedUnit.ms), 4.5);
   });
 
   test('Wind speed should be 4.5 m/s', () {
-    expect(getWindSpeed(10.0, WindSpeedUnit.ms), 4.5); // 10mph
+    expect(getWindSpeed(10.0, WindSpeedUnit.ms), 4.5); // 10 mph; 16.1 km/h
+    expect(getWindSpeed(10.0, WindSpeedUnit.mph), 10.0);
+    expect(getWindSpeed(10.0, WindSpeedUnit.kmh), 16.1);
   });
 
   test('Pressure should be 0', () {
@@ -96,9 +102,26 @@ void main() {
 
   test('Pressure should be 1003 hPa', () {
     expect(getPressure(1003, PressureUnit.hpa), 1003); // 29.62 inHg
+    expect(getPressure(1003, PressureUnit.inhg), 29.62);
   });
 
   test('Pressure should be 29.62 inHg', () {
-    expect(getPressure(1003, PressureUnit.inhg), 29.62); // 29.62 inHg
+    expect(getPressure(1003, PressureUnit.inhg), 29.62); // 1003 hPa
+    expect(getPressure(1003, PressureUnit.hpa), 1003);
+  });
+
+  test('Distance should be 0', () {
+    expect(getDistance(null, DistanceUnit.km), 0.0);
+    expect(getDistance(null, DistanceUnit.mi), 0.0);
+  });
+
+  test('Distance should be 10 km', () {
+    expect(getDistance(10000, DistanceUnit.km), 10.0); // 6.21 mi
+    expect(getDistance(10000, DistanceUnit.mi), 6.21);
+  });
+
+  test('Distance should be 10 mi', () {
+    expect(getDistance(16093.40, DistanceUnit.mi), 10.0); // 16.09 km
+    expect(getDistance(16093.40, DistanceUnit.km), 16.09);
   });
 }

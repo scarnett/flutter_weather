@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/localization.dart';
 import 'package:flutter_weather/models/models.dart';
+import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_icon.dart';
 import 'package:flutter_weather/views/forecast/widgets/forecast_meta_info.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -23,7 +24,10 @@ class ForecastUVIndex extends StatelessWidget {
           children: [
             ForecastMetaInfo(
               label: AppLocalizations.of(context)!.uvIndex,
-              value: details.current!.uvi.toString(),
+              value: details.current!.uvi!
+                  .toDouble()
+                  .formatDecimal(decimals: 1)
+                  .toString(),
               unit: '', // TODO!
             ),
             SizedBox(

@@ -220,6 +220,24 @@ num getPressure(
   }
 }
 
+num getDistance(
+  num? distance,
+  DistanceUnit unit,
+) {
+  if (distance == null) {
+    return 0;
+  }
+
+  switch (unit) {
+    case DistanceUnit.km:
+      return (distance * 0.001).formatDecimal(decimals: 2);
+
+    case DistanceUnit.mi:
+    default:
+      return (distance * 0.00062137).formatDecimal(decimals: 2);
+  }
+}
+
 String getPressureText(
   BuildContext context,
   num? pressure,

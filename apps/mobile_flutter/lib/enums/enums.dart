@@ -1,5 +1,6 @@
 export 'chart_type.dart';
 export 'crud_status.dart';
+export 'distance_unit.dart';
 export 'flavor.dart';
 export 'hour_range.dart';
 export 'lookup_status.dart';

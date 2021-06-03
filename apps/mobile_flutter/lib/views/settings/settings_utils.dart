@@ -52,6 +52,8 @@ String getTitle(
     return AppLocalizations.of(context)!.windSpeedUnits;
   } else if (_currentPage.toInt() == 8) {
     return AppLocalizations.of(context)!.pressureUnits;
+  } else if (_currentPage.toInt() == 9) {
+    return AppLocalizations.of(context)!.distanceUnits;
   }
 
   return AppLocalizations.of(context)!.settings;

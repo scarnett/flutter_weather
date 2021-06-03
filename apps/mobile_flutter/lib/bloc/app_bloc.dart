@@ -53,6 +53,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapSetWindSpeedUnitToStates(event);
     } else if (event is SetPressureUnit) {
       yield* _mapSetPressureUnitToStates(event);
+    } else if (event is SetDistanceUnit) {
+      yield* _mapSetDistanceUnitToStates(event);
     } else if (event is SetChartType) {
       yield _mapSetChartTypeToStates(event);
     } else if (event is SetHourRange) {
@@ -246,6 +248,21 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     yield state.copyWith(
       units: state.units.copyWith(
         pressure: event.pressureUnit,
+      ),
+    );
+
+    await _saveDeviceInfo(prefs.pushNotification);
+  }
+
+  Stream<AppState> _mapSetDistanceUnitToStates(
+    SetDistanceUnit event,
+  ) async* {
+    AppPrefs prefs = AppPrefs();
+    prefs.distanceUnit = event.distanceUnit;
+
+    yield state.copyWith(
+      units: state.units.copyWith(
+        distance: event.distanceUnit,
       ),
     );
 

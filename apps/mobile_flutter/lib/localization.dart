@@ -78,6 +78,10 @@ class AppLocalizations {
   String get visibility => addMessage('Visibility');
   String get dewPoint => addMessage('Dew Point');
   String get uvIndex => addMessage('UV Index');
+  String get distance => addMessage('Distance');
+  String get distanceUnits => addMessage('Distance Units');
+  String get distanceMi => addMessage('mi');
+  String get distanceKm => addMessage('km');
   String get forecast => addMessage('Forecast');
   String get addForecast => addMessage('Add Forecast');
   String get addThisForecast => addMessage('Add This Forecast');

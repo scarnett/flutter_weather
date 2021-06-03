@@ -118,6 +118,17 @@ class SetPressureUnit extends AppEvent {
   List<Object?> get props => [pressureUnit];
 }
 
+class SetDistanceUnit extends AppEvent {
+  final DistanceUnit? distanceUnit;
+
+  const SetDistanceUnit(
+    this.distanceUnit,
+  );
+
+  @override
+  List<Object?> get props => [distanceUnit];
+}
+
 class SetChartType extends AppEvent {
   final ChartType? chartType;
 

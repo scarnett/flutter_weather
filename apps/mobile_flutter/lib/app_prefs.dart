@@ -12,6 +12,7 @@ const String pushNotificationExtrasKey = 'pushNotificationExtras';
 const String temperatureUnitKey = 'temperatureUnit';
 const String windSpeedUnitKey = 'windSpeedUnitKey';
 const String pressureUnitKey = 'pressureUnitKey';
+const String distanceUnitKey = 'distanceUnitKey';
 
 class AppPrefs {
   static late SharedPreferences _sharedPrefs;
@@ -108,5 +109,14 @@ class AppPrefs {
     PressureUnit? pressureUnit,
   ) {
     _sharedPrefs.setString(pressureUnitKey, pressureUnit.toString());
+  }
+
+  DistanceUnit get distanceUnit =>
+      getDistanceUnit(_sharedPrefs.getString(distanceUnitKey));
+
+  set distanceUnit(
+    DistanceUnit? pressureUnit,
+  ) {
+    _sharedPrefs.setString(distanceUnitKey, distanceUnit.toString());
   }
 }
