@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/forecast/forecast_utils.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 
 class AppColorThemeToggle extends StatelessWidget {
   final Function callback;

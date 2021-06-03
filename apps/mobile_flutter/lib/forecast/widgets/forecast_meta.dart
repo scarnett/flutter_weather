@@ -3,12 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_dew_point.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_humidity.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_pressure.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_uv_index.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_visibility.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_wind_speed.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastMeta extends StatelessWidget {

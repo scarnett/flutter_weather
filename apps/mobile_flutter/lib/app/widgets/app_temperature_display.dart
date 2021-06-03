@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/forecast/forecast_utils.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 
 class AppTemperatureDisplay extends StatelessWidget {
   final String temperature;

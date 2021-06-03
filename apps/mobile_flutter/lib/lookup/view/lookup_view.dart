@@ -14,10 +14,8 @@ import 'package:flutter_weather/app/widgets/app_ui_overlay_style.dart';
 import 'package:flutter_weather/app/widgets/app_ui_safe_area.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/forecast/forecast_form.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_display.dart';
-import 'package:flutter_weather/lookup/bloc/bloc.dart';
-import 'package:flutter_weather/lookup/lookup_utils.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
+import 'package:flutter_weather/lookup/lookup.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
@@ -94,7 +92,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                 key: _scaffoldKey,
                 appBar: AppBar(
                   title: Text(
-                    getTitle(AppLocalizations.of(context), _currentPage)!,
+                    getLookupTitle(AppLocalizations.of(context), _currentPage)!,
                   ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/forecast/forecast_extension.dart';
-import 'package:flutter_weather/forecast/forecast_utils.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastLocation extends StatelessWidget {

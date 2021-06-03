@@ -5,7 +5,7 @@ import 'package:flutter_weather/app/utils/common_utils.dart';
 import 'package:flutter_weather/app/utils/date_utils.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/forecast/forecast_extension.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:weather_icons/weather_icons.dart';
 

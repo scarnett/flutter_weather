@@ -16,7 +16,7 @@ import 'package:flutter_weather/app/widgets/app_section_header.dart';
 import 'package:flutter_weather/app/widgets/app_ui_overlay_style.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/forecast/forecast_extension.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
 import 'package:geolocator/geolocator.dart';

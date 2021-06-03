@@ -7,7 +7,7 @@ import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/utils/date_utils.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/forecast/forecast_utils.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 class ForecastRefresh extends StatefulWidget {

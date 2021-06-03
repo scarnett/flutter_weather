@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/forecast/forecast_utils.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_day_charts.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_divider.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_hours.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastDetailDisplay extends StatefulWidget {

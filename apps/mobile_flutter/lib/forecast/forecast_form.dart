@@ -11,8 +11,7 @@ import 'package:flutter_weather/app/widgets/app_progress_indicator.dart';
 import 'package:flutter_weather/app/widgets/app_ui_safe_area.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/forecast/bloc/forecast_form_bloc.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_country_picker.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:iso_countries/country.dart';
 

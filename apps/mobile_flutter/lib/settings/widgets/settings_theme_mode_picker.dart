@@ -10,7 +10,7 @@ import 'package:flutter_weather/app/widgets/app_radio_tile.dart';
 import 'package:flutter_weather/app/widgets/app_ui_overlay_style.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/forecast/forecast_utils.dart' as forecastUtils;
+import 'package:flutter_weather/forecast/forecast.dart';
 
 class SettingsThemeModePicker extends StatefulWidget {
   SettingsThemeModePicker({
@@ -54,7 +54,7 @@ class _SettingsThemeModePickerState extends State<SettingsThemeModePicker> {
       ]);
 
     if ((themeMode == ThemeMode.light) &&
-        forecastUtils.hasForecasts(context.read<AppBloc>().state.forecasts)) {
+        hasForecasts(context.read<AppBloc>().state.forecasts)) {
       widgets.addAll(
         [
           AppCheckboxTile(

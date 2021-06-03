@@ -5,11 +5,9 @@ import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/widgets/app_color_theme.dart';
 import 'package:flutter_weather/app/widgets/app_day_night_switch.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/forecast/forecast_utils.dart';
-import 'package:flutter_weather/forecast/view/forecast_form_view.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_refresh.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:flutter_weather/settings/view/settings_view.dart';
+import 'package:flutter_weather/settings/view/view.dart';
 
 class ForecastOptions extends StatelessWidget {
   static final double height = 50.0;

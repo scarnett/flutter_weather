@@ -1,6 +1,6 @@
 import 'package:flutter_weather/app/app_localization.dart';
 
-String? getTitle(
+String? getLookupTitle(
   AppLocalizations? localization,
   num? currentPage,
 ) {

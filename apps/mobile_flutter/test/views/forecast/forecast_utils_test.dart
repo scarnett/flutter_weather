@@ -1,4 +1,4 @@
-import 'package:flutter_weather/forecast/forecast_utils.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:test/test.dart';
 
