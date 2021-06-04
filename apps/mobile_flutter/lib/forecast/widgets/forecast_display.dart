@@ -101,6 +101,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   pinned: true,
                   floating: false,
                   delegate: ForecastSliverHeader(
+                    scrollController: _scrollController,
                     parentContext: context,
                     forecastColor: widget.forecastColor,
                     forecast: widget.forecast,
@@ -172,15 +173,17 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       return [
         GestureDetector(
           onDoubleTap: () {
-            _scrollController.animateTo(
-              _headerHeight,
-              duration: Duration(milliseconds: 150),
-              curve: Curves.linear,
-            );
+            if (_scrollController.offset == 0.0) {
+              _scrollController.animateTo(
+                _headerHeight,
+                duration: Duration(milliseconds: 150),
+                curve: Curves.linear,
+              );
 
-            context
-                .read<AppBloc>()
-                .add(SetScrollDirection(ScrollDirection.reverse));
+              context
+                  .read<AppBloc>()
+                  .add(SetScrollDirection(ScrollDirection.reverse));
+            }
           },
           child: ForecastDetailDisplay(
             scrollController: _scrollController,
