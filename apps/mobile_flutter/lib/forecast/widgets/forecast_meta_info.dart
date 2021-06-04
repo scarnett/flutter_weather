@@ -28,6 +28,9 @@ class ForecastMetaInfo extends StatelessWidget {
               label,
               style: Theme.of(context).textTheme.headline5!.copyWith(
                     fontSize: 10.0,
+                    color: AppTheme.getFadedTextColor(
+                      colorTheme: context.read<AppBloc>().state.colorTheme,
+                    ),
                   ),
             ),
           ),

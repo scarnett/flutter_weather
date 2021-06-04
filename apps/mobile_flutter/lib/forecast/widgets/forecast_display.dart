@@ -115,6 +115,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                           left: 10.0,
                           right: 10.0,
                           bottom: 20.0,
+                          top: 10.0,
                         ),
                       ),
                       ForecastDayScroller(forecast: widget.forecast),
