@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
-import 'package:flutter_weather/app/widgets/app_ui_overlay_style.dart';
-import 'package:flutter_weather/app/widgets/app_ui_safe_area.dart';
+import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicyView extends StatefulWidget {

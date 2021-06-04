@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/app/utils/color_utils.dart';
-import 'package:flutter_weather/app/utils/common_utils.dart';
-import 'package:flutter_weather/app/utils/date_utils.dart';
-import 'package:flutter_weather/app/utils/scroll_utils.dart';
-import 'package:flutter_weather/app/widgets/app_option_button.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
+import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';

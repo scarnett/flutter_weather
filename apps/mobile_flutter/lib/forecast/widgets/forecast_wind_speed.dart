@@ -5,7 +5,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
-import 'package:flutter_weather/app/widgets/app_progress_indicator.dart';
+import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';

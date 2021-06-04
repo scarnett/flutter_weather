@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/app/app_localization.dart';
-import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:weather_icons/weather_icons.dart';

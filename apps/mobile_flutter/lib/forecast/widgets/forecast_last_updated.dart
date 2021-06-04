@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/app/app_localization.dart';
-import 'package:flutter_weather/app/utils/date_utils.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastLastUpdated extends StatelessWidget {

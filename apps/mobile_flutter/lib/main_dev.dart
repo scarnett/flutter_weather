@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_root.dart';
-import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';

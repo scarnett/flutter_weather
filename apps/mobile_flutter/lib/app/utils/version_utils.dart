@@ -1,4 +1,4 @@
-import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:version/version.dart';
 
 String scrubVersion(

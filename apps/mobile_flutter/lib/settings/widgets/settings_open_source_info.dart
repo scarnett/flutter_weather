@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app/app_config.dart';
-import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/bloc/bloc.dart';
 
 class SettingsOpenSourceInfo extends StatelessWidget {

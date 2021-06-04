@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/app/utils/common_utils.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
