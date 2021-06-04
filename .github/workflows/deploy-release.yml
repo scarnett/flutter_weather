@@ -208,7 +208,7 @@ jobs:
   buildIos:
     name: 'Build iOS'
     needs: [version, test]
-    runs-on: macos-11
+    runs-on: macos-11.0
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
@@ -343,7 +343,7 @@ jobs:
   deployIos:
     name: 'Deploy iOS Release to App Store'
     needs: [buildIos]
-    runs-on: macos-11
+    runs-on: macos-11.0
     env:
       FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}

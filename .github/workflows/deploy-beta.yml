@@ -216,7 +216,7 @@ jobs:
   buildIos:
     name: 'Build iOS'
     needs: [version, test]
-    runs-on: macos-11
+    runs-on: macos-11.0
     env:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
