@@ -59,7 +59,6 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
           cityName: Nullable<String?>(event.lookupData['cityName']),
           postalCode: Nullable<String?>(event.lookupData['postalCode']),
           countryCode: Nullable<String?>(event.lookupData['countryCode']),
-          primary: Nullable<bool?>(event.lookupData['primary']),
           lookupForecast: Nullable<Forecast>(forecast),
           status: Nullable<LookupStatus>(LookupStatus.forecastFound),
         );

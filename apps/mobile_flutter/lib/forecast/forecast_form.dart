@@ -247,17 +247,6 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 padding: const EdgeInsets.only(bottom: 10.0),
                 onTap: () => animatePage(_pageController!, page: 1),
               ),
-              SwitchFieldBlocBuilder(
-                booleanFieldBloc: context.watch<ForecastFormBloc>().primary,
-                body: GestureDetector(
-                  onTap: _tapPrimaryFieldText,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(AppLocalizations.of(context)!.primaryForecast),
-                  ),
-                ),
-                padding: const EdgeInsets.all(0.0),
-              ),
               _buildButtons(),
             ],
           ),
@@ -390,12 +379,6 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
 
       await animatePage(_pageController!, page: 0);
     }
-  }
-
-  void _tapPrimaryFieldText() {
-    // ignore: close_sinks
-    BooleanFieldBloc primaryField = context.read<ForecastFormBloc>().primary;
-    primaryField.updateInitialValue(!primaryField.value!);
   }
 
   void _tapConfirmDelete() =>
