@@ -6,7 +6,7 @@ import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
 
@@ -37,15 +37,14 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     );
 
     try {
-      http.Response forecastResponse =
-          await tryLookupForecast(event.lookupData);
+      Response forecastResponse = await tryLookupForecast(event.lookupData);
 
       if (forecastResponse.statusCode == 200) {
         Forecast forecast =
             Forecast.fromJson(jsonDecode(forecastResponse.body));
 
         // TODO! premium
-        http.Response forecastDetailsResponse = await fetchDetailedForecast(
+        Response forecastDetailsResponse = await fetchDetailedForecast(
           longitude: forecast.city!.coord!.lon!,
           latitude: forecast.city!.coord!.lat!,
         );

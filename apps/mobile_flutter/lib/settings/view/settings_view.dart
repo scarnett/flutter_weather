@@ -10,7 +10,7 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/settings/settings.dart' as settingsUtils;
+import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/settings/widgets/widgets.dart';
 import 'package:package_info/package_info.dart';
 
@@ -76,7 +76,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
             context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(settingsUtils.getTitle(context, _pageListIndex)),
+            title: Text(getTitle(context, _pageListIndex)),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: _handleBack,
@@ -159,7 +159,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsOption(
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.themeMode,
-          trailingText: settingsUtils.getThemeModeText(
+          trailingText: getThemeModeText(
             context,
             themeMode: context.read<AppBloc>().state.themeMode,
             colorized: context.read<AppBloc>().state.colorTheme,
@@ -233,7 +233,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         SettingsOption(
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.pushNotification,
-          trailingText: settingsUtils.getPushNotificationText(
+          trailingText: getPushNotificationText(
                 context,
                 context.read<AppBloc>().state.pushNotification,
                 extras: context.read<AppBloc>().state.pushNotificationExtras,

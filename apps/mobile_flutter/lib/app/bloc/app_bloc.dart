@@ -14,7 +14,7 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
 import 'package:flutter_weather/settings/settings.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
@@ -381,7 +381,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     };
 
     try {
-      http.Response forecastResponse = await tryLookupForecast(lookupData);
+      Response forecastResponse = await tryLookupForecast(lookupData);
       if (forecastResponse.statusCode == 200) {
         List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
         int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
@@ -408,7 +408,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           );
 
           // TODO! premium
-          http.Response forecastDetailsResponse = await fetchDetailedForecast(
+          Response forecastDetailsResponse = await fetchDetailedForecast(
             longitude: forecast.city!.coord!.lon!,
             latitude: forecast.city!.coord!.lat!,
           );

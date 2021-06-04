@@ -1,29 +1,29 @@
 import 'package:flutter_weather/forecast/forecast.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
-Future<http.Response> fetchDetailedForecast({
+Future<Response> fetchDetailedForecast({
   required num longitude,
   required num latitude,
 }) async {
   Map<String, dynamic> params = Map<String, dynamic>();
   params['lon'] = longitude.toString();
   params['lat'] = latitude.toString();
-  return http.get(getDetailedUri(params));
+  return get(getDetailedUri(params));
 }
 
-Future<http.Response> fetchCurrentForecastByCoords({
+Future<Response> fetchCurrentForecastByCoords({
   required num longitude,
   required num latitude,
 }) async {
   Map<String, dynamic> params = Map<String, dynamic>();
   params['lon'] = longitude.toString();
   params['lat'] = latitude.toString();
-  return http.get(getCurrentApiUri(params));
+  return get(getCurrentApiUri(params));
 }
 
-Future<http.Response> tryLookupForecast(
+Future<Response> tryLookupForecast(
   Map<String, dynamic> lookupData,
 ) async {
   Map<String, dynamic> params = buildLookupParams(lookupData);
-  return http.get(getDailyApiUri(params));
+  return get(getDailyApiUri(params));
 }

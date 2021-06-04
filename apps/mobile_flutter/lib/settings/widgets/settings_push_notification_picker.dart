@@ -15,7 +15,7 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:sentry/sentry.dart';
 
 class SettingsPushNotificationPicker extends StatefulWidget {
@@ -240,7 +240,7 @@ class _SettingsPushNotificationPickerState
         Position? position = await getPosition();
         if (position != null) {
           try {
-            http.Response forecastResponse = await fetchCurrentForecastByCoords(
+            Response forecastResponse = await fetchCurrentForecastByCoords(
               longitude: position.longitude,
               latitude: position.latitude,
             );
