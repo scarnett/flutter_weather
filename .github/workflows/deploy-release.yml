@@ -362,7 +362,8 @@ jobs:
 
   remoteConfig:
     name: 'Update Remote Configuration'
-    needs: [deployAndroid, deployIos]
+    # needs: [deployAndroid, deployIos]
+    needs: [deployIos]
     runs-on: ubuntu-latest
     env:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
