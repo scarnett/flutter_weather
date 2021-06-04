@@ -5,7 +5,6 @@ class LookupState extends Equatable {
   final String? cityName;
   final String? postalCode;
   final String? countryCode;
-  final bool? primary;
   final Forecast? lookupForecast;
   final LookupStatus? status;
 
@@ -13,7 +12,6 @@ class LookupState extends Equatable {
     this.cityName,
     this.postalCode,
     this.countryCode,
-    this.primary,
     this.lookupForecast,
     this.status,
   });
@@ -22,7 +20,6 @@ class LookupState extends Equatable {
     this.cityName,
     this.postalCode,
     this.countryCode,
-    this.primary,
     this.lookupForecast,
     this.status,
   });
@@ -35,7 +32,6 @@ class LookupState extends Equatable {
     Nullable<String?>? cityName,
     Nullable<String?>? postalCode,
     Nullable<String?>? countryCode,
-    Nullable<bool?>? primary,
     Nullable<Forecast?>? lookupForecast,
     Nullable<LookupStatus?>? status,
   }) =>
@@ -44,7 +40,6 @@ class LookupState extends Equatable {
         postalCode: (postalCode == null) ? this.postalCode : postalCode.value,
         countryCode:
             (countryCode == null) ? this.countryCode : countryCode.value,
-        primary: (primary == null) ? this.primary : primary.value,
         lookupForecast: (lookupForecast == null)
             ? this.lookupForecast
             : lookupForecast.value,
@@ -56,7 +51,6 @@ class LookupState extends Equatable {
         cityName,
         postalCode,
         countryCode,
-        primary,
         lookupForecast,
         status,
       ];
@@ -64,6 +58,6 @@ class LookupState extends Equatable {
   @override
   String toString() =>
       'LookupState{cityName: $cityName, postalCode: $postalCode, ' +
-      'countryCode: $countryCode, primary: $primary, ' +
-      'lookupForecast: $lookupForecast, status: $status}';
+      'countryCode: $countryCode, lookupForecast: $lookupForecast, ' +
+      'status: $status}';
 }

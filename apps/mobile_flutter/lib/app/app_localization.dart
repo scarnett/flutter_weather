@@ -116,7 +116,6 @@ class AppLocalizations {
   String get city => addMessage('City');
   String get postalCode => addMessage('Postal Code');
   String get country => addMessage('Country');
-  String get primaryForecast => addMessage('Primary Forecast');
   String get save => addMessage('Save');
   String get delete => addMessage('Delete');
   String get cancel => addMessage('Cancel');
