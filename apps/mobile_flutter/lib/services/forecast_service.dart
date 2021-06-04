@@ -1,4 +1,4 @@
-import 'package:flutter_weather/views/forecast/forecast_utils.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> fetchDetailedForecast({

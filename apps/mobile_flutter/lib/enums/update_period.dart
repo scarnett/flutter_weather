@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/localization.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 
 enum UpdatePeriod {
   hour1,
