@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
@@ -6,11 +7,13 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
+  final ScrollController scrollController;
   final BuildContext parentContext;
   final Forecast forecast;
   final Color? forecastColor;
 
   ForecastSliverHeader({
+    required this.scrollController,
     required this.parentContext,
     required this.forecast,
     this.forecastColor,
@@ -40,43 +43,58 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
           final AlwaysStoppedAnimation<double> resizeAnimation =
               AlwaysStoppedAnimation(expandRatio);
 
-          return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  _getBackgroundColor(context),
-                  _getBackgroundColor(context).withOpacity(0.0),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.7, 1.0],
-                tileMode: TileMode.clamp,
-              ),
-            ),
-            padding: EdgeInsets.only(
-              top:
-                  (MediaQuery.of(context).padding.top + ForecastOptions.height),
-              bottom: 10.0,
-            ),
+          return GestureDetector(
+            onDoubleTap: () {
+              if (scrollController.offset > 0.0) {
+                scrollController.animateTo(
+                  0,
+                  duration: Duration(milliseconds: 150),
+                  curve: Curves.linear,
+                );
+
+                context
+                    .read<AppBloc>()
+                    .add(SetScrollDirection(ScrollDirection.forward));
+              }
+            },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Stack(
-                children: [
-                  ForecastLocation(
-                    forecast: forecast,
-                    shrinkOffset: shrinkOffset,
-                    maxExtent: maxExtent,
-                    minExtent: minExtent,
-                    resizeAnimation: resizeAnimation,
-                  ),
-                  ForecastCurrentTemp(
-                    currentDay: forecast.list!.first,
-                    shrinkOffset: shrinkOffset,
-                    maxExtent: maxExtent,
-                    minExtent: minExtent,
-                    resizeAnimation: resizeAnimation,
-                  ),
-                ],
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    _getBackgroundColor(context),
+                    _getBackgroundColor(context).withOpacity(0.0),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.7, 1.0],
+                  tileMode: TileMode.clamp,
+                ),
+              ),
+              padding: EdgeInsets.only(
+                top: (MediaQuery.of(context).padding.top +
+                    ForecastOptions.height),
+                bottom: 10.0,
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Stack(
+                  children: [
+                    ForecastLocation(
+                      forecast: forecast,
+                      shrinkOffset: shrinkOffset,
+                      maxExtent: maxExtent,
+                      minExtent: minExtent,
+                      resizeAnimation: resizeAnimation,
+                    ),
+                    ForecastCurrentTemp(
+                      currentDay: forecast.list!.first,
+                      shrinkOffset: shrinkOffset,
+                      maxExtent: maxExtent,
+                      minExtent: minExtent,
+                      resizeAnimation: resizeAnimation,
+                    ),
+                  ],
+                ),
               ),
             ),
           );
