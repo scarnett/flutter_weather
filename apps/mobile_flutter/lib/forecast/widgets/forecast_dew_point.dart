@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:weather_icons/weather_icons.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/app/bloc/bloc.dart';
 
 class ForecastWindDirection extends StatelessWidget {
   final IconData icon;

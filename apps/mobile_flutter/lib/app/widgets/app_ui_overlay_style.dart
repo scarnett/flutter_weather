@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/app/bloc/bloc.dart';
 
 class AppUiOverlayStyle extends StatelessWidget {
   final Widget? child;

@@ -6,7 +6,7 @@ import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
-import 'package:flutter_weather/bloc/bloc.dart';
+import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 
 class WeatherApp extends StatelessWidget {
