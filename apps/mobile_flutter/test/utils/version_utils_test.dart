@@ -1,4 +1,4 @@
-import 'package:flutter_weather/utils/version_utils.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:test/test.dart';
 import 'package:version/version.dart';
 

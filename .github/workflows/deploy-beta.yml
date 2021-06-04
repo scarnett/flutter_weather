@@ -6,7 +6,7 @@ on:
       flutterVersion:
         description: 'Flutter Version'
         required: true
-        default: '2.0.6'
+        default: '2.2.1'
       distributionGroups:
         description: 'Distribution Groups'
         required: true
@@ -143,6 +143,7 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: version.txt
+          trim: false
 
       - name: 'Update app version'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
@@ -285,6 +286,7 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: version.txt
+          trim: false
 
       - name: 'Update app version'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'

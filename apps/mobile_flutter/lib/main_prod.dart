@@ -4,13 +4,13 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/app.dart';
-import 'package:flutter_weather/app_prefs.dart';
-import 'package:flutter_weather/bloc/app_bloc_observer.dart';
-import 'package:flutter_weather/config.dart';
-import 'package:flutter_weather/enums.dart';
+import 'package:flutter_weather/app/app_config.dart';
+import 'package:flutter_weather/app/app_prefs.dart';
+import 'package:flutter_weather/app/app_root.dart';
+import 'package:flutter_weather/app/bloc/app_bloc_observer.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
-import 'package:flutter_weather/utils/common_utils.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -65,16 +65,14 @@ Future<void> main() async {
   AppConfig config = AppConfig(
     flavor: Flavor.prod,
     appVersion: remoteConfig.appVersion,
+    appBuild: remoteConfig.appBuild,
     appPushNotificationsSave: remoteConfig.appPushNotificationsSave,
     appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
     openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
     openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
-    openWeatherMapApiCurrentForecastPath:
-        remoteConfig.openWeatherMapApiCurrentForecastPath,
     openWeatherMapApiDailyForecastPath:
         remoteConfig.openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiHourlyForecastPath:
-        remoteConfig.openWeatherMapApiHourlyForecastPath,
+    openWeatherMapApiOneCallPath: remoteConfig.openWeatherMapApiOneCallPath,
     refreshTimeout: remoteConfig.refreshTimeout,
     defaultCountryCode: remoteConfig.defaultCountryCode,
     supportedLocales: remoteConfig.supportedLocales,

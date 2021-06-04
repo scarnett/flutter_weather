@@ -2,9 +2,10 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart' as ft;
-import 'package:flutter_weather/bloc/bloc.dart';
-import 'package:flutter_weather/views/forecast/forecast_form_view.dart';
+import 'package:flutter_weather/app/bloc/bloc.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:mockito/mockito.dart';
+
 import '../../test_utils.dart';
 
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
