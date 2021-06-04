@@ -128,7 +128,7 @@
         "runProd": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "flutter run -t lib/main_prod.dart --flavor prod --release",
+            "command": "flutter run -t lib/main.dart --flavor prod --release",
             "cwd": "apps/mobile_flutter"
           }
         },
