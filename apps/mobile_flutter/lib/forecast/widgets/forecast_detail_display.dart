@@ -80,10 +80,10 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
               ),
               ForecastDivider(
                 padding: const EdgeInsets.only(
-                  top: 10.0,
                   left: 10.0,
                   right: 10.0,
                   bottom: 20.0,
+                  top: 10.0,
                 ),
               ),
               Padding(
