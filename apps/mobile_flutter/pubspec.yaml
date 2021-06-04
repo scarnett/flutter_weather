@@ -1,10 +1,10 @@
 name: flutter_weather
-description: Simple weather forecast
+description: Beautiful weather forecasting
 publish_to: 'none'
 version: 99.99.99
 
 environment:
-  flutter: 2.0.5
+  flutter: 2.2.1
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
@@ -12,15 +12,17 @@ dependencies:
     sdk: flutter
 
   bloc: '^7.0.0'
-  cloud_firestore: '^2.1.0'
   collection: '^1.15.0-nullsafety.4'
   cupertino_icons: '^1.0.3'
+  cloud_firestore: '^2.1.0'
   device_info: '^2.0.0'
   equatable: '^2.0.0'
+  flutter_compass: '^0.6.0'
   firebase_core: '^1.1.1'
   firebase_crashlytics: '^2.0.3'
   firebase_messaging: '^10.0.0'
   firebase_remote_config: '^0.10.0-dev.3'
+  fl_chart: '^0.36.1'
   flutter_bloc: '^7.0.0'
   flutter_form_bloc: '^0.20.1'
   flutter_switch: '^0.3.0'
@@ -60,12 +62,6 @@ dev_dependencies:
   injectable_generator: '^1.4.0'
   integration_test: '^1.0.2+3'
   mockito: '^5.0.3'
-
-dependency_overrides:
-  archive: ^3.1.2
-  args: ^2.0.0
-  convert: ^3.0.0
-  crypto: ^3.0.1
 
 flutter:
   uses-material-design: true

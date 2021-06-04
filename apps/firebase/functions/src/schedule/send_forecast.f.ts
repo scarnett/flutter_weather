@@ -23,7 +23,7 @@ exports = module.exports = functions.pubsub
         })
 
         const now: admin.firestore.Timestamp = admin.firestore.Timestamp.now()
-        const nowDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
+        const lastPushDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
 
         const promises: Array<Promise<any>> = []
         const devicesSnapshot: admin.firestore.QuerySnapshot<admin.firestore.DocumentData> = await admin.firestore()
@@ -35,7 +35,7 @@ exports = module.exports = functions.pubsub
           const device: deviceModel.Device = deviceData as deviceModel.Device
           if (forecastUtils.canPushForecast(device, now.toDate())) {
             if ((device.pushNotificationExtras != null) && (device.pushNotificationExtras.location != null)) {
-              openWeather.setUnits(device.temperatureUnit || 'imperial')
+              openWeather.setUnits(device.units?.temperature || 'imperial')
 
               const extras: PushNotificationExtras = device.pushNotificationExtras
               const response: any = await openWeather.getByGeoCoordinates({
@@ -45,12 +45,10 @@ exports = module.exports = functions.pubsub
               })
 
               if (response != null) {
-                // functions.logger.debug(JSON.stringify(response))
-
                 const message: messageModel.Message = new messageModel.Message()
                 const messageText: string = i18n.__('{{temp}}{{temperatureUnit}} in {{cityName}}', {
                   temp: response.main.temp.toFixed(),
-                  temperatureUnit: forecastUtils.getTemperatureUnit(device.temperatureUnit),
+                  temperatureUnit: forecastUtils.getTemperatureUnit(device.units?.temperature),
                   cityName: response.name,
                 })
 
@@ -61,12 +59,15 @@ exports = module.exports = functions.pubsub
                 promises.push(pushUtils.pushMessage(device, message)
                     .then((res: any) => Promise.resolve('ok'))
                     .catch((error: any) => {
+                      functions.logger.debug(`[scheduleSendForecast] Push message failed; ` +
+                        `deviceId: ${deviceDoc.id}, fcmToken: ${device.fcm?.token}`)
+
                       functions.logger.error(error)
-                      return Promise.resolve(null)
+                      return Promise.resolve('error')
                     }))
 
                 // Update the last push date in the device document
-                promises.push(deviceDoc.ref.update('lastPushDate', nowDate.toJSDate()))
+                promises.push(deviceDoc.ref.update('lastPushDate', lastPushDate.toJSDate()))
               }
             }
           }
@@ -77,6 +78,7 @@ exports = module.exports = functions.pubsub
               return Promise.resolve('ok')
             })
             .catch((error: any) => {
+              functions.logger.debug('[scheduleSendForecast] Push message error')
               functions.logger.error(error)
               return Promise.resolve('error')
             })

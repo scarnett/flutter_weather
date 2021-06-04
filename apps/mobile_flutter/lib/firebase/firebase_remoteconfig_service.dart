@@ -8,10 +8,15 @@ class FirebaseRemoteConfigService {
     try {
       await _fetchAndActivate();
     } on Exception catch (exception, stackTrace) {
-      // Fetch throttled.
+      _remoteConfig = RemoteConfig
+          .instance; // TODO! set the 'retry' flag in the state instead
+
       print('Remote config fetch throttled: $exception');
       await Sentry.captureException(exception, stackTrace: stackTrace);
     } catch (exception, stackTrace) {
+      _remoteConfig = RemoteConfig
+          .instance; // TODO! set the 'retry' flag in the state instead
+
       print('Unable to fetch remote config. Cached or default values will be '
           'used');
 
@@ -37,6 +42,7 @@ class FirebaseRemoteConfigService {
   }
 
   String get appVersion => _remoteConfig.getString('app_version');
+  String get appBuild => _remoteConfig.getString('app_build');
   String get appPushNotificationsSave =>
       _remoteConfig.getString('app_push_notifications_save');
 
@@ -49,14 +55,14 @@ class FirebaseRemoteConfigService {
   String get openWeatherMapApiUri =>
       _remoteConfig.getString('openweathermap_api_uri');
 
-  String get openWeatherMapApiCurrentForecastPath =>
-      _remoteConfig.getString('openweathermap_api_current_forecast_path');
+  String get openWeatherMapApiOneCallUrl =>
+      _remoteConfig.getString('openweathermap_api_one_call_url');
 
   String get openWeatherMapApiDailyForecastPath =>
       _remoteConfig.getString('openweathermap_api_daily_forecast_path');
 
-  String get openWeatherMapApiHourlyForecastPath =>
-      _remoteConfig.getString('openweathermap_api_hourly_forecast_path');
+  String get openWeatherMapApiOneCallPath =>
+      _remoteConfig.getString('openweathermap_api_one_call_path');
 
   int get refreshTimeout => _remoteConfig.getInt('refresh_timeout');
 

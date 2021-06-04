@@ -1,7 +1,7 @@
 assembly-versioning-scheme: MajorMinorPatch
 mode: ContinuousDeployment
 continuous-delivery-fallback-tag: ''
-next-version: 1.1.0
+next-version: 1.1.2
 branches:
   master:
     regex: (^main$|^origin\/main$)
@@ -10,16 +10,20 @@ branches:
   release:
     tag: 'beta'
     increment: Patch
-    tracks-release-branches: true
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    tracks-release-branches: false
+    is-release-branch: true
+    pre-release-weight: 1000
     source-branches:
     - main
   feature:
     tag: 'beta'
-    increment: Patch
+    increment: Inherit
     prevent-increment-of-merged-branch-version: false
   bugfix:
     tag: 'beta'
-    increment: Patch
+    increment: Inherit
     prevent-increment-of-merged-branch-version: false
     regex: bugfix(es)?[/-]
     source-branches:

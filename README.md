@@ -60,6 +60,11 @@ nx run web_ng:serve
 ```
 [**Read More**](apps/web_ng/README.md)
 
+## Contributing
+Pull requests are welcome. For significant changes, please open an issue first to discuss what you would like to change.
+
+Don't feel like contributing to the code? Feature requests, feedback and suggestions are welcome. Reach me via Slack/email, or create a new issue.
+
 ## Credits
 Created by [@scarnett](https://github.com/scarnett/)
 
