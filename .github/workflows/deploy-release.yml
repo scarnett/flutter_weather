@@ -357,11 +357,8 @@ jobs:
         with:
           name: ipa
 
-      - name: 'Validate ipa'
-        run: xcrun altool --validate-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}" --verbose
-
       - name: 'Upload ipa'
-        run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}" --verbose
+        run: xcrun altool --upload-app -t ios -f "${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}" -u "${{ env.FLUTTER_WEATHER_APPSTORE_USERNAME }}" -p "${{ env.FLUTTER_WEATHER_APPSTORE_PASSWORD }}"
 
   remoteConfig:
     name: 'Update Remote Configuration'
