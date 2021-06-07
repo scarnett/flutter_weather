@@ -221,6 +221,10 @@ jobs:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
+      FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST: ${{ secrets.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_DEV }}
+      FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/ExportOptions.plist' }}
+      FLUTTER_WEATHER_EXPORT_XCARCHIVE_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/archive/Runner.xcarchive' }}
+      FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/export/app-prod-release.ipa' }}
       FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_P12_DATA }}
       FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_PASSWORD }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
@@ -232,9 +236,6 @@ jobs:
       FLUTTER_WEATHER_APPSTORE_ISSUER_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_KEY_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
-      FLUTTER_WEATHER_XCARCHIVE: ${{ './apps/mobile_flutter/build/ios/archive/Runner.xcarchive' }}
-      FLUTTER_WEATHER_EXPORT_OPTIONS: ${{ './apps/mobile_flutter/ios/exportOptions.plist' }}
-      FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/export/app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'ios-beta' }}
       XCODE_VERSION: ${{ '12.3' }}
@@ -253,6 +254,9 @@ jobs:
 
       - name: 'Decode GoogleService-Info.plist'
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
+
+      - name: 'Decode ExportOptions.plist'
+        run: echo "${{ env.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST }}" > "${{ env.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_FILE_PATH }}"
 
       - name: 'Decode signing certificate'
         run: echo "${{ env.FLUTTER_WEATHER_CERTS_P12_DATA }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_CERTS_FILE_PATH }}"
