@@ -186,7 +186,7 @@ jobs:
 
       - name: 'Flutter build app bundle'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build appbundle -t lib/main_prod.dart --flavor prod --release --verbose --no-sound-null-safety'
+        run: 'flutter build appbundle -t lib/main.dart --flavor prod --release --verbose'
 
       - name: 'Compress app bundle'
         run: exec .github/scripts/compress-android-appbundle.sh
@@ -213,6 +213,11 @@ jobs:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
+      FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST: ${{ secrets.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_DIST }}
+      FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/ExportOptions.plist' }}
+      FLUTTER_WEATHER_EXPORT_XCARCHIVE_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/archive/Runner.xcarchive' }}
+      FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/ipa/' }}
+      FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME: ${{ 'app-prod-dist.ipa' }}
       FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_DIST_P12_DATA }}
       FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_DIST_PASSWORD }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
@@ -224,8 +229,6 @@ jobs:
       FLUTTER_WEATHER_APPSTORE_ISSUER_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_KEY_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
-      FLUTTER_WEATHER_IPA_OUTPUT_FOLDER: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
-      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'ios-release' }}
       XCODE_VERSION: ${{ '12.3' }}
@@ -244,6 +247,9 @@ jobs:
 
       - name: 'Decode GoogleService-Info.plist'
         run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}" > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH }}"
+
+      - name: 'Decode ExportOptions.plist'
+        run: echo "${{ env.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST }}" > "${{ env.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_FILE_PATH }}"
 
       - name: 'Decode signing certificate'
         run: echo "${{ env.FLUTTER_WEATHER_CERTS_P12_DATA }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_CERTS_FILE_PATH }}"
@@ -296,15 +302,15 @@ jobs:
 
       - name: 'Flutter build ipa'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build ios -t lib/main_prod.dart --release --verbose --no-sound-null-safety'
+        run: 'flutter build ipa -t lib/main.dart --release --verbose'
 
-      - name: 'Compress ipa'
-        run: exec .github/scripts/compress-ios-ipa.sh
+      - name: 'Export ipa'
+        run: exec .github/scripts/export-ios-ipa.sh
 
       - name: 'Create github artifact'
         uses: ncipollo/release-action@v1
         with:
-          artifacts: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+          artifacts: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME }}'
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
           commit: ${{ github.sha }}
@@ -313,7 +319,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ipa
-          path: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+          path: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME }}'
 
   deployAndroid:
     name: 'Deploy Android Release to Play Store'
@@ -345,7 +351,7 @@ jobs:
     needs: [buildIos]
     runs-on: macos-latest
     env:
-      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-dist.ipa' }}
       FLUTTER_WEATHER_APPSTORE_USERNAME: ${{ secrets.FLUTTER_WEATHER_APPSTORE_USERNAME }}
       FLUTTER_WEATHER_APPSTORE_PASSWORD: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PASSWORD }}
 

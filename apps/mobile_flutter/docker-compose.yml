@@ -24,4 +24,4 @@ services:
     privileged: true
     stdin_open: true
     tty: true
-    command: flutter run -t lib/main_prod.dart --flavor prod --release
+    command: flutter run -t lib/main.dart --flavor prod --release
