@@ -87,131 +87,131 @@ jobs:
       #   working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
       #   run: 'flutter test'
 
-  buildAndroid:
-    name: 'Build Android'
-    needs: [version, test]
-    runs-on: ubuntu-latest
-    env:
-      FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
-      FLUTTER_WEATHER_LOCAL_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}
-      FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/local.properties' }}
-      FLUTTER_WEATHER_KEY_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}
-      FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/key.properties' }}
-      FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}
-      FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH: ${{ './apps/mobile_flutter/android/app/google-services.json' }}
-      FLUTTER_WEATHER_KEYSTORE: ${{ secrets.FLUTTER_WEATHER_KEYSTORE }}
-      FLUTTER_WEATHER_KEYSTORE_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}
-      FLUTTER_WEATHER_KEYSTORE_KEY_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}
-      FLUTTER_WEATHER_KEYSTORE_JKS_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks' }}
-      FLUTTER_WEATHER_KEYSTORE_JKS_ASC_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks.asc' }}
-      FLUTTER_WEATHER_RELEASE_FOLDER: ${{ './apps/mobile_flutter/build/app/outputs/apk/prod/release' }}
-      FLUTTER_WEATHER_RELEASE_ZIP: ${{ 'android-app.zip' }}
-      FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
-      FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'android-dev' }}
+  # buildAndroid:
+  #   name: 'Build Android'
+  #   needs: [version, test]
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
+  #     FLUTTER_WEATHER_LOCAL_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_LOCAL_PROPERTIES }}
+  #     FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/local.properties' }}
+  #     FLUTTER_WEATHER_KEY_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}
+  #     FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/key.properties' }}
+  #     FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}
+  #     FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH: ${{ './apps/mobile_flutter/android/app/google-services.json' }}
+  #     FLUTTER_WEATHER_KEYSTORE: ${{ secrets.FLUTTER_WEATHER_KEYSTORE }}
+  #     FLUTTER_WEATHER_KEYSTORE_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_PASS }}
+  #     FLUTTER_WEATHER_KEYSTORE_KEY_PASS: ${{ secrets.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}
+  #     FLUTTER_WEATHER_KEYSTORE_JKS_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks' }}
+  #     FLUTTER_WEATHER_KEYSTORE_JKS_ASC_FILE_PATH: ${{ './apps/mobile_flutter/android/app/key.jks.asc' }}
+  #     FLUTTER_WEATHER_RELEASE_FOLDER: ${{ './apps/mobile_flutter/build/app/outputs/apk/prod/release' }}
+  #     FLUTTER_WEATHER_RELEASE_ZIP: ${{ 'android-app.zip' }}
+  #     FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
+  #     FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'android-dev' }}
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 12.x
+  #     - uses: actions/setup-java@v1
+  #       with:
+  #         java-version: 12.x
 
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: stable
-          flutter-version: '${{ github.event.inputs.flutterVersion }}'
+  #     - uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: stable
+  #         flutter-version: '${{ github.event.inputs.flutterVersion }}'
 
-      - name: 'Decode android local.properties'
-        run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
+  #     - name: 'Decode android local.properties'
+  #       run: echo "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
 
-      - name: 'Decode android key.properties'
-        run: echo "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH }}"
+  #     - name: 'Decode android key.properties'
+  #       run: echo "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES }}" > "${{ env.FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH }}"
 
-      - name: 'Decode google-services.json'
-        run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH }}"
+  #     - name: 'Decode google-services.json'
+  #       run: echo "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}" | base64 --decode > "${{ env.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH }}"
 
-      - name: 'Decode android keystore'
-        run: exec .github/scripts/configure-android-keystore.sh
+  #     - name: 'Decode android keystore'
+  #       run: exec .github/scripts/configure-android-keystore.sh
 
-      - name: 'Get version.txt'
-        uses: actions/download-artifact@v2
-        with:
-          name: gitversion
+  #     - name: 'Get version.txt'
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: gitversion
 
-      - name: 'Read version'
-        id: version
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: version.txt
-          trim: false
+  #     - name: 'Read version'
+  #       id: version
+  #       uses: juliangruber/read-file-action@v1
+  #       with:
+  #         path: version.txt
+  #         trim: false
 
-      - name: 'Update app version'
-        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: |
-          ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
-          sed -i "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
+  #     - name: 'Update app version'
+  #       working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+  #       run: |
+  #         ESCAPED_VERSION=$(printf '%s\n' "${{ steps.version.outputs.content }}" | sed -e 's/[]\/$*.^[]/\\&/g');
+  #         sed -i "s/99.99.99/$ESCAPED_VERSION/g" ./pubspec.yaml
 
-      - name: 'Update KeyStore password in gradle properties'
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "storePassword\\="
-          replace: 'storePassword=${{ env.FLUTTER_WEATHER_KEYSTORE_PASS }}'
-          include: apps/mobile_flutter/android/key.properties
+  #     - name: 'Update KeyStore password in gradle properties'
+  #       uses: jacobtomlinson/gha-find-replace@master
+  #       with:
+  #         find: "storePassword\\="
+  #         replace: 'storePassword=${{ env.FLUTTER_WEATHER_KEYSTORE_PASS }}'
+  #         include: apps/mobile_flutter/android/key.properties
 
-      - name: 'Update KeyStore key password in gradle properties'
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "keyPassword\\="
-          replace: 'keyPassword=${{ env.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}'
-          include: apps/mobile_flutter/android/key.properties
+  #     - name: 'Update KeyStore key password in gradle properties'
+  #       uses: jacobtomlinson/gha-find-replace@master
+  #       with:
+  #         find: "keyPassword\\="
+  #         replace: 'keyPassword=${{ env.FLUTTER_WEATHER_KEYSTORE_KEY_PASS }}'
+  #         include: apps/mobile_flutter/android/key.properties
 
-      - name: 'Update build mode in local properties'
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: 'flutter.buildMode=debug'
-          replace: 'flutter.buildMode=release'
+  #     - name: 'Update build mode in local properties'
+  #       uses: jacobtomlinson/gha-find-replace@master
+  #       with:
+  #         find: 'flutter.buildMode=debug'
+  #         replace: 'flutter.buildMode=release'
 
-      - name: 'Update version name in local properties'
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: 'flutter.versionName=1.0.0'
-          replace: 'flutter.versionName=${{ steps.version.outputs.content }}'
+  #     - name: 'Update version name in local properties'
+  #       uses: jacobtomlinson/gha-find-replace@master
+  #       with:
+  #         find: 'flutter.versionName=1.0.0'
+  #         replace: 'flutter.versionName=${{ steps.version.outputs.content }}'
 
-      - name: 'Update version code in local properties'
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: 'flutter.versionCode=1'
-          replace: 'flutter.versionCode=${{ github.run_number }}'
+  #     - name: 'Update version code in local properties'
+  #       uses: jacobtomlinson/gha-find-replace@master
+  #       with:
+  #         find: 'flutter.versionCode=1'
+  #         replace: 'flutter.versionCode=${{ github.run_number }}'
 
-      - name: 'Flutter get'
-        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter pub get'
+  #     - name: 'Flutter get'
+  #       working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+  #       run: 'flutter pub get'
 
-      - name: 'Flutter clean'
-        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter clean'
+  #     - name: 'Flutter clean'
+  #       working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+  #       run: 'flutter clean'
 
-      - name: 'Flutter build apk'
-        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build apk -t lib/main.dart --flavor prod --release --verbose'
+  #     - name: 'Flutter build apk'
+  #       working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+  #       run: 'flutter build apk -t lib/main.dart --flavor prod --release --verbose'
 
-      - name: 'Compress apk'
-        run: exec .github/scripts/compress-android-apk.sh
+  #     - name: 'Compress apk'
+  #       run: exec .github/scripts/compress-android-apk.sh
 
-      - name: 'Create github artifact'
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_ZIP }}'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
-          commit: ${{ github.sha }}
-          prerelease: true
+  #     - name: 'Create github artifact'
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         artifacts: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_ZIP }}'
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
+  #         commit: ${{ github.sha }}
+  #         prerelease: true
 
-      - name: 'Upload apk'
-        uses: actions/upload-artifact@v2
-        with:
-          name: apk
-          path: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
+  #     - name: 'Upload apk'
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: apk
+  #         path: '${{ env.FLUTTER_WEATHER_RELEASE_FOLDER }}/${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
 
   buildIos:
     name: 'Build iOS'
@@ -232,8 +232,9 @@ jobs:
       FLUTTER_WEATHER_APPSTORE_ISSUER_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_ISSUER_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_KEY_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_KEY_ID }} # https://appstoreconnect.apple.com/access/api
       FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
-      FLUTTER_WEATHER_IPA_OUTPUT_FOLDER: ${{ './apps/mobile_flutter/build/ios/iphoneos/' }}
-      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+      FLUTTER_WEATHER_XCARCHIVE: ${{ './apps/mobile_flutter/build/ios/archive/Runner.xcarchive' }}
+      FLUTTER_WEATHER_EXPORT_OPTIONS: ${{ './apps/mobile_flutter/ios/exportOptions.plist' }}
+      FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/export/app-prod-release.ipa' }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'ios-beta' }}
       XCODE_VERSION: ${{ '12.3' }}
@@ -306,13 +307,13 @@ jobs:
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter build ios -t lib/main.dart --release --verbose'
 
-      - name: 'Compress ipa'
-        run: exec .github/scripts/compress-ios-ipa.sh
+      - name: 'Export ipa'
+        run: exec .github/scripts/export-ios-ipa.sh
 
       - name: 'Create github artifact'
         uses: ncipollo/release-action@v1
         with:
-          artifacts: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+          artifacts: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}'
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
           commit: ${{ github.sha }}
@@ -322,52 +323,52 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ipa
-          path: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FOLDER }}${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+          path: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}'
 
-  deployAndroid:
-    name: 'Deploy Android Beta to Firebase App Distribution'
-    needs: [buildAndroid]
-    runs-on: ubuntu-latest
-    env:
-      FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
+  # deployAndroid:
+  #   name: 'Deploy Android Beta to Firebase App Distribution'
+  #   needs: [buildAndroid]
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     FLUTTER_WEATHER_RELEASE_APP: ${{ 'app-prod-release.apk' }}
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: 'Get apk from artifacts'
-        uses: actions/download-artifact@v2
-        with:
-          name: apk
+  #     - name: 'Get apk from artifacts'
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: apk
 
-      - name: 'Upload apk'
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-        with:
-          appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: '${{ github.event.inputs.distributionGroups }}'
-          releaseNotes: '${{ github.event.inputs.releaseNotes }}'
-          file: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
+  #     - name: 'Upload apk'
+  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+  #       with:
+  #         appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
+  #         token: ${{ secrets.FIREBASE_TOKEN }}
+  #         groups: '${{ github.event.inputs.distributionGroups }}'
+  #         releaseNotes: '${{ github.event.inputs.releaseNotes }}'
+  #         file: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
 
-  deployIos:
-    name: 'Deploy iOS Beta to Firebase App Distribution'
-    needs: [buildIos]
-    runs-on: ubuntu-latest
-    env:
-      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+  # deployIos:
+  #   name: 'Deploy iOS Beta to Firebase App Distribution'
+  #   needs: [buildIos]
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: 'Get ipa from artifacts'
-        uses: actions/download-artifact@v2
-        with:
-          name: ipa
+  #     - name: 'Get ipa from artifacts'
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: ipa
 
-      - name: 'Upload ipa'
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-        with:
-          appId: ${{ secrets.FIREBASE_IOS_APPID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: '${{ github.event.inputs.distributionGroups }}'
-          releaseNotes: '${{ github.event.inputs.releaseNotes }}'
-          file: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+  #     - name: 'Upload ipa'
+  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+  #       with:
+  #         appId: ${{ secrets.FIREBASE_IOS_APPID }}
+  #         token: ${{ secrets.FIREBASE_TOKEN }}
+  #         groups: '${{ github.event.inputs.distributionGroups }}'
+  #         releaseNotes: '${{ github.event.inputs.releaseNotes }}'
+  #         file: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'

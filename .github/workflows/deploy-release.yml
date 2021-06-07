@@ -296,10 +296,10 @@ jobs:
 
       - name: 'Flutter build ipa'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build ios -t lib/main.dart --release --verbose'
+        run: 'flutter build ipa -t lib/main.dart --release --verbose'
 
-      - name: 'Compress ipa'
-        run: exec .github/scripts/compress-ios-ipa.sh
+      - name: 'Export ipa'
+        run: exec .github/scripts/export-ios-ipa.sh
 
       - name: 'Create github artifact'
         uses: ncipollo/release-action@v1
