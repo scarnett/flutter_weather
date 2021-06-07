@@ -221,10 +221,11 @@ jobs:
       FLUTTER_WEATHER_FOLDER: ${{ './apps/mobile_flutter' }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/Runner/GoogleService-Info.plist' }}
-      FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST: ${{ secrets.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_DEV }}
+      FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST: ${{ secrets.FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_AD_HOC }}
       FLUTTER_WEATHER_EXPORT_OPTIONS_PLIST_FILE_PATH: ${{ './apps/mobile_flutter/ios/ExportOptions.plist' }}
       FLUTTER_WEATHER_EXPORT_XCARCHIVE_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/archive/Runner.xcarchive' }}
-      FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/export/app-prod-release.ipa' }}
+      FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH: ${{ './apps/mobile_flutter/build/ios/export/' }}
+      FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME: ${{ 'app-prod-ad-hoc.ipa' }}
       FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_P12_DATA }}
       FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_PASSWORD }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
@@ -317,7 +318,7 @@ jobs:
       - name: 'Create github artifact'
         uses: ncipollo/release-action@v1
         with:
-          artifacts: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}'
+          artifacts: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME }}/${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME }}'
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: '${{ env.FLUTTER_WEATHER_RELEASE_FILE_PREFIX }}-${{ steps.version.outputs.content }}'
           commit: ${{ github.sha }}
@@ -327,7 +328,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ipa
-          path: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}'
+          path: '${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_PATH }}${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME }}/${{ env.FLUTTER_WEATHER_EXPORT_IPA_FILE_NAME }}'
 
   # deployAndroid:
   #   name: 'Deploy Android Beta to Firebase App Distribution'
@@ -353,26 +354,26 @@ jobs:
   #         releaseNotes: '${{ github.event.inputs.releaseNotes }}'
   #         file: '${{ env.FLUTTER_WEATHER_RELEASE_APP }}'
 
-  # deployIos:
-  #   name: 'Deploy iOS Beta to Firebase App Distribution'
-  #   needs: [buildIos]
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-release.ipa' }}
+  deployIos:
+    name: 'Deploy iOS Beta to Firebase App Distribution'
+    needs: [buildIos]
+    runs-on: ubuntu-latest
+    env:
+      FLUTTER_WEATHER_IPA_OUTPUT_FILE: ${{ 'app-prod-ad-hoc.ipa' }}
 
-  #   steps:
-  #     - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: 'Get ipa from artifacts'
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: ipa
+      - name: 'Get ipa from artifacts'
+        uses: actions/download-artifact@v2
+        with:
+          name: ipa
 
-  #     - name: 'Upload ipa'
-  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-  #       with:
-  #         appId: ${{ secrets.FIREBASE_IOS_APPID }}
-  #         token: ${{ secrets.FIREBASE_TOKEN }}
-  #         groups: '${{ github.event.inputs.distributionGroups }}'
-  #         releaseNotes: '${{ github.event.inputs.releaseNotes }}'
-  #         file: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
+      - name: 'Upload ipa'
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+        with:
+          appId: ${{ secrets.FIREBASE_IOS_APPID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: '${{ github.event.inputs.distributionGroups }}'
+          releaseNotes: '${{ github.event.inputs.releaseNotes }}'
+          file: '${{ env.FLUTTER_WEATHER_IPA_OUTPUT_FILE }}'
