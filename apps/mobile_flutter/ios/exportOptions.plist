@@ -4,5 +4,16 @@
 <dict>
     <key>method</key>
     <string>app-store</string>
+    <key>uploadBitcode</key>
+    <true/>
+    <key>compileBitcode</key>
+    <true/>
+    <key>uploadSymbols</key>
+    <true/>
+    <key>provisioningProfiles</key>
+    <dict>
+      <key>io.flutterWeather.prod</key>
+      <string>Flutter Weather Ad Hoc</string>
+    </dict>
 </dict>
 </plist>
