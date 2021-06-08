@@ -10,7 +10,6 @@ void main() {
     expect(round5(number: 87.0), 90.0);
     expect(round5(number: 88.0), 90.0);
     expect(round5(number: 89.0), 90.0);
-    expect(round5(number: 91.0), 90.0);
   });
 
   test('Should be 95', () {

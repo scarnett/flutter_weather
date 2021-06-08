@@ -8,6 +8,9 @@ Widget buildFrame({
 }) =>
     AppConfig(
       flavor: Flavor.dev,
+      appVersion: '1.5.0',
+      appBuild: '1',
+      supportedLocales: 'en',
       child: MaterialApp(
         localizationsDelegates: [
           AppLocalizationsDelegate(),

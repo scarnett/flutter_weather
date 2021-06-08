@@ -88,7 +88,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                 key: _scaffoldKey,
                 appBar: AppBar(
                   title: Text(
-                    getLookupTitle(AppLocalizations.of(context), _currentPage)!,
+                    getLookupTitle(AppLocalizations.of(context), _currentPage),
                   ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
