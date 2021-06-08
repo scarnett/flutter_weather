@@ -92,7 +92,7 @@ class _PremiumPageViewState extends State<PremiumPageView> {
                       right: 40.0,
                     ),
                     child: Text(
-                      'Refresh your forecasts anytime, get hourly and weekly forecasts, ad fee and more...', // TODO!
+                      'Refresh your forecasts anytime, get hourly and weekly forecasts, ad free and more...', // TODO!
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2!
