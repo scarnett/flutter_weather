@@ -96,7 +96,8 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
         color: Theme.of(context).appBarTheme.color,
         child: TextField(
           key: Key(AppKeys.locationCountryFilterKey),
-          keyboardType: TextInputType.streetAddress,
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.words,
           decoration: InputDecoration(
             labelText: AppLocalizations.of(context)!.filterCountries,
             prefixIcon: Icon(
