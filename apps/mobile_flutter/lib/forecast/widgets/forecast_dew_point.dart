@@ -26,10 +26,12 @@ class ForecastDewPoint extends StatelessWidget {
         children: [
           ForecastMetaInfo(
             label: AppLocalizations.of(context)!.dewPoint,
-            value: getTemperature(
-              details.current!.dewPoint,
-              state.units.temperature,
-            ).toString(),
+            value: (details.current == null)
+                ? '0'
+                : getTemperature(
+                    details.current!.dewPoint,
+                    state.units.temperature,
+                  ).toString(),
             unit: getUnitSymbol(state.units.temperature),
           ),
           SizedBox(
