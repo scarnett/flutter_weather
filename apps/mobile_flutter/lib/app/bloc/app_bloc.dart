@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,9 @@ part 'app_events.dart';
 part 'app_state.dart';
 
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+
   AppBloc() : super(AppState.initial());
 
   AppState get initialState => AppState.initial();
@@ -72,8 +77,21 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     } else if (event is ClearActiveForecastId) {
       yield _mapClearActiveForecastIdToState(event);
     } else if (event is SetScrollDirection) {
-      yield _mapScrollDirectionToState(event);
+      yield _mapSetScrollDirectionToState(event);
+    } else if (event is StreamConnectivityResult) {
+      yield* _mapStreamConnectivityResultToState(event);
+    } else if (event is SetConnectivityResult) {
+      yield _mapSetConnectivityResultToState(event);
     }
+  }
+
+  @override
+  Future<void> close() {
+    if (_connectivitySubscription != null) {
+      _connectivitySubscription?.cancel();
+    }
+
+    return super.close();
   }
 
   AppState _mapToggleThemeModeToStates(
@@ -466,7 +484,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         activeForecastId: Nullable<String?>(null),
       );
 
-  AppState _mapScrollDirectionToState(
+  AppState _mapSetScrollDirectionToState(
     SetScrollDirection event,
   ) {
     if (event.scrollDirection == state.scrollDirection) {
@@ -475,6 +493,34 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     return state.copyWith(
       scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
+    );
+  }
+
+  Stream<AppState> _mapStreamConnectivityResultToState(
+    StreamConnectivityResult event,
+  ) async* {
+    if (_connectivitySubscription != null) {
+      _connectivitySubscription?.cancel();
+    }
+
+    _connectivitySubscription = _connectivity.onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      add(SetConnectivityResult(result));
+    });
+
+    yield state;
+  }
+
+  AppState _mapSetConnectivityResultToState(
+    SetConnectivityResult event,
+  ) {
+    if (event.connectivityResult == state.connectivityResult) {
+      return state;
+    }
+
+    return state.copyWith(
+      connectivityResult:
+          Nullable<ConnectivityResult?>(event.connectivityResult),
     );
   }
 
