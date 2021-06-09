@@ -1,59 +1,21 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/enums/flavor.dart';
+import 'package:flutter_weather/models/models.dart';
 
 class AppConfig extends InheritedWidget {
   final Flavor flavor;
-  final String? appVersion;
-  final String? appBuild;
-  final String? appPushNotificationsSave;
-  final String? appPushNotificationsRemove;
-  final String? openWeatherMapApiKey;
-  final String? openWeatherMapApiUri;
-  final String? openWeatherMapApiDailyForecastPath;
-  final String? openWeatherMapApiOneCallPath;
-  final int? refreshTimeout;
-  final String? defaultCountryCode;
-  final String? supportedLocales;
-  final String? privacyPolicyUrl;
-  final String? githubUrl;
-  final String? sentryDsn;
+  final Config config;
 
   static late AppConfig _instance;
 
   factory AppConfig({
-    required flavor,
-    appVersion,
-    appBuild,
-    appPushNotificationsSave,
-    appPushNotificationsRemove,
-    openWeatherMapApiKey,
-    openWeatherMapApiUri,
-    openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiOneCallPath,
-    refreshTimeout,
-    defaultCountryCode,
-    supportedLocales,
-    privacyPolicyUrl,
-    githubUrl,
-    sentryDsn,
-    required child,
+    required Flavor flavor,
+    required Config config,
+    required Widget child,
   }) {
     _instance = AppConfig._internal(
       flavor,
-      appVersion,
-      appBuild,
-      appPushNotificationsSave,
-      appPushNotificationsRemove,
-      openWeatherMapApiKey,
-      openWeatherMapApiUri,
-      openWeatherMapApiDailyForecastPath,
-      openWeatherMapApiOneCallPath,
-      refreshTimeout,
-      defaultCountryCode,
-      supportedLocales,
-      privacyPolicyUrl,
-      githubUrl,
-      sentryDsn,
+      config,
       child,
     );
 
@@ -62,26 +24,11 @@ class AppConfig extends InheritedWidget {
 
   AppConfig._internal(
     this.flavor,
-    this.appVersion,
-    this.appBuild,
-    this.appPushNotificationsSave,
-    this.appPushNotificationsRemove,
-    this.openWeatherMapApiKey,
-    this.openWeatherMapApiUri,
-    this.openWeatherMapApiDailyForecastPath,
-    this.openWeatherMapApiOneCallPath,
-    this.refreshTimeout,
-    this.defaultCountryCode,
-    this.supportedLocales,
-    this.privacyPolicyUrl,
-    this.githubUrl,
-    this.sentryDsn,
+    this.config,
     Widget child,
   ) : super(child: child);
 
-  static AppConfig get instance {
-    return _instance;
-  }
+  static AppConfig get instance => _instance;
 
   static AppConfig? of(
     BuildContext context,

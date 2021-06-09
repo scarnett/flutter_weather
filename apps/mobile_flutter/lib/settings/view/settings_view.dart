@@ -121,7 +121,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
       ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildUnitsSection());
 
-    if (AppConfig.instance.privacyPolicyUrl != '') {
+    if (AppConfig.instance.config.privacyPolicyUrl != '') {
       children..addAll(_buildAboutSection());
     }
 

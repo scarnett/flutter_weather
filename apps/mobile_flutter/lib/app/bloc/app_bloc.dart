@@ -1,14 +1,18 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/enums/wind_speed_unit.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
@@ -23,6 +27,9 @@ part 'app_events.dart';
 part 'app_state.dart';
 
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+
   AppBloc() : super(AppState.initial());
 
   AppState get initialState => AppState.initial();
@@ -72,8 +79,21 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     } else if (event is ClearActiveForecastId) {
       yield _mapClearActiveForecastIdToState(event);
     } else if (event is SetScrollDirection) {
-      yield _mapScrollDirectionToState(event);
+      yield _mapSetScrollDirectionToState(event);
+    } else if (event is StreamConnectivityResult) {
+      yield* _mapStreamConnectivityResultToState(event);
+    } else if (event is SetConnectivityResult) {
+      yield _mapSetConnectivityResultToState(event);
     }
+  }
+
+  @override
+  Future<void> close() {
+    if (_connectivitySubscription != null) {
+      _connectivitySubscription?.cancel();
+    }
+
+    return super.close();
   }
 
   AppState _mapToggleThemeModeToStates(
@@ -105,10 +125,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     if (event.updatePeriod == null) {
       prefs.pushNotification = null;
-      await removePushNotification(deviceId: deviceId);
+      await pushNotificationRemove(deviceId: deviceId);
     } else if (state.pushNotification == null) {
       prefs.pushNotification = PushNotification.off;
-      await removePushNotification(deviceId: deviceId);
+      await pushNotificationRemove(deviceId: deviceId);
     } else if (prefs.pushNotification != PushNotification.off) {
       await _saveDeviceInfo(prefs.pushNotification);
     }
@@ -142,6 +162,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           showSnackbar(
             event.context,
             AppLocalizations.of(event.context)!.locationPermissionDenied,
+            messageType: MessageType.danger,
           );
 
           if (state.pushNotification == PushNotification.currentLocation) {
@@ -353,6 +374,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) async* {
     yield state.copyWith(
       refreshStatus: Nullable<RefreshStatus>(RefreshStatus.refreshing),
+      crudStatus: Nullable<CRUDStatus?>(null),
     );
 
     Map<String, String?> lookupData = {
@@ -362,55 +384,77 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     };
 
     try {
-      Response forecastResponse = await tryLookupForecast(lookupData);
-      if (forecastResponse.statusCode == 200) {
-        List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
-        int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
-            forecast.postalCode == event.forecast.postalCode);
+      Client httpClient = Client();
 
-        if (forecastIndex == -1) {
+      if (await hasConnectivity(
+        client: httpClient,
+        config: AppConfig.instance.config,
+        result: state.connectivityResult,
+      )) {
+        Response forecastResponse = await tryLookupForecast(
+          client: httpClient,
+          lookupData: lookupData,
+        );
+
+        if (forecastResponse.statusCode == 200) {
+          List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
+          int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
+              forecast.postalCode == event.forecast.postalCode);
+
+          if (forecastIndex == -1) {
+            showSnackbar(
+              event.context,
+              AppLocalizations.of(event.context)!.refreshFailure,
+              messageType: MessageType.danger,
+            );
+
+            yield state;
+          } else {
+            Forecast forecast =
+                Forecast.fromJson(jsonDecode(forecastResponse.body));
+
+            forecasts[forecastIndex] = forecast.copyWith(
+              id: event.forecast.id,
+              cityName: Nullable<String?>(event.forecast.cityName),
+              postalCode: Nullable<String?>(event.forecast.postalCode),
+              countryCode: Nullable<String?>(event.forecast.countryCode),
+              lastUpdated: getNow(),
+            );
+
+            // TODO! premium
+            Response forecastDetailsResponse = await fetchDetailedForecast(
+              client: httpClient,
+              longitude: forecast.city!.coord!.lon!,
+              latitude: forecast.city!.coord!.lat!,
+            );
+
+            if (forecastDetailsResponse.statusCode == 200) {
+              forecasts[forecastIndex] = forecasts[forecastIndex].copyWith(
+                  details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
+                      jsonDecode(forecastDetailsResponse.body))));
+            }
+
+            yield state.copyWith(
+              forecasts: forecasts,
+              refreshStatus: Nullable<RefreshStatus?>(null),
+              crudStatus: Nullable<CRUDStatus?>(null),
+            );
+          }
+        } else {
           showSnackbar(
             event.context,
             AppLocalizations.of(event.context)!.refreshFailure,
+            messageType: MessageType.danger,
           );
 
           yield state;
-        } else {
-          Forecast forecast =
-              Forecast.fromJson(jsonDecode(forecastResponse.body));
-
-          forecasts[forecastIndex] = forecast.copyWith(
-            id: event.forecast.id,
-            cityName: Nullable<String?>(event.forecast.cityName),
-            postalCode: Nullable<String?>(event.forecast.postalCode),
-            countryCode: Nullable<String?>(event.forecast.countryCode),
-            lastUpdated: getNow(),
-          );
-
-          // TODO! premium
-          Response forecastDetailsResponse = await fetchDetailedForecast(
-            longitude: forecast.city!.coord!.lon!,
-            latitude: forecast.city!.coord!.lat!,
-          );
-
-          if (forecastDetailsResponse.statusCode == 200) {
-            forecasts[forecastIndex] = forecasts[forecastIndex].copyWith(
-                details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
-                    jsonDecode(forecastDetailsResponse.body))));
-          }
-
-          yield state.copyWith(
-            forecasts: forecasts,
-            refreshStatus: Nullable<RefreshStatus?>(null),
-          );
         }
       } else {
         showSnackbar(
           event.context,
-          AppLocalizations.of(event.context)!.refreshFailure,
+          AppLocalizations.of(event.context)!.connectivityFailure,
+          messageType: MessageType.danger,
         );
-
-        yield state;
       }
     } on Exception catch (exception, stackTrace) {
       await Sentry.captureException(exception, stackTrace: stackTrace);
@@ -418,6 +462,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       showSnackbar(
         event.context,
         AppLocalizations.of(event.context)!.refreshFailure,
+        messageType: MessageType.danger,
       );
 
       yield state;
@@ -466,7 +511,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         activeForecastId: Nullable<String?>(null),
       );
 
-  AppState _mapScrollDirectionToState(
+  AppState _mapSetScrollDirectionToState(
     SetScrollDirection event,
   ) {
     if (event.scrollDirection == state.scrollDirection) {
@@ -478,13 +523,41 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
   }
 
+  Stream<AppState> _mapStreamConnectivityResultToState(
+    StreamConnectivityResult event,
+  ) async* {
+    if (_connectivitySubscription != null) {
+      _connectivitySubscription?.cancel();
+    }
+
+    _connectivitySubscription = _connectivity.onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      add(SetConnectivityResult(result));
+    });
+
+    yield state;
+  }
+
+  AppState _mapSetConnectivityResultToState(
+    SetConnectivityResult event,
+  ) {
+    if (event.connectivityResult == state.connectivityResult) {
+      return state;
+    }
+
+    return state.copyWith(
+      connectivityResult:
+          Nullable<ConnectivityResult?>(event.connectivityResult),
+    );
+  }
+
   Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
     if ((pushNotification != null) &&
         (pushNotification != PushNotification.off)) {
       String? deviceId = await getDeviceId();
       String? token = await FirebaseMessaging.instance.getToken();
 
-      await savePushNotification(
+      await pushNotificationSave(
         deviceId: deviceId,
         period: state.updatePeriod,
         pushNotification: state.pushNotification,
@@ -494,7 +567,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       );
     } else {
       String? deviceId = await getDeviceId();
-      await removePushNotification(deviceId: deviceId);
+      await pushNotificationRemove(deviceId: deviceId);
     }
   }
 

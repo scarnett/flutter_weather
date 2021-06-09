@@ -117,7 +117,7 @@ class _ForecastPageViewState extends State<ForecastView>
 
     _hideFabAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       value: 1.0,
     );
 
@@ -137,15 +137,15 @@ class _ForecastPageViewState extends State<ForecastView>
 
       switch (state.crudStatus) {
         case CRUDStatus.created:
-          showSnackbar(context, i18n!.forecastAdded);
+          _showSnackbar(state: state, message: i18n!.forecastAdded);
           break;
 
         case CRUDStatus.updated:
-          showSnackbar(context, i18n!.forecastUpdated);
+          _showSnackbar(state: state, message: i18n!.forecastUpdated);
           break;
 
         case CRUDStatus.deleted:
-          showSnackbar(context, i18n!.forecastDeleted);
+          _showSnackbar(state: state, message: i18n!.forecastDeleted);
           break;
 
         default:
@@ -414,4 +414,19 @@ class _ForecastPageViewState extends State<ForecastView>
               state.units.temperature,
             ),
           );
+
+  _showSnackbar({
+    required AppState state,
+    required String message,
+  }) {
+    showSnackbar(
+      context,
+      message,
+      backgroundColor: state.colorTheme
+          ? state.forecasts[state.selectedForecastIndex]
+              .getTemperatureColor()
+              .darken(0.35)
+          : null,
+    );
+  }
 }

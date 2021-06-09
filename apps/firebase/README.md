@@ -30,16 +30,22 @@ firebase functions:config:set openweathermap.key="<your_openweathermap_api_key>"
 firebase functions:config:get
 ```
 
-## Deploy firebase functions
+## Deploy functions
 
 ```bash
-npm run deploy
+npm run deploy-functions
+```
+
+## Deploy hosting
+
+```bash
+npm run deploy-hosting
 ```
 
 ## Deploy firestore rules
 
 ```bash
-npm run deploy-rules
+npm run deploy-firestore-rules
 ```
 
 ## Structure

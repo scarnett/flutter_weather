@@ -16,6 +16,7 @@ class AppState extends Equatable {
   final RefreshStatus? refreshStatus;
   final CRUDStatus? crudStatus;
   final ScrollDirection? scrollDirection;
+  final ConnectivityResult? connectivityResult;
 
   AppState({
     this.updatePeriod,
@@ -32,6 +33,7 @@ class AppState extends Equatable {
     this.refreshStatus,
     this.crudStatus,
     this.scrollDirection,
+    this.connectivityResult,
   });
 
   const AppState._({
@@ -49,6 +51,7 @@ class AppState extends Equatable {
     this.refreshStatus,
     this.crudStatus,
     this.scrollDirection: ScrollDirection.idle,
+    this.connectivityResult,
   });
 
   const AppState.initial() : this._();
@@ -69,6 +72,7 @@ class AppState extends Equatable {
     Nullable<RefreshStatus?>? refreshStatus,
     Nullable<CRUDStatus?>? crudStatus,
     Nullable<ScrollDirection?>? scrollDirection,
+    Nullable<ConnectivityResult?>? connectivityResult,
   }) =>
       AppState._(
         updatePeriod:
@@ -96,6 +100,9 @@ class AppState extends Equatable {
         scrollDirection: (scrollDirection == null)
             ? this.scrollDirection
             : scrollDirection.value,
+        connectivityResult: (connectivityResult == null)
+            ? this.connectivityResult
+            : connectivityResult.value,
       );
 
   @override
@@ -114,6 +121,7 @@ class AppState extends Equatable {
         refreshStatus,
         crudStatus,
         scrollDirection,
+        connectivityResult,
       ];
 
   @override
@@ -125,5 +133,6 @@ class AppState extends Equatable {
       'units: $units, chartType: $chartType, hourRange: $hourRange, ' +
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
-      'crudStatus: $crudStatus, scrollDirection: $scrollDirection}';
+      'crudStatus: $crudStatus, scrollDirection: $scrollDirection, ' +
+      'connectivityResult: $connectivityResult}';
 }

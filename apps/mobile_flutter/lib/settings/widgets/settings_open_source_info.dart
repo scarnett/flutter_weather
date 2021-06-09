@@ -18,11 +18,11 @@ class SettingsOpenSourceInfo extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          if (AppConfig.instance.githubUrl != null)
+          if (AppConfig.instance.config.githubUrl != null)
             Expanded(
               child: InkWell(
                 onTap: () async =>
-                    await launchURL(AppConfig.instance.githubUrl),
+                    await launchURL(AppConfig.instance.config.githubUrl),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Image.asset(

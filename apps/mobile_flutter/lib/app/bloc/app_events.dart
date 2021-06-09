@@ -252,3 +252,19 @@ class SetScrollDirection extends AppEvent {
   @override
   List<Object?> get props => [scrollDirection];
 }
+
+class SetConnectivityResult extends AppEvent {
+  final ConnectivityResult connectivityResult;
+
+  const SetConnectivityResult(
+    this.connectivityResult,
+  );
+
+  @override
+  List<Object?> get props => [connectivityResult];
+}
+
+class StreamConnectivityResult extends AppEvent {
+  @override
+  List<Object?> get props => [];
+}
