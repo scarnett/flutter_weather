@@ -1,11 +1,11 @@
 import 'package:flutter_weather/app/app_localization.dart';
 
-String? getLookupTitle(
+String getLookupTitle(
   AppLocalizations? localization,
   num? currentPage,
 ) {
   if (localization == null) {
-    return null;
+    return '';
   }
 
   if ((currentPage != null) && (currentPage.toInt() == 1)) {

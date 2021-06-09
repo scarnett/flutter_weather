@@ -206,7 +206,8 @@ class _ForecastPageFormState extends State<ForecastPageForm> {
                 key: Key(AppKeys.locationCityKey),
                 focusNode: _cityFocusNode,
                 textFieldBloc: context.watch<ForecastFormBloc>().cityName,
-                keyboardType: TextInputType.streetAddress,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.city,
                   labelStyle: getInputTextLabelStyle(_cityFocusNode),

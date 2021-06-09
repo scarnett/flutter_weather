@@ -49,7 +49,7 @@ packages:
       name: bloc_test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.0.0"
+    version: "8.0.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -245,7 +245,7 @@ packages:
       name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.2"
   fake_async:
     dependency: transitive
     description:
@@ -369,7 +369,7 @@ packages:
       name: flutter_compass
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.6.1"
   flutter_driver:
     dependency: "direct dev"
     description: flutter
@@ -378,17 +378,19 @@ packages:
   flutter_form_bloc:
     dependency: "direct main"
     description:
-      name: flutter_form_bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.20.1"
+      path: "packages/flutter_form_bloc"
+      ref: HEAD
+      resolved-ref: "3b662016995066804da8100c87e5d4b930a3f6c7"
+      url: "git://github.com/GiancarloCode/form_bloc.git"
+    source: git
+    version: "0.20.4"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
       name: flutter_keyboard_visibility
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.1"
+    version: "5.0.2"
   flutter_keyboard_visibility_platform_interface:
     dependency: transitive
     description:
@@ -440,7 +442,7 @@ packages:
       name: form_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.20.1"
+    version: "0.20.4"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -816,7 +818,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.26.0"
+    version: "0.27.1"
   sentry:
     dependency: "direct main"
     description:

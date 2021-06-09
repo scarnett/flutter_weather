@@ -223,6 +223,8 @@ class _SettingsPushNotificationPickerState
             'location': {
               'id': forecast.id,
               'name': forecast.getLocationText(),
+              'cityName': forecast.city?.name,
+              'country': forecast.city?.country,
               'longitude': forecast.city?.coord?.lon,
               'latitude': forecast.city?.coord?.lat,
             },
@@ -253,6 +255,8 @@ class _SettingsPushNotificationPickerState
               notificationExtras = {
                 'location': {
                   'name': forecast.getLocationText(),
+                  'cityName': forecast.city?.name,
+                  'country': forecast.city?.country,
                   'longitude': forecast.city?.coord?.lon,
                   'latitude': forecast.city?.coord?.lat,
                 },

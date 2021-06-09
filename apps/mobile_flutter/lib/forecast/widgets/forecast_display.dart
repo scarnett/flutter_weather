@@ -74,10 +74,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             ForecastCondition(currentDay: currentDay),
             ForecastHiLo(currentDay: currentDay),
             ForecastDayScroller(forecast: widget.forecast),
-            ForecastMeta(
-              details: widget.forecast.details!,
-              currentDay: currentDay,
-            ),
+            if ((widget.forecast.details != null) &&
+                (widget.forecast.details!.current != null))
+              ForecastMeta(
+                details: widget.forecast.details!,
+                currentDay: currentDay,
+              ),
           ]..addAll(_buildDetailDisplay()),
         ),
       );
@@ -161,10 +163,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         children: <Widget>[
           ForecastCondition(currentDay: currentDay),
           ForecastHiLo(currentDay: currentDay),
-          ForecastMeta(
-            details: widget.forecast.details!,
-            currentDay: currentDay,
-          ),
+          if ((widget.forecast.details != null) &&
+              (widget.forecast.details!.current != null))
+            ForecastMeta(
+              details: widget.forecast.details!,
+              currentDay: currentDay,
+            ),
         ],
       );
 
