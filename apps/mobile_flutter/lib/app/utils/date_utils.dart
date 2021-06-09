@@ -13,8 +13,10 @@ extension DateHelpers on DateTime {
   DateTime endOfToday() =>
       DateTime(this.year, this.month, this.day, 23, 59, 59);
 
-  DateTime endOfDay() =>
-      this.getDate().add(Duration(days: 1)).subtract(Duration(seconds: 1));
+  DateTime endOfDay() => this
+      .getDate()
+      .add(const Duration(days: 1))
+      .subtract(const Duration(seconds: 1));
 
   DateTime startOfWeek({
     bool isMondayFirstDay: false,

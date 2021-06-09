@@ -374,6 +374,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) async* {
     yield state.copyWith(
       refreshStatus: Nullable<RefreshStatus>(RefreshStatus.refreshing),
+      crudStatus: Nullable<CRUDStatus?>(null),
     );
 
     Map<String, String?> lookupData = {
@@ -436,6 +437,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             yield state.copyWith(
               forecasts: forecasts,
               refreshStatus: Nullable<RefreshStatus?>(null),
+              crudStatus: Nullable<CRUDStatus?>(null),
             );
           }
         } else {

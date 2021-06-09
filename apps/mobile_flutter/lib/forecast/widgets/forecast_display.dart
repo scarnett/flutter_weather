@@ -180,7 +180,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             if (_scrollController.offset == 0.0) {
               _scrollController.animateTo(
                 _headerHeight,
-                duration: Duration(milliseconds: 150),
+                duration: const Duration(milliseconds: 150),
                 curve: Curves.linear,
               );
 
@@ -225,7 +225,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
       Future.microtask(() => _scrollController.animateTo(
             snapOffset,
-            duration: Duration(milliseconds: 250),
+            duration: const Duration(milliseconds: 250),
             curve: Curves.easeIn,
           ));
 

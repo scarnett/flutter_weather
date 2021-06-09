@@ -48,7 +48,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
               if (scrollController.offset > 0.0) {
                 scrollController.animateTo(
                   0,
-                  duration: Duration(milliseconds: 150),
+                  duration: const Duration(milliseconds: 150),
                   curve: Curves.linear,
                 );
 
