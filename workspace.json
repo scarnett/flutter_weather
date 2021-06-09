@@ -83,6 +83,13 @@
             "cwd": "apps/mobile_flutter"
           }
         },
+        "generateMocks": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "flutter pub run build_runner build",
+            "cwd": "apps/mobile_flutter"
+          }
+        },
         "clean": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {

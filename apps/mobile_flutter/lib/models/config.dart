@@ -39,9 +39,12 @@ class Config extends Equatable {
   factory Config.mock() => Config(
         appVersion: '1.5.0',
         appBuild: '1',
-        appPushNotificationsSave: '',
-        appPushNotificationsRemove: '',
-        appConnectivityStatus: '',
+        appPushNotificationsSave:
+            'http://flutter-weather.mock/http-push-notifications-save',
+        appPushNotificationsRemove:
+            'http://flutter-weather.mock/http-push-notifications-remove',
+        appConnectivityStatus:
+            'http://flutter-weather.mock/http-connectivity-status',
         openWeatherMapApiKey: '',
         openWeatherMapApiUri: '',
         openWeatherMapApiDailyForecastPath: '',

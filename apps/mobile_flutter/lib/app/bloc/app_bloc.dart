@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
@@ -382,8 +383,18 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     };
 
     try {
-      if (await hasConnectivity(result: state.connectivityResult)) {
-        Response forecastResponse = await tryLookupForecast(lookupData);
+      Client httpClient = Client();
+
+      if (await hasConnectivity(
+        client: httpClient,
+        config: AppConfig.instance.config,
+        result: state.connectivityResult,
+      )) {
+        Response forecastResponse = await tryLookupForecast(
+          client: httpClient,
+          lookupData: lookupData,
+        );
+
         if (forecastResponse.statusCode == 200) {
           List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
           int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
@@ -411,6 +422,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
             // TODO! premium
             Response forecastDetailsResponse = await fetchDetailedForecast(
+              client: httpClient,
               longitude: forecast.city!.coord!.lon!,
               latitude: forecast.city!.coord!.lat!,
             );

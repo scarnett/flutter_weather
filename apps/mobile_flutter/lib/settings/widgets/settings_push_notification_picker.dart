@@ -244,6 +244,7 @@ class _SettingsPushNotificationPickerState
         if (position != null) {
           try {
             Response forecastResponse = await fetchCurrentForecastByCoords(
+              client: Client(),
               longitude: position.longitude,
               latitude: position.latitude,
             );

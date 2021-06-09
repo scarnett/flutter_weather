@@ -1,5 +1,8 @@
-import 'package:flutter_weather/app/app_config.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:http/http.dart';
 
-Future<Response> connectivityStatus() async =>
-    get(Uri.parse(AppConfig.instance.config.appConnectivityStatus));
+Future<Response> connectivityStatus({
+  required Client client,
+  required Config config,
+}) async =>
+    client.get(Uri.parse(config.appConnectivityStatus));

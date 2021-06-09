@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/models/models.dart';
@@ -37,14 +38,24 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     );
 
     try {
-      if (await hasConnectivity()) {
-        Response forecastResponse = await tryLookupForecast(event.lookupData);
+      Client httpClient = Client();
+
+      if (await hasConnectivity(
+        client: httpClient,
+        config: AppConfig.instance.config,
+      )) {
+        Response forecastResponse = await tryLookupForecast(
+          client: httpClient,
+          lookupData: event.lookupData,
+        );
+
         if (forecastResponse.statusCode == 200) {
           Forecast forecast =
               Forecast.fromJson(jsonDecode(forecastResponse.body));
 
           // TODO! premium
           Response forecastDetailsResponse = await fetchDetailedForecast(
+            client: httpClient,
             longitude: forecast.city!.coord!.lon!,
             latitude: forecast.city!.coord!.lat!,
           );

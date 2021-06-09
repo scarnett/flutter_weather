@@ -147,6 +147,11 @@ nx run mobile_flutter:buildLauncherIcons
 nx run mobile_flutter:buildSplashScreens
 ```
 
+## Generate mocks
+```bash
+nx run mobile_flutter:generateMocks
+```
+
 ## Unit and Widget Tests
 ```bash
 nx run mobile_flutter:test
