@@ -74,7 +74,7 @@ class SettingsVersionStatusText extends StatelessWidget {
         barrierDismissible: true,
         builder: (BuildContext context) => AppUpdateDialog(
           packageInfo: packageInfo,
-          appVersion: AppConfig.instance.appVersion!,
+          appVersion: AppConfig.instance.appVersion,
         ),
       );
 }

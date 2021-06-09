@@ -1,23 +1,17 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/services.dart';
-import 'package:sentry/sentry.dart';
 
-Future<ConnectivityResult?> initConnectivity(
-  bool mounted,
+Future<bool> hasConnectivity(
+  ConnectivityResult result,
 ) async {
-  ConnectivityResult result;
+  switch (result) {
+    case ConnectivityResult.none:
+      return false;
 
-  try {
-    final Connectivity connectivity = Connectivity();
-    result = await connectivity.checkConnectivity();
-  } on PlatformException catch (exception, stackTrace) {
-    await Sentry.captureException(exception, stackTrace: stackTrace);
-    return null;
+    case ConnectivityResult.mobile:
+    case ConnectivityResult.wifi:
+    default:
+      break;
   }
 
-  if (!mounted) {
-    return Future.value(null);
-  }
-
-  return result;
+  return true;
 }

@@ -1,59 +1,21 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/enums/flavor.dart';
 
 class AppConfig extends InheritedWidget {
   final Flavor flavor;
-  final String? appVersion;
-  final String? appBuild;
-  final String? appPushNotificationsSave;
-  final String? appPushNotificationsRemove;
-  final String? openWeatherMapApiKey;
-  final String? openWeatherMapApiUri;
-  final String? openWeatherMapApiDailyForecastPath;
-  final String? openWeatherMapApiOneCallPath;
-  final int? refreshTimeout;
-  final String? defaultCountryCode;
-  final String? supportedLocales;
-  final String? privacyPolicyUrl;
-  final String? githubUrl;
-  final String? sentryDsn;
+  final Map<String, RemoteConfigValue>? remoteConfig;
 
   static late AppConfig _instance;
 
   factory AppConfig({
-    required flavor,
-    appVersion,
-    appBuild,
-    appPushNotificationsSave,
-    appPushNotificationsRemove,
-    openWeatherMapApiKey,
-    openWeatherMapApiUri,
-    openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiOneCallPath,
-    refreshTimeout,
-    defaultCountryCode,
-    supportedLocales,
-    privacyPolicyUrl,
-    githubUrl,
-    sentryDsn,
-    required child,
+    required Flavor flavor,
+    Map<String, RemoteConfigValue>? remoteConfig,
+    required Widget child,
   }) {
     _instance = AppConfig._internal(
       flavor,
-      appVersion,
-      appBuild,
-      appPushNotificationsSave,
-      appPushNotificationsRemove,
-      openWeatherMapApiKey,
-      openWeatherMapApiUri,
-      openWeatherMapApiDailyForecastPath,
-      openWeatherMapApiOneCallPath,
-      refreshTimeout,
-      defaultCountryCode,
-      supportedLocales,
-      privacyPolicyUrl,
-      githubUrl,
-      sentryDsn,
+      remoteConfig,
       child,
     );
 
@@ -62,26 +24,49 @@ class AppConfig extends InheritedWidget {
 
   AppConfig._internal(
     this.flavor,
-    this.appVersion,
-    this.appBuild,
-    this.appPushNotificationsSave,
-    this.appPushNotificationsRemove,
-    this.openWeatherMapApiKey,
-    this.openWeatherMapApiUri,
-    this.openWeatherMapApiDailyForecastPath,
-    this.openWeatherMapApiOneCallPath,
-    this.refreshTimeout,
-    this.defaultCountryCode,
-    this.supportedLocales,
-    this.privacyPolicyUrl,
-    this.githubUrl,
-    this.sentryDsn,
+    this.remoteConfig,
     Widget child,
   ) : super(child: child);
 
-  static AppConfig get instance {
-    return _instance;
-  }
+  static AppConfig get instance => _instance;
+
+  String get appVersion => remoteConfig!['app_version']!.asString();
+  String get appBuild => remoteConfig!['app_build']!.asString();
+  String get appPushNotificationsSave =>
+      remoteConfig!['app_push_notifications_save']!.asString();
+
+  String get appPushNotificationsRemove =>
+      remoteConfig!['app_push_notifications_remove']!.asString();
+
+  String get appConnectivityStatus =>
+      remoteConfig!['app_connectivity_status']!.asString();
+
+  String get openWeatherMapApiKey =>
+      remoteConfig!['openweathermap_api_key']!.asString();
+
+  String get openWeatherMapApiUri =>
+      remoteConfig!['openweathermap_api_uri']!.asString();
+
+  String get openWeatherMapApiOneCallUrl =>
+      remoteConfig!['openweathermap_api_one_call_url']!.asString();
+
+  String get openWeatherMapApiDailyForecastPath =>
+      remoteConfig!['openweathermap_api_daily_forecast_path']!.asString();
+
+  String get openWeatherMapApiOneCallPath =>
+      remoteConfig!['openweathermap_api_one_call_path']!.asString();
+
+  int get refreshTimeout => remoteConfig!['refresh_timeout']!.asInt();
+
+  String get defaultCountryCode =>
+      remoteConfig!['default_country_code']!.asString();
+
+  String get supportedLocales => remoteConfig!['supported_locales']!.asString();
+  String? get privacyPolicyUrl =>
+      remoteConfig!['privacy_policy_url']!.asString();
+
+  String? get githubUrl => remoteConfig!['github_url']!.asString();
+  String? get sentryDsn => remoteConfig!['sentry_dsn']!.asString();
 
   static AppConfig? of(
     BuildContext context,

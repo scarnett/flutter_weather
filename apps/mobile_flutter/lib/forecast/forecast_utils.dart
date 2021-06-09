@@ -14,8 +14,8 @@ Uri getDetailedUri(
   params['appid'] = AppConfig.instance.openWeatherMapApiKey;
 
   return Uri.https(
-    AppConfig.instance.openWeatherMapApiUri!,
-    AppConfig.instance.openWeatherMapApiOneCallPath!,
+    AppConfig.instance.openWeatherMapApiUri,
+    AppConfig.instance.openWeatherMapApiOneCallPath,
     params.cast<String, String>(),
   );
 }
@@ -27,8 +27,8 @@ Uri getCurrentApiUri(
   params['appid'] = AppConfig.instance.openWeatherMapApiKey;
 
   return Uri.https(
-    AppConfig.instance.openWeatherMapApiUri!,
-    AppConfig.instance.openWeatherMapApiDailyForecastPath!,
+    AppConfig.instance.openWeatherMapApiUri,
+    AppConfig.instance.openWeatherMapApiDailyForecastPath,
     params.cast<String, String>(),
   );
 }
@@ -44,8 +44,8 @@ Uri getDailyApiUri(
   params['appid'] = AppConfig.instance.openWeatherMapApiKey;
 
   return Uri.https(
-    AppConfig.instance.openWeatherMapApiUri!,
-    AppConfig.instance.openWeatherMapApiDailyForecastPath!,
+    AppConfig.instance.openWeatherMapApiUri,
+    AppConfig.instance.openWeatherMapApiDailyForecastPath,
     params.cast<String, String>(),
   );
 }
@@ -408,7 +408,7 @@ DateTime getNextUpdateTime(
   DateTime dateTime,
 ) =>
     dateTime.add(Duration(
-      milliseconds: AppConfig.instance.refreshTimeout!,
+      milliseconds: AppConfig.instance.refreshTimeout,
     ));
 
 bool hasForecasts(

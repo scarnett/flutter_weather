@@ -18,7 +18,7 @@ Future<Response?> savePushNotification({
   }
 
   return post(
-    Uri.parse(AppConfig.instance.appPushNotificationsSave!),
+    Uri.parse(AppConfig.instance.appPushNotificationsSave),
     body: {
       'device': deviceId,
       'period': (period == null) ? null : period.getInfo()!['id'],
@@ -41,7 +41,7 @@ Future<Response?> removePushNotification({
   }
 
   return post(
-    Uri.parse(AppConfig.instance.appPushNotificationsRemove!),
+    Uri.parse(AppConfig.instance.appPushNotificationsRemove),
     body: {
       'device': deviceId,
     },

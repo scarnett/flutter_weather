@@ -11,17 +11,17 @@ Future<void> main() async {
   // Bloc
   HydratedBloc.storage = MockStorage();
 
+  // TEST Environment Specific Configuration
+  AppConfig config = AppConfig(
+    flavor: Flavor.tst,
+    child: WeatherApp(),
+  );
+
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
     print(details.exception);
     print(details.stack);
   };
-
-  // PROD Environment Specific Configuration
-  AppConfig config = AppConfig(
-    flavor: Flavor.prod,
-    child: WeatherApp(),
-  );
 
   runApp(config);
 }

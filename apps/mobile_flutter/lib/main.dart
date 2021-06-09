@@ -51,9 +51,16 @@ Future<void> main() async {
   // Preferences
   await AppPrefs().init();
 
+  // PROD Environment Specific Configuration
+  AppConfig config = AppConfig(
+    flavor: Flavor.prod,
+    remoteConfig: remoteConfig.data,
+    child: WeatherApp(),
+  );
+
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    if (!remoteConfig.sentryDsn.isNullOrEmpty()) {
+    if (!config.sentryDsn.isNullOrEmpty()) {
       await Sentry.captureException(
         details.exception,
         stackTrace: details.stack,
@@ -61,33 +68,12 @@ Future<void> main() async {
     }
   };
 
-  // PROD Environment Specific Configuration
-  AppConfig config = AppConfig(
-    flavor: Flavor.prod,
-    appVersion: remoteConfig.appVersion,
-    appBuild: remoteConfig.appBuild,
-    appPushNotificationsSave: remoteConfig.appPushNotificationsSave,
-    appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
-    openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
-    openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
-    openWeatherMapApiDailyForecastPath:
-        remoteConfig.openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiOneCallPath: remoteConfig.openWeatherMapApiOneCallPath,
-    refreshTimeout: remoteConfig.refreshTimeout,
-    defaultCountryCode: remoteConfig.defaultCountryCode,
-    supportedLocales: remoteConfig.supportedLocales,
-    privacyPolicyUrl: remoteConfig.privacyPolicyUrl,
-    githubUrl: remoteConfig.githubUrl,
-    sentryDsn: remoteConfig.sentryDsn,
-    child: WeatherApp(),
-  );
-
-  if (remoteConfig.sentryDsn.isNullOrEmpty()) {
+  if (config.sentryDsn.isNullOrEmpty()) {
     runApp(config);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
-        ..dsn = remoteConfig.sentryDsn
+        ..dsn = config.sentryDsn
         ..environment = 'prod'
         ..useNativeBreadcrumbTracking(),
       appRunner: () {
