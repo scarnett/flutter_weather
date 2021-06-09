@@ -11,6 +11,7 @@ import 'package:flutter_weather/app/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -51,9 +52,16 @@ Future<void> main() async {
   // Preferences
   await AppPrefs().init();
 
+  // PROD Environment Specific Configuration
+  AppConfig appConfig = AppConfig(
+    flavor: Flavor.prod,
+    config: Config.fromRemoteConfig(remoteConfig.data),
+    child: WeatherApp(),
+  );
+
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    if (!remoteConfig.sentryDsn.isNullOrEmpty()) {
+    if (!appConfig.config.sentryDsn.isNullOrEmpty()) {
       await Sentry.captureException(
         details.exception,
         stackTrace: details.stack,
@@ -61,37 +69,16 @@ Future<void> main() async {
     }
   };
 
-  // PROD Environment Specific Configuration
-  AppConfig config = AppConfig(
-    flavor: Flavor.prod,
-    appVersion: remoteConfig.appVersion,
-    appBuild: remoteConfig.appBuild,
-    appPushNotificationsSave: remoteConfig.appPushNotificationsSave,
-    appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
-    openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
-    openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
-    openWeatherMapApiDailyForecastPath:
-        remoteConfig.openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiOneCallPath: remoteConfig.openWeatherMapApiOneCallPath,
-    refreshTimeout: remoteConfig.refreshTimeout,
-    defaultCountryCode: remoteConfig.defaultCountryCode,
-    supportedLocales: remoteConfig.supportedLocales,
-    privacyPolicyUrl: remoteConfig.privacyPolicyUrl,
-    githubUrl: remoteConfig.githubUrl,
-    sentryDsn: remoteConfig.sentryDsn,
-    child: WeatherApp(),
-  );
-
-  if (remoteConfig.sentryDsn.isNullOrEmpty()) {
-    runApp(config);
+  if (appConfig.config.sentryDsn.isNullOrEmpty()) {
+    runApp(appConfig);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
-        ..dsn = remoteConfig.sentryDsn
+        ..dsn = appConfig.config.sentryDsn
         ..environment = 'prod'
         ..useNativeBreadcrumbTracking(),
       appRunner: () {
-        runApp(config);
+        runApp(appConfig);
       },
     );
   }

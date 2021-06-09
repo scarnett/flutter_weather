@@ -22,20 +22,24 @@
 
 ## Firebase Remote Configuration
 
-| Name                                     | Value                      | Optional |
-|------------------------------------------|----------------------------|----------|
-| app_version                              | 1.0.0                      | No       |
-| app_build                                | 123                        | No       |
-| openweathermap_api_key                   | <your_openweather_api_key> | No       |
-| openweathermap_api_uri                   | api.openweathermap.com     | No       |
-| openweathermap_api_daily_forecast_path   | /data/2.5/forecast/daily   | No       |
-| openweathermap_api_one_call_path         | /data/2.5/onecall          | No       |
-| refresh_timeout                          | 300000                     | No       |
-| default_country_code                     | us                         | No       |
-| supported_locales                        | en                         | No       |
-| privacy_policy_url                       |                            | Yes      |
-| github_url                               |                            | Yes      |
-| sentry_dsn                               | <your_sentry_dsn>          | Yes      |
+| Name                                     | Value                                                                | Optional |
+|------------------------------------------|----------------------------------------------------------------------|----------|
+| app_version                              | 1.0.0                                                                | No       |
+| app_build                                | 123                                                                  | No       |
+| app_connectivity_status                  | https://<firebase_project_id>.web.app/http-connectivity-status       | No       |
+| app_push_notifications_remove            | https://<firebase_project_id>.web.app/http-push-notifications-remove | No       |
+| app_push_notifications_save              | https://<firebase_project_id>.web.app/http-push-notifications-save   | No       |
+| openweathermap_api_key                   | <your_openweather_api_key>                                           | No       |
+| openweathermap_api_uri                   | api.openweathermap.com                                               | No       |
+| openweathermap_api_daily_forecast_path   | /data/2.5/forecast/daily                                             | No       |
+| openweathermap_api_one_call_path         | /data/2.5/onecall                                                    | No       |
+| openweathermap_api_current_forecast_path | /data/2.5/weather                                                    | No       |
+| refresh_timeout                          | 300000                                                               | No       |
+| default_country_code                     | us                                                                   | No       |
+| supported_locales                        | en                                                                   | No       |
+| privacy_policy_url                       |                                                                      | Yes      |
+| github_url                               |                                                                      | Yes      |
+| sentry_dsn                               | <your_sentry_dsn>                                                    | Yes      |
 
 ## Android Configuration
 
@@ -74,19 +78,19 @@ You can find this file in your Firebase console in *Project Settings -> Your app
 
 ## Firebase Functions
 ```bash
-npm run deploy
+nx run firebase:deploy-functions
 ```
 [**Read More**](../firebase/README.md)
 
 ## Firebase Firestore Rules
 ```bash
-npm run deploy-rules
+nx run firebase:deploy-firestore-rules
 ```
 [**Read More**](../firebase/README.md)
 
 ## Firebase Hosting
 ```bash
-firebase deploy --only hosting
+nx run firebase:deploy-hosting
 ```
 [**Read More**](../firebase/README.md)
 
@@ -141,6 +145,11 @@ nx run mobile_flutter:buildLauncherIcons
 
 ```bash
 nx run mobile_flutter:buildSplashScreens
+```
+
+## Generate mocks
+```bash
+nx run mobile_flutter:generateMocks
 ```
 
 ## Unit and Widget Tests

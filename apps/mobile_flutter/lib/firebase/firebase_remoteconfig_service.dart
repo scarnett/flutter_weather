@@ -28,8 +28,8 @@ class FirebaseRemoteConfigService {
     final RemoteConfig initialRemoteConfig = RemoteConfig.instance;
 
     await initialRemoteConfig.setConfigSettings(RemoteConfigSettings(
-      fetchTimeout: Duration(minutes: 1),
-      minimumFetchInterval: Duration(hours: 1),
+      fetchTimeout: const Duration(minutes: 1),
+      minimumFetchInterval: const Duration(hours: 1),
     ));
 
     await initialRemoteConfig.fetch();
@@ -41,37 +41,5 @@ class FirebaseRemoteConfigService {
     print('[FirebaseRemoteConfig] Last fetch: $lastFetch');
   }
 
-  String get appVersion => _remoteConfig.getString('app_version');
-  String get appBuild => _remoteConfig.getString('app_build');
-  String get appPushNotificationsSave =>
-      _remoteConfig.getString('app_push_notifications_save');
-
-  String get appPushNotificationsRemove =>
-      _remoteConfig.getString('app_push_notifications_remove');
-
-  String get openWeatherMapApiKey =>
-      _remoteConfig.getString('openweathermap_api_key');
-
-  String get openWeatherMapApiUri =>
-      _remoteConfig.getString('openweathermap_api_uri');
-
-  String get openWeatherMapApiOneCallUrl =>
-      _remoteConfig.getString('openweathermap_api_one_call_url');
-
-  String get openWeatherMapApiDailyForecastPath =>
-      _remoteConfig.getString('openweathermap_api_daily_forecast_path');
-
-  String get openWeatherMapApiOneCallPath =>
-      _remoteConfig.getString('openweathermap_api_one_call_path');
-
-  int get refreshTimeout => _remoteConfig.getInt('refresh_timeout');
-
-  String get defaultCountryCode =>
-      _remoteConfig.getString('default_country_code');
-
-  String get supportedLocales => _remoteConfig.getString('supported_locales');
-  String? get privacyPolicyUrl => _remoteConfig.getString('privacy_policy_url');
-
-  String? get githubUrl => _remoteConfig.getString('github_url');
-  String? get sentryDsn => _remoteConfig.getString('sentry_dsn');
+  Map<String, RemoteConfigValue> get data => _remoteConfig.getAll();
 }

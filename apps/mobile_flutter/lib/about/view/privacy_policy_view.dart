@@ -40,7 +40,7 @@ class _PrivacyPolicyPageViewState extends State<PrivacyPolicyView>
               child: Stack(
                 children: <Widget>[
                   WebView(
-                    initialUrl: AppConfig.instance.privacyPolicyUrl,
+                    initialUrl: AppConfig.instance.config.privacyPolicyUrl,
                     onWebViewCreated: _onWebViewCreated,
                   ),
                 ],

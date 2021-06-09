@@ -184,7 +184,14 @@ class ForecastCity extends Equatable {
       };
 
   @override
-  List<Object?> get props => [id, name, coord, country, population, timezone];
+  List<Object?> get props => [
+        id,
+        name,
+        coord,
+        country,
+        population,
+        timezone,
+      ];
 
   @override
   String toString() =>

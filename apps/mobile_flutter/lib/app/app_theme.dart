@@ -6,7 +6,7 @@ class AppTheme {
   static Color get secondaryColor => Colors.grey[900]!;
   static Color get disabledColor => primaryColor.withOpacity(0.5);
   static Color get disabledTextColor => Colors.white.withOpacity(0.3);
-  static Color get successColor => Colors.green[700]!;
+  static Color get successColor => AppTheme.primaryColor;
   static Color get warningColor => Colors.yellow[700]!;
   static Color get dangerColor => Colors.red[700]!;
   static Color get infoColor => Colors.lightBlue;
@@ -141,6 +141,9 @@ ThemeData appLightThemeData = ThemeData(
     ),
   ),
   textTheme: _darkTextTheme,
+  snackBarTheme: SnackBarThemeData(
+    contentTextStyle: TextStyle(color: Colors.white),
+  ),
 );
 
 ThemeData appColorThemeData = appLightThemeData.copyWith(
