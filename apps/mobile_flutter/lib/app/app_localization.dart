@@ -94,6 +94,9 @@ class AppLocalizations {
   String get locationFailure => addMessage(
       'There was an error getting your current location. Please try again.');
 
+  String get connectivityFailure => addMessage(
+      'Unable to connect to the weather provider. Please check your network.');
+
   String get forecastAdded => addMessage('Forecast Added');
   String get forecastUpdated => addMessage('Forecast Updated');
   String get forecastDeleted => addMessage('Forecast Deleted');

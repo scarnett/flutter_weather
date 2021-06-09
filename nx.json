@@ -26,13 +26,7 @@
     "mobile_flutter": {
       "tags": []
     },
-    "firebase-functions": {
-      "tags": []
-    },
-    "firebase-hosting": {
-      "tags": []
-    },
-    "firebase-rules": {
+    "firebase": {
       "tags": []
     },
     "web_ng": {

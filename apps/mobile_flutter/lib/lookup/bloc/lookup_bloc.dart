@@ -37,34 +37,39 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     );
 
     try {
-      Response forecastResponse = await tryLookupForecast(event.lookupData);
+      if (await hasConnectivity()) {
+        Response forecastResponse = await tryLookupForecast(event.lookupData);
+        if (forecastResponse.statusCode == 200) {
+          Forecast forecast =
+              Forecast.fromJson(jsonDecode(forecastResponse.body));
 
-      if (forecastResponse.statusCode == 200) {
-        Forecast forecast =
-            Forecast.fromJson(jsonDecode(forecastResponse.body));
+          // TODO! premium
+          Response forecastDetailsResponse = await fetchDetailedForecast(
+            longitude: forecast.city!.coord!.lon!,
+            latitude: forecast.city!.coord!.lat!,
+          );
 
-        // TODO! premium
-        Response forecastDetailsResponse = await fetchDetailedForecast(
-          longitude: forecast.city!.coord!.lon!,
-          latitude: forecast.city!.coord!.lat!,
-        );
+          if (forecastDetailsResponse.statusCode == 200) {
+            forecast = forecast.copyWith(
+                details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
+                    jsonDecode(forecastDetailsResponse.body))));
+          }
 
-        if (forecastDetailsResponse.statusCode == 200) {
-          forecast = forecast.copyWith(
-              details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
-                  jsonDecode(forecastDetailsResponse.body))));
+          yield state.copyWith(
+            cityName: Nullable<String?>(event.lookupData['cityName']),
+            postalCode: Nullable<String?>(event.lookupData['postalCode']),
+            countryCode: Nullable<String?>(event.lookupData['countryCode']),
+            lookupForecast: Nullable<Forecast>(forecast),
+            status: Nullable<LookupStatus>(LookupStatus.forecastFound),
+          );
+        } else {
+          yield state.copyWith(
+            status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+          );
         }
-
-        yield state.copyWith(
-          cityName: Nullable<String?>(event.lookupData['cityName']),
-          postalCode: Nullable<String?>(event.lookupData['postalCode']),
-          countryCode: Nullable<String?>(event.lookupData['countryCode']),
-          lookupForecast: Nullable<Forecast>(forecast),
-          status: Nullable<LookupStatus>(LookupStatus.forecastFound),
-        );
       } else {
         yield state.copyWith(
-          status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+          status: Nullable<LookupStatus>(LookupStatus.forecastConnectivity),
         );
       }
     } on Exception catch (exception, stackTrace) {

@@ -78,19 +78,19 @@ You can find this file in your Firebase console in *Project Settings -> Your app
 
 ## Firebase Functions
 ```bash
-npm run deploy
+nx run firebase:deploy-functions
 ```
 [**Read More**](../firebase/README.md)
 
 ## Firebase Firestore Rules
 ```bash
-npm run deploy-rules
+nx run firebase:deploy-firestore-rules
 ```
 [**Read More**](../firebase/README.md)
 
 ## Firebase Hosting
 ```bash
-firebase deploy --only hosting
+nx run firebase:deploy-hosting
 ```
 [**Read More**](../firebase/README.md)
 

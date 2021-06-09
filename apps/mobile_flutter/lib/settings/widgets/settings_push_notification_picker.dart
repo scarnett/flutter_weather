@@ -11,6 +11,7 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
@@ -267,6 +268,7 @@ class _SettingsPushNotificationPickerState
             showSnackbar(
               context,
               AppLocalizations.of(context)!.locationFailure,
+              messageType: MessageType.danger,
             );
           }
         }

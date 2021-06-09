@@ -1,17 +1,27 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_weather/services/services.dart';
+import 'package:http/http.dart';
 
-Future<bool> hasConnectivity(
-  ConnectivityResult result,
-) async {
-  switch (result) {
-    case ConnectivityResult.none:
-      return false;
+Future<bool> hasConnectivity({
+  ConnectivityResult? result,
+}) async {
+  if (result != null) {
+    switch (result) {
+      case ConnectivityResult.none:
+        return false;
 
-    case ConnectivityResult.mobile:
-    case ConnectivityResult.wifi:
-    default:
-      break;
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.wifi:
+      default:
+        break;
+    }
   }
 
-  return true;
+  Response connectivityResponse = await connectivityStatus();
+  if ((connectivityResponse.statusCode == 200) &&
+      (connectivityResponse.body == 'ok')) {
+    return true;
+  }
+
+  return false;
 }

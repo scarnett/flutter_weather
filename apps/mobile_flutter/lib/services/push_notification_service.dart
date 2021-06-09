@@ -5,7 +5,7 @@ import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:http/http.dart';
 
-Future<Response?> savePushNotification({
+Future<Response?> pushNotificationSave({
   required String? deviceId,
   UpdatePeriod? period,
   PushNotification? pushNotification,
@@ -33,7 +33,7 @@ Future<Response?> savePushNotification({
   );
 }
 
-Future<Response?> removePushNotification({
+Future<Response?> pushNotificationRemove({
   required String? deviceId,
 }) async {
   if (deviceId == null) {

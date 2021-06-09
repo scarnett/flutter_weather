@@ -11,6 +11,7 @@ import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/enums/wind_speed_unit.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
@@ -123,10 +124,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     if (event.updatePeriod == null) {
       prefs.pushNotification = null;
-      await removePushNotification(deviceId: deviceId);
+      await pushNotificationRemove(deviceId: deviceId);
     } else if (state.pushNotification == null) {
       prefs.pushNotification = PushNotification.off;
-      await removePushNotification(deviceId: deviceId);
+      await pushNotificationRemove(deviceId: deviceId);
     } else if (prefs.pushNotification != PushNotification.off) {
       await _saveDeviceInfo(prefs.pushNotification);
     }
@@ -160,6 +161,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           showSnackbar(
             event.context,
             AppLocalizations.of(event.context)!.locationPermissionDenied,
+            messageType: MessageType.danger,
           );
 
           if (state.pushNotification == PushNotification.currentLocation) {
@@ -380,55 +382,65 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     };
 
     try {
-      Response forecastResponse = await tryLookupForecast(lookupData);
-      if (forecastResponse.statusCode == 200) {
-        List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
-        int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
-            forecast.postalCode == event.forecast.postalCode);
+      if (await hasConnectivity(result: state.connectivityResult)) {
+        Response forecastResponse = await tryLookupForecast(lookupData);
+        if (forecastResponse.statusCode == 200) {
+          List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
+          int forecastIndex = forecasts.indexWhere((Forecast forecast) =>
+              forecast.postalCode == event.forecast.postalCode);
 
-        if (forecastIndex == -1) {
+          if (forecastIndex == -1) {
+            showSnackbar(
+              event.context,
+              AppLocalizations.of(event.context)!.refreshFailure,
+              messageType: MessageType.danger,
+            );
+
+            yield state;
+          } else {
+            Forecast forecast =
+                Forecast.fromJson(jsonDecode(forecastResponse.body));
+
+            forecasts[forecastIndex] = forecast.copyWith(
+              id: event.forecast.id,
+              cityName: Nullable<String?>(event.forecast.cityName),
+              postalCode: Nullable<String?>(event.forecast.postalCode),
+              countryCode: Nullable<String?>(event.forecast.countryCode),
+              lastUpdated: getNow(),
+            );
+
+            // TODO! premium
+            Response forecastDetailsResponse = await fetchDetailedForecast(
+              longitude: forecast.city!.coord!.lon!,
+              latitude: forecast.city!.coord!.lat!,
+            );
+
+            if (forecastDetailsResponse.statusCode == 200) {
+              forecasts[forecastIndex] = forecasts[forecastIndex].copyWith(
+                  details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
+                      jsonDecode(forecastDetailsResponse.body))));
+            }
+
+            yield state.copyWith(
+              forecasts: forecasts,
+              refreshStatus: Nullable<RefreshStatus?>(null),
+            );
+          }
+        } else {
           showSnackbar(
             event.context,
             AppLocalizations.of(event.context)!.refreshFailure,
+            messageType: MessageType.danger,
           );
 
           yield state;
-        } else {
-          Forecast forecast =
-              Forecast.fromJson(jsonDecode(forecastResponse.body));
-
-          forecasts[forecastIndex] = forecast.copyWith(
-            id: event.forecast.id,
-            cityName: Nullable<String?>(event.forecast.cityName),
-            postalCode: Nullable<String?>(event.forecast.postalCode),
-            countryCode: Nullable<String?>(event.forecast.countryCode),
-            lastUpdated: getNow(),
-          );
-
-          // TODO! premium
-          Response forecastDetailsResponse = await fetchDetailedForecast(
-            longitude: forecast.city!.coord!.lon!,
-            latitude: forecast.city!.coord!.lat!,
-          );
-
-          if (forecastDetailsResponse.statusCode == 200) {
-            forecasts[forecastIndex] = forecasts[forecastIndex].copyWith(
-                details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
-                    jsonDecode(forecastDetailsResponse.body))));
-          }
-
-          yield state.copyWith(
-            forecasts: forecasts,
-            refreshStatus: Nullable<RefreshStatus?>(null),
-          );
         }
       } else {
         showSnackbar(
           event.context,
-          AppLocalizations.of(event.context)!.refreshFailure,
+          AppLocalizations.of(event.context)!.connectivityFailure,
+          messageType: MessageType.danger,
         );
-
-        yield state;
       }
     } on Exception catch (exception, stackTrace) {
       await Sentry.captureException(exception, stackTrace: stackTrace);
@@ -436,6 +448,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       showSnackbar(
         event.context,
         AppLocalizations.of(event.context)!.refreshFailure,
+        messageType: MessageType.danger,
       );
 
       yield state;
@@ -530,7 +543,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       String? deviceId = await getDeviceId();
       String? token = await FirebaseMessaging.instance.getToken();
 
-      await savePushNotification(
+      await pushNotificationSave(
         deviceId: deviceId,
         period: state.updatePeriod,
         pushNotification: state.pushNotification,
@@ -540,7 +553,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       );
     } else {
       String? deviceId = await getDeviceId();
-      await removePushNotification(deviceId: deviceId);
+      await pushNotificationRemove(deviceId: deviceId);
     }
   }
 
