@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/models/models.dart';
 
 Widget buildFrame({
   required WidgetBuilder buildContent,
 }) =>
     AppConfig(
-      flavor: Flavor.dev,
-      appVersion: '1.5.0',
-      appBuild: '1',
-      supportedLocales: 'en',
+      flavor: Flavor.tst,
+      config: Config.mock(),
       child: MaterialApp(
         localizationsDelegates: [
           AppLocalizationsDelegate(),

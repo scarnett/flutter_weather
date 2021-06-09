@@ -11,11 +11,11 @@ import 'package:weather_icons/weather_icons.dart';
 Uri getDetailedUri(
   Map<String, dynamic> params,
 ) {
-  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
+  params['appid'] = AppConfig.instance.config.openWeatherMapApiKey;
 
   return Uri.https(
-    AppConfig.instance.openWeatherMapApiUri,
-    AppConfig.instance.openWeatherMapApiOneCallPath,
+    AppConfig.instance.config.openWeatherMapApiUri,
+    AppConfig.instance.config.openWeatherMapApiOneCallPath,
     params.cast<String, String>(),
   );
 }
@@ -24,11 +24,11 @@ Uri getCurrentApiUri(
   Map<String, dynamic> params,
 ) {
   params['cnt'] = '1';
-  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
+  params['appid'] = AppConfig.instance.config.openWeatherMapApiKey;
 
   return Uri.https(
-    AppConfig.instance.openWeatherMapApiUri,
-    AppConfig.instance.openWeatherMapApiDailyForecastPath,
+    AppConfig.instance.config.openWeatherMapApiUri,
+    AppConfig.instance.config.openWeatherMapApiDailyForecastPath,
     params.cast<String, String>(),
   );
 }
@@ -41,11 +41,11 @@ Uri getDailyApiUri(
     params['cnt'] = count.toString();
   }
 
-  params['appid'] = AppConfig.instance.openWeatherMapApiKey;
+  params['appid'] = AppConfig.instance.config.openWeatherMapApiKey;
 
   return Uri.https(
-    AppConfig.instance.openWeatherMapApiUri,
-    AppConfig.instance.openWeatherMapApiDailyForecastPath,
+    AppConfig.instance.config.openWeatherMapApiUri,
+    AppConfig.instance.config.openWeatherMapApiDailyForecastPath,
     params.cast<String, String>(),
   );
 }
@@ -408,7 +408,7 @@ DateTime getNextUpdateTime(
   DateTime dateTime,
 ) =>
     dateTime.add(Duration(
-      milliseconds: AppConfig.instance.refreshTimeout,
+      milliseconds: AppConfig.instance.config.refreshTimeout,
     ));
 
 bool hasForecasts(

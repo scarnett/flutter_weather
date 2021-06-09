@@ -11,6 +11,7 @@ import 'package:flutter_weather/app/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -54,15 +55,15 @@ Future<void> main() async {
   await AppPrefs().init();
 
   // DEV Environment Specific Configuration
-  AppConfig config = AppConfig(
+  AppConfig appConfig = AppConfig(
     flavor: Flavor.dev,
-    remoteConfig: remoteConfig.data,
+    config: Config.fromRemoteConfig(remoteConfig.data),
     child: WeatherApp(),
   );
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    if (config.sentryDsn.isNullOrEmpty()) {
+    if (appConfig.config.sentryDsn.isNullOrEmpty()) {
       print(details.exception);
       print(details.stack);
     } else {
@@ -73,15 +74,15 @@ Future<void> main() async {
     }
   };
 
-  if (config.sentryDsn.isNullOrEmpty()) {
-    runApp(config);
+  if (appConfig.config.sentryDsn.isNullOrEmpty()) {
+    runApp(appConfig);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
-        ..dsn = config.sentryDsn
+        ..dsn = appConfig.config.sentryDsn
         ..environment = 'dev',
       appRunner: () {
-        runApp(config);
+        runApp(appConfig);
       },
     );
   }

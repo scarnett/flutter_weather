@@ -23,11 +23,11 @@ class SettingsVersionStatusText extends StatelessWidget {
     Version? _latestVersion;
 
     try {
-      if (AppConfig.instance.appVersion.isNullOrEmpty()) {
+      if (AppConfig.instance.config.appVersion.isNullOrEmpty()) {
         return Text('');
       }
 
-      _latestVersion = getAppVersion(AppConfig.instance.appVersion);
+      _latestVersion = getAppVersion(AppConfig.instance.config.appVersion);
 
       if (packageInfo.version == 'unknown') {
         return Text('');
@@ -74,7 +74,7 @@ class SettingsVersionStatusText extends StatelessWidget {
         barrierDismissible: true,
         builder: (BuildContext context) => AppUpdateDialog(
           packageInfo: packageInfo,
-          appVersion: AppConfig.instance.appVersion,
+          appVersion: AppConfig.instance.config.appVersion,
         ),
       );
 }

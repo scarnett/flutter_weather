@@ -220,7 +220,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   ) =>
       locale.languageCode
           .toLowerCase()
-          .contains(AppConfig.instance.supportedLocales ?? 'en');
+          .contains(AppConfig.instance.config.supportedLocales);
 }
 
 class FallbackCupertinoLocalisationsDelegate
