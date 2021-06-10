@@ -79,6 +79,7 @@ Future<void> main() async {
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
+        ..diagnosticLevel = SentryLevel.debug
         ..dsn = appConfig.config.sentryDsn
         ..environment = 'dev',
       appRunner: () {

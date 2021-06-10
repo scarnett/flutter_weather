@@ -89,10 +89,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   @override
   Future<void> close() {
-    if (_connectivitySubscription != null) {
-      _connectivitySubscription?.cancel();
-    }
-
+    _connectivitySubscription?.cancel();
     return super.close();
   }
 
@@ -526,14 +523,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   Stream<AppState> _mapStreamConnectivityResultToState(
     StreamConnectivityResult event,
   ) async* {
-    if (_connectivitySubscription != null) {
-      _connectivitySubscription?.cancel();
-    }
-
-    _connectivitySubscription = _connectivity.onConnectivityChanged
-        .listen((ConnectivityResult result) async {
-      add(SetConnectivityResult(result));
-    });
+    _connectivitySubscription?.cancel();
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
+        (ConnectivityResult result) => add(SetConnectivityResult(result)));
 
     yield state;
   }
