@@ -1,23 +1,49 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
-import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 
-class ForecastWindSpeed extends StatelessWidget {
+class ForecastWindSpeed extends StatefulWidget {
   final ForecastDay currentDay;
 
-  const ForecastWindSpeed({
+  ForecastWindSpeed({
     Key? key,
     required this.currentDay,
   }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ForecastWindSpeedState();
+}
+
+class _ForecastWindSpeedState extends State<ForecastWindSpeed> {
+  Stream<CompassEvent>? _headingStream;
+  StreamSubscription<CompassEvent>? _headingSubscription;
+  double? _heading;
+
+  @override
+  void initState() {
+    if (AppConfig.isRelease()) {
+      _headingStream = FlutterCompass.events;
+      _headingSubscription = _headingStream?.listen(
+          (CompassEvent event) => setState(() => _heading = event.heading));
+    }
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _headingSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(
@@ -30,7 +56,7 @@ class ForecastWindSpeed extends StatelessWidget {
             ForecastMetaInfo(
               label: AppLocalizations.of(context)!.wind,
               value: getWindSpeed(
-                currentDay.speed,
+                widget.currentDay.speed,
                 context.read<AppBloc>().state.units.windSpeed,
               ).toString(),
               unit: context
@@ -40,47 +66,7 @@ class ForecastWindSpeed extends StatelessWidget {
                   .windSpeed
                   .getText(context),
             ),
-            AppConfig.isRelease()
-                ? StreamBuilder<CompassEvent>(
-                    stream: FlutterCompass.events,
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<CompassEvent> snapshot,
-                    ) {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: AppTheme.dangerColor,
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        if (currentDay.deg != null) {
-                          return _buildWindDirection();
-                        }
-
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: SizedBox(
-                              height: 10.0,
-                              width: 10.0,
-                              child: AppProgressIndicator(),
-                            ),
-                          ),
-                        );
-                      }
-
-                      return _buildWindDirection(
-                        heading: snapshot.data!.heading,
-                      );
-                    },
-                  )
-                : _buildWindDirection(),
+            _buildWindDirection(heading: _heading),
           ],
         ),
       );
@@ -93,7 +79,7 @@ class ForecastWindSpeed extends StatelessWidget {
         width: 30.0,
         child: ForecastWindDirection(
           degree: getWindDirection(
-            windDirection: currentDay.deg ?? 0.0,
+            windDirection: widget.currentDay.deg ?? 0.0,
             heading: heading ?? 0.0,
           ),
           size: 20.0,

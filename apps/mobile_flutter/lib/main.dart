@@ -74,6 +74,7 @@ Future<void> main() async {
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
+        ..diagnosticLevel = SentryLevel.fatal
         ..dsn = appConfig.config.sentryDsn
         ..environment = 'prod'
         ..useNativeBreadcrumbTracking(),
