@@ -38,8 +38,8 @@ dependencies:
   page_view_indicators: '2.0.0'
   path_provider: '2.0.2'
   permission_handler: '8.0.1'
-  sentry: '5.1.0'
-  sentry_flutter: '5.1.0'
+  sentry: '5.0.0'
+  sentry_flutter: '5.0.0'
   shared_preferences: '2.0.6'
   sticky_headers: '0.2.0'
   store_redirect:
