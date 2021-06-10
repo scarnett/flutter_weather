@@ -13,7 +13,7 @@ dependencies:
 
   bloc: '7.0.0'
   collection: '1.15.0'
-  cloud_firestore: '2.2.2'
+  cloud_firestore: '2.2.1'
   connectivity_plus: '1.0.2'
   cupertino_icons: '1.0.3'
   device_info: '2.0.2'
@@ -24,6 +24,7 @@ dependencies:
   firebase_remote_config: '0.10.0+2'
   fl_chart: '0.36.1'
   flutter_bloc: '7.0.1'
+  flutter_compass: '0.6.1'
   flutter_form_bloc:
     git:
       url: git://github.com/GiancarloCode/form_bloc.git #see https://github.com/GiancarloCode/form_bloc/issues/221
