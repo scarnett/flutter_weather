@@ -41,8 +41,6 @@ class AppConfig extends InheritedWidget {
         return true;
 
       case Flavor.tst:
-        return false;
-
       case Flavor.prod:
       default:
         return false;
