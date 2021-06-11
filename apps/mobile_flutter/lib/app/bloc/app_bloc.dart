@@ -18,7 +18,7 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
 import 'package:flutter_weather/settings/settings.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
@@ -381,14 +381,14 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     };
 
     try {
-      Client httpClient = Client();
+      http.Client httpClient = http.Client();
 
       if (await hasConnectivity(
         client: httpClient,
         config: AppConfig.instance.config,
         result: state.connectivityResult,
       )) {
-        Response forecastResponse = await tryLookupForecast(
+        http.Response forecastResponse = await tryLookupForecast(
           client: httpClient,
           lookupData: lookupData,
         );
@@ -419,7 +419,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             );
 
             // TODO! premium
-            Response forecastDetailsResponse = await fetchDetailedForecast(
+            http.Response forecastDetailsResponse = await fetchDetailedForecast(
               client: httpClient,
               longitude: forecast.city!.coord!.lon!,
               latitude: forecast.city!.coord!.lat!,

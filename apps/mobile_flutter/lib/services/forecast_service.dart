@@ -1,8 +1,8 @@
 import 'package:flutter_weather/forecast/forecast.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
-Future<Response> fetchDetailedForecast({
-  required Client client,
+Future<http.Response> fetchDetailedForecast({
+  required http.Client client,
   required num longitude,
   required num latitude,
 }) async {
@@ -12,8 +12,8 @@ Future<Response> fetchDetailedForecast({
   return client.get(getDetailedUri(params));
 }
 
-Future<Response> fetchCurrentForecastByCoords({
-  required Client client,
+Future<http.Response> fetchCurrentForecastByCoords({
+  required http.Client client,
   required num longitude,
   required num latitude,
 }) async {
@@ -23,8 +23,8 @@ Future<Response> fetchCurrentForecastByCoords({
   return client.get(getCurrentApiUri(params));
 }
 
-Future<Response> tryLookupForecast({
-  required Client client,
+Future<http.Response> tryLookupForecast({
+  required http.Client client,
   required Map<String, dynamic> lookupData,
 }) async {
   Map<String, dynamic> params = buildLookupParams(lookupData);
