@@ -11,11 +11,12 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:sentry/sentry.dart';
 
 class SettingsPushNotificationPicker extends StatefulWidget {
@@ -222,6 +223,8 @@ class _SettingsPushNotificationPickerState
             'location': {
               'id': forecast.id,
               'name': forecast.getLocationText(),
+              'cityName': forecast.city?.name,
+              'country': forecast.city?.country,
               'longitude': forecast.city?.coord?.lon,
               'latitude': forecast.city?.coord?.lat,
             },
@@ -240,7 +243,8 @@ class _SettingsPushNotificationPickerState
         Position? position = await getPosition();
         if (position != null) {
           try {
-            Response forecastResponse = await fetchCurrentForecastByCoords(
+            http.Response forecastResponse = await fetchCurrentForecastByCoords(
+              client: http.Client(),
               longitude: position.longitude,
               latitude: position.latitude,
             );
@@ -252,6 +256,8 @@ class _SettingsPushNotificationPickerState
               notificationExtras = {
                 'location': {
                   'name': forecast.getLocationText(),
+                  'cityName': forecast.city?.name,
+                  'country': forecast.city?.country,
                   'longitude': forecast.city?.coord?.lon,
                   'latitude': forecast.city?.coord?.lat,
                 },
@@ -267,6 +273,7 @@ class _SettingsPushNotificationPickerState
             showSnackbar(
               context,
               AppLocalizations.of(context)!.locationFailure,
+              messageType: MessageType.danger,
             );
           }
         }

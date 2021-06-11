@@ -6,7 +6,9 @@
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy-functions": "firebase deploy --only functions",
+    "deploy-hosting": "firebase deploy --only hosting",
+    "deploy-firestore-rules": "firebase deploy --only firestore:rules",
     "logs": "firebase functions:log",
     "test": "jest --watchAll"
   },

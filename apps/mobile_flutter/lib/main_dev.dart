@@ -11,16 +11,15 @@ import 'package:flutter_weather/app/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(
   RemoteMessage message,
-) async {
-  await Firebase.initializeApp();
-  // TODO!
-}
+) async =>
+    await Firebase.initializeApp();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,9 +31,8 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Crashlytics
-  if (kDebugMode) {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
+  await FirebaseCrashlytics.instance
+      .setCrashlyticsCollectionEnabled(!kDebugMode);
 
   // Remote configuration
   final FirebaseRemoteConfigService remoteConfig =
@@ -53,50 +51,35 @@ Future<void> main() async {
   // Preferences
   await AppPrefs().init();
 
+  // DEV Environment Specific Configuration
+  AppConfig appConfig = AppConfig(
+    flavor: Flavor.dev,
+    config: Config.fromRemoteConfig(remoteConfig.data),
+    child: WeatherApp(),
+  );
+
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    if (remoteConfig.sentryDsn.isNullOrEmpty()) {
-      print(details.exception);
-      print(details.stack);
+    if (appConfig.config.sentryDsn.isNullOrEmpty()) {
+      print(details.exceptionAsString());
+      print(details.stack.toString());
     } else {
       await Sentry.captureException(
-        details.exception,
-        stackTrace: details.stack,
+        details.exceptionAsString(),
+        stackTrace: details.stack.toString(),
       );
     }
   };
 
-  // DEV Environment Specific Configuration
-  AppConfig config = AppConfig(
-    flavor: Flavor.dev,
-    appVersion: remoteConfig.appVersion,
-    appBuild: remoteConfig.appBuild,
-    appPushNotificationsSave: remoteConfig.appPushNotificationsSave,
-    appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
-    openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
-    openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
-    openWeatherMapApiDailyForecastPath:
-        remoteConfig.openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiOneCallPath: remoteConfig.openWeatherMapApiOneCallPath,
-    refreshTimeout: remoteConfig.refreshTimeout,
-    defaultCountryCode: remoteConfig.defaultCountryCode,
-    supportedLocales: remoteConfig.supportedLocales,
-    privacyPolicyUrl: remoteConfig.privacyPolicyUrl,
-    githubUrl: remoteConfig.githubUrl,
-    sentryDsn: remoteConfig.sentryDsn,
-    child: WeatherApp(),
-  );
-
-  if (remoteConfig.sentryDsn.isNullOrEmpty()) {
-    runApp(config);
+  if (appConfig.config.sentryDsn.isNullOrEmpty()) {
+    runApp(appConfig);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
-        ..dsn = remoteConfig.sentryDsn
+        ..diagnosticLevel = SentryLevel.debug
+        ..dsn = appConfig.config.sentryDsn
         ..environment = 'dev',
-      appRunner: () {
-        runApp(config);
-      },
+      appRunner: () => runApp(appConfig),
     );
   }
 }

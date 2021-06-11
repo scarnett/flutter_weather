@@ -8,8 +8,7 @@
       "program": "apps/mobile_flutter/lib/main_dev.dart",
       "args": [
         "--flavor",
-        "dev",
-        "--no-sound-null-safety"
+        "dev"
       ]
     },
     {

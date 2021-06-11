@@ -16,7 +16,7 @@ void main() {
   });
 
   test('Should have NOT have a title', () {
-    expect(getLookupTitle(null, null), null);
+    expect(getLookupTitle(null, null), '');
   });
 
   test('Should have \'add forecast\' title', () {

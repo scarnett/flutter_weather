@@ -10,6 +10,7 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/lookup/lookup.dart';
 import 'package:flutter_weather/models/models.dart';
@@ -88,7 +89,7 @@ class _LookupPageViewState extends State<LookupPageView> {
                 key: _scaffoldKey,
                 appBar: AppBar(
                   title: Text(
-                    getLookupTitle(AppLocalizations.of(context), _currentPage)!,
+                    getLookupTitle(AppLocalizations.of(context), _currentPage),
                   ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
@@ -134,7 +135,22 @@ class _LookupPageViewState extends State<LookupPageView> {
       switch (state.status) {
         case LookupStatus.forecastNotFound:
           closeKeyboard(context);
-          showSnackbar(context, i18n!.lookupFailure);
+          showSnackbar(
+            context,
+            i18n!.lookupFailure,
+            messageType: MessageType.danger,
+          );
+
+          break;
+
+        case LookupStatus.forecastConnectivity:
+          closeKeyboard(context);
+          showSnackbar(
+            context,
+            i18n!.connectivityFailure,
+            messageType: MessageType.danger,
+          );
+
           break;
 
         default:
@@ -247,7 +263,11 @@ class _LookupPageViewState extends State<LookupPageView> {
     FormBlocFailure<String, String> state,
   ) {
     closeKeyboard(context);
-    showSnackbar(context, state.failureResponse!);
+    showSnackbar(
+      context,
+      state.failureResponse!,
+      messageType: MessageType.danger,
+    );
   }
 
   void _onPageChange(

@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
 
@@ -37,34 +38,49 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
     );
 
     try {
-      Response forecastResponse = await tryLookupForecast(event.lookupData);
+      http.Client httpClient = http.Client();
 
-      if (forecastResponse.statusCode == 200) {
-        Forecast forecast =
-            Forecast.fromJson(jsonDecode(forecastResponse.body));
-
-        // TODO! premium
-        Response forecastDetailsResponse = await fetchDetailedForecast(
-          longitude: forecast.city!.coord!.lon!,
-          latitude: forecast.city!.coord!.lat!,
+      if (await hasConnectivity(
+        client: httpClient,
+        config: AppConfig.instance.config,
+      )) {
+        http.Response forecastResponse = await tryLookupForecast(
+          client: httpClient,
+          lookupData: event.lookupData,
         );
 
-        if (forecastDetailsResponse.statusCode == 200) {
-          forecast = forecast.copyWith(
-              details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
-                  jsonDecode(forecastDetailsResponse.body))));
+        if (forecastResponse.statusCode == 200) {
+          Forecast forecast =
+              Forecast.fromJson(jsonDecode(forecastResponse.body));
+
+          // TODO! premium
+          http.Response forecastDetailsResponse = await fetchDetailedForecast(
+            client: httpClient,
+            longitude: forecast.city!.coord!.lon!,
+            latitude: forecast.city!.coord!.lat!,
+          );
+
+          if (forecastDetailsResponse.statusCode == 200) {
+            forecast = forecast.copyWith(
+                details: Nullable<ForecastDetails?>(ForecastDetails.fromJson(
+                    jsonDecode(forecastDetailsResponse.body))));
+          }
+
+          yield state.copyWith(
+            cityName: Nullable<String?>(event.lookupData['cityName']),
+            postalCode: Nullable<String?>(event.lookupData['postalCode']),
+            countryCode: Nullable<String?>(event.lookupData['countryCode']),
+            lookupForecast: Nullable<Forecast>(forecast),
+            status: Nullable<LookupStatus>(LookupStatus.forecastFound),
+          );
+        } else {
+          yield state.copyWith(
+            status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+          );
         }
-
-        yield state.copyWith(
-          cityName: Nullable<String?>(event.lookupData['cityName']),
-          postalCode: Nullable<String?>(event.lookupData['postalCode']),
-          countryCode: Nullable<String?>(event.lookupData['countryCode']),
-          lookupForecast: Nullable<Forecast>(forecast),
-          status: Nullable<LookupStatus>(LookupStatus.forecastFound),
-        );
       } else {
         yield state.copyWith(
-          status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+          status: Nullable<LookupStatus>(LookupStatus.forecastConnectivity),
         );
       }
     } on Exception catch (exception, stackTrace) {

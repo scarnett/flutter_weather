@@ -9,6 +9,7 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
@@ -169,7 +170,11 @@ class _ForecastFormViewState extends State<ForecastPageView> {
     FormBlocFailure<String, String> state,
   ) {
     closeKeyboard(context);
-    showSnackbar(context, state.failureResponse!);
+    showSnackbar(
+      context,
+      state.failureResponse!,
+      messageType: MessageType.danger,
+    );
   }
 
   void _onPageChange(

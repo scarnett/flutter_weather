@@ -73,19 +73,18 @@ jobs:
       - name: 'Flutter clean'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter clean'
-      
+
       - name: 'Flutter analyze'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
         run: 'flutter analyze .'
-      
+
       # - name: 'Flutter format'
       #   working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
       #   run: 'flutter format .'
 
-      # TODO! re-enable
-      # - name: 'Flutter test'
-      #   working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-      #   run: 'flutter test'
+      - name: 'Flutter test'
+        working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
+        run: 'flutter test'
 
   buildAndroid:
     name: 'Build Android'
