@@ -33,9 +33,8 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Crashlytics
-  if (kDebugMode) {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
+  await FirebaseCrashlytics.instance
+      .setCrashlyticsCollectionEnabled(!kDebugMode);
 
   // Remote configuration
   final FirebaseRemoteConfigService remoteConfig =
@@ -61,7 +60,10 @@ Future<void> main() async {
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    // await FirebaseCrashlytics.instance.recordError(details.exception, details.stack);
+    await FirebaseCrashlytics.instance.recordError(
+      details.exceptionAsString(),
+      details.stack,
+    );
 
     if (!appConfig.config.sentryDsn.isNullOrEmpty()) {
       await Sentry.captureException(
