@@ -18,10 +18,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(
   RemoteMessage message,
-) async {
-  await Firebase.initializeApp();
-  // TODO!
-}
+) async =>
+    await Firebase.initializeApp();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +31,7 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Crashlytics
-  await FirebaseCrashlytics.instance
-      .setCrashlyticsCollectionEnabled(!kDebugMode);
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   // Remote configuration
   final FirebaseRemoteConfigService remoteConfig =

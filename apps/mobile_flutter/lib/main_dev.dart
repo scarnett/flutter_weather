@@ -18,10 +18,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(
   RemoteMessage message,
-) async {
-  await Firebase.initializeApp();
-  // TODO!
-}
+) async =>
+    await Firebase.initializeApp();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
