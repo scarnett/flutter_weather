@@ -26,10 +26,12 @@ class ForecastVisibility extends StatelessWidget {
           children: [
             ForecastMetaInfo(
               label: AppLocalizations.of(context)!.visibility,
-              value: getDistance(
-                details.current!.visibility,
-                context.read<AppBloc>().state.units.distance,
-              ).toString(),
+              value: (details.current == null)
+                  ? '0'
+                  : getDistance(
+                      details.current!.visibility,
+                      context.read<AppBloc>().state.units.distance,
+                    ).toString(),
               unit:
                   context.read<AppBloc>().state.units.distance.getText(context),
             ),

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
@@ -11,16 +11,15 @@ import 'package:flutter_weather/app/bloc/app_bloc_observer.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(
   RemoteMessage message,
-) async {
-  await Firebase.initializeApp();
-  // TODO!
-}
+) async =>
+    await Firebase.initializeApp();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,9 +31,7 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Crashlytics
-  if (kDebugMode) {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   // Remote configuration
   final FirebaseRemoteConfigService remoteConfig =
@@ -51,48 +48,35 @@ Future<void> main() async {
   // Preferences
   await AppPrefs().init();
 
+  // PROD Environment Specific Configuration
+  AppConfig appConfig = AppConfig(
+    flavor: Flavor.prod,
+    config: Config.fromRemoteConfig(remoteConfig.data),
+    child: WeatherApp(),
+  );
+
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    if (!remoteConfig.sentryDsn.isNullOrEmpty()) {
+    await FirebaseCrashlytics.instance.recordFlutterError(details);
+
+    if (!appConfig.config.sentryDsn.isNullOrEmpty()) {
       await Sentry.captureException(
-        details.exception,
-        stackTrace: details.stack,
+        details.exceptionAsString(),
+        stackTrace: details.stack.toString(),
       );
     }
   };
 
-  // PROD Environment Specific Configuration
-  AppConfig config = AppConfig(
-    flavor: Flavor.prod,
-    appVersion: remoteConfig.appVersion,
-    appBuild: remoteConfig.appBuild,
-    appPushNotificationsSave: remoteConfig.appPushNotificationsSave,
-    appPushNotificationsRemove: remoteConfig.appPushNotificationsRemove,
-    openWeatherMapApiKey: remoteConfig.openWeatherMapApiKey,
-    openWeatherMapApiUri: remoteConfig.openWeatherMapApiUri,
-    openWeatherMapApiDailyForecastPath:
-        remoteConfig.openWeatherMapApiDailyForecastPath,
-    openWeatherMapApiOneCallPath: remoteConfig.openWeatherMapApiOneCallPath,
-    refreshTimeout: remoteConfig.refreshTimeout,
-    defaultCountryCode: remoteConfig.defaultCountryCode,
-    supportedLocales: remoteConfig.supportedLocales,
-    privacyPolicyUrl: remoteConfig.privacyPolicyUrl,
-    githubUrl: remoteConfig.githubUrl,
-    sentryDsn: remoteConfig.sentryDsn,
-    child: WeatherApp(),
-  );
-
-  if (remoteConfig.sentryDsn.isNullOrEmpty()) {
-    runApp(config);
+  if (appConfig.config.sentryDsn.isNullOrEmpty()) {
+    runApp(appConfig);
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
-        ..dsn = remoteConfig.sentryDsn
+        ..diagnosticLevel = SentryLevel.fatal
+        ..dsn = appConfig.config.sentryDsn
         ..environment = 'prod'
         ..useNativeBreadcrumbTracking(),
-      appRunner: () {
-        runApp(config);
-      },
+      appRunner: () => runApp(appConfig),
     );
   }
 }

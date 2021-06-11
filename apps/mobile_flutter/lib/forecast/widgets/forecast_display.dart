@@ -74,10 +74,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             ForecastCondition(currentDay: currentDay),
             ForecastHiLo(currentDay: currentDay),
             ForecastDayScroller(forecast: widget.forecast),
-            ForecastMeta(
-              details: widget.forecast.details!,
-              currentDay: currentDay,
-            ),
+            if ((widget.forecast.details != null) &&
+                (widget.forecast.details!.current != null))
+              ForecastMeta(
+                details: widget.forecast.details!,
+                currentDay: currentDay,
+              ),
           ]..addAll(_buildDetailDisplay()),
         ),
       );
@@ -161,10 +163,12 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
         children: <Widget>[
           ForecastCondition(currentDay: currentDay),
           ForecastHiLo(currentDay: currentDay),
-          ForecastMeta(
-            details: widget.forecast.details!,
-            currentDay: currentDay,
-          ),
+          if ((widget.forecast.details != null) &&
+              (widget.forecast.details!.current != null))
+            ForecastMeta(
+              details: widget.forecast.details!,
+              currentDay: currentDay,
+            ),
         ],
       );
 
@@ -176,7 +180,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             if (_scrollController.offset == 0.0) {
               _scrollController.animateTo(
                 _headerHeight,
-                duration: Duration(milliseconds: 150),
+                duration: const Duration(milliseconds: 150),
                 curve: Curves.linear,
               );
 
@@ -221,7 +225,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
 
       Future.microtask(() => _scrollController.animateTo(
             snapOffset,
-            duration: Duration(milliseconds: 250),
+            duration: const Duration(milliseconds: 250),
             curve: Curves.easeIn,
           ));
 

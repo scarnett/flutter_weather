@@ -24,10 +24,12 @@ class ForecastUVIndex extends StatelessWidget {
           children: [
             ForecastMetaInfo(
               label: AppLocalizations.of(context)!.uvIndex,
-              value: details.current!.uvi!
-                  .toDouble()
-                  .formatDecimal(decimals: 1)
-                  .toString(),
+              value: (details.current == null)
+                  ? '0'
+                  : details.current!.uvi!
+                      .toDouble()
+                      .formatDecimal(decimals: 1)
+                      .toString(),
               unit: '', // TODO!
             ),
             SizedBox(

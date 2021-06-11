@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
-Future<Response?> savePushNotification({
+Future<http.Response?> pushNotificationSave({
   required String? deviceId,
   UpdatePeriod? period,
   PushNotification? pushNotification,
@@ -17,8 +17,8 @@ Future<Response?> savePushNotification({
     return null;
   }
 
-  return post(
-    Uri.parse(AppConfig.instance.appPushNotificationsSave!),
+  return http.post(
+    Uri.parse(AppConfig.instance.config.appPushNotificationsSave),
     body: {
       'device': deviceId,
       'period': (period == null) ? null : period.getInfo()!['id'],
@@ -33,15 +33,15 @@ Future<Response?> savePushNotification({
   );
 }
 
-Future<Response?> removePushNotification({
+Future<http.Response?> pushNotificationRemove({
   required String? deviceId,
 }) async {
   if (deviceId == null) {
     return null;
   }
 
-  return post(
-    Uri.parse(AppConfig.instance.appPushNotificationsRemove!),
+  return http.post(
+    Uri.parse(AppConfig.instance.config.appPushNotificationsRemove),
     body: {
       'device': deviceId,
     },

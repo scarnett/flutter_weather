@@ -1,6 +1,7 @@
 export 'chart_utils.dart';
 export 'color_utils.dart';
 export 'common_utils.dart';
+export 'connectivity_utils.dart';
 export 'date_utils.dart';
 export 'device_utils.dart';
 export 'fab_utils.dart';
