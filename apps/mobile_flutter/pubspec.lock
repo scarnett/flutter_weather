@@ -105,7 +105,7 @@ packages:
       name: built_collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "5.1.0"
   built_value:
     dependency: transitive
     description:
@@ -161,14 +161,14 @@ packages:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.1"
+    version: "5.1.2"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   code_builder:
     dependency: transitive
     description:
@@ -389,9 +389,11 @@ packages:
   fl_chart:
     dependency: "direct main"
     description:
-      name: fl_chart
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "730cf51f5ed5f5a92fd427f52639cd4fdf0c42a2"
+      url: "https://github.com/WxqKb/fl_chart"
+    source: git
     version: "0.36.1"
   flutter:
     dependency: "direct main"
@@ -510,7 +512,7 @@ packages:
       name: geolocator_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   geolocator_web:
     dependency: transitive
     description:
@@ -795,7 +797,7 @@ packages:
       name: permission_handler_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.1"
+    version: "3.6.0"
   petitparser:
     dependency: transitive
     description:
