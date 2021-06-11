@@ -111,10 +111,11 @@ Color getTooltipColor({
 }
 
 Color getTextColor({
+  required double temperature,
   required bool colorTheme,
 }) {
   if (colorTheme) {
-    return AppTheme.secondaryColor;
+    return getTemperatureColor(temperature);
   }
 
   return Colors.white;
@@ -292,7 +293,10 @@ LineTouchTooltipData getLineTooltipData({
                     temperatureUnit,
                   ),
                   Theme.of(context).textTheme.headline6!.copyWith(
-                        color: getTextColor(colorTheme: colorTheme),
+                        color: getTextColor(
+                          temperature: lineBarSpot.y,
+                          colorTheme: colorTheme,
+                        ),
                         height: 1.0,
                       ),
                 ),
@@ -320,7 +324,10 @@ BarTouchTooltipData getBarTooltipData({
           temperatureUnit,
         ),
         Theme.of(context).textTheme.headline6!.copyWith(
-              color: getTextColor(colorTheme: colorTheme),
+              color: getTextColor(
+                temperature: rod.y,
+                colorTheme: colorTheme,
+              ),
               height: 1.0,
             ),
       ),
