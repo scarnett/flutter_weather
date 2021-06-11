@@ -64,12 +64,12 @@ Future<void> main() async {
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
     if (appConfig.config.sentryDsn.isNullOrEmpty()) {
-      print(details.exception);
-      print(details.stack);
+      print(details.exceptionAsString());
+      print(details.stack.toString());
     } else {
       await Sentry.captureException(
-        details.exception,
-        stackTrace: details.stack,
+        details.exceptionAsString(),
+        stackTrace: details.stack.toString(),
       );
     }
   };
@@ -82,9 +82,7 @@ Future<void> main() async {
         ..diagnosticLevel = SentryLevel.debug
         ..dsn = appConfig.config.sentryDsn
         ..environment = 'dev',
-      appRunner: () {
-        runApp(appConfig);
-      },
+      appRunner: () => runApp(appConfig),
     );
   }
 }

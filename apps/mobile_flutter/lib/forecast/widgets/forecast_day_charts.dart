@@ -84,7 +84,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
                     : const NeverScrollableScrollPhysics(),
                 clipBehavior: Clip.none,
                 children: [
-                  _buildLineChart(context),
+                  _buildLineChart(),
                   _buildBarChart(),
                 ],
               ),
@@ -132,9 +132,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
         ),
       );
 
-  Widget _buildLineChart(
-    BuildContext context,
-  ) {
+  Widget _buildLineChart() {
     AppState state = context.read<AppBloc>().state;
     List<LineChartBarData> lineBarsData = getLineBarsData(state);
 
@@ -161,18 +159,15 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             show: true,
             horizontalInterval: 1.0,
             drawHorizontalLine: true,
+            checkToShowHorizontalLine: (double value) => (value % 5) == 0,
             getDrawingHorizontalLine: (double value) {
-              if ((value % 5) == 0) {
-                return FlLine(
-                  color: getGridBorderColor(
-                    themeMode: state.themeMode,
-                    colorTheme: state.colorTheme,
-                  ),
-                  strokeWidth: 1.0,
-                );
-              }
-
-              return FlLine(color: Colors.transparent);
+              return FlLine(
+                color: getGridBorderColor(
+                  themeMode: state.themeMode,
+                  colorTheme: state.colorTheme,
+                ),
+                strokeWidth: 1.0,
+              );
             },
             drawVerticalLine: true,
             getDrawingVerticalLine: (double value) => FlLine(
@@ -278,18 +273,15 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             show: true,
             horizontalInterval: 1.0,
             drawHorizontalLine: true,
+            checkToShowHorizontalLine: (double value) => (value % 5) == 0,
             getDrawingHorizontalLine: (double value) {
-              if ((value % 5) == 0) {
-                return FlLine(
-                  color: getGridBorderColor(
-                    themeMode: state.themeMode,
-                    colorTheme: state.colorTheme,
-                  ),
-                  strokeWidth: 1.0,
-                );
-              }
-
-              return FlLine(color: Colors.transparent);
+              return FlLine(
+                color: getGridBorderColor(
+                  themeMode: state.themeMode,
+                  colorTheme: state.colorTheme,
+                ),
+                strokeWidth: 1.0,
+              );
             },
           ),
           groupsSpace: 15.0,

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
@@ -61,10 +61,12 @@ Future<void> main() async {
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
+    // await FirebaseCrashlytics.instance.recordError(details.exception, details.stack);
+
     if (!appConfig.config.sentryDsn.isNullOrEmpty()) {
       await Sentry.captureException(
-        details.exception,
-        stackTrace: details.stack,
+        details.exceptionAsString(),
+        stackTrace: details.stack.toString(),
       );
     }
   };
@@ -78,9 +80,7 @@ Future<void> main() async {
         ..dsn = appConfig.config.sentryDsn
         ..environment = 'prod'
         ..useNativeBreadcrumbTracking(),
-      appRunner: () {
-        runApp(appConfig);
-      },
+      appRunner: () => runApp(appConfig),
     );
   }
 }
