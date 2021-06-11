@@ -57,10 +57,7 @@ Future<void> main() async {
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {
-    await FirebaseCrashlytics.instance.recordError(
-      details.exceptionAsString(),
-      details.stack,
-    );
+    await FirebaseCrashlytics.instance.recordFlutterError(details);
 
     if (!appConfig.config.sentryDsn.isNullOrEmpty()) {
       await Sentry.captureException(
