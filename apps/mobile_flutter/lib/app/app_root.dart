@@ -8,6 +8,7 @@ import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
+import 'package:flutter_weather/premium/premium.dart';
 
 class WeatherApp extends StatelessWidget {
   WeatherApp({
@@ -79,7 +80,7 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
               FallbackCupertinoLocalisationsDelegate(),
             ],
             navigatorKey: _navigatorKey,
-            home: ForecastView(),
+            home: PremiumOverlayView(child: ForecastView()),
           ),
         ),
       );
