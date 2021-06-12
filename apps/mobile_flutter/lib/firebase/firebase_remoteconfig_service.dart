@@ -28,12 +28,14 @@ class FirebaseRemoteConfigService {
     final RemoteConfig initialRemoteConfig = RemoteConfig.instance;
 
     await initialRemoteConfig.setConfigSettings(RemoteConfigSettings(
-      fetchTimeout: const Duration(minutes: 1),
+      fetchTimeout: const Duration(seconds: 10),
       minimumFetchInterval: const Duration(hours: 1),
     ));
 
+    await initialRemoteConfig.setDefaults(defaults);
     await initialRemoteConfig.fetch();
     _remoteConfig = initialRemoteConfig;
+
     bool fetchActivated = await _remoteConfig.activate();
     print('[FirebaseRemoteConfig] Fetched: $fetchActivated');
 
@@ -42,4 +44,12 @@ class FirebaseRemoteConfigService {
   }
 
   Map<String, RemoteConfigValue> get data => _remoteConfig.getAll();
+
+  Map<String, dynamic> get defaults => {
+        'app_version': '1.0.0',
+        'app_build': '1',
+        'refresh_timeout': 300000,
+        'default_country_code': 'us',
+        'supported_locales': 'en',
+      };
 }
