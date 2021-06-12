@@ -60,8 +60,8 @@ class _ForecastIconState extends State<PremiumStar>
           BuildContext context,
           Widget? _widget,
         ) =>
-            Transform.rotate(
-          angle: (_rotateController.value * widget.speed),
+            RotationTransition(
+          turns: Tween(begin: 0.0, end: 1.0).animate(_rotateController),
           child: _widget,
         ),
       );
@@ -69,7 +69,7 @@ class _ForecastIconState extends State<PremiumStar>
   void _initialize() {
     _rotateController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 20),
+      duration: const Duration(seconds: 20),
     );
 
     _sizeController = AnimationController(
