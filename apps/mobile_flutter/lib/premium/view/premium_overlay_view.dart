@@ -103,7 +103,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                 child: AnimatedContainer(
                   color: Theme.of(context)
                       .scaffoldBackgroundColor
-                      .withOpacity(0.7), // TODO! color mode
+                      .withOpacity(0.9), // TODO! color mode
                   height: context.read<AppBloc>().state.showPremiumInfo
                       ? MediaQuery.of(context).size.height
                       : 0.0,
@@ -154,7 +154,10 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
                       'GET ALL PREMIUM FEATURES', // TODO!
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -169,7 +172,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2!
-                          .copyWith(height: 1.5),
+                          .copyWith(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -202,8 +205,8 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                       '\$1.00 per year', // TODO!
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText2!
-                          .copyWith(fontSize: 10.0),
+                          .subtitle2!
+                          .copyWith(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -224,7 +227,8 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                     stops: [0.0, 1.0],
                   ),
                 ),
-                height: (widget.curveHeight - _overlayCurveAnimation.value),
+                height: ((widget.curveHeight * 6) -
+                    (_overlayCurveAnimation.value * 6)),
               ),
             ),
           ],
