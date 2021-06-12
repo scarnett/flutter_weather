@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/premium/view/premium_view.dart';
 import 'package:flutter_weather/premium/widgets/premium_star.dart';
 
 class AppPremiumTrigger extends StatefulWidget {
@@ -37,5 +36,6 @@ class _AppPremiumTrigger extends State<AppPremiumTrigger> {
         ),
       );
 
-  void _tapPremium() => Navigator.push(context, PremiumView.route());
+  void _tapPremium() => context.read<AppBloc>().add(
+      SetShowPremiumInfo(true)); // Navigator.push(context, PremiumView.route())
 }

@@ -268,3 +268,14 @@ class StreamConnectivityResult extends AppEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SetShowPremiumInfo extends AppEvent {
+  final bool? showPremiumInfo;
+
+  const SetShowPremiumInfo(
+    this.showPremiumInfo,
+  );
+
+  @override
+  List<Object?> get props => [showPremiumInfo];
+}

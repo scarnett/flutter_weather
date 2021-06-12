@@ -84,6 +84,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapStreamConnectivityResultToState(event);
     } else if (event is SetConnectivityResult) {
       yield _mapSetConnectivityResultToState(event);
+    } else if (event is SetShowPremiumInfo) {
+      yield _mapSetShowPremiumInfoToStates(event);
     }
   }
 
@@ -542,6 +544,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           Nullable<ConnectivityResult?>(event.connectivityResult),
     );
   }
+
+  AppState _mapSetShowPremiumInfoToStates(
+    SetShowPremiumInfo event,
+  ) =>
+      state.copyWith(
+        showPremiumInfo: event.showPremiumInfo,
+      );
 
   Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
     if ((pushNotification != null) &&

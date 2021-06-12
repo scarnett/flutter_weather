@@ -27,7 +27,7 @@ class AppLocalizations {
   String get premium => addMessage('$appTitle Premium');
   String get application => addMessage('Application');
   String get settings => addMessage('Settings');
-  String get upgrade => addMessage('Upgrade');
+  String get premiumFeatures => addMessage('Premium Features');
   String get buildInformation => addMessage('Build Information');
   String get about => addMessage('About');
   String get privacyPolicy => addMessage('Privacy Policy');
