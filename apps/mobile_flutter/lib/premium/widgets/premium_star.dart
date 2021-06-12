@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +25,7 @@ class _ForecastIconState extends State<PremiumStar>
   late AnimationController _rotateController;
   late AnimationController _sizeController;
   late Tween<double> _sizeTween;
+  late Timer _sizeTimer;
 
   @override
   void initState() {
@@ -34,6 +37,7 @@ class _ForecastIconState extends State<PremiumStar>
   void dispose() {
     _rotateController.dispose();
     _sizeController.dispose();
+    _sizeTimer.cancel();
     super.dispose();
   }
 
@@ -76,16 +80,13 @@ class _ForecastIconState extends State<PremiumStar>
       duration: const Duration(seconds: 2),
       vsync: this,
       value: 1.0,
-    )..addStatusListener((AnimationStatus status) {
-        if (status == AnimationStatus.completed) {
-          Future.delayed(
-            Duration(seconds: 10),
-            () => _sizeController.forward(from: 0.0),
-          );
-        }
-      });
+    );
 
     _sizeTween = Tween(begin: widget.pulseSize, end: 1.0);
+    _sizeTimer = Timer.periodic(
+      const Duration(seconds: 10),
+      (Timer timer) => _sizeController.forward(from: 0.0),
+    );
 
     _rotateController.repeat();
     _sizeController.forward();

@@ -8,8 +8,8 @@ import 'package:flutter_weather/premium/widgets/premium_clipper.dart';
 import 'package:flutter_weather/premium/widgets/premium_star.dart';
 
 class PremiumView extends StatelessWidget {
-  static Route route() =>
-      MaterialPageRoute<void>(builder: (_) => PremiumView());
+  // static Route route() =>
+  //     MaterialPageRoute<void>(builder: (_) => PremiumView());
 
   const PremiumView({
     Key? key,

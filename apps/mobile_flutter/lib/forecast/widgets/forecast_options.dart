@@ -9,9 +9,18 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/settings/view/view.dart';
 
-class ForecastOptions extends StatelessWidget {
+class ForecastOptions extends StatefulWidget {
   static final double height = 50.0;
 
+  ForecastOptions({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ForecastOptionsState();
+}
+
+class _ForecastOptionsState extends State<ForecastOptions> {
   @override
   Widget build(
     BuildContext context,
@@ -45,7 +54,7 @@ class ForecastOptions extends StatelessWidget {
     BuildContext context,
   ) =>
       Tooltip(
-        message: AppLocalizations.of(context)!.upgrade,
+        message: AppLocalizations.of(context)!.premiumFeatures,
         child: Material(
           type: MaterialType.transparency,
           child: Container(
