@@ -98,7 +98,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
               child: ClipPath(
                 clipper: PremiumClipper(curveHeight: 0.0),
                 child: AnimatedContainer(
-                  color: backdropColor,
+                  color: _backdropColor,
                   height: context.read<AppBloc>().state.showPremiumInfo
                       ? MediaQuery.of(context).size.height
                       : 0.0,
@@ -108,19 +108,29 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                 ),
               ),
             ),
-            ClipPath(
-              clipper:
-                  PremiumClipper(curveHeight: _overlayCurveAnimation.value),
-              child: AnimatedContainer(
-                color: AppTheme.primaryColor,
-                height: context.read<AppBloc>().state.showPremiumInfo
-                    ? widget.expandHeight
-                    : 0.0,
-                width: double.infinity,
-                duration: Duration(milliseconds: widget.expandSpeed),
-                curve: Curves.bounceOut,
-                child: _buildTopContent(),
-                clipBehavior: Clip.antiAlias,
+            CustomPaint(
+              painter: PremiumClipperShadowPainter(
+                clipper:
+                    PremiumClipper(curveHeight: _overlayCurveAnimation.value),
+                shadow: Shadow(
+                  color: _overlayShadowColor,
+                  offset: Offset(0.0, 10.0),
+                ),
+              ),
+              child: ClipPath(
+                clipper:
+                    PremiumClipper(curveHeight: _overlayCurveAnimation.value),
+                child: AnimatedContainer(
+                  color: AppTheme.primaryColor,
+                  height: context.read<AppBloc>().state.showPremiumInfo
+                      ? widget.expandHeight
+                      : 0.0,
+                  width: double.infinity,
+                  duration: Duration(milliseconds: widget.expandSpeed),
+                  curve: Curves.bounceOut,
+                  child: _buildTopContent(),
+                  clipBehavior: Clip.antiAlias,
+                ),
               ),
             ),
           ],
@@ -222,7 +232,8 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                     stops: [0.0, 1.0],
                   ),
                 ),
-                height: (widget.curveHeight - _overlayCurveAnimation.value),
+                height: ((widget.curveHeight / 2.0) -
+                    (_overlayCurveAnimation.value / 2.0)),
               ),
             ),
           ],
@@ -246,12 +257,21 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
     return Duration(milliseconds: speed);
   }
 
-  Color get backdropColor {
+  Color get _backdropColor {
     AppState state = context.read<AppBloc>().state;
     if (state.colorTheme) {
-      return Colors.black.withOpacity(0.9);
+      return Colors.black.withOpacity(0.75);
     }
 
     return Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9);
+  }
+
+  Color get _overlayShadowColor {
+    AppState state = context.read<AppBloc>().state;
+    if (state.colorTheme) {
+      return Colors.black.withOpacity(0.2);
+    }
+
+    return Colors.black.withOpacity(0.1);
   }
 }
