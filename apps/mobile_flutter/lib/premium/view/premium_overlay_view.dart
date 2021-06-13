@@ -14,7 +14,7 @@ class PremiumOverlayView extends StatefulWidget {
 
   PremiumOverlayView({
     required this.child,
-    this.expandHeight: 300.0,
+    this.expandHeight: 275.0,
     this.expandSpeed: 1250,
     this.curveHeight: 30.0,
     Key? key,
@@ -30,7 +30,6 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
 
   late AnimationController _overlayCurveTweenController;
   late Animation _overlayCurveAnimation;
-  late Animation _backdropCurveAnimation;
 
   @override
   void initState() {
@@ -43,22 +42,21 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
 
     _overlayCurveAnimation = Tween(begin: 0.0, end: widget.curveHeight)
         .animate(_overlayCurveTweenController);
-
-    _backdropCurveAnimation = Tween(begin: widget.curveHeight, end: 0.0)
-        .animate(_overlayCurveTweenController);
   }
 
   @override
   Widget build(
     BuildContext context,
   ) =>
-      BlocListener<AppBloc, AppState>(
-        listener: _blocListener,
-        child: Stack(
-          children: [
-            _buildChild(),
-            _buildContent(),
-          ],
+      Container(
+        child: BlocListener<AppBloc, AppState>(
+          listener: _blocListener,
+          child: Stack(
+            children: [
+              _buildChild(),
+              _buildContent(),
+            ],
+          ),
         ),
       );
 
@@ -98,12 +96,9 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
               onTap: () =>
                   context.read<AppBloc>().add(SetShowPremiumInfo(false)),
               child: ClipPath(
-                clipper:
-                    PremiumClipper(curveHeight: _backdropCurveAnimation.value),
+                clipper: PremiumClipper(curveHeight: 0.0),
                 child: AnimatedContainer(
-                  color: Theme.of(context)
-                      .scaffoldBackgroundColor
-                      .withOpacity(0.9), // TODO! color mode
+                  color: backdropColor,
                   height: context.read<AppBloc>().state.showPremiumInfo
                       ? MediaQuery.of(context).size.height
                       : 0.0,
@@ -227,8 +222,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                     stops: [0.0, 1.0],
                   ),
                 ),
-                height: ((widget.curveHeight * 6) -
-                    (_overlayCurveAnimation.value * 6)),
+                height: (widget.curveHeight - _overlayCurveAnimation.value),
               ),
             ),
           ],
@@ -250,5 +244,14 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
     }
 
     return Duration(milliseconds: speed);
+  }
+
+  Color get backdropColor {
+    AppState state = context.read<AppBloc>().state;
+    if (state.colorTheme) {
+      return Colors.black.withOpacity(0.9);
+    }
+
+    return Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9);
   }
 }

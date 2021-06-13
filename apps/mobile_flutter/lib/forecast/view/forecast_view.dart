@@ -289,10 +289,15 @@ class _ForecastPageViewState extends State<ForecastView>
                   AlwaysStoppedAnimation(_forecastColorValue),
                 );
 
-          Color _forecastDarkenedColor = _forecastColor!.darken(0.25);
+          Color _forecastDarkenedColor = state.showPremiumInfo
+              ? _forecastColor!
+              : _forecastColor!.darken(0.25);
 
           return AppUiOverlayStyle(
-            systemNavigationBarColor: _forecastDarkenedColor,
+            systemNavigationBarColorOpacity:
+                state.showPremiumInfo ? 0.01 : 0.925,
+            systemNavigationBarColor:
+                state.showPremiumInfo ? Colors.black : _forecastDarkenedColor,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: _forecastColor,

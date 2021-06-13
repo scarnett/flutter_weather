@@ -80,7 +80,9 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
               FallbackCupertinoLocalisationsDelegate(),
             ],
             navigatorKey: _navigatorKey,
-            home: PremiumOverlayView(child: ForecastView()),
+            home: PremiumOverlayView(
+              child: ForecastView(),
+            ),
           ),
         ),
       );
