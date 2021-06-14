@@ -54,7 +54,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
     BuildContext context,
   ) =>
       Tooltip(
-        message: AppLocalizations.of(context)!.premiumFeatures,
+        message: AppLocalizations.of(context)!.premium,
         child: Material(
           type: MaterialType.transparency,
           child: Container(

@@ -106,7 +106,7 @@ num getTemperature(
 
     case TemperatureUnit.kelvin:
     default:
-      return temperature.toDouble().formatDecimal();
+      return double.parse(temperature.toDouble().formatDecimal());
   }
 }
 
@@ -178,10 +178,11 @@ num getWindSpeed(
 
   switch (unit) {
     case WindSpeedUnit.kmh:
-      return (windSpeed * 1.609344).formatDecimal(decimals: 1);
+      return double.parse((windSpeed * 1.609344).formatDecimal(decimals: 1));
 
     case WindSpeedUnit.ms:
-      return (windSpeed / 2.2369362920544).formatDecimal(decimals: 1);
+      return double.parse(
+          (windSpeed / 2.2369362920544).formatDecimal(decimals: 1));
 
     case WindSpeedUnit.mph:
     default:
@@ -211,7 +212,8 @@ num getPressure(
 
   switch (unit) {
     case PressureUnit.inhg:
-      return (pressure / 33.863886666667).formatDecimal(decimals: 2);
+      return double.parse(
+          (pressure / 33.863886666667).formatDecimal(decimals: 2));
 
     case PressureUnit.hpa:
     default:
@@ -229,11 +231,11 @@ num getDistance(
 
   switch (unit) {
     case DistanceUnit.km:
-      return (distance * 0.001).formatDecimal(decimals: 2);
+      return double.parse((distance * 0.001).formatDecimal(decimals: 2));
 
     case DistanceUnit.mi:
     default:
-      return (distance * 0.00062137).formatDecimal(decimals: 2);
+      return double.parse((distance * 0.00062137).formatDecimal(decimals: 2));
   }
 }
 

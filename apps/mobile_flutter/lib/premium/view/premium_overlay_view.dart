@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
+import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/premium/premium.dart';
 import 'package:flutter_weather/premium/widgets/premium_clipper.dart';
 
@@ -156,9 +158,9 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                 alignment: WrapAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
+                    padding: const EdgeInsets.only(bottom: 10.0),
                     child: Text(
-                      'GET ALL PREMIUM FEATURES', // TODO!
+                      AppLocalizations.of(context)!.premium,
                       style: Theme.of(context)
                           .textTheme
                           .headline4!
@@ -168,24 +170,27 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                      bottom: 20.0,
+                      bottom: 10.0,
                       left: 40.0,
                       right: 40.0,
                     ),
                     child: Text(
-                      'Refresh your forecasts anytime, get hourly and weekly forecasts, ad free and more...', // TODO!
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(color: Colors.white),
+                      AppLocalizations.of(context)!.premiumText,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            color: AppTheme.getFadedTextColor(colorTheme: true),
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  // TODO!
-                  FlatButton(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                  TextButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
                     ),
                     onPressed: () => null,
                     child: Row(
@@ -195,7 +200,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                         Padding(
                           padding: const EdgeInsets.only(left: 5.0),
                           child: Text(
-                            'Start Today!', // TODO!
+                            AppLocalizations.of(context)!.premiumSubscribe,
                             style: TextStyle(
                               color: AppTheme.primaryColor,
                             ),
@@ -207,11 +212,12 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                   Container(
                     width: double.infinity,
                     child: Text(
-                      '\$1.00 per year', // TODO!
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle2!
-                          .copyWith(color: Colors.white),
+                      AppLocalizations.of(context)!.getPremiumCost(
+                          (2.00).formatDecimal(decimals: 2)), // TODO!
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: AppTheme.getFadedTextColor(colorTheme: true),
+                            fontWeight: FontWeight.bold,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ),
