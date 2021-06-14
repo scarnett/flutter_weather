@@ -27,7 +27,7 @@ class AppLocalizations {
   String get premium => addMessage('$appTitle Premium');
   String get premiumSubscribe => addMessage('Subscribe Today');
   String get premiumText => addMessage(
-      'Refresh your forecasts anytime, get severe weather alerts, extended hour forecasts, \nad free, and more!');
+      'Refresh your forecasts anytime, severe weather alerts, extended hour forecasts, \nad free, and more!');
 
   String getPremiumCost(
     String cost,

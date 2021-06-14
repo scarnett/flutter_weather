@@ -123,7 +123,18 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                 clipper:
                     PremiumClipper(curveHeight: _overlayCurveAnimation.value),
                 child: AnimatedContainer(
-                  color: AppTheme.primaryColor,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppTheme.primaryColor.darken(0.1),
+                        AppTheme.primaryColor,
+                      ],
+                      stops: [0.0, 0.5],
+                    ),
+                  ),
                   height: context.read<AppBloc>().state.showPremiumInfo
                       ? widget.expandHeight
                       : 0.0,
@@ -142,86 +153,85 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
   Widget _buildTopContent() => SafeArea(
         child: Stack(
           children: [
-            AnimatedContainer(
-              duration: _getContentAnimateDuration(),
-              curve: Curves.easeOut,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(),
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-              ),
-              width: double.infinity,
-              height: context.read<AppBloc>().state.showPremiumInfo ? 400 : 0.0,
-              child: Wrap(
-                runAlignment: WrapAlignment.center,
-                alignment: WrapAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Text(
-                      AppLocalizations.of(context)!.premium,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4!
-                          .copyWith(color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 10.0,
-                      left: 40.0,
-                      right: 40.0,
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.premiumText,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            color: AppTheme.getFadedTextColor(colorTheme: true),
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
+            AnimatedOpacity(
+              opacity:
+                  context.read<AppBloc>().state.showPremiumInfo ? 1.0 : 0.0,
+              duration: _getContentFadeDuration(),
+              child: AnimatedContainer(
+                duration: _getContentAnimateDuration(),
+                curve: Curves.easeOut,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(),
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                ),
+                width: double.infinity,
+                height:
+                    context.read<AppBloc>().state.showPremiumInfo ? 400 : 0.0,
+                child: Wrap(
+                  runAlignment: WrapAlignment.center,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        AppLocalizations.of(context)!.premium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4!
+                            .copyWith(color: Colors.white),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    onPressed: () => null,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        PremiumStar(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: Text(
-                            AppLocalizations.of(context)!.premiumSubscribe,
-                            style: TextStyle(
-                              color: AppTheme.primaryColor,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10.0,
+                        left: 40.0,
+                        right: 40.0,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.premiumText,
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                              color:
+                                  AppTheme.getFadedTextColor(colorTheme: true),
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => null, // TODO!
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          PremiumStar(),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: Text(
+                              AppLocalizations.of(context)!.premiumSubscribe,
+                              style: TextStyle(
+                                color: AppTheme.primaryColor,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: Text(
-                      AppLocalizations.of(context)!.getPremiumCost(
-                          (2.00).formatDecimal(decimals: 2)), // TODO!
-                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                            color: AppTheme.getFadedTextColor(colorTheme: true),
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.center,
+                    Container(
+                      width: double.infinity,
+                      child: Text(
+                        AppLocalizations.of(context)!.getPremiumCost(
+                            (2.00).formatDecimal(decimals: 2)), // TODO!
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                              color:
+                                  AppTheme.getFadedTextColor(colorTheme: true),
+                              fontWeight: FontWeight.bold,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Align(
@@ -261,6 +271,11 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
     }
 
     return Duration(milliseconds: speed);
+  }
+
+  Duration _getContentFadeDuration() {
+    int speed = widget.expandSpeed;
+    return Duration(milliseconds: (speed / 1.5).round());
   }
 
   Color get _backdropColor {

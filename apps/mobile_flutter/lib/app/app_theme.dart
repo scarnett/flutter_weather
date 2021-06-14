@@ -144,6 +144,18 @@ ThemeData appLightThemeData = ThemeData(
   snackBarTheme: SnackBarThemeData(
     contentTextStyle: TextStyle(color: Colors.white),
   ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+      overlayColor: MaterialStateProperty.all<Color>(
+          AppTheme.primaryColor.withOpacity(0.2)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+      ),
+    ),
+  ),
 );
 
 ThemeData appColorThemeData = appLightThemeData.copyWith(
