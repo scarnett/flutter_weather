@@ -221,7 +221,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                       width: double.infinity,
                       child: Text(
                         AppLocalizations.of(context)!.getPremiumCost(
-                            (2.00).formatDecimal(decimals: 2)), // TODO!
+                            (2.00).formatDecimal(decimals: 2)), // TODO! cost
                         style: Theme.of(context).textTheme.subtitle2!.copyWith(
                               color:
                                   AppTheme.getFadedTextColor(colorTheme: true),

@@ -177,7 +177,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
 
   Widget _buildDayForecastsCircleIndicator({
     List<ForecastDay>? days,
-    int dayCount: 3, // TODO! parameter?
+    int dayCount: 3,
   }) {
     AppState state = context.read<AppBloc>().state;
     int pageCount = 0;
