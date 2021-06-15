@@ -66,7 +66,10 @@ class _ForecastHoursState extends State<ForecastHours> {
                   shrinkWrap: true,
                   controller: _listViewScrollController,
                   physics: _listViewScrollPhysics,
-                  children: _getHourTiles(),
+                  children: _getHourTiles()
+                    ..add(
+                      AppNativeAd(factoryId: 'listTile'),
+                    ),
                   padding: const EdgeInsets.all(0.0),
                 ),
               ),

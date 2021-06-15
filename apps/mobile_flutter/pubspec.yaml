@@ -33,6 +33,7 @@ dependencies:
       path: packages/flutter_form_bloc
   flutter_switch: '0.3.1'
   geolocator: '7.0.3'
+  google_mobile_ads: '0.13.0'
   http: '0.13.3'
   hydrated_bloc: '7.0.1'
   iso_countries: '2.0.1'

@@ -17,6 +17,7 @@ class Config extends Equatable {
   final String? privacyPolicyUrl;
   final String? githubUrl;
   final String? sentryDsn;
+  final String? adMobNativeUnitId;
 
   Config({
     required this.appVersion,
@@ -34,6 +35,7 @@ class Config extends Equatable {
     this.privacyPolicyUrl,
     this.githubUrl,
     this.sentryDsn,
+    this.adMobNativeUnitId,
   });
 
   factory Config.mock() => Config(
@@ -75,6 +77,7 @@ class Config extends Equatable {
         privacyPolicyUrl: values['privacy_policy_url']!.asString(),
         githubUrl: values['github_url']!.asString(),
         sentryDsn: values['sentry_dsn']!.asString(),
+        adMobNativeUnitId: values['admob_native_unit_id']!.asString(),
       );
 
   @override
@@ -94,6 +97,7 @@ class Config extends Equatable {
         privacyPolicyUrl,
         githubUrl,
         sentryDsn,
+        adMobNativeUnitId,
       ];
 
   @override
@@ -108,5 +112,6 @@ class Config extends Equatable {
       'openWeatherMapApiOneCallPath: $openWeatherMapApiOneCallPath, ' +
       'refreshTimeout: $refreshTimeout, defaultCountryCode: $defaultCountryCode ' +
       'supportedLocales: $supportedLocales, privacyPolicyUrl: $privacyPolicyUrl ' +
-      'githubUrl: $githubUrl, sentryDsn: $sentryDsn}';
+      'githubUrl: $githubUrl, sentryDsn: $sentryDsn, ' +
+      'adMobNativeUnitId: $adMobNativeUnitId}';
 }
