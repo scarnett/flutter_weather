@@ -356,7 +356,7 @@ class _ForecastPageViewState extends State<ForecastView>
         child: ForecastDisplay(
           forecastColor: forecastColor,
           forecastDarkenedColor: forecastDarkenedColor,
-          forecast: state.forecasts[position],
+          forecast: sortForecasts(state.forecasts)[position],
         ),
       );
     }
@@ -364,7 +364,7 @@ class _ForecastPageViewState extends State<ForecastView>
     return ForecastDisplay(
       forecastColor: forecastColor,
       forecastDarkenedColor: forecastDarkenedColor,
-      forecast: state.forecasts[position],
+      forecast: sortForecasts(state.forecasts)[position],
     );
   }
 

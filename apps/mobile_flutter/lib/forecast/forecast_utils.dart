@@ -512,3 +512,15 @@ void tapHourRange(
     }
   }
 }
+
+List<Forecast> sortForecasts(
+  List<Forecast> forecasts,
+) =>
+    forecasts
+      ..sort((forecast1, forecast2) {
+        if ((forecast1.created == null) || (forecast2.created == null)) {
+          return -1;
+        }
+
+        return forecast1.created!.compareTo(forecast2.created!);
+      });

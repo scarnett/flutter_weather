@@ -323,10 +323,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.creating),
     );
 
-    // TODO! sort
-    List<Forecast> forecasts =
+    List<Forecast> forecasts = sortForecasts(
         List<Forecast>.from(state.forecasts) // Clone the existing state list
-          ..add(event.forecast);
+          ..add(event.forecast));
 
     yield state.copyWith(
       forecasts: forecasts,

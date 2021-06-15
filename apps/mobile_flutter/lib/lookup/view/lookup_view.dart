@@ -225,13 +225,15 @@ class _LookupPageViewState extends State<LookupPageView> {
   }
 
   void _tapAddLocation() {
+    DateTime now = getNow();
     LookupState lookupState = context.read<LookupBloc>().state;
     Forecast forecast = lookupState.lookupForecast!.copyWith(
       id: Uuid().v4(),
       cityName: Nullable<String?>(lookupState.cityName),
       postalCode: Nullable<String?>(lookupState.postalCode),
       countryCode: Nullable<String?>(lookupState.countryCode),
-      lastUpdated: getNow(),
+      created: now,
+      lastUpdated: now,
     );
 
     context.read<AppBloc>().add(AddForecast(forecast));
