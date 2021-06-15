@@ -66,10 +66,7 @@ class _ForecastHoursState extends State<ForecastHours> {
                   shrinkWrap: true,
                   controller: _listViewScrollController,
                   physics: _listViewScrollPhysics,
-                  children: _getHourTiles()
-                    ..add(
-                      AppNativeAd(factoryId: 'listTile'),
-                    ),
+                  children: _getHourTiles(),
                   padding: const EdgeInsets.all(0.0),
                 ),
               ),
@@ -228,24 +225,23 @@ class _ForecastHoursState extends State<ForecastHours> {
           ),
         );
 
-        int hourCount = 0;
-
         // Add hour tiles
         for (ForecastHour hour in hours) {
-          Widget hourTile = ForecastHourTile(hour: hour);
+          tiles.add(ForecastHourTile(hour: hour));
+        }
 
-          if (((dayCount + 1) == _hourData.length) &&
-              ((hourCount + 1) == hours.length)) {
-            hourTile = Container(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
-              child: hourTile,
-            );
-          }
+        if (!context.read<AppBloc>().state.isPremium) {
+          tiles.add(AppNativeAd(factoryId: 'listTile'));
+        }
 
-          tiles.add(hourTile);
-          hourCount++;
+        // Pad the last tile
+        if (((dayCount + 1) == _hourData.length)) {
+          tiles[tiles.length - 1] = Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
+            child: tiles[tiles.length - 1],
+          );
         }
 
         dayCount++;
