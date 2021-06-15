@@ -79,16 +79,12 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
     }
   }
 
-  Widget _buildChild() {
-    if (context.read<AppBloc>().state.showPremiumInfo) {
-      return GestureDetector(
-        onTap: () => context.read<AppBloc>().add(SetShowPremiumInfo(false)),
+  Widget _buildChild() => GestureDetector(
+        onTap: context.read<AppBloc>().state.showPremiumInfo
+            ? () => context.read<AppBloc>().add(SetShowPremiumInfo(false))
+            : null,
         child: widget.child,
       );
-    }
-
-    return widget.child;
-  }
 
   Widget _buildContent() => AnimatedBuilder(
         animation: _overlayCurveTweenController,

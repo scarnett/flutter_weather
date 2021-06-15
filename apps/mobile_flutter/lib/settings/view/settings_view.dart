@@ -10,6 +10,7 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/premium/view/view.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/settings/widgets/widgets.dart';
 import 'package:package_info/package_info.dart';
@@ -26,7 +27,9 @@ class SettingsView extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      SettingsPageView();
+      PremiumOverlayView(
+        child: SettingsPageView(),
+      );
 }
 
 class SettingsPageView extends StatefulWidget {

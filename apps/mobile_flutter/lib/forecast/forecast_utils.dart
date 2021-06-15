@@ -490,3 +490,25 @@ String? formatHour({
 
   return null;
 }
+
+void tapHourRange(
+  AppBloc bloc,
+  HourRange? hourRange,
+) {
+  if (bloc.state.isPremium) {
+    bloc.add(SetHourRange(hourRange));
+  } else {
+    switch (hourRange) {
+      case HourRange.hours12:
+        bloc.add(SetHourRange(hourRange));
+        break;
+
+      case HourRange.hours24:
+      case HourRange.hours36:
+      case HourRange.hours48:
+      default:
+        bloc.add(SetShowPremiumInfo(true));
+        break;
+    }
+  }
+}

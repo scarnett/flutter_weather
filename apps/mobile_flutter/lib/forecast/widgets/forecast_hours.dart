@@ -256,7 +256,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     HourRange range,
   ) {
     _selectedHourRange = range.hours;
-    context.read<AppBloc>().add(SetHourRange(range));
+    tapHourRange(context.read<AppBloc>(), range);
     _buildDataMap(_selectedHourRange);
   }
 }
