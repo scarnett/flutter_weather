@@ -17,6 +17,7 @@ class AppState extends Equatable {
   final CRUDStatus? crudStatus;
   final ScrollDirection? scrollDirection;
   final ConnectivityResult? connectivityResult;
+  final bool isPremium;
   final bool showPremiumInfo;
 
   AppState({
@@ -35,6 +36,7 @@ class AppState extends Equatable {
     this.crudStatus,
     this.scrollDirection,
     this.connectivityResult,
+    this.isPremium: false,
     this.showPremiumInfo: false,
   });
 
@@ -54,6 +56,7 @@ class AppState extends Equatable {
     this.crudStatus,
     this.scrollDirection: ScrollDirection.idle,
     this.connectivityResult,
+    this.isPremium: false,
     this.showPremiumInfo: false,
   });
 
@@ -76,6 +79,7 @@ class AppState extends Equatable {
     Nullable<CRUDStatus?>? crudStatus,
     Nullable<ScrollDirection?>? scrollDirection,
     Nullable<ConnectivityResult?>? connectivityResult,
+    bool? isPremium,
     bool? showPremiumInfo,
   }) =>
       AppState._(
@@ -107,6 +111,7 @@ class AppState extends Equatable {
         connectivityResult: (connectivityResult == null)
             ? this.connectivityResult
             : connectivityResult.value,
+        isPremium: isPremium ?? this.isPremium,
         showPremiumInfo: showPremiumInfo ?? this.showPremiumInfo,
       );
 
@@ -127,6 +132,7 @@ class AppState extends Equatable {
         crudStatus,
         scrollDirection,
         connectivityResult,
+        isPremium,
         showPremiumInfo,
       ];
 
@@ -141,5 +147,5 @@ class AppState extends Equatable {
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus, scrollDirection: $scrollDirection, ' +
       'connectivityResult: $connectivityResult, ' +
-      'showPremiumInfo: $showPremiumInfo}';
+      'isPremium: $isPremium, showPremiumInfo: $showPremiumInfo}';
 }

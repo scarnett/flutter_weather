@@ -269,6 +269,17 @@ class StreamConnectivityResult extends AppEvent {
   List<Object?> get props => [];
 }
 
+class SetIsPremium extends AppEvent {
+  final bool? isPremium;
+
+  const SetIsPremium(
+    this.isPremium,
+  );
+
+  @override
+  List<Object?> get props => [isPremium];
+}
+
 class SetShowPremiumInfo extends AppEvent {
   final bool? showPremiumInfo;
 

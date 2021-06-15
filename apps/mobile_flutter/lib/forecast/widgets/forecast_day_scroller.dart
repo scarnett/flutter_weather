@@ -75,7 +75,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
   List<Widget> _buildDayForecasts(
     BuildContext context,
     List<ForecastDay> days, {
-    int count: 3, // TODO! parameter?
+    int count: 3,
   }) {
     int index = 0;
     List<Widget> forecasts = [];

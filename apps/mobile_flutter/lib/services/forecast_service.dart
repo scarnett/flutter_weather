@@ -26,7 +26,11 @@ Future<http.Response> fetchCurrentForecastByCoords({
 Future<http.Response> tryLookupForecast({
   required http.Client client,
   required Map<String, dynamic> lookupData,
+  required bool isPremium,
 }) async {
   Map<String, dynamic> params = buildLookupParams(lookupData);
-  return client.get(getDailyApiUri(params));
+  return client.get(getDailyApiUri(
+    params: params,
+    count: getDailyForecastCount(isPremium),
+  ));
 }

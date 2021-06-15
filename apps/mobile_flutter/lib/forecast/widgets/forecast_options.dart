@@ -37,7 +37,8 @@ class _ForecastOptionsState extends State<ForecastOptions> {
           children: <Widget>[
             _buildEditButton(context),
             ForecastRefresh(),
-            _buildPremiumButton(context),
+            if (!context.read<AppBloc>().state.isPremium)
+              _buildPremiumButton(context),
             Expanded(child: Container()),
             AppColorThemeToggle(
               callback: () => context.read<AppBloc>().add(ToggleColorTheme()),

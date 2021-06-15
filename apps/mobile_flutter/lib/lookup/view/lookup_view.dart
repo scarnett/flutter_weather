@@ -252,9 +252,11 @@ class _LookupPageViewState extends State<LookupPageView> {
           : country.countryCode;
     }
 
+    AppState appState = context.read<AppBloc>().state;
     context.read<LookupBloc>().add(LookupForecast(
           lookupData,
-          context.read<AppBloc>().state.units.temperature,
+          appState.units.temperature,
+          appState.isPremium,
         ));
   }
 

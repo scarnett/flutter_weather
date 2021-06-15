@@ -33,9 +33,9 @@ Uri getCurrentApiUri(
   );
 }
 
-Uri getDailyApiUri(
-  Map<String, dynamic> params, {
-  int count: 7, // TODO! premium
+Uri getDailyApiUri({
+  required Map<String, dynamic> params,
+  required int count,
 }) {
   if (!params.containsKey('cnt')) {
     params['cnt'] = count.toString();
@@ -49,6 +49,16 @@ Uri getDailyApiUri(
     params.cast<String, String>(),
   );
 }
+
+int getDailyForecastCount(
+  bool isPremium,
+) =>
+    isPremium ? 16 : 7;
+
+int getDailyChartPointCount(
+  bool isPremium,
+) =>
+    getDailyForecastCount(isPremium) + 1; // +1 to account for 'today'
 
 Map<String, dynamic> buildLookupParams(
   Map<String, dynamic> lookupData,
