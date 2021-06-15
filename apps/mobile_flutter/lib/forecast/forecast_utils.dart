@@ -500,10 +500,10 @@ void tapHourRange(
   } else {
     switch (hourRange) {
       case HourRange.hours12:
+      case HourRange.hours24:
         bloc.add(SetHourRange(hourRange));
         break;
 
-      case HourRange.hours24:
       case HourRange.hours36:
       case HourRange.hours48:
       default:
