@@ -60,6 +60,22 @@ class AppTheme {
     ThemeMode themeMode,
   ) =>
       (themeMode == ThemeMode.dark) ? Colors.grey[700] : Colors.grey[300];
+
+  static Color? getAdmobHeadlineColor(
+    ThemeMode themeMode, {
+    bool colorTheme: false,
+  }) =>
+      colorTheme
+          ? Colors.white
+          : (themeMode == ThemeMode.dark)
+              ? Colors.white
+              : Colors.grey[900];
+
+  static Color? getAdmobBodyColor(
+    ThemeMode themeMode, {
+    bool colorTheme: false,
+  }) =>
+      colorTheme ? Colors.white : Colors.grey[500];
 }
 
 ThemeMode getThemeMode(
