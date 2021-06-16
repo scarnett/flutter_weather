@@ -156,6 +156,7 @@ class AppLocalizations {
   String get hours24 => addMessage('24hr');
   String get hours36 => addMessage('36hr');
   String get hours48 => addMessage('48hr');
+  String get disableAds => addMessage('Disable Ads');
 
   String getFeelsLike(
     String temp,

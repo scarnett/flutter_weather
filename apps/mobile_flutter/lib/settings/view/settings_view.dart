@@ -185,10 +185,29 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               context.read<AppBloc>().state.hourRange.getText(context),
           onTapCallback: () => _setPageListIndex(4),
         ),
-      ],
+      ]..addAll(_buildAds()),
     );
 
     return widgets;
+  }
+
+  List<Widget> _buildAds() {
+    AppState state = context.read<AppBloc>().state;
+    if (state.isPremium) {
+      return [];
+    }
+
+    return [
+      Divider(),
+      SettingsOption(
+        pageController: _pageController!,
+        title: AppLocalizations.of(context)!.disableAds,
+        // trailing: PremiumStar(iconSize: 20.0),
+        onTapCallback: () =>
+            context.read<AppBloc>().add(SetShowPremiumInfo(true)),
+        returnIndex: null,
+      ),
+    ];
   }
 
   List<Widget> _buildAutoUpdatePeriodSection() {
