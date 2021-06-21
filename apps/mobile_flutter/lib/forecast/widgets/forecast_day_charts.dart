@@ -99,11 +99,12 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     AppState state,
   ) async {
     if (_chartTypeNotifier.value != state.chartType.index) {
-      setState(() async {
+      setState(() {
         _currentPage = state.chartType.index;
         _chartTypeNotifier.value = state.chartType.index;
-        await animatePage(_pageController, page: state.chartType.index);
       });
+
+      await animatePage(_pageController, page: state.chartType.index);
     }
   }
 
