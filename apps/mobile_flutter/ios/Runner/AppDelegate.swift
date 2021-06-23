@@ -10,8 +10,10 @@ import google_mobile_ads
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     FirebaseApp.configure()
-    // GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ kGADSimulatorID as! String ]
+
+    GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ kGADSimulatorID as! String ]
     GADMobileAds.sharedInstance().start(completionHandler: nil)
+
     GeneratedPluginRegistrant.register(with: self)
 
     let appListTileFactory = AppListTileNativeAdFactory()
