@@ -14,10 +14,10 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		CC067FBF25C887BC00833340 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC067FBE25C887BC00833340 /* GoogleService-Info.plist */; };
-		D276D5822682EF200098FE81 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D276D5812682EF200098FE81 /* main.m */; };
 		D28588C1268294DF00AA5972 /* ListTileNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D28588C0268294DE00AA5972 /* ListTileNativeAdView.xib */; };
 		D28588C4268295A500AA5972 /* AppNativeAdFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28588C2268295A500AA5972 /* AppNativeAdFactory.swift */; };
 		D28588C5268295A500AA5972 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28588C3268295A500AA5972 /* AppDelegate.swift */; };
+		D2935A572682F59200977403 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D2935A562682F59200977403 /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,11 +49,11 @@
 		A187826DA2B4CCFF820D872B /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		A6AFEEFD7CBF09886289B52E /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		CC067FBE25C887BC00833340 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		D276D5812682EF200098FE81 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../../../../.Trash/main.m; sourceTree = "<group>"; };
 		D28588C0268294DE00AA5972 /* ListTileNativeAdView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ListTileNativeAdView.xib; path = Runner/ListTileNativeAdView.xib; sourceTree = "<group>"; };
 		D28588C2268295A500AA5972 /* AppNativeAdFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNativeAdFactory.swift; sourceTree = "<group>"; };
 		D28588C3268295A500AA5972 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D28588C6268295B000AA5972 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
+		D2935A562682F59200977403 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D2DD1E822656D72D0054AECE /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		E86165EF0BDB3F2284A11BE3 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +122,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				D2935A562682F59200977403 /* main.m */,
 				D28588C6268295B000AA5972 /* Runner-Bridging-Header.h */,
 				D28588C3268295A500AA5972 /* AppDelegate.swift */,
 				D28588C2268295A500AA5972 /* AppNativeAdFactory.swift */,
@@ -141,7 +142,6 @@
 		97C146F11CF9000F007C117D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				D276D5812682EF200098FE81 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -315,7 +315,7 @@
 			files = (
 				D28588C5268295A500AA5972 /* AppDelegate.swift in Sources */,
 				D28588C4268295A500AA5972 /* AppNativeAdFactory.swift in Sources */,
-				D276D5822682EF200098FE81 /* main.m in Sources */,
+				D2935A572682F59200977403 /* main.m in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
