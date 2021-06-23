@@ -56,7 +56,7 @@ extension ForecastExtension on Forecast {
       return this.details!.daily!;
     }
 
-    return this.details!.daily!.sublist(0, (maxTemps - 1)).toList();
+    return this.details!.daily!.sublist(0, maxTemps).toList();
   }
 
   ForecastDaily getDayHighMax({
