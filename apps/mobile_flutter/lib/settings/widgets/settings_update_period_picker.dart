@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 
@@ -86,7 +85,7 @@ class _SettingsUpdatePeriodPickerState
                     color: _getPeriodColor(period),
                   ),
             ),
-            onTap: () => _tapPeriod(period),
+            onTap: () => _tapPeriod(context.read<AppBloc>(), period),
           );
         },
         separatorBuilder: (context, index) => Divider(),
@@ -94,13 +93,33 @@ class _SettingsUpdatePeriodPickerState
       );
 
   void _tapPeriod(
-    UpdatePeriod period,
-  ) async {
-    closeKeyboard(context);
-    context.read<AppBloc>().add(SetUpdatePeriod(
-          context: context,
-          updatePeriod: period,
-        ));
+    AppBloc bloc,
+    UpdatePeriod? period,
+  ) {
+    if (bloc.state.isPremium) {
+      bloc.add(SetUpdatePeriod(
+        context: context,
+        updatePeriod: period,
+      ));
+    } else {
+      switch (period) {
+        case UpdatePeriod.hour3:
+        case UpdatePeriod.hour4:
+        case UpdatePeriod.hour5:
+          bloc.add(SetUpdatePeriod(
+            context: context,
+            updatePeriod: period,
+          ));
+
+          break;
+
+        case UpdatePeriod.hour1:
+        case UpdatePeriod.hour2:
+        default:
+          bloc.add(SetShowPremiumInfo(true));
+          break;
+      }
+    }
   }
 
   Color? _getPeriodColor(

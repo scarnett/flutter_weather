@@ -228,7 +228,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               height: 16.0,
               child: Switch(
                 onChanged: (bool value) async => await _tapUpdatePeriod(
-                  value ? UpdatePeriod.hour2 : null,
+                  value ? UpdatePeriod.hour4 : null,
                   redirect: false,
                 ),
                 value: (updatePeriod != null),
