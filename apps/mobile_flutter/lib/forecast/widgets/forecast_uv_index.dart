@@ -26,7 +26,7 @@ class ForecastUVIndex extends StatelessWidget {
               label: AppLocalizations.of(context)!.uvIndex,
               value: (details.current == null)
                   ? '0'
-                  : details.current!.uvi!
+                  : (details.current!.uvi ?? 0)
                       .toDouble()
                       .formatDecimal(decimals: 1)
                       .toString(),
