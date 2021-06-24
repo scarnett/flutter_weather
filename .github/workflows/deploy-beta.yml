@@ -228,7 +228,6 @@ jobs:
       FLUTTER_WEATHER_CERTS_P12_DATA: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_P12_DATA }}
       FLUTTER_WEATHER_CERTS_P12_PASSWORD: ${{ secrets.FLUTTER_WEATHER_CERTS_AD_HOC_PASSWORD }}
       FLUTTER_WEATHER_CERTS_FILE_PATH: ${{ './apps/mobile_flutter/ios/certs.p12' }}
-      FLUTTER_WEATHER_APPSTORE_BUNDLE_ID: ${{ secrets.FLUTTER_WEATHER_APPSTORE_BUNDLE_ID }}
       FLUTTER_WEATHER_APPSTORE_PROFILE_NAME: ${{ 'Flutter Weather Ad Hoc' }}
       FLUTTER_WEATHER_APPSTORE_PROFILE_TYPE: ${{ 'IOS_APP_ADHOC' }}
       FLUTTER_WEATHER_APPSTORE_IDENTIFIER: ${{ secrets.FLUTTER_WEATHER_APPSTORE_IDENTIFIER }} # https://developer.apple.com/account/resources/identifiers/bundleId/edit/<identifier>
@@ -277,10 +276,6 @@ jobs:
         working-directory: './apps/mobile_flutter/ios/Runner.xcodeproj'
         run: sed -i '' "s/FLUTTER_WEATHER_PROVISIONING_PROFILE/$FLUTTER_WEATHER_APPSTORE_PROFILE_NAME/g" ./project.pbxproj
 
-      - name: 'Update bundle identifiers in project.pbxproj'
-        working-directory: './apps/mobile_flutter/ios/Runner.xcodeproj'
-        run: sed -i '' "s/FLUTTER_WEATHER_BUNDLE_ID/$FLUTTER_WEATHER_APPSTORE_BUNDLE_ID/g" ./project.pbxproj
-
       - name: 'Get version.txt'
         uses: actions/download-artifact@v2
         with:
@@ -309,7 +304,7 @@ jobs:
 
       - name: 'Flutter build ipa'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'
-        run: 'flutter build ipa -t lib/main.dart --release --verbose'
+        run: 'flutter build ipa -t lib/main.dart --flavor prod --release --verbose'
 
       - name: 'Export ipa'
         run: exec .github/scripts/export-ios-ipa.sh
