@@ -32,8 +32,9 @@ class WeatherApp extends StatelessWidget {
     BuildContext context,
   ) =>
       BlocProvider(
-        create: (BuildContext context) =>
-            AppBloc()..add(StreamConnectivityResult())..add(StreamIAPResult()),
+        create: (BuildContext context) => AppBloc()
+          ..add(StreamConnectivityResult())
+          ..add(StreamIAPResult(context)),
         child: FlutterWeatherAppView(),
       );
 }

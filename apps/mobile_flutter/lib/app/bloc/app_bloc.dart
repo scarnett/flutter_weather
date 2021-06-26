@@ -97,7 +97,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     } else if (event is OnIAPPurchaseDone) {
       yield _mapOnIAPPurchaseDoneToState(event);
     } else if (event is OnIAPPurchaseError) {
-      yield _mapOnIAPPurchaseErrorToState(event);
+      yield* _mapOnIAPPurchaseErrorToState(event);
     } else if (event is SetIsPremium) {
       yield _mapSetIsPremiumToStates(event);
     } else if (event is SetShowPremiumInfo) {
@@ -569,7 +569,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       (List<PurchaseDetails> purchaseDetails) =>
           add(OnIAPPurchaseUpdate(purchaseDetails)),
       onDone: () => add(OnIAPPurchaseDone()),
-      onError: (dynamic error) => add(OnIAPPurchaseError(error)),
+      onError: (dynamic error) => add(OnIAPPurchaseError(event.context, error)),
     );
 
     yield state;
@@ -578,22 +578,38 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   AppState _mapOnIAPPurchaseUpdateToState(
     OnIAPPurchaseUpdate event,
   ) {
-    // TODO!
+    event.purchaseDetailList!.forEach((PurchaseDetails purchaseDetails) {
+      if (purchaseDetails.status == PurchaseStatus.purchased) {
+        // TODO!
+      }
+
+      if (purchaseDetails.pendingCompletePurchase) {
+        IAPConnection.instance.completePurchase(purchaseDetails);
+      }
+    });
+
     return state;
   }
 
   AppState _mapOnIAPPurchaseDoneToState(
     OnIAPPurchaseDone event,
   ) {
-    // TODO!
+    _iapSubscription?.cancel();
     return state;
   }
 
-  AppState _mapOnIAPPurchaseErrorToState(
+  Stream<AppState> _mapOnIAPPurchaseErrorToState(
     OnIAPPurchaseError event,
-  ) {
-    // TODO!
-    return state;
+  ) async* {
+    await Sentry.captureException(event.error);
+
+    showSnackbar(
+      event.context,
+      AppLocalizations.of(event.context)!.refreshFailure,
+      messageType: MessageType.danger,
+    );
+
+    yield state;
   }
 
   AppState _mapSetIsPremiumToStates(

@@ -270,19 +270,25 @@ class StreamConnectivityResult extends AppEvent {
 }
 
 class StreamIAPResult extends AppEvent {
-  @override
-  List<Object?> get props => [];
-}
+  final BuildContext context;
 
-class OnIAPPurchaseUpdate extends AppEvent {
-  final List<PurchaseDetails>? purchaseDetails;
-
-  const OnIAPPurchaseUpdate(
-    this.purchaseDetails,
+  const StreamIAPResult(
+    this.context,
   );
 
   @override
-  List<Object?> get props => [purchaseDetails];
+  List<Object?> get props => [context];
+}
+
+class OnIAPPurchaseUpdate extends AppEvent {
+  final List<PurchaseDetails>? purchaseDetailList;
+
+  const OnIAPPurchaseUpdate(
+    this.purchaseDetailList,
+  );
+
+  @override
+  List<Object?> get props => [purchaseDetailList];
 }
 
 class OnIAPPurchaseDone extends AppEvent {
@@ -291,14 +297,16 @@ class OnIAPPurchaseDone extends AppEvent {
 }
 
 class OnIAPPurchaseError extends AppEvent {
+  final BuildContext context;
   final dynamic error;
 
   const OnIAPPurchaseError(
+    this.context,
     this.error,
   );
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [context, error];
 }
 
 class SetIsPremium extends AppEvent {

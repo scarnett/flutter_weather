@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class Product {
   final String documentId;
   final String id;
   final bool enabled;
+  final ProductStatus status;
   final ProductDetails? details;
 
   Product({
@@ -12,7 +14,11 @@ class Product {
     required this.id,
     required this.enabled,
     this.details,
-  });
+  }) : status = ProductStatus.purchasable;
+
+  String? get title => details?.title;
+  String? get description => details?.description;
+  String? get price => details?.price;
 
   factory Product.fromJson(
     Map<dynamic, dynamic> json,
