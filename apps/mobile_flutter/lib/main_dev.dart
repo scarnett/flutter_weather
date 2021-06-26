@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart' show kDebugMode, defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
@@ -14,6 +14,7 @@ import 'package:flutter_weather/firebase/firebase_remoteconfig_service.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -33,6 +34,11 @@ Future<void> main() async {
 
   // Admob
   MobileAds.instance.initialize();
+
+  // In-App-Purchase
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+  }
 
   // Crashlytics
   await FirebaseCrashlytics.instance
