@@ -1,6 +1,15 @@
 import 'package:flutter_weather/models/models.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+Future<void> purchase(
+  Product product,
+) async {
+  final PurchaseParam purchaseParam =
+      PurchaseParam(productDetails: product.details!);
+
+  IAPConnection.instance.buyNonConsumable(purchaseParam: purchaseParam);
+}
+
 Future<List<ProductDetails>> getProductDetails(
   List<Product>? products,
 ) async {

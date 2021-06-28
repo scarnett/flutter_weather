@@ -13,7 +13,7 @@ export function canPushForecast(device: deviceModel.Device, minDate: Date): bool
   if (lastPushDateTs != null) {
     const lastPushDate: DateTime = DateTime.fromJSDate(lastPushDateTs.toDate())
     const hours: number = getPeriodHours(device)
-    if (lastPushDate.plus({hours: hours}) <= DateTime.fromJSDate(minDate)) {
+    if (lastPushDate.plus({ hours: hours }) <= DateTime.fromJSDate(minDate)) {
       return true
     }
 

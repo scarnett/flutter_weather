@@ -44,5 +44,7 @@ module.exports = {
     'semi': [0, 'never'],
     'max-len': ['error', {'code': 120}],
     'object-curly-spacing': [0, 'never'],
+    'indent': 'off',
+    '@typescript-eslint/indent': ['error', 2],
   },
 }

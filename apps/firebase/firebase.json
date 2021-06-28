@@ -29,6 +29,10 @@
         "function": "httpConnectivityStatus"
       },
       {
+        "source": "http-verify-purchase",
+        "function": "httpVerifyPurchase"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
