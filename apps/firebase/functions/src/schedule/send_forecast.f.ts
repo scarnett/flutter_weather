@@ -35,7 +35,7 @@ exports = module.exports = functions.pubsub
         const deviceData: admin.firestore.DocumentData = deviceDoc.data()
         const device: deviceModel.Device = deviceData as deviceModel.Device
         if (forecastUtils.canPushForecast(device, now.toDate())) {
-          if (device.pushNotificationExtras != null && device.pushNotificationExtras.location != null) {
+          if ((device.pushNotificationExtras != null) && (device.pushNotificationExtras.location != null)) {
             openWeather.setUnits(device.units?.temperature || 'imperial')
 
             const extras: PushNotificationExtras = device.pushNotificationExtras
@@ -70,7 +70,7 @@ exports = module.exports = functions.pubsub
                     functions.logger.error(error)
 
                     const cause: any = error.cause
-                    if (cause.errorCode.name == 'NOT_FOUND' || cause.messagingErrorCode.name == 'UNREGISTERED') {
+                    if ((cause.errorCode.name == 'NOT_FOUND') || (cause.messagingErrorCode.name == 'UNREGISTERED')) {
                       // If we land in here then the device fcm token has expired and/or
                       // is no longer valid. Let's delete it.
                       promises.push(admin.firestore().collection('devices').doc(deviceDoc.id).delete())
