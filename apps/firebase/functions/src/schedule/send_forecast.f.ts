@@ -69,8 +69,8 @@ exports = module.exports = functions.pubsub
 
                     functions.logger.error(error)
 
-                    const cause: any = error.cause
-                    if ((cause.errorCode.name == 'NOT_FOUND') || (cause.messagingErrorCode.name == 'UNREGISTERED')) {
+                    if ((error.code === 'messaging/invalid-registration-token') ||
+                      (error.code === 'messaging/registration-token-not-registered')) {
                       // If we land in here then the device fcm token has expired and/or
                       // is no longer valid. Let's delete it.
                       promises.push(admin.firestore().collection('devices').doc(deviceDoc.id).delete())
