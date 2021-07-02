@@ -10,6 +10,7 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
     'google',
+    'prettier',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
