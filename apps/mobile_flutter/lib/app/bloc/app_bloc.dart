@@ -78,6 +78,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapSetActiveForecastIdToState(event);
     } else if (event is ClearActiveForecastId) {
       yield _mapClearActiveForecastIdToState(event);
+    } else if (event is AutoUpdateForecast) {
+      yield _mapAutoUpdateForecastToState(event);
     } else if (event is SetScrollDirection) {
       yield _mapSetScrollDirectionToState(event);
     } else if (event is StreamConnectivityResult) {
@@ -507,6 +509,31 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       state.copyWith(
         activeForecastId: Nullable<String?>(null),
       );
+
+  AppState _mapAutoUpdateForecastToState(
+    AutoUpdateForecast event,
+  ) {
+    // If auto update is enabled then run the refresh
+    if ((state.updatePeriod != null) &&
+        state.forecasts.isNotEmpty &&
+        (state.forecasts.length >= event.forecastIndex + 1)) {
+      Forecast forecast = state.forecasts[event.forecastIndex];
+      DateTime? lastUpdated = forecast.lastUpdated;
+      if ((lastUpdated == null) ||
+          DateTime.now().isAfter(lastUpdated.add(
+              Duration(minutes: state.updatePeriod?.getInfo()!['minutes'])))) {
+        add(
+          RefreshForecast(
+            event.context,
+            state.forecasts[event.forecastIndex],
+            state.units.temperature,
+          ),
+        );
+      }
+    }
+
+    return state;
+  }
 
   AppState _mapSetScrollDirectionToState(
     SetScrollDirection event,
