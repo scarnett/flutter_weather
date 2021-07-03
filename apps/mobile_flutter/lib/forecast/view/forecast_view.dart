@@ -10,7 +10,6 @@ import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
-import 'package:flutter_weather/models/models.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class ForecastView extends StatefulWidget {
@@ -92,26 +91,8 @@ class _ForecastPageViewState extends State<ForecastView>
 
           context.read<AppBloc>()
             ..add(SelectedForecastIndex(_currentForecastNotifier.value))
-            ..add(SetScrollDirection(ScrollDirection.forward));
-
-          // If auto update is enabled then run the refresh
-          if ((state.updatePeriod != null) &&
-              state.forecasts.isNotEmpty &&
-              (state.forecasts.length >= _currentForecastNotifier.value + 1)) {
-            Forecast forecast = state.forecasts[_currentForecastNotifier.value];
-            DateTime? lastUpdated = forecast.lastUpdated;
-            if ((lastUpdated == null) ||
-                DateTime.now().isAfter(lastUpdated.add(Duration(
-                    minutes: state.updatePeriod?.getInfo()!['minutes'])))) {
-              context.read<AppBloc>().add(
-                    RefreshForecast(
-                      context,
-                      state.forecasts[_currentForecastNotifier.value],
-                      state.units.temperature,
-                    ),
-                  );
-            }
-          }
+            ..add(SetScrollDirection(ScrollDirection.forward))
+            ..add(AutoUpdateForecast(context, _currentForecastNotifier.value));
         }
       });
 
@@ -126,6 +107,9 @@ class _ForecastPageViewState extends State<ForecastView>
     }
 
     _currentForecastNotifier = ValueNotifier<int>(state.selectedForecastIndex);
+
+    context.read<AppBloc>()
+      ..add(AutoUpdateForecast(context, _currentForecastNotifier.value));
   }
 
   void _blocListener(

@@ -235,6 +235,22 @@ class ClearActiveForecastId extends AppEvent {
   List<Object> get props => [];
 }
 
+class AutoUpdateForecast extends AppEvent {
+  final BuildContext context;
+  final int forecastIndex;
+
+  const AutoUpdateForecast(
+    this.context,
+    this.forecastIndex,
+  );
+
+  @override
+  List<Object> get props => [
+        context,
+        forecastIndex,
+      ];
+}
+
 class ClearCRUDStatus extends AppEvent {
   const ClearCRUDStatus();
 

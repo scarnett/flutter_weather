@@ -10,11 +10,13 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
     'google',
+    'prettier',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: ['tsconfig.json', 'tsconfig.dev.json'],
     sourceType: 'module',
+    tsconfigRootDir: __dirname,
   },
   ignorePatterns: [
     '/lib/**/*', // Ignore built files.
