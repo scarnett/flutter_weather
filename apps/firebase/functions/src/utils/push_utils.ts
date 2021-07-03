@@ -1,5 +1,4 @@
 import * as admin from 'firebase-admin'
-import * as functions from 'firebase-functions'
 import * as deviceModel from '../models/device'
 import * as messageModel from '../models/message'
 
@@ -11,15 +10,14 @@ import * as messageModel from '../models/message'
  * @return {Promise<string>}
  */
 export async function pushMessage(
-    device: deviceModel.Device,
-    messageData: messageModel.Message | null,
-    priority: string = 'high',
-): Promise<string | null> {
+  device: deviceModel.Device,
+  messageData: messageModel.Message | null,
+  priority: string = 'high',
+): Promise<String | null> {
   if (messageData === null) {
     return Promise.resolve(null)
   }
 
-  const promises: Array<Promise<any>> = []
   const payload: any = {
     android: {
       notification: {
@@ -43,17 +41,5 @@ export async function pushMessage(
   }
 
   // Send push notification
-  promises.push(admin.messaging().send(payload))
-
-  return Promise.all(promises)
-      .then(() => {
-        return Promise.resolve('ok')
-      })
-      .catch((error: any) => {
-        functions.logger.debug(`[pushMessage] Push message failed; ` +
-          `fcmToken: ${device.fcm?.token}`)
-
-        functions.logger.error(error)
-        return Promise.resolve('error')
-      })
+  return admin.messaging().send(payload)
 }

@@ -67,8 +67,6 @@ exports = module.exports = functions.pubsub
                       `deviceId: ${deviceDoc.id}, fcmToken: ${device.fcm?.token}`
                     )
 
-                    functions.logger.error(error)
-
                     if ((error.code === 'messaging/invalid-registration-token') ||
                       (error.code === 'messaging/registration-token-not-registered')) {
                       // If we land in here then the device fcm token has expired and/or
