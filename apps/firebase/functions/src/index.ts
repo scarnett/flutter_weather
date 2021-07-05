@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin'
 import * as glob from 'glob'
 import * as i18n from 'i18n'
 import * as path from 'path'
-import { IapRepository } from './repository/iap.repository'
+import { IapRepository } from './iap/iap_repository'
 
 admin.initializeApp()
 

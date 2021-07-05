@@ -1,16 +1,18 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
-import { IAPSource, Purchase } from '../utils/iap_utils'
+import { IAPSource, Purchase } from './iap_constants'
 
 /**
  * In-App-Purchase repository
  */
 export class IapRepository {
   /**
-   * the default constructor
+   * The default constructor
    * @param {admin.firestore.Firestore} firestore the firestore instance
    */
-  constructor(private firestore: admin.firestore.Firestore) {}
+  constructor(
+    private firestore: admin.firestore.Firestore,
+  ) { }
 
   /**
    * Updates some purchase data

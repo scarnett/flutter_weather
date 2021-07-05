@@ -29,8 +29,8 @@
         "function": "httpConnectivityStatus"
       },
       {
-        "source": "http-verify-purchase",
-        "function": "httpVerifyPurchase"
+        "source": "http-iap-verify-purchase",
+        "function": "httpIapVerifyPurchase"
       },
       {
         "source": "**",

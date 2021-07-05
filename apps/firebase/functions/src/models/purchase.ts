@@ -1,11 +1,10 @@
 import * as admin from 'firebase-admin'
-import { IAPSource, NonSubscriptionStatus, SubscriptionStatus } from '../utils/iap_utils'
+import { IAPSource, NonSubscriptionStatus, SubscriptionStatus } from '../iap/iap_constants'
 
 export interface BasePurchase {
   iapSource: IAPSource
   orderId: string
   productId: string
-  deviceId: string
   purchaseDate: admin.firestore.Timestamp
 }
 

@@ -1,4 +1,4 @@
-import { IAPSource, SubscriptionType } from '../utils/iap_utils'
+import { IAPSource, SubscriptionType } from '../iap/iap_constants'
 import { BaseModel } from './base'
 
 /**

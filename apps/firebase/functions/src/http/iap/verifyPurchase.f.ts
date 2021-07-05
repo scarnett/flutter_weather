@@ -1,7 +1,10 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
+import { IAPSource } from '../../iap/iap_constants'
+import { AppStorePurchaseHandler } from '../../iap/iap_handler_app_store'
+import { GooglePlayPurchaseHandler } from '../../iap/iap_handler_google_play'
+import { IapRepository } from '../../iap/iap_repository'
 import * as productModel from '../../models/product'
-import { IAPSource, verifyPurchase } from '../../utils/iap_utils'
 
 interface VerifyPurchaseParams {
   source: IAPSource
@@ -10,9 +13,12 @@ interface VerifyPurchaseParams {
 }
 
 exports = module.exports = functions.https.onCall(
-  async (data: VerifyPurchaseParams, context: functions.https.CallableContext) => {
+  async (
+    data: VerifyPurchaseParams,
+    context: functions.https.CallableContext,
+  ) => {
     if (!context.auth) {
-      functions.logger.warn('verifyPurchase called when not authenticated') // TODO! function name
+      functions.logger.warn('[httpIapVerifyPurchase] verifyPurchase called when not authenticated')
       throw new functions.https.HttpsError('unauthenticated', 'Request was not authenticated.')
     }
 
@@ -25,10 +31,13 @@ exports = module.exports = functions.https.onCall(
 
     const productDocuments: admin.firestore.QueryDocumentSnapshot<admin.firestore.DocumentData>[] =
       productsSnapshot.docs
+
     if (!productDocuments || !productDocuments.length) {
       functions.logger.warn(
-        `verifyPurchase called for an unknown product id: ${data.productId}, source: ${data.source}`
-      ) // TODO! function name
+        `[httpIapVerifyPurchase] verifyPurchase called for an unknown product id: ` +
+        `${data.productId}, source: ${data.source}`
+      )
+
       throw new functions.https.HttpsError(
         'failed-precondition',
         `Product not found id: ${data.productId}, source: ${data.source}`
@@ -40,7 +49,30 @@ exports = module.exports = functions.https.onCall(
       const product: productModel.Product = productData as productModel.Product
 
       // Process the purchase for the product
-      return verifyPurchase(exports.iapRepository, data.source, product)
+      return verifyPurchase(exports.iapRepository, data.source, product, data)
     })
   }
 )
+
+/**
+ * Verifies an iap
+ * @param {IapRepository} iapRepository the iap repository
+ * @param {IAPSource} source the iap source
+ * @param {productModel.Product} product the product
+ * @param {VerifyPurchaseParams} data the verification purchase params
+ * @return {Promise<boolean>} with the purchase verification status
+ */
+function verifyPurchase(
+  iapRepository: IapRepository,
+  source: IAPSource,
+  product: productModel.Product,
+  data: VerifyPurchaseParams,
+): Promise<boolean> {
+  switch (source) {
+    case 'google_play':
+      return new GooglePlayPurchaseHandler(iapRepository).verifyPurchase(product, data.verificationData)
+
+    case 'app_store':
+      return new AppStorePurchaseHandler(iapRepository).verifyPurchase(product, data.verificationData)
+  }
+}

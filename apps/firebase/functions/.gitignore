@@ -9,3 +9,4 @@ node_modules/
 
 /keys/
 flutter-weather-firebase-config.json
+src/assets/service-account.json
