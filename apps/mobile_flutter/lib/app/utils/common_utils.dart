@@ -36,11 +36,10 @@ extension StringExtension on String {
 }
 
 extension DoubleExtension on double {
-  double formatDecimal({
+  String formatDecimal({
     int decimals: 2,
   }) =>
-      double.parse(this
-          .toStringAsFixed((this.truncateToDouble() == this) ? 0 : decimals));
+      this.toStringAsFixed((this.truncateToDouble() == this) ? 0 : decimals);
 }
 
 List<Shadow> commonTextShadow({

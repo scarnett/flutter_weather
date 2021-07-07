@@ -1,4 +1,3 @@
-// import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 
 class AppBlocObserver extends BlocObserver {
@@ -7,7 +6,7 @@ class AppBlocObserver extends BlocObserver {
     Bloc bloc,
     Object? event,
   ) {
-    // developer.log(event.toString(), name: 'AppBlocObserver');
+    print(event.toString());
     super.onEvent(bloc, event);
   }
 
@@ -16,7 +15,7 @@ class AppBlocObserver extends BlocObserver {
     BlocBase base,
     Change change,
   ) {
-    // developer.log(change.toString(), name: 'AppBlocObserver');
+    print(change.toString());
     super.onChange(base, change);
   }
 
@@ -25,7 +24,7 @@ class AppBlocObserver extends BlocObserver {
     Bloc bloc,
     Transition transition,
   ) {
-    // developer.log(transition.toString(), name: 'AppBlocObserver');
+    print(transition.toString());
     super.onTransition(bloc, transition);
   }
 
@@ -35,15 +34,8 @@ class AppBlocObserver extends BlocObserver {
     Object error,
     StackTrace stackTrace,
   ) {
-    /*
-    developer.log(
-      error.toString(),
-      name: 'AppBlocObserver',
-      error: error,
-      stackTrace: stackTrace,
-    );
-    */
-
+    print(error);
+    print(stackTrace);
     super.onError(base, error, stackTrace);
   }
 }

@@ -14,7 +14,8 @@
   "include": [
     "**/*.ts",
     "*/keys/*.json",
-    "*/locales/*.json"
+    "*/locales/*.json",
+    "*/assets/*"
   ],
   "exclude": [
     "node_modules"

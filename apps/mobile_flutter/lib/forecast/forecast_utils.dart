@@ -33,9 +33,9 @@ Uri getCurrentApiUri(
   );
 }
 
-Uri getDailyApiUri(
-  Map<String, dynamic> params, {
-  int count: 7, // TODO! premium
+Uri getDailyApiUri({
+  required Map<String, dynamic> params,
+  required int count,
 }) {
   if (!params.containsKey('cnt')) {
     params['cnt'] = count.toString();
@@ -49,6 +49,16 @@ Uri getDailyApiUri(
     params.cast<String, String>(),
   );
 }
+
+int getDailyForecastCount(
+  bool isPremium,
+) =>
+    isPremium ? 16 : 7;
+
+int getDailyChartPointCount(
+  bool isPremium,
+) =>
+    getDailyForecastCount(isPremium) + 1; // +1 to account for 'today'
 
 Map<String, dynamic> buildLookupParams(
   Map<String, dynamic> lookupData,
@@ -106,7 +116,7 @@ num getTemperature(
 
     case TemperatureUnit.kelvin:
     default:
-      return temperature.toDouble().formatDecimal();
+      return double.parse(temperature.toDouble().formatDecimal());
   }
 }
 
@@ -178,10 +188,11 @@ num getWindSpeed(
 
   switch (unit) {
     case WindSpeedUnit.kmh:
-      return (windSpeed * 1.609344).formatDecimal(decimals: 1);
+      return double.parse((windSpeed * 1.609344).formatDecimal(decimals: 1));
 
     case WindSpeedUnit.ms:
-      return (windSpeed / 2.2369362920544).formatDecimal(decimals: 1);
+      return double.parse(
+          (windSpeed / 2.2369362920544).formatDecimal(decimals: 1));
 
     case WindSpeedUnit.mph:
     default:
@@ -211,7 +222,8 @@ num getPressure(
 
   switch (unit) {
     case PressureUnit.inhg:
-      return (pressure / 33.863886666667).formatDecimal(decimals: 2);
+      return double.parse(
+          (pressure / 33.863886666667).formatDecimal(decimals: 2));
 
     case PressureUnit.hpa:
     default:
@@ -229,11 +241,11 @@ num getDistance(
 
   switch (unit) {
     case DistanceUnit.km:
-      return (distance * 0.001).formatDecimal(decimals: 2);
+      return double.parse((distance * 0.001).formatDecimal(decimals: 2));
 
     case DistanceUnit.mi:
     default:
-      return (distance * 0.00062137).formatDecimal(decimals: 2);
+      return double.parse((distance * 0.00062137).formatDecimal(decimals: 2));
   }
 }
 
@@ -478,3 +490,37 @@ String? formatHour({
 
   return null;
 }
+
+void tapHourRange(
+  AppBloc bloc,
+  HourRange? hourRange,
+) {
+  if (bloc.state.isPremium) {
+    bloc.add(SetHourRange(hourRange));
+  } else {
+    switch (hourRange) {
+      case HourRange.hours12:
+      case HourRange.hours24:
+        bloc.add(SetHourRange(hourRange));
+        break;
+
+      case HourRange.hours36:
+      case HourRange.hours48:
+      default:
+        bloc.add(SetShowPremiumInfo(true));
+        break;
+    }
+  }
+}
+
+List<Forecast> sortForecasts(
+  List<Forecast> forecasts,
+) =>
+    forecasts
+      ..sort((forecast1, forecast2) {
+        if ((forecast1.created == null) || (forecast2.created == null)) {
+          return -1;
+        }
+
+        return forecast1.created!.compareTo(forecast2.created!);
+      });

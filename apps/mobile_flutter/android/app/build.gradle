@@ -26,6 +26,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0.0'
 }
 
+def admobApplicationId = localProperties.getProperty('admob.applicationId')
+if (admobApplicationId == null) {
+    admobApplicationId = 'ca-app-pub-3940256099942544~3347511713' // sample application id provided by google
+}
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -93,6 +98,7 @@ android {
             versionName flutterVersionName
             manifestPlaceholders.appLabel = flutterAppLabel
             manifestPlaceholders.appLabelSuffix = ' - DEV'
+            manifestPlaceholders.admobApplicationId = admobApplicationId
         }
 
         tst {
@@ -102,6 +108,7 @@ android {
             versionName flutterVersionName
             manifestPlaceholders.appLabel = flutterAppLabel
             manifestPlaceholders.appLabelSuffix = ' - TEST'
+            manifestPlaceholders.admobApplicationId = admobApplicationId
         }
 
         prod {
@@ -111,6 +118,7 @@ android {
             versionName flutterVersionName
             manifestPlaceholders.appLabel = flutterAppLabel
             manifestPlaceholders.appLabelSuffix = ''
+            manifestPlaceholders.admobApplicationId = admobApplicationId
         }
     }
 }

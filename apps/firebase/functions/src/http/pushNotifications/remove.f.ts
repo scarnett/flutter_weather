@@ -1,28 +1,29 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 
-exports = module.exports = functions.https
-    .onRequest(async (req: functions.https.Request, res: functions.Response<any>) => {
-      const promises: Array<Promise<any>> = []
-      const data: any = req.body
-      if (data != null) {
-        try {
-          // Deletes the device from firestore
-          promises.push(admin.firestore().doc(`devices/${data['device']}`).delete())
+exports = module.exports = functions.https.onRequest(
+  async (req: functions.https.Request, res: functions.Response<any>) => {
+    const promises: Array<Promise<any>> = []
+    const data: any = req.body
+    if (data != null) {
+      try {
+        // Deletes the device from firestore
+        promises.push(admin.firestore().doc(`devices/${data['device']}`).delete())
 
-          return Promise.all(promises)
-              .then(() => {
-                res.status(200).send('ok')
-              })
-              .catch((error: any) => {
-                functions.logger.error(error)
-                res.status(500).send('error')
-              })
-        } catch (error) {
-          functions.logger.error(error)
-          res.status(500).send('error')
-        }
+        return Promise.all(promises)
+          .then(() => {
+            res.status(200).send('ok')
+          })
+          .catch((error: any) => {
+            functions.logger.error(error)
+            res.status(500).send('error')
+          })
+      } catch (error) {
+        functions.logger.error(error)
+        res.status(500).send('error')
       }
+    }
 
-      res.status(200).send('ok')
-    })
+    res.status(200).send('ok')
+  }
+)

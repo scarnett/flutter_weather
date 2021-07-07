@@ -10,6 +10,7 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/premium/view/view.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/settings/widgets/widgets.dart';
 import 'package:package_info/package_info.dart';
@@ -26,7 +27,9 @@ class SettingsView extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      SettingsPageView();
+      PremiumOverlayView(
+        child: SettingsPageView(),
+      );
 }
 
 class SettingsPageView extends StatefulWidget {
@@ -182,10 +185,29 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               context.read<AppBloc>().state.hourRange.getText(context),
           onTapCallback: () => _setPageListIndex(4),
         ),
-      ],
+      ]..addAll(_buildAds()),
     );
 
     return widgets;
+  }
+
+  List<Widget> _buildAds() {
+    AppState state = context.read<AppBloc>().state;
+    if (state.isPremium) {
+      return [];
+    }
+
+    return [
+      Divider(),
+      SettingsOption(
+        pageController: _pageController!,
+        title: AppLocalizations.of(context)!.disableAds,
+        // trailing: PremiumStar(iconSize: 20.0),
+        onTapCallback: () =>
+            context.read<AppBloc>().add(SetShowPremiumInfo(true)),
+        returnIndex: null,
+      ),
+    ];
   }
 
   List<Widget> _buildAutoUpdatePeriodSection() {
@@ -206,7 +228,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               height: 16.0,
               child: Switch(
                 onChanged: (bool value) async => await _tapUpdatePeriod(
-                  value ? UpdatePeriod.hour2 : null,
+                  value ? UpdatePeriod.hour4 : null,
                   redirect: false,
                 ),
                 value: (updatePeriod != null),

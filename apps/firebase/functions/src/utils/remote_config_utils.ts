@@ -24,23 +24,23 @@ export function remoteConfigUrl(): string {
  */
 export async function getRemoteConfig(): Promise<any> {
   return getAccessToken()
-      .then((accessToken: any) => {
-        const options: any = {
-          uri: remoteConfigUrl(),
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          },
-          json: true,
-        }
+    .then((accessToken: any) => {
+      const options: any = {
+        uri: remoteConfigUrl(),
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        json: true,
+      }
 
-        return rp(options)
-            .then((config: any) => Promise.resolve(config))
-            .catch((err: any) => Promise.resolve(null))
-      })
-      .catch((error: any) => {
-        functions.logger.error(error)
-        return Promise.resolve(null)
-      })
+      return rp(options)
+        .then((config: any) => Promise.resolve(config))
+        .catch((err: any) => Promise.resolve(null))
+    })
+    .catch((error: any) => {
+      functions.logger.error(error)
+      return Promise.resolve(null)
+    })
 }
 
 /**

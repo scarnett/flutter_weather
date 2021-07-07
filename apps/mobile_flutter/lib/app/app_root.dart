@@ -7,7 +7,10 @@ import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
+import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
+import 'package:flutter_weather/premium/bloc/bloc.dart';
+import 'package:flutter_weather/premium/premium.dart';
 
 class WeatherApp extends StatelessWidget {
   WeatherApp({
@@ -30,9 +33,19 @@ class WeatherApp extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      BlocProvider(
-        create: (BuildContext context) =>
-            AppBloc()..add(StreamConnectivityResult()),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (BuildContext context) =>
+                AppBloc()..add(StreamConnectivityResult()),
+          ),
+          BlocProvider(
+            lazy: false,
+            create: (BuildContext context) => PremiumBloc()
+              ..add(FetchProducts(getProductSourceByPlatform()))
+              ..add(StreamIAPResult(context)),
+          ),
+        ],
         child: FlutterWeatherAppView(),
       );
 }
@@ -79,7 +92,9 @@ class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
               FallbackCupertinoLocalisationsDelegate(),
             ],
             navigatorKey: _navigatorKey,
-            home: ForecastView(),
+            home: PremiumOverlayView(
+              child: ForecastView(),
+            ),
           ),
         ),
       );

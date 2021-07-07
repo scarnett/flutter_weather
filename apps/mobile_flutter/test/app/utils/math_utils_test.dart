@@ -38,4 +38,11 @@ void main() {
   test('Should be 100', () {
     expect(round5(number: 95.0), 100.0);
   });
+
+  test('Should be 65', () {
+    expect(round5(number: 69.0, offset: -5.0), 65.0);
+    expect(round5(number: 68.0, offset: -5.0), 65.0);
+    expect(round5(number: 67.0, offset: -5.0), 65.0);
+    expect(round5(number: 66.0, offset: -5.0), 65.0);
+  });
 }

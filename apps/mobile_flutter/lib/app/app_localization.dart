@@ -24,6 +24,20 @@ class AppLocalizations {
 
   static String get appTitle => 'Flutter Weather';
 
+  String get premium => addMessage('$appTitle Premium');
+  String get premiumSubscribe => addMessage('Subscribe Today');
+  String get premiumText => addMessage(
+      'Refresh your forecasts anytime, severe weather alerts, extended hour forecasts, \nad free, and more!');
+
+  String getPremiumCost(
+    String cost,
+  ) =>
+      addMessage(
+        '\$${cost} per year',
+        name: 'getPremiumCost',
+        args: [cost],
+      );
+
   String get application => addMessage('Application');
   String get settings => addMessage('Settings');
   String get buildInformation => addMessage('Build Information');
@@ -142,6 +156,7 @@ class AppLocalizations {
   String get hours24 => addMessage('24hr');
   String get hours36 => addMessage('36hr');
   String get hours48 => addMessage('48hr');
+  String get disableAds => addMessage('Disable Ads');
 
   String getFeelsLike(
     String temp,

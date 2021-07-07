@@ -86,6 +86,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapStreamConnectivityResultToState(event);
     } else if (event is SetConnectivityResult) {
       yield _mapSetConnectivityResultToState(event);
+    } else if (event is SetIsPremium) {
+      yield _mapSetIsPremiumToStates(event);
+    } else if (event is SetShowPremiumInfo) {
+      yield _mapSetShowPremiumInfoToStates(event);
     }
   }
 
@@ -321,10 +325,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       crudStatus: Nullable<CRUDStatus>(CRUDStatus.creating),
     );
 
-    // TODO! sort
-    List<Forecast> forecasts =
+    List<Forecast> forecasts = sortForecasts(
         List<Forecast>.from(state.forecasts) // Clone the existing state list
-          ..add(event.forecast);
+          ..add(event.forecast));
 
     yield state.copyWith(
       forecasts: forecasts,
@@ -393,6 +396,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         http.Response forecastResponse = await tryLookupForecast(
           client: httpClient,
           lookupData: lookupData,
+          isPremium: state.isPremium,
         );
 
         if (forecastResponse.statusCode == 200) {
@@ -420,7 +424,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
               lastUpdated: getNow(),
             );
 
-            // TODO! premium
             http.Response forecastDetailsResponse = await fetchDetailedForecast(
               client: httpClient,
               longitude: forecast.city!.coord!.lon!,
@@ -569,6 +572,20 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           Nullable<ConnectivityResult?>(event.connectivityResult),
     );
   }
+
+  AppState _mapSetIsPremiumToStates(
+    SetIsPremium event,
+  ) =>
+      state.copyWith(
+        isPremium: event.isPremium,
+      );
+
+  AppState _mapSetShowPremiumInfoToStates(
+    SetShowPremiumInfo event,
+  ) =>
+      state.copyWith(
+        showPremiumInfo: event.showPremiumInfo,
+      );
 
   Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
     if ((pushNotification != null) &&
