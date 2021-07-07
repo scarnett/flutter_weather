@@ -17,10 +17,10 @@ exports = module.exports = functions.https.onCall(
     data: VerifyPurchaseParams,
     context: functions.https.CallableContext,
   ) => {
-    if (!context.auth) {
-      functions.logger.warn('[httpIapVerifyPurchase] verifyPurchase called when not authenticated')
-      throw new functions.https.HttpsError('unauthenticated', 'Request was not authenticated.')
-    }
+    // if (!context.auth) {
+    //   functions.logger.warn('[httpIapVerifyPurchase] Called when not authenticated')
+    //   throw new functions.https.HttpsError('unauthenticated', 'Request was not authenticated.')
+    // }
 
     const productsSnapshot: admin.firestore.QuerySnapshot<admin.firestore.DocumentData> = await admin
       .firestore()
@@ -34,7 +34,7 @@ exports = module.exports = functions.https.onCall(
 
     if (!productDocuments || !productDocuments.length) {
       functions.logger.warn(
-        `[httpIapVerifyPurchase] verifyPurchase called for an unknown product id: ` +
+        `[httpIapVerifyPurchase] Called for an unknown product id: ` +
         `${data.productId}, source: ${data.source}`
       )
 

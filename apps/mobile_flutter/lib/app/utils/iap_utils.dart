@@ -20,7 +20,7 @@ Future<List<ProductDetails>> getProductDetails(
       productIds..add(product.id);
     });
 
-    return InAppPurchase.instance
+    return IAPConnection.instance
         .queryProductDetails(productIds.toSet())
         .then((ProductDetailsResponse response) {
       List<ProductDetails> productDetails = [];

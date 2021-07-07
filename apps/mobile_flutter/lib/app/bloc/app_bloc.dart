@@ -20,7 +20,6 @@ import 'package:flutter_weather/services/services.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
 
@@ -30,11 +29,6 @@ part 'app_state.dart';
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult>? _connectivitySubscription;
-
-  final Stream<List<PurchaseDetails>> iapPurchaseUpdated =
-      InAppPurchase.instance.purchaseStream;
-
-  StreamSubscription<List<PurchaseDetails>>? _iapSubscription;
 
   AppBloc() : super(AppState.initial());
 
@@ -92,14 +86,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapStreamConnectivityResultToState(event);
     } else if (event is SetConnectivityResult) {
       yield _mapSetConnectivityResultToState(event);
-    } else if (event is StreamIAPResult) {
-      yield* _mapStreamIAPResultToState(event);
-    } else if (event is OnIAPPurchaseUpdate) {
-      yield _mapOnIAPPurchaseUpdateToState(event);
-    } else if (event is OnIAPPurchaseDone) {
-      yield _mapOnIAPPurchaseDoneToState(event);
-    } else if (event is OnIAPPurchaseError) {
-      yield* _mapOnIAPPurchaseErrorToState(event);
     } else if (event is SetIsPremium) {
       yield _mapSetIsPremiumToStates(event);
     } else if (event is SetShowPremiumInfo) {
@@ -110,7 +96,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   @override
   Future<void> close() {
     _connectivitySubscription?.cancel();
-    _iapSubscription?.cancel();
     return super.close();
   }
 
@@ -586,57 +571,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       connectivityResult:
           Nullable<ConnectivityResult?>(event.connectivityResult),
     );
-  }
-
-  Stream<AppState> _mapStreamIAPResultToState(
-    StreamIAPResult event,
-  ) async* {
-    _iapSubscription?.cancel();
-    _iapSubscription = iapPurchaseUpdated.listen(
-      (List<PurchaseDetails> purchaseDetails) =>
-          add(OnIAPPurchaseUpdate(purchaseDetails)),
-      onDone: () => add(OnIAPPurchaseDone()),
-      onError: (dynamic error) => add(OnIAPPurchaseError(event.context, error)),
-    );
-
-    yield state;
-  }
-
-  AppState _mapOnIAPPurchaseUpdateToState(
-    OnIAPPurchaseUpdate event,
-  ) {
-    event.purchaseDetailList!.forEach((PurchaseDetails purchaseDetails) {
-      if (purchaseDetails.status == PurchaseStatus.purchased) {
-        // TODO!
-      }
-
-      if (purchaseDetails.pendingCompletePurchase) {
-        IAPConnection.instance.completePurchase(purchaseDetails);
-      }
-    });
-
-    return state;
-  }
-
-  AppState _mapOnIAPPurchaseDoneToState(
-    OnIAPPurchaseDone event,
-  ) {
-    _iapSubscription?.cancel();
-    return state;
-  }
-
-  Stream<AppState> _mapOnIAPPurchaseErrorToState(
-    OnIAPPurchaseError event,
-  ) async* {
-    await Sentry.captureException(event.error);
-
-    showSnackbar(
-      event.context,
-      AppLocalizations.of(event.context)!.refreshFailure,
-      messageType: MessageType.danger,
-    );
-
-    yield state;
   }
 
   AppState _mapSetIsPremiumToStates(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/premium/widgets/premium_star.dart';
+import 'package:flutter_weather/premium/widgets/widgets.dart';
 
 class AppPremiumTrigger extends StatefulWidget {
   const AppPremiumTrigger({
