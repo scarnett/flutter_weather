@@ -29,13 +29,12 @@ export async function pushMessage(
       },
     },
     data: {
-      // ...messageData.data,
-      // 'send_date': Date.now().toString(),
       'click_action': 'FLUTTER_NOTIFICATION_CLICK',
     },
     notification: {
       title: messageData.title,
       body: messageData.body,
+      sub: messageData.sub,
     },
     token: device.fcm?.token,
   }

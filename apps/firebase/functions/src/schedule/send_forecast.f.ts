@@ -53,8 +53,16 @@ exports = module.exports = functions.pubsub
                 cityName: response.name,
               })
 
+              const subText: string =
+                i18n.__('High {{highTemp}}{{temperatureUnit}} | Low {{lowTemp}}{{temperatureUnit}}', {
+                  highTemp: response.main.temp_max.toFixed(),
+                  lowTemp: response.main.temp_min.toFixed(),
+                  temperatureUnit: forecastUtils.getTemperatureUnit(device.units?.temperature),
+                })
+
               message.title = messageText
               message.body = stringUtils.capitalize(response.weather[0].description)
+              message.sub = subText
 
               // Push the message to the device
               promises.push(
