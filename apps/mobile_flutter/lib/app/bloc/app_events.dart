@@ -39,7 +39,7 @@ class SetUpdatePeriod extends AppEvent {
 class SetPushNotification extends AppEvent {
   final BuildContext context;
   final PushNotification? pushNotification;
-  final Map<String, dynamic>? pushNotificationExtras;
+  final NotificationExtras? pushNotificationExtras;
   final Function? callback;
 
   const SetPushNotification({
