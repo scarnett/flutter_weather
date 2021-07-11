@@ -67,19 +67,9 @@ export function getMessageText(
   device: deviceModel.Device,
   showUnits: boolean,
 ): String {
-  if (showUnits) {
-    const text: string = i18n.__('{{temp}}{{temperatureUnit}} in {{cityName}} - {{condition}}', {
-      temp: response.main.temp.toFixed(),
-      temperatureUnit: forecastUtils.getTemperatureUnit(device.units?.temperature),
-      cityName: response.name,
-      condition: stringUtils.capitalize(response.weather[0].description),
-    })
-
-    return text
-  }
-
-  const text: string = i18n.__('{{temp}} in {{cityName}} - {{condition}}', {
+  const text: string = i18n.__('{{temp}}{{temperatureUnit}} in {{cityName}} - {{condition}}', {
     temp: response.main.temp.toFixed(),
+    temperatureUnit: forecastUtils.getTemperatureUnit(device.units?.temperature, showUnits),
     cityName: response.name,
     condition: stringUtils.capitalize(response.weather[0].description),
   })
@@ -99,21 +89,11 @@ export function getBodyText(
   device: deviceModel.Device,
   showUnits: boolean,
 ): String {
-  if (showUnits) {
-    const text: string =
-      i18n.__('High {{highTemp}}{{temperatureUnit}} | Low {{lowTemp}}{{temperatureUnit}}', {
-        highTemp: response.main.temp_max.toFixed(),
-        lowTemp: response.main.temp_min.toFixed(),
-        temperatureUnit: forecastUtils.getTemperatureUnit(device.units?.temperature),
-      })
-
-    return text
-  }
-
   const text: string =
-    i18n.__('High {{highTemp}} | Low {{lowTemp}}', {
+    i18n.__('High {{highTemp}}{{temperatureUnit}} | Low {{lowTemp}}{{temperatureUnit}}', {
       highTemp: response.main.temp_max.toFixed(),
       lowTemp: response.main.temp_min.toFixed(),
+      temperatureUnit: forecastUtils.getTemperatureUnit(device.units?.temperature, showUnits),
     })
 
   return text
