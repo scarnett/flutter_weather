@@ -102,10 +102,12 @@ export function getBodyText(
 /**
  * Gets the push notification image url
  * @param {any} response the http response
+ * @param {boolean} large the large icon status
  * @return {String} with the push notification image url
  */
 export function getImageUrl(
   response: any,
+  large: boolean = true,
 ): String {
-  return `https://openweathermap.org/img/wn/${response.weather[0].icon}.png`
+  return `https://openweathermap.org/img/wn/${response.weather[0].icon}${large ? '@2x' : ''}.png`
 }
