@@ -186,6 +186,24 @@ class AppLocalizations {
         ],
       );
 
+  String getAlerts(
+    int count,
+  ) {
+    if (count == 1) {
+      return addMessage(
+        '$count Alert',
+        name: 'getAlerts',
+        args: [count],
+      );
+    }
+
+    return addMessage(
+      '$count Alerts',
+      name: 'getAlerts',
+      args: [count],
+    );
+  }
+
   addMessage(
     String message, {
     String? name,

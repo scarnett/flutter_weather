@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
+import 'package:flutter_weather/forecast/widgets/forecast_alerts.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastDisplay extends StatefulWidget {
@@ -72,6 +73,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             SizedBox(height: 10.0),
             ForecastCurrentTemp(currentDay: widget.forecast.list!.first),
             ForecastCondition(currentDay: currentDay),
+            ForecastAlerts(),
             ForecastHiLo(currentDay: currentDay),
             ForecastDayScroller(forecast: widget.forecast),
             if ((widget.forecast.details != null) &&
@@ -162,6 +164,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       Column(
         children: <Widget>[
           ForecastCondition(currentDay: currentDay),
+          ForecastAlerts(),
           ForecastHiLo(currentDay: currentDay),
           if ((widget.forecast.details != null) &&
               (widget.forecast.details!.current != null))

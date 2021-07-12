@@ -11,6 +11,16 @@ class AppTheme {
   static Color get dangerColor => Colors.red[700]!;
   static Color get infoColor => Colors.lightBlue;
 
+  static Color getAlertColor(
+    ThemeMode themeMode, {
+    bool? colorTheme: false,
+  }) =>
+      (themeMode == ThemeMode.dark)
+          ? Colors.white.withOpacity(0.05)
+          : colorTheme!
+              ? Colors.white.withOpacity(0.1)
+              : secondaryColor.withOpacity(0.1);
+
   static List<Color> getComplimentaryColors({
     double opacity: 1.0,
   }) =>
