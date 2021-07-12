@@ -47,13 +47,14 @@ class ForecastLocation extends StatelessWidget {
                 forecast.getLocationText(includeCityName: false),
                 style: getLocationTextStyle(context),
               ),
-              Opacity(
-                opacity: Tween<double>(
-                  begin: 0.0,
-                  end: 1.0,
-                ).evaluate(opacityAnimation!),
-                child: ForecastAlerts(compact: true),
-              ),
+              if (forecast.hasAlerts())
+                Opacity(
+                  opacity: Tween<double>(
+                    begin: 0.0,
+                    end: 1.0,
+                  ).evaluate(opacityAnimation!),
+                  child: ForecastAlerts(compact: true),
+                ),
             ],
           ),
         ),

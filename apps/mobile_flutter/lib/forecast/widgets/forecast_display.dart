@@ -72,7 +72,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             SizedBox(height: 10.0),
             ForecastCurrentTemp(currentDay: widget.forecast.list!.first),
             ForecastCondition(currentDay: currentDay),
-            ForecastAlerts(),
+            if (widget.forecast.hasAlerts()) ForecastAlerts(),
             ForecastHiLo(currentDay: currentDay),
             ForecastDayScroller(forecast: widget.forecast),
             if ((widget.forecast.details != null) &&
@@ -163,7 +163,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       Column(
         children: <Widget>[
           ForecastCondition(currentDay: currentDay),
-          ForecastAlerts(),
+          if (widget.forecast.hasAlerts()) ForecastAlerts(),
           ForecastHiLo(currentDay: currentDay),
           if ((widget.forecast.details != null) &&
               (widget.forecast.details!.current != null))
