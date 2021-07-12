@@ -8,6 +8,8 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+const double headerHeight = 260.0;
+
 Uri getDetailedUri(
   Map<String, dynamic> params,
 ) {

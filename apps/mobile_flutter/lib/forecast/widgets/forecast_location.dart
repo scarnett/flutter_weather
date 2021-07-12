@@ -9,6 +9,7 @@ class ForecastLocation extends StatelessWidget {
   final double? maxExtent;
   final double? minExtent;
   final Animation<double>? resizeAnimation;
+  final Animation<double>? opacityAnimation;
 
   final AlignmentTween _locationAlignTween = AlignmentTween(
     begin: Alignment.topCenter,
@@ -22,6 +23,7 @@ class ForecastLocation extends StatelessWidget {
     this.maxExtent,
     this.minExtent,
     this.resizeAnimation,
+    this.opacityAnimation,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,13 @@ class ForecastLocation extends StatelessWidget {
               Text(
                 forecast.getLocationText(includeCityName: false),
                 style: getLocationTextStyle(context),
+              ),
+              Opacity(
+                opacity: Tween<double>(
+                  begin: 0.0,
+                  end: 1.0,
+                ).evaluate(opacityAnimation!),
+                child: ForecastAlerts(compact: true),
               ),
             ],
           ),

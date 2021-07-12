@@ -29,7 +29,6 @@ class ForecastDisplay extends StatefulWidget {
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
   late ScrollController _scrollController;
-  double _headerHeight = 260.0;
   double _bottomFadeHeight = 75.0;
   double _bottomFadeOpacity = 1.0;
 
@@ -182,7 +181,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           onDoubleTap: () {
             if (_scrollController.offset == 0.0) {
               _scrollController.animateTo(
-                _headerHeight,
+                headerHeight,
                 duration: const Duration(milliseconds: 150),
                 curve: Curves.linear,
               );
@@ -218,7 +217,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     double minHeight: 0.0,
     double minDistance: 0.5,
   }) {
-    final double scrollDistance = ((maxHeight ?? _headerHeight) - minHeight);
+    final double scrollDistance = ((maxHeight ?? headerHeight) - minHeight);
     if ((_scrollController.offset > 0.0) &&
         (_scrollController.offset < scrollDistance)) {
       final double snapOffset =

@@ -3,17 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 
 class ForecastAlerts extends StatefulWidget {
-  final double size;
-  final double pulseSize;
+  final double iconSize;
+  final double iconPulseSize;
+  final bool compact;
 
   ForecastAlerts({
     Key? key,
-    this.size: 18.0,
-    this.pulseSize: 1.5,
+    this.iconSize: 16.0,
+    this.iconPulseSize: 1.5,
+    this.compact: false,
   }) : super(key: key);
 
   @override
@@ -45,58 +48,7 @@ class _ForecastAlertsState extends State<ForecastAlerts>
   ) =>
       Material(
         type: MaterialType.transparency,
-        child: Center(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AppTheme.warningColor.withOpacity(0.3),
-                width: 2.0,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              color: AppTheme.getAlertColor(
-                context.read<AppBloc>().state.themeMode,
-                colorTheme: context.read<AppBloc>().state.colorTheme,
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 20.0,
-            ),
-            margin: const EdgeInsets.only(
-              bottom: 20.0,
-              left: 10.0,
-              right: 10.0,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: ScaleTransition(
-                    scale: _sizeTween.animate(
-                      CurvedAnimation(
-                        parent: _sizeController,
-                        curve: Curves.elasticOut,
-                      ),
-                    ),
-                    child: Icon(
-                      Icons.warning,
-                      color: AppTheme.warningColor,
-                      size: widget.size,
-                    ),
-                  ),
-                ),
-                Text(
-                  'Severe Thunderstorm Watch', // TODO!
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(height: 1.0),
-                ),
-              ],
-            ),
-          ),
-        ),
+        child: _buildContent(),
       );
 
   void _initialize() {
@@ -106,7 +58,7 @@ class _ForecastAlertsState extends State<ForecastAlerts>
       value: 1.0,
     );
 
-    _sizeTween = Tween(begin: widget.pulseSize, end: 1.0);
+    _sizeTween = Tween(begin: widget.iconPulseSize, end: 1.0);
     _sizeTimer = Timer.periodic(
       const Duration(seconds: 10),
       (Timer timer) => _sizeController.forward(from: 0.0),
@@ -114,4 +66,106 @@ class _ForecastAlertsState extends State<ForecastAlerts>
 
     _sizeController.forward();
   }
+
+  Widget _buildContent() {
+    if (widget.compact) {
+      return _buildCompactAlert();
+    }
+
+    return _buildDetailedAlert();
+  }
+
+  Widget _buildCompactAlert() => Tooltip(
+        preferBelow: false,
+        message: AppLocalizations.of(context)!.getAlerts(1), // TODO
+        child: Material(
+          type: MaterialType.transparency,
+          child: Container(
+            height: 40.0,
+            width: 40.0,
+            child: InkWell(
+              highlightColor: Colors.transparent,
+              overlayColor: MaterialStateProperty.all<Color>(
+                  AppTheme.warningColor.withOpacity(0.1)),
+              borderRadius: BorderRadius.circular(40.0),
+              child: ScaleTransition(
+                scale: _sizeTween.animate(
+                  CurvedAnimation(
+                    parent: _sizeController,
+                    curve: Curves.elasticOut,
+                  ),
+                ),
+                child: Icon(
+                  Icons.warning,
+                  color: AppTheme.warningColor,
+                  size: widget.iconSize,
+                ),
+              ),
+              onTap: () => print('TODO'), // TODO!
+            ),
+          ),
+        ),
+      );
+
+  Widget _buildDetailedAlert() => Center(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: AppTheme.warningColor.withOpacity(0.3),
+              width: 2.0,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            color: AppTheme.getAlertColor(
+              context.read<AppBloc>().state.themeMode,
+              colorTheme: context.read<AppBloc>().state.colorTheme,
+            ),
+          ),
+          margin: const EdgeInsets.only(
+            bottom: 20.0,
+            left: 10.0,
+            right: 10.0,
+          ),
+          child: InkWell(
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            highlightColor: Colors.transparent,
+            overlayColor: MaterialStateProperty.all<Color>(
+                AppTheme.warningColor.withOpacity(0.1)),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20.0,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: ScaleTransition(
+                      scale: _sizeTween.animate(
+                        CurvedAnimation(
+                          parent: _sizeController,
+                          curve: Curves.elasticOut,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.warning,
+                        color: AppTheme.warningColor,
+                        size: widget.iconSize,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'Severe Thunderstorm Watch', // TODO!
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(height: 1.0),
+                  ),
+                ],
+              ),
+            ),
+            onTap: () => print('TODO'), // TODO!
+          ),
+        ),
+      );
 }
