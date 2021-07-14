@@ -78,22 +78,23 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   enabled: chartsEnabled,
                 ),
               ),
-              ForecastDivider(
-                padding: const EdgeInsets.only(
-                  left: 10.0,
-                  right: 10.0,
-                  bottom: 20.0,
-                  top: 10.0,
-                ),
-              ),
+              ForecastDivider(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: ForecastHours(
                   parentScrollController: widget.scrollController,
                   forecast: widget.forecast,
                   forecastColor: widget.forecastColor,
+                  padBottom: !widget.forecast.hasAlerts(),
                 ),
               ),
+              if (widget.forecast.hasAlerts()) ...[
+                ForecastDivider(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: ForecastAlertList(forecast: widget.forecast),
+                ),
+              ],
             ],
           ),
         ),

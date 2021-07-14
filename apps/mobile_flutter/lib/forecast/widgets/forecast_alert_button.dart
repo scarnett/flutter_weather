@@ -6,28 +6,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
+import 'package:flutter_weather/app/widgets/widgets.dart';
+import 'package:flutter_weather/models/models.dart';
 
-class ForecastAlerts extends StatefulWidget {
+class ForecastAlertButton extends StatefulWidget {
+  final Forecast forecast;
   final double iconSize;
   final double iconPulseSize;
   final bool compact;
 
-  ForecastAlerts({
+  ForecastAlertButton({
     Key? key,
+    required this.forecast,
     this.iconSize: 16.0,
     this.iconPulseSize: 1.5,
     this.compact: false,
   }) : super(key: key);
 
   @override
-  _ForecastAlertsState createState() => _ForecastAlertsState();
+  _ForecastAlertButtonState createState() => _ForecastAlertButtonState();
 }
 
-class _ForecastAlertsState extends State<ForecastAlerts>
+class _ForecastAlertButtonState extends State<ForecastAlertButton>
     with TickerProviderStateMixin {
   late AnimationController _sizeController;
   late Tween<double> _sizeTween;
   late Timer _sizeTimer;
+
+  Timer? _eventTimer;
+  List<Widget> _alertWidgets = <Widget>[];
+  int _currentPage = 0;
 
   @override
   void initState() {
@@ -39,6 +47,7 @@ class _ForecastAlertsState extends State<ForecastAlerts>
   void dispose() {
     _sizeController.dispose();
     _sizeTimer.cancel();
+    _eventTimer?.cancel();
     super.dispose();
   }
 
@@ -65,6 +74,16 @@ class _ForecastAlertsState extends State<ForecastAlerts>
     );
 
     _sizeController.forward();
+
+    if ((widget.forecast.details?.alerts?.length ?? 0) > 1) {
+      _eventTimer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
+        if (_currentPage < (widget.forecast.details!.alerts!.length - 1)) {
+          setState(() => _currentPage++);
+        } else {
+          setState(() => (_currentPage = 0));
+        }
+      });
+    }
   }
 
   Widget _buildContent() {
@@ -72,12 +91,31 @@ class _ForecastAlertsState extends State<ForecastAlerts>
       return _buildCompactAlert();
     }
 
-    return _buildDetailedAlert();
+    if (_alertWidgets.isEmpty) {
+      _buildAlerts();
+    }
+
+    if (_alertWidgets.isNotEmpty) {
+      return Container(
+        margin: const EdgeInsets.only(
+          bottom: 20.0,
+          left: 10.0,
+          right: 10.0,
+        ),
+        child: FadeIndexedStack(
+          children: _alertWidgets,
+          index: _currentPage,
+        ),
+      );
+    }
+
+    return Container();
   }
 
   Widget _buildCompactAlert() => Tooltip(
         preferBelow: false,
-        message: AppLocalizations.of(context)!.getAlerts(1), // TODO
+        message: AppLocalizations.of(context)!
+            .getAlerts(widget.forecast.details?.alerts?.length ?? 0),
         child: Material(
           type: MaterialType.transparency,
           child: Container(
@@ -101,13 +139,16 @@ class _ForecastAlertsState extends State<ForecastAlerts>
                   size: widget.iconSize,
                 ),
               ),
-              onTap: () => print('TODO'), // TODO!
+              onTap: () => _tapAlert(context),
             ),
           ),
         ),
       );
 
-  Widget _buildDetailedAlert() => Center(
+  Widget _buildDetailedAlert(
+    ForecastAlert alert,
+  ) =>
+      Center(
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
@@ -119,11 +160,6 @@ class _ForecastAlertsState extends State<ForecastAlerts>
               context.read<AppBloc>().state.themeMode,
               colorTheme: context.read<AppBloc>().state.colorTheme,
             ),
-          ),
-          margin: const EdgeInsets.only(
-            bottom: 20.0,
-            left: 10.0,
-            right: 10.0,
           ),
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -140,32 +176,43 @@ class _ForecastAlertsState extends State<ForecastAlerts>
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 10.0),
-                    child: ScaleTransition(
-                      scale: _sizeTween.animate(
-                        CurvedAnimation(
-                          parent: _sizeController,
-                          curve: Curves.elasticOut,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.warning,
-                        color: AppTheme.warningColor,
-                        size: widget.iconSize,
-                      ),
+                    child: Icon(
+                      Icons.warning,
+                      color: AppTheme.warningColor,
+                      size: widget.iconSize,
                     ),
                   ),
-                  Text(
-                    'Severe Thunderstorm Watch', // TODO!
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(height: 1.0),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      alert.event ?? 'N/A',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(height: 1.0),
+                    ),
                   ),
                 ],
               ),
             ),
-            onTap: () => print('TODO'), // TODO!
+            onTap: () => _tapAlert(context, index: _currentPage),
           ),
         ),
       );
+
+  void _buildAlerts() {
+    if (widget.forecast.details?.alerts != null) {
+      for (ForecastAlert alert in widget.forecast.details!.alerts!) {
+        _alertWidgets.add(_buildDetailedAlert(alert));
+      }
+    }
+  }
+
+  void _tapAlert(
+    BuildContext context, {
+    int index: 0,
+  }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    // Navigator.push(context, ForecastAlertsView.route());
+  }
 }

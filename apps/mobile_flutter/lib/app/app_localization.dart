@@ -82,7 +82,9 @@ class AppLocalizations {
   String get distanceUnits => addMessage('Distance Units');
   String get distanceMi => addMessage('mi');
   String get distanceKm => addMessage('km');
+  String get alerts => addMessage('Alerts');
   String get forecast => addMessage('Forecast');
+  String get forecastAlerts => addMessage('Forecast Alerts');
   String get addForecast => addMessage('Add Forecast');
   String get addThisForecast => addMessage('Add This Forecast');
   String get editForecast => addMessage('Edit Forecast');

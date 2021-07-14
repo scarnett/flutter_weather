@@ -480,3 +480,27 @@ String? formatHour({
 
   return null;
 }
+
+List<Map<String, String?>> scrubAlertDescription(
+  String? description,
+) {
+  List<Map<String, String?>> data = [];
+
+  if (description != null) {
+    description = description.replaceAll('\n*', '*');
+    description = description.replaceAll('\n', ' ');
+    description.split('*').forEach((String line) {
+      if (line.startsWith('...') && line.endsWith('...')) {
+        line = line.replaceAll('...', '');
+        data.add({'label': null, 'text': line.trim()});
+      } else if (line.contains('...')) {
+        List<String> lineParts = line.split('...');
+        data.add({'label': lineParts[0].trim(), 'text': lineParts[1].trim()});
+      } else {
+        data.add({'label': null, 'text': line.trim()});
+      }
+    });
+  }
+
+  return data;
+}

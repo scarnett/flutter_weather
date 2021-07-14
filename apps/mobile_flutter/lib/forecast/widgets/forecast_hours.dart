@@ -12,12 +12,14 @@ class ForecastHours extends StatefulWidget {
   final ScrollController parentScrollController;
   final Forecast forecast;
   final Color? forecastColor;
+  final bool padBottom;
 
   ForecastHours({
     Key? key,
     required this.parentScrollController,
     required this.forecast,
     this.forecastColor,
+    this.padBottom: true,
   }) : super(key: key);
 
   @override
@@ -231,7 +233,8 @@ class _ForecastHoursState extends State<ForecastHours> {
         for (ForecastHour hour in hours) {
           Widget hourTile = ForecastHourTile(hour: hour);
 
-          if (((dayCount + 1) == _hourData.length) &&
+          if (widget.padBottom &&
+              ((dayCount + 1) == _hourData.length) &&
               ((hourCount + 1) == hours.length)) {
             hourTile = Container(
               padding: EdgeInsets.only(
