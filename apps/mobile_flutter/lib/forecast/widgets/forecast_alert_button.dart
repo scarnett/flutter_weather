@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastAlertButton extends StatefulWidget {
@@ -97,14 +97,16 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton>
 
     if (_alertWidgets.isNotEmpty) {
       return Container(
-        margin: const EdgeInsets.only(
-          bottom: 20.0,
-          left: 10.0,
-          right: 10.0,
-        ),
-        child: FadeIndexedStack(
-          children: _alertWidgets,
-          index: _currentPage,
+        margin: const EdgeInsets.only(bottom: 20.0),
+        child: CarouselSlider(
+          items: _alertWidgets,
+          options: CarouselOptions(
+            height: 40.0,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 10),
+            autoPlayAnimationDuration: const Duration(milliseconds: 250),
+            autoPlayCurve: Curves.easeInOut,
+          ),
         ),
       );
     }

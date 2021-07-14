@@ -2,7 +2,6 @@ export 'app_checkbox_tile.dart';
 export 'app_color_theme.dart';
 export 'app_day_night_switch.dart';
 export 'app_fab.dart';
-export 'app_fade_indexed_stack.dart';
 export 'app_form_button.dart';
 export 'app_label.dart';
 export 'app_none_found.dart';
