@@ -146,8 +146,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     int count = 0;
 
     for (ForecastHour hour in widget.forecast.details!.hourly!) {
-      DateTime hourDate = epochToDateTime(hour.dt!).getDate();
-      String? formatted = formatDateTime(date: hourDate, format: 'yyyyMMdd');
+      String? formatted = formatEpoch(epoch: hour.dt!, format: 'yyyyMMdd');
       if (formatted != null) {
         if (_hourData.containsKey(formatted)) {
           _hourData[formatted]!.add(hour);

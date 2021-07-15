@@ -20,11 +20,10 @@ class AppLabel extends StatelessWidget {
   ) =>
       Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          color: context.read<AppBloc>().state.colorTheme
-              ? Colors.white
-              : AppTheme.primaryColor,
+          color: Colors.black.withOpacity(0.1),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 10.0,

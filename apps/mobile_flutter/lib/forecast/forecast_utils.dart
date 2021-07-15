@@ -376,9 +376,9 @@ IconData getForecastIconData(
 
 String getTitle(
   BuildContext context,
-  num _currentPage,
+  num currentPage,
 ) {
-  if (_currentPage.toInt() == 1) {
+  if (currentPage.toInt() == 1) {
     return AppLocalizations.of(context)!.country;
   }
 

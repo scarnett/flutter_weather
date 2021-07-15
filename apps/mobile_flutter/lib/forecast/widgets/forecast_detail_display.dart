@@ -85,16 +85,8 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   parentScrollController: widget.scrollController,
                   forecast: widget.forecast,
                   forecastColor: widget.forecastColor,
-                  padBottom: !widget.forecast.hasAlerts(),
                 ),
               ),
-              if (widget.forecast.hasAlerts()) ...[
-                ForecastDivider(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: ForecastAlertList(forecast: widget.forecast),
-                ),
-              ],
             ],
           ),
         ),

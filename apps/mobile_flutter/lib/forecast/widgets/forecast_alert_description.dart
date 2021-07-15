@@ -33,27 +33,27 @@ class _ForecastAlertDescriptionState extends State<ForecastAlertDescription> {
     BuildContext context,
   ) =>
       Column(
+        mainAxisSize: MainAxisSize.min,
         children: _buildContent(),
       );
 
   List<Widget> _buildContent() {
-    int count = 0;
     List<Widget> children = [];
 
     for (Map<String, String?> entry in lines) {
       if (entry['label'] == null) {
         children.add(_buildText(entry['text']));
       } else {
-        children.add(Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildLabel(entry['label']),
-            _buildText(entry['text'], index: count),
-          ],
-        ));
+        children.add(
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildLabel(entry['label']),
+              _buildText(entry['text']),
+            ],
+          ),
+        );
       }
-
-      count++;
     }
 
     return children;
@@ -62,28 +62,20 @@ class _ForecastAlertDescriptionState extends State<ForecastAlertDescription> {
   Widget _buildLabel(
     String? label,
   ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: AppLabel(text: label ?? ''),
-        ),
-      );
+      AppSectionHeader(text: label ?? '');
 
   Widget _buildText(
-    String? text, {
-    int index: 0,
-  }) =>
+    String? text,
+  ) =>
       Padding(
-        padding: EdgeInsets.only(
-          bottom: ((index == (lines.length - 1)) ? 0.0 : 20.0),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: Align(
           alignment: Alignment.centerLeft,
           child: Text(
             text ?? '',
             style: Theme.of(context).textTheme.headline5!.copyWith(
-                  height: 1.2,
+                  height: 1.5,
+                  fontSize: 18.0,
                   shadows: context.read<AppBloc>().state.colorTheme
                       ? commonTextShadow()
                       : null,

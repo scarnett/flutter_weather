@@ -17,11 +17,7 @@ String getDayTitle(
   }
 
   ForecastDaily day = forecast.details!.daily![value.toInt()];
-  return formatDateTime(
-        date: epochToDateTime(day.dt!),
-        format: format,
-      ) ??
-      '';
+  return formatEpoch(epoch: day.dt!, format: format) ?? '';
 }
 
 List<Color> getLineColors(

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
+import 'package:flutter_weather/forecast/view/view.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastAlertButton extends StatefulWidget {
@@ -215,6 +216,6 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton>
     int index: 0,
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    // Navigator.push(context, ForecastAlertsView.route());
+    Navigator.push(context, ForecastAlertsView.route());
   }
 }
