@@ -142,7 +142,7 @@ String? formatEpoch({
   required int epoch,
   String? format: 'M/d/yy \'at\' hh:mm a',
 }) {
-  DateTime hourDate = epochToDateTime(epoch).getDate();
+  DateTime hourDate = epochToDateTime(epoch);
   return formatDateTime(date: hourDate, format: format);
 }
 
