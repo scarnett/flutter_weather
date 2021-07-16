@@ -6,4 +6,6 @@ import { Location } from './location'
  */
 export class PushNotificationExtras extends BaseModel {
   location?: Location
+  sound: boolean = true
+  showUnitSymbol: boolean = false
 }

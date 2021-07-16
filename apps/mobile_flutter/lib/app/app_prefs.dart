@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,7 +67,7 @@ class AppPrefs {
     }
   }
 
-  Map<String, dynamic>? get pushNotificationExtras {
+  NotificationExtras? get pushNotificationExtras {
     String? pushNotificationExtras =
         _sharedPrefs.getString(pushNotificationExtrasKey);
 
@@ -74,14 +75,18 @@ class AppPrefs {
       return null;
     }
 
-    return json.decode(pushNotificationExtras);
+    return NotificationExtras.fromJson(pushNotificationExtras);
   }
 
   set pushNotificationExtras(
-    Map<String, dynamic>? pushNotificationExtras,
+    NotificationExtras? pushNotificationExtras,
   ) {
-    _sharedPrefs.setString(
-        pushNotificationExtrasKey, json.encode(pushNotificationExtras));
+    if (pushNotificationExtras == null) {
+      _sharedPrefs.remove(pushNotificationExtrasKey);
+    } else {
+      _sharedPrefs.setString(pushNotificationExtrasKey,
+          json.encode(pushNotificationExtras.toJson()));
+    }
   }
 
   TemperatureUnit get temperatureUnit =>

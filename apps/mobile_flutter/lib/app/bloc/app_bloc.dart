@@ -168,7 +168,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             yield state.copyWith(
               pushNotification:
                   Nullable<PushNotification?>(PushNotification.off),
-              pushNotificationExtras: Nullable<Map<String, dynamic>?>(null),
+              pushNotificationExtras: Nullable<NotificationExtras?>(null),
             );
           }
         }
@@ -190,7 +190,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     yield state.copyWith(
       pushNotification: Nullable<PushNotification?>(event.pushNotification),
       pushNotificationExtras:
-          Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
+          Nullable<NotificationExtras?>(NotificationExtras.fromJson({
+        ...state.pushNotificationExtras?.toJson() ?? {},
+        ...event.pushNotificationExtras?.toJson() ?? {},
+      })),
     );
 
     await _saveDeviceInfo(event.pushNotification);
@@ -598,7 +601,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         updatePeriod: getPeriod(id: jsonData['updatePeriod']),
         pushNotification: getPushNotification(jsonData['pushNotification']),
         pushNotificationExtras: (jsonData['pushNotificationExtras'] != null)
-            ? json.decode(jsonData['pushNotificationExtras'])
+            ? NotificationExtras.fromJson(jsonData['pushNotificationExtras'])
             : null,
         themeMode: getThemeMode(jsonData['themeMode']),
         colorTheme: jsonData['colorTheme'],
@@ -616,8 +619,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       {
         'updatePeriod': state.updatePeriod?.getInfo()?['id'],
         'pushNotification': state.pushNotification?.getInfo()?['id'],
-        'pushNotificationExtras': state.pushNotificationExtras != null
-            ? json.encode(state.pushNotificationExtras)
+        'pushNotificationExtras': (state.pushNotificationExtras != null)
+            ? state.pushNotificationExtras!.toJson()
             : null,
         'themeMode': state.themeMode.toString(),
         'colorTheme': state.colorTheme,
