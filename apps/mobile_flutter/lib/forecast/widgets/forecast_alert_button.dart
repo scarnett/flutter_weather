@@ -28,7 +28,8 @@ class ForecastAlertButton extends StatefulWidget {
   _ForecastAlertButtonState createState() => _ForecastAlertButtonState();
 }
 
-class _ForecastAlertButtonState extends State<ForecastAlertButton> with TickerProviderStateMixin {
+class _ForecastAlertButtonState extends State<ForecastAlertButton>
+    with TickerProviderStateMixin {
   late AnimationController _sizeController;
   late Tween<double> _sizeTween;
   late Timer _sizeTimer;
@@ -123,7 +124,8 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton> with TickerPr
 
   Widget _buildCompactAlert() => Tooltip(
         preferBelow: false,
-        message: AppLocalizations.of(context)!.getAlerts(widget.forecast.details?.alerts?.length ?? 0),
+        message: AppLocalizations.of(context)!
+            .getAlerts(widget.forecast.details?.alerts?.length ?? 0),
         child: Material(
           type: MaterialType.transparency,
           child: Container(
@@ -131,7 +133,8 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton> with TickerPr
             width: 40.0,
             child: InkWell(
               highlightColor: Colors.transparent,
-              overlayColor: MaterialStateProperty.all<Color>(AppTheme.warningColor.withOpacity(0.1)),
+              overlayColor: MaterialStateProperty.all<Color>(
+                  AppTheme.warningColor.withOpacity(0.1)),
               borderRadius: BorderRadius.circular(40.0),
               child: ScaleTransition(
                 scale: _sizeTween.animate(
@@ -171,7 +174,8 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton> with TickerPr
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             highlightColor: Colors.transparent,
-            overlayColor: MaterialStateProperty.all<Color>(AppTheme.warningColor.withOpacity(0.1)),
+            overlayColor: MaterialStateProperty.all<Color>(
+                AppTheme.warningColor.withOpacity(0.1)),
             child: Container(
               padding: const EdgeInsets.symmetric(
                 vertical: 10.0,
@@ -192,7 +196,8 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton> with TickerPr
                     alignment: Alignment.centerLeft,
                     child: Text(
                       alert.event ?? 'N/A',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(height: 1.0),
+                      style: TextStyle(fontSize: 16.0),
+                      //style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
                 ],

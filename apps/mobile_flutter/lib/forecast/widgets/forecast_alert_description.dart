@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/app/bloc/app_bloc.dart';
-import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 
@@ -73,12 +70,9 @@ class _ForecastAlertDescriptionState extends State<ForecastAlertDescription> {
           alignment: Alignment.centerLeft,
           child: Text(
             text ?? '',
-            style: Theme.of(context).textTheme.headline5!.copyWith(
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(
                   height: 1.5,
                   fontSize: 18.0,
-                  shadows: context.read<AppBloc>().state.colorTheme
-                      ? commonTextShadow()
-                      : null,
                 ),
           ),
         ),
