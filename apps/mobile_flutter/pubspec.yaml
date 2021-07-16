@@ -20,7 +20,7 @@ dependencies:
   device_info: '2.0.2'
   equatable: '2.0.3'
   firebase_core: '1.4.0'
-  firebase_crashlytics: '2.1.1'
+  firebase_crashlytics: '2.0.6'
   firebase_messaging: '10.0.4'
   firebase_remote_config: '0.10.0+3'
   fl_chart:
@@ -38,8 +38,8 @@ dependencies:
   page_view_indicators: '2.0.0'
   path_provider: '2.0.2'
   permission_handler: '8.1.2'
-  sentry: '5.1.0'
-  sentry_flutter: '5.1.0'
+  sentry: '5.0.0'
+  sentry_flutter: '5.0.0'
   shared_preferences: '2.0.6'
   sticky_headers: '0.2.0'
   store_redirect:
