@@ -87,7 +87,13 @@ class AppLocalizations {
   String get distanceUnits => addMessage('Distance Units');
   String get distanceMi => addMessage('mi');
   String get distanceKm => addMessage('km');
+  String get alerts => addMessage('Alerts');
+  String get meta => addMessage('Meta');
+  String get sender => addMessage('Sender');
+  String get start => addMessage('Start');
+  String get end => addMessage('End');
   String get forecast => addMessage('Forecast');
+  String get forecastAlerts => addMessage('Forecast Alerts');
   String get addForecast => addMessage('Add Forecast');
   String get addThisForecast => addMessage('Add This Forecast');
   String get editForecast => addMessage('Edit Forecast');
@@ -190,6 +196,24 @@ class AppLocalizations {
           appVersion,
         ],
       );
+
+  String getAlerts(
+    int count,
+  ) {
+    if (count == 1) {
+      return addMessage(
+        '$count Alert',
+        name: 'getAlerts',
+        args: [count],
+      );
+    }
+
+    return addMessage(
+      '$count Alerts',
+      name: 'getAlerts',
+      args: [count],
+    );
+  }
 
   addMessage(
     String message, {

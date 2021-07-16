@@ -43,6 +43,10 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
           final AlwaysStoppedAnimation<double> resizeAnimation =
               AlwaysStoppedAnimation(expandRatio);
 
+          final double opacityPercentage = _calculateOpacityPercentage();
+          final AlwaysStoppedAnimation<double> opacityAnimation =
+              AlwaysStoppedAnimation(opacityPercentage);
+
           return GestureDetector(
             onDoubleTap: () {
               if (scrollController.offset > 0.0) {
@@ -85,6 +89,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
                       maxExtent: maxExtent,
                       minExtent: minExtent,
                       resizeAnimation: resizeAnimation,
+                      opacityAnimation: opacityAnimation,
                     ),
                     ForecastCurrentTemp(
                       currentDay: forecast.list!.first,
@@ -130,5 +135,12 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
     }
 
     return expandRatio;
+  }
+
+  double _calculateOpacityPercentage() {
+    double min = ((headerHeight - (100 / headerHeight) * 100));
+
+    return ((scrollController.position.pixels - min) / (headerHeight - min))
+        .clamp(0.0, 1.0);
   }
 }

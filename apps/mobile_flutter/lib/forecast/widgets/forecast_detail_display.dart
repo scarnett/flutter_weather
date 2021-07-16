@@ -78,14 +78,7 @@ class _ForecastDetailDisplayState extends State<ForecastDetailDisplay> {
                   enabled: chartsEnabled,
                 ),
               ),
-              ForecastDivider(
-                padding: const EdgeInsets.only(
-                  left: 10.0,
-                  right: 10.0,
-                  bottom: 20.0,
-                  top: 10.0,
-                ),
-              ),
+              ForecastDivider(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: ForecastHours(
