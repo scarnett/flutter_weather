@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/models/models.dart';
 
 UpdatePeriod? getPeriod({
   BuildContext? context,
@@ -66,14 +67,14 @@ String getTitle(
 String? getPushNotificationText(
   BuildContext context,
   PushNotification? notification, {
-  Map<String, dynamic>? extras,
+  NotificationExtras? extras,
 }) {
   switch (notification) {
     case PushNotification.currentLocation:
     case PushNotification.savedLocation:
       if (extras != null) {
-        if (extras.containsKey('location')) {
-          return extras['location']['name'];
+        if (extras.location != null) {
+          return extras.location!.name;
         }
       }
 

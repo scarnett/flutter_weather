@@ -9,7 +9,12 @@ class ForecastDivider extends StatelessWidget {
 
   const ForecastDivider({
     Key? key,
-    this.padding: const EdgeInsets.symmetric(horizontal: 0.0),
+    this.padding: const EdgeInsets.only(
+      left: 10.0,
+      right: 10.0,
+      bottom: 20.0,
+      top: 10.0,
+    ),
   }) : super(key: key);
 
   @override

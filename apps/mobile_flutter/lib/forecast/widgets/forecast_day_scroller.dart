@@ -126,10 +126,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4.0),
                       child: Text(
-                        formatDateTime(
-                          date: epochToDateTime(day.dt!),
-                          format: 'EEE',
-                        )!,
+                        formatEpoch(epoch: day.dt!, format: 'EEE')!,
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),

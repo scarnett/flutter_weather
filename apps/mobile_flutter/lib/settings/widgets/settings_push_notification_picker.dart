@@ -21,7 +21,7 @@ import 'package:sentry/sentry.dart';
 
 class SettingsPushNotificationPicker extends StatefulWidget {
   final PushNotification? selectedNotification;
-  final Map<String, dynamic>? selectedNotificationExtras;
+  final NotificationExtras? selectedNotificationExtras;
 
   SettingsPushNotificationPicker({
     Key? key,
@@ -84,12 +84,13 @@ class _SettingsPushNotificationPickerState
   ) =>
       ListView(
         children: [
-          ..._buildListOfNotificationTile(PushNotification.off),
-          ..._buildListOfNotificationTile(
+          ..._buildListOfNotificationTiles(PushNotification.off),
+          ..._buildListOfNotificationTiles(
             PushNotification.currentLocation,
             showDivider: false,
           ),
           ..._buildListOfForecasts(state),
+          ..._buildMessageOptions(state),
         ],
       );
 
@@ -110,7 +111,7 @@ class _SettingsPushNotificationPickerState
 
     for (int i = 0; i < forecasts.length; i++) {
       children.addAll(
-        _buildListOfNotificationTile(
+        _buildListOfNotificationTiles(
           PushNotification.savedLocation,
           forecast: forecasts[i],
           showDivider: ((i + 1) < forecasts.length),
@@ -121,7 +122,41 @@ class _SettingsPushNotificationPickerState
     return children;
   }
 
-  List<Widget> _buildListOfNotificationTile(
+  List<Widget> _buildMessageOptions(
+    AppState state,
+  ) {
+    bool pushStatus = (state.pushNotification != PushNotification.off);
+    List<Widget> children = <Widget>[];
+    children.addAll([
+      AppSectionHeader(
+        text: AppLocalizations.of(context)!.pushNotificationOptions,
+      ),
+      AppCheckboxTile(
+        title: AppLocalizations.of(context)!.pushNotificationOptionPlaySound,
+        checked: ((state.pushNotificationExtras != null) && pushStatus)
+            ? state.pushNotificationExtras!.sound ?? false
+            : false,
+        onTap: pushStatus
+            ? (bool? checked) => _tapPlaySoundOption(state, checked ?? true)
+            : null,
+      ),
+      Divider(),
+      AppCheckboxTile(
+        title: AppLocalizations.of(context)!.pushNotificationOptionShowUnits,
+        checked: ((state.pushNotificationExtras != null) && pushStatus)
+            ? state.pushNotificationExtras!.showUnits ?? false
+            : false,
+        onTap: pushStatus
+            ? (bool? checked) => _tapShowUnitsOption(state, checked ?? true)
+            : null,
+      ),
+      Divider(),
+    ]);
+
+    return children;
+  }
+
+  List<Widget> _buildListOfNotificationTiles(
     PushNotification notification, {
     Forecast? forecast,
     bool showDivider: true,
@@ -210,7 +245,9 @@ class _SettingsPushNotificationPickerState
     PushNotification notification, {
     Forecast? forecast,
   }) async {
-    Map<String, dynamic>? notificationExtras;
+    NotificationExtras? notificationExtras =
+        context.read<AppBloc>().state.pushNotificationExtras ??
+            NotificationExtras(location: null);
 
     switch (notification) {
       case PushNotification.savedLocation:
@@ -219,16 +256,16 @@ class _SettingsPushNotificationPickerState
         }
 
         if (forecast != null) {
-          notificationExtras = {
-            'location': {
-              'id': forecast.id,
-              'name': forecast.getLocationText(),
-              'cityName': forecast.city?.name,
-              'country': forecast.city?.country,
-              'longitude': forecast.city?.coord?.lon,
-              'latitude': forecast.city?.coord?.lat,
-            },
-          };
+          notificationExtras = notificationExtras.copyWith(
+            location: NotificationLocation(
+              id: forecast.id,
+              name: forecast.getLocationText(),
+              cityName: forecast.city?.name,
+              country: forecast.city?.country,
+              longitude: forecast.city?.coord?.lon,
+              latitude: forecast.city?.coord?.lat,
+            ),
+          );
         }
 
         break;
@@ -253,15 +290,15 @@ class _SettingsPushNotificationPickerState
               Forecast forecast =
                   Forecast.fromJson(jsonDecode(forecastResponse.body));
 
-              notificationExtras = {
-                'location': {
-                  'name': forecast.getLocationText(),
-                  'cityName': forecast.city?.name,
-                  'country': forecast.city?.country,
-                  'longitude': forecast.city?.coord?.lon,
-                  'latitude': forecast.city?.coord?.lat,
-                },
-              };
+              notificationExtras = notificationExtras.copyWith(
+                location: NotificationLocation(
+                  name: forecast.getLocationText(),
+                  cityName: forecast.city?.name,
+                  country: forecast.city?.country,
+                  longitude: forecast.city?.coord?.lon,
+                  latitude: forecast.city?.coord?.lat,
+                ),
+              );
             }
 
             setState(() => error = false);
@@ -282,6 +319,8 @@ class _SettingsPushNotificationPickerState
         break;
 
       default:
+        notificationExtras = null;
+        setState(() => processing = false);
         break;
     }
 
@@ -296,6 +335,34 @@ class _SettingsPushNotificationPickerState
     }
   }
 
+  void _tapPlaySoundOption(
+    AppState state,
+    bool playSound,
+  ) async {
+    NotificationExtras? notificationExtras = state.pushNotificationExtras
+        ?.copyWith(sound: Nullable<bool>(playSound));
+
+    context.read<AppBloc>().add(SetPushNotification(
+          context: context,
+          pushNotification: context.read<AppBloc>().state.pushNotification,
+          pushNotificationExtras: notificationExtras,
+        ));
+  }
+
+  void _tapShowUnitsOption(
+    AppState state,
+    bool showUnits,
+  ) async {
+    NotificationExtras? notificationExtras = state.pushNotificationExtras
+        ?.copyWith(showUnits: Nullable<bool>(showUnits));
+
+    context.read<AppBloc>().add(SetPushNotification(
+          context: context,
+          pushNotification: context.read<AppBloc>().state.pushNotification,
+          pushNotificationExtras: notificationExtras,
+        ));
+  }
+
   Color? _getNotificationColor(
     PushNotification notification, {
     String? objectId,
@@ -303,10 +370,8 @@ class _SettingsPushNotificationPickerState
     if (widget.selectedNotification?.getInfo()!['id'] ==
         notification.getInfo()!['id']) {
       if ((widget.selectedNotificationExtras != null) &&
-          widget.selectedNotificationExtras!.containsKey('location')) {
-        String? forecastId =
-            widget.selectedNotificationExtras?['location']['id'];
-
+          widget.selectedNotificationExtras!.location != null) {
+        String? forecastId = widget.selectedNotificationExtras?.location?.id;
         if ((forecastId == null) || (forecastId == objectId)) {
           return AppTheme.primaryColor;
         }

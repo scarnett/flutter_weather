@@ -15,7 +15,7 @@ class ForecastCondition extends StatelessWidget {
     BuildContext context,
   ) =>
       Container(
-        padding: const EdgeInsets.only(bottom: 20.0, top: 10.0),
+        padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
         child: Text(
           currentDay.weather!.first.description!.toUpperCase(),
           style: Theme.of(context).textTheme.headline4!.copyWith(

@@ -100,4 +100,6 @@ extension ForecastExtension on Forecast {
       .daily!
       .map((ForecastDaily day) => utils.getTemperatureColor(day.temp!.min!))
       .toList();
+
+  bool hasAlerts() => ((this.details?.alerts?.length ?? 0) > 0);
 }

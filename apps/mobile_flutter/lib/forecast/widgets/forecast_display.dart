@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
+import 'package:flutter_weather/forecast/widgets/forecast_alert_button.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastDisplay extends StatefulWidget {
@@ -28,7 +29,6 @@ class ForecastDisplay extends StatefulWidget {
 
 class _ForecastDisplayState extends State<ForecastDisplay> {
   late ScrollController _scrollController;
-  double _headerHeight = 260.0;
   double _bottomFadeHeight = 75.0;
   double _bottomFadeOpacity = 1.0;
 
@@ -72,6 +72,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
             SizedBox(height: 10.0),
             ForecastCurrentTemp(currentDay: widget.forecast.list!.first),
             ForecastCondition(currentDay: currentDay),
+            if (widget.forecast.hasAlerts())
+              ForecastAlertButton(forecast: widget.forecast),
             ForecastHiLo(currentDay: currentDay),
             ForecastDayScroller(forecast: widget.forecast),
             if ((widget.forecast.details != null) &&
@@ -113,14 +115,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
                   delegate: SliverChildListDelegate(
                     [
                       _buildCurrentForecast(currentDay),
-                      ForecastDivider(
-                        padding: const EdgeInsets.only(
-                          left: 10.0,
-                          right: 10.0,
-                          bottom: 20.0,
-                          top: 10.0,
-                        ),
-                      ),
+                      ForecastDivider(),
                       ForecastDayScroller(forecast: widget.forecast),
                     ]..addAll(_buildDetailDisplay()),
                   ),
@@ -162,6 +157,8 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       Column(
         children: <Widget>[
           ForecastCondition(currentDay: currentDay),
+          if (widget.forecast.hasAlerts())
+            ForecastAlertButton(forecast: widget.forecast),
           ForecastHiLo(currentDay: currentDay),
           if ((widget.forecast.details != null) &&
               (widget.forecast.details!.current != null))
@@ -179,7 +176,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
           onDoubleTap: () {
             if (_scrollController.offset == 0.0) {
               _scrollController.animateTo(
-                _headerHeight,
+                headerHeight,
                 duration: const Duration(milliseconds: 150),
                 curve: Curves.linear,
               );
@@ -215,7 +212,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
     double minHeight: 0.0,
     double minDistance: 0.5,
   }) {
-    final double scrollDistance = ((maxHeight ?? _headerHeight) - minHeight);
+    final double scrollDistance = ((maxHeight ?? headerHeight) - minHeight);
     if ((_scrollController.offset > 0.0) &&
         (_scrollController.offset < scrollDistance)) {
       final double snapOffset =

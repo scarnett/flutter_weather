@@ -1,3 +1,4 @@
 {
-	"{{temp}}{{temperatureUnit}} in {{cityName}}": "{{temp}}{{temperatureUnit}} in {{cityName}}"
+	"{{temp}}{{temperatureUnit}} in {{cityName}} - {{condition}}": "{{temp}}{{temperatureUnit}} in {{cityName}} - {{condition}}",
+  "High {{highTemp}}{{temperatureUnit}} | Low {{lowTemp}}{{temperatureUnit}}": "High {{highTemp}}{{temperatureUnit}} | Low {{lowTemp}}{{temperatureUnit}}"
 }

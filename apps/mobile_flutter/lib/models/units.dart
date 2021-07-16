@@ -47,7 +47,7 @@ class Units extends Equatable {
               distance: getDistanceUnit(json['distanceUnit']),
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'temperature': temperature.units,
         'windSpeed': windSpeed.units,
         'pressure': pressure.units,

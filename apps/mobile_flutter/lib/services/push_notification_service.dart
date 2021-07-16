@@ -9,7 +9,7 @@ Future<http.Response?> pushNotificationSave({
   required String? deviceId,
   UpdatePeriod? period,
   PushNotification? pushNotification,
-  Map<String, dynamic>? pushNotificationExtras,
+  NotificationExtras? pushNotificationExtras,
   Units? units,
   String? fcmToken,
 }) async {
@@ -26,7 +26,7 @@ Future<http.Response?> pushNotificationSave({
           (pushNotification == null) ? null : pushNotification.getInfo()!['id'],
       'pushNotificationExtras': (pushNotificationExtras == null)
           ? null
-          : json.encode(pushNotificationExtras),
+          : json.encode(pushNotificationExtras.toJson()),
       'units': (units == null) ? null : json.encode(units.toJson()),
       'fcmToken': (fcmToken == null) ? null : fcmToken,
     },
