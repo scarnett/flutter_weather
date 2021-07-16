@@ -49,6 +49,11 @@ class AppLocalizations {
   String get pushNotificationSaved => addMessage('Saved Locations');
   String get pushNotificationCurrent => addMessage('Current Location');
   String get pushNotificationCurrentTap => addMessage('Tap to update');
+  String get pushNotificationOptions => addMessage('Message Options');
+  String get pushNotificationOptionPlaySound => addMessage('Play Sound?');
+  String get pushNotificationOptionShowUnits =>
+      addMessage('Show Temperature Units?');
+
   String get pushNotificationUpdated =>
       addMessage('Your push notification settings were updated');
 

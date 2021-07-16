@@ -1,6 +1,5 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
-import * as i18n from 'i18n'
 import { DateTime } from 'luxon'
 import OpenWeatherMap from 'openweathermap-ts'
 import * as deviceModel from '../models/device'
@@ -8,7 +7,6 @@ import * as messageModel from '../models/message'
 import { PushNotificationExtras } from '../models/push_notification'
 import * as forecastUtils from '../utils/forecast_utils'
 import * as pushUtils from '../utils/push_utils'
-import * as stringUtils from '../utils/string_utils'
 
 /**
  * This pushes current forecast notifications to devices.
@@ -18,14 +16,13 @@ exports = module.exports = functions.pubsub
   .timeZone('America/Chicago')
   .onRun(async (context: functions.EventContext) => {
     try {
+      const promises: Array<Promise<any>> = []
       const openWeather: OpenWeatherMap = new OpenWeatherMap({
         apiKey: functions.config().openweathermap.key,
       })
 
       const now: admin.firestore.Timestamp = admin.firestore.Timestamp.now()
       const lastPushDate: DateTime = DateTime.fromJSDate(now.toDate()).startOf('hour')
-
-      const promises: Array<Promise<any>> = []
       const devicesSnapshot: admin.firestore.QuerySnapshot<admin.firestore.DocumentData> = await admin
         .firestore()
         .collection('devices')
@@ -47,14 +44,15 @@ exports = module.exports = functions.pubsub
 
             if (response != null) {
               const message: messageModel.Message = new messageModel.Message()
-              const messageText: string = i18n.__('{{temp}}{{temperatureUnit}} in {{cityName}}', {
-                temp: response.main.temp.toFixed(),
-                temperatureUnit: forecastUtils.getTemperatureUnit(device.units?.temperature),
-                cityName: response.name,
-              })
+              message.title = pushUtils.getMessageText(response, device, extras.showUnitSymbol)
+              message.body = pushUtils.getBodyText(response, device, extras.showUnitSymbol)
+              message.sound = extras.sound ? 'default' : 'disabled'
+              message.priorityAndroid = extras.sound ? 'high' : 'normal'
+              message.priorityIos = extras.sound ? '10' : '5'
 
-              message.title = messageText
-              message.body = stringUtils.capitalize(response.weather[0].description)
+              if (response.weather && (response.weather.length > 0)) {
+                message.image = pushUtils.getImageUrl(response)
+              }
 
               // Push the message to the device
               promises.push(

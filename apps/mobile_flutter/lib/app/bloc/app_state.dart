@@ -4,7 +4,7 @@ part of 'app_bloc.dart';
 class AppState extends Equatable {
   final UpdatePeriod? updatePeriod;
   final PushNotification? pushNotification;
-  final Map<String, dynamic>? pushNotificationExtras;
+  final NotificationExtras? pushNotificationExtras;
   final ThemeMode themeMode;
   final bool colorTheme;
   final Units units;
@@ -59,7 +59,7 @@ class AppState extends Equatable {
   AppState copyWith({
     Nullable<UpdatePeriod?>? updatePeriod,
     Nullable<PushNotification?>? pushNotification,
-    Nullable<Map<String, dynamic>?>? pushNotificationExtras,
+    Nullable<NotificationExtras?>? pushNotificationExtras,
     ThemeMode? themeMode,
     bool? colorTheme,
     Units? units,
