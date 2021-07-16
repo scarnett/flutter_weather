@@ -255,7 +255,7 @@ class _SettingsPushNotificationPickerState
         }
 
         if (forecast != null) {
-          notificationExtras?.copyWith(
+          notificationExtras = notificationExtras?.copyWith(
             location: NotificationLocation(
               id: forecast.id,
               name: forecast.getLocationText(),
@@ -289,7 +289,7 @@ class _SettingsPushNotificationPickerState
               Forecast forecast =
                   Forecast.fromJson(jsonDecode(forecastResponse.body));
 
-              notificationExtras?.copyWith(
+              notificationExtras = notificationExtras?.copyWith(
                 location: NotificationLocation(
                   name: forecast.getLocationText(),
                   cityName: forecast.city?.name,

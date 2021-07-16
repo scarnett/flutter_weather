@@ -90,14 +90,16 @@ class NotificationLocation extends Equatable {
   static NotificationLocation fromJson(
     dynamic json,
   ) =>
-      NotificationLocation(
-        id: json['id'],
-        name: json['name'],
-        cityName: json['cityName'],
-        country: json['country'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
-      );
+      (json == null)
+          ? NotificationLocation()
+          : NotificationLocation(
+              id: json['id'],
+              name: json['name'],
+              cityName: json['cityName'],
+              country: json['country'],
+              latitude: json['latitude'],
+              longitude: json['longitude'],
+            );
 
   Map<String, dynamic> toJson() => {
         'id': id,
