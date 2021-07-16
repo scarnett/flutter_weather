@@ -190,10 +190,12 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     yield state.copyWith(
       pushNotification: Nullable<PushNotification?>(event.pushNotification),
       pushNotificationExtras:
-          Nullable<NotificationExtras?>(NotificationExtras.fromJson({
-        ...state.pushNotificationExtras?.toJson() ?? {},
-        ...event.pushNotificationExtras?.toJson() ?? {},
-      })),
+          Nullable<NotificationExtras?>((event.pushNotificationExtras == null)
+              ? null
+              : NotificationExtras.fromJson({
+                  ...state.pushNotificationExtras?.toJson() ?? {},
+                  ...event.pushNotificationExtras?.toJson() ?? {},
+                })),
     );
 
     await _saveDeviceInfo(event.pushNotification);

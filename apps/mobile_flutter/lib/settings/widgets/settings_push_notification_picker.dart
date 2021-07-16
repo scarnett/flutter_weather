@@ -246,7 +246,8 @@ class _SettingsPushNotificationPickerState
     Forecast? forecast,
   }) async {
     NotificationExtras? notificationExtras =
-        context.read<AppBloc>().state.pushNotificationExtras;
+        context.read<AppBloc>().state.pushNotificationExtras ??
+            NotificationExtras(location: null);
 
     switch (notification) {
       case PushNotification.savedLocation:
@@ -255,7 +256,7 @@ class _SettingsPushNotificationPickerState
         }
 
         if (forecast != null) {
-          notificationExtras = notificationExtras?.copyWith(
+          notificationExtras = notificationExtras.copyWith(
             location: NotificationLocation(
               id: forecast.id,
               name: forecast.getLocationText(),
@@ -289,7 +290,7 @@ class _SettingsPushNotificationPickerState
               Forecast forecast =
                   Forecast.fromJson(jsonDecode(forecastResponse.body));
 
-              notificationExtras = notificationExtras?.copyWith(
+              notificationExtras = notificationExtras.copyWith(
                 location: NotificationLocation(
                   name: forecast.getLocationText(),
                   cityName: forecast.city?.name,
@@ -318,6 +319,8 @@ class _SettingsPushNotificationPickerState
         break;
 
       default:
+        notificationExtras = null;
+        setState(() => processing = false);
         break;
     }
 
