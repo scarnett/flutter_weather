@@ -77,14 +77,9 @@ class _LookupPageViewState extends State<LookupPageView> {
             LookupState state,
           ) =>
               AppUiOverlayStyle(
-            systemNavigationBarIconBrightness:
-                context.watch<AppBloc>().state.colorTheme
-                    ? Brightness.dark
-                    : null,
+            systemNavigationBarIconBrightness: context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
             child: Theme(
-              data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
-                  ? appDarkThemeData
-                  : appLightThemeData,
+              data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark) ? appDarkThemeData : appLightThemeData,
               child: Scaffold(
                 key: _scaffoldKey,
                 appBar: AppBar(
@@ -178,7 +173,26 @@ class _LookupPageViewState extends State<LookupPageView> {
     if (lookupForecast != null) {
       return SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
-        child: AppUiSafeArea(child: Container()),
+        child: AppUiSafeArea(
+          child: Column(
+            children: <Widget>[
+              ForecastDisplay(
+                forecast: lookupForecast,
+                sliverView: false,
+                detailsEnabled: false,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: AppFormButton(
+                  key: Key(AppKeys.addThisForecastKey),
+                  text: AppLocalizations.of(context)!.addThisForecast,
+                  icon: const Icon(Icons.add, size: 16.0),
+                  onTap: _tapAddLocation,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
@@ -225,8 +239,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     Map<String, dynamic> lookupData = state.toJson();
     if (lookupData.containsKey('countryCode')) {
       final Country? country = (await IsoCountries.iso_countries)
-          .firstWhereOrNull(
-              (Country _country) => _country.name == lookupData['countryCode']);
+          .firstWhereOrNull((Country _country) => _country.name == lookupData['countryCode']);
 
       lookupData['countryCode'] = (country == null)
           ? null // AppConfig.instance.defaultCountryCode
