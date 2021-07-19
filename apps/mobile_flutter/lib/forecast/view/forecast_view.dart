@@ -273,7 +273,7 @@ class _ForecastPageViewState extends State<ForecastView>
                   AlwaysStoppedAnimation(_forecastColorValue),
                 );
 
-          Color _forecastDarkenedColor = _forecastColor!.darken(0.25);
+          Color _forecastDarkenedColor = _forecastColor!.darken(40);
 
           return AppUiOverlayStyle(
             systemNavigationBarColor: _forecastDarkenedColor,
@@ -409,7 +409,7 @@ class _ForecastPageViewState extends State<ForecastView>
       backgroundColor: state.colorTheme
           ? state.forecasts[state.selectedForecastIndex]
               .getTemperatureColor()
-              .darken(0.35)
+              .darken(35)
           : null,
     );
   }

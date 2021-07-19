@@ -77,7 +77,6 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
     _pageController = PageController(initialPage: 0)
       ..addListener(() {
         num? currentPage = _pageController.page;
-        print(currentPage);
         if (isInteger(currentPage)) {
           setState(() {
             _currentPage = currentPage!.toInt();

@@ -44,8 +44,8 @@ exports = module.exports = functions.pubsub
 
             if (response != null) {
               const message: messageModel.Message = new messageModel.Message()
-              message.title = pushUtils.getMessageText(response, device, extras.showUnitSymbol)
-              message.body = pushUtils.getBodyText(response, device, extras.showUnitSymbol)
+              message.title = pushUtils.getMessageText(response, device, extras.showUnits)
+              message.body = pushUtils.getBodyText(response, device, extras.showUnits)
               message.sound = extras.sound ? 'default' : 'disabled'
               message.priorityAndroid = extras.sound ? 'high' : 'normal'
               message.priorityIos = extras.sound ? '10' : '5'

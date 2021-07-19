@@ -180,7 +180,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     for (HourRange range in HourRange.values) {
       Widget option = AppOptionButton(
         text: range.getText(context).toUpperCase(),
-        colorThemeColor: widget.forecastColor?.darken(0.15),
+        colorThemeColor: widget.forecastColor?.darken(15),
         active: (state.hourRange == range),
         onTap: (state.hourRange == range) ? null : () => _tapHourRange(range),
       );
