@@ -79,8 +79,8 @@ Future<void> launchURL(
 Future<void> animatePage(
   PageController pageController, {
   num page: 0,
-  int duration: 150,
-  Curve curve: Curves.linear,
+  int duration: 300,
+  Curve curve: Curves.fastOutSlowIn,
   int pauseMilliseconds: 0,
 }) async {
   if (pauseMilliseconds > 0) {

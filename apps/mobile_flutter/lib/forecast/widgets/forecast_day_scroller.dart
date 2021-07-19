@@ -55,7 +55,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
           Container(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Container(
-              height: 60.0,
+              height: 66.0,
               child: PageView(
                 controller: _pageController,
                 physics: const AppPageViewScrollPhysics(),
