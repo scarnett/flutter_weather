@@ -10,8 +10,22 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
+class ForecastAlertsViewArguments {
+  final int initialIndex;
+
+  ForecastAlertsViewArguments({
+    this.initialIndex: 0,
+  });
+}
+
 class ForecastAlertsView extends StatefulWidget {
-  static Route route() => PageRouteBuilder(
+  static Route route({
+    required ForecastAlertsViewArguments arguments,
+  }) =>
+      PageRouteBuilder(
+        settings: RouteSettings(
+          arguments: arguments,
+        ),
         pageBuilder: (
           BuildContext context,
           Animation<double> animation,
@@ -19,8 +33,8 @@ class ForecastAlertsView extends StatefulWidget {
         ) =>
             ForecastAlertsView(),
         opaque: false,
-        transitionDuration: const Duration(milliseconds: 150),
-        reverseTransitionDuration: const Duration(milliseconds: 150),
+        transitionDuration: const Duration(milliseconds: 300),
+        reverseTransitionDuration: const Duration(milliseconds: 300),
         transitionsBuilder: (
           BuildContext context,
           Animation<double> animation,
@@ -30,7 +44,7 @@ class ForecastAlertsView extends StatefulWidget {
           Animatable<Offset> tween = Tween(
             begin: Offset(0.0, 1.0),
             end: Offset.zero,
-          ).chain(CurveTween(curve: Curves.easeInOut));
+          ).chain(CurveTween(curve: Curves.fastOutSlowIn));
 
           return SlideTransition(
             position: animation.drive(tween),
@@ -51,6 +65,7 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
   late final Forecast _forecast;
   late PageController _pageController;
   late ValueNotifier<int> _alertsNotifier;
+  late ForecastAlertsViewArguments _arguments;
 
   int _currentPage = 0;
 
@@ -62,6 +77,7 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
     _pageController = PageController(initialPage: 0)
       ..addListener(() {
         num? currentPage = _pageController.page;
+        print(currentPage);
         if (isInteger(currentPage)) {
           setState(() {
             _currentPage = currentPage!.toInt();
@@ -71,6 +87,21 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
       });
 
     _alertsNotifier = ValueNotifier<int>(0);
+
+    WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
+      _arguments = ModalRoute.of(context)!.settings.arguments
+          as ForecastAlertsViewArguments;
+
+      if (_arguments.initialIndex > 0) {
+        setState(() {
+          _currentPage = _arguments.initialIndex;
+          _alertsNotifier.value = _currentPage;
+        });
+
+        animatePage(_pageController, page: _arguments.initialIndex);
+      }
+    });
+
     super.initState();
   }
 

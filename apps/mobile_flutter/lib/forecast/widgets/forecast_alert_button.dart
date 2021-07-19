@@ -103,11 +103,13 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton>
           child: CarouselSlider(
             items: _alertWidgets,
             options: CarouselOptions(
-              height: 40.0,
+              height: 50.0,
               autoPlay: true,
               autoPlayInterval: const Duration(seconds: 10),
-              autoPlayAnimationDuration: const Duration(milliseconds: 250),
-              autoPlayCurve: Curves.easeInOut,
+              autoPlayAnimationDuration: const Duration(milliseconds: 300),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enableInfiniteScroll: false,
+              viewportFraction: 1.0,
             ),
           ),
         );
@@ -157,6 +159,7 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton>
 
   Widget _buildDetailedAlert(
     ForecastAlert alert,
+    int index,
   ) =>
       Center(
         child: Container(
@@ -203,15 +206,17 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton>
                 ],
               ),
             ),
-            onTap: () => _tapAlert(context, index: _currentPage),
+            onTap: () => _tapAlert(context, index: index),
           ),
         ),
       );
 
   void _buildAlerts() {
     if (widget.forecast.details?.alerts != null) {
+      int index = 0;
       for (ForecastAlert alert in widget.forecast.details!.alerts!) {
-        _alertWidgets.add(_buildDetailedAlert(alert));
+        _alertWidgets.add(_buildDetailedAlert(alert, index));
+        index++;
       }
     }
   }
@@ -221,6 +226,11 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton>
     int index: 0,
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    Navigator.push(context, ForecastAlertsView.route());
+    Navigator.push(
+      context,
+      ForecastAlertsView.route(
+        arguments: ForecastAlertsViewArguments(initialIndex: index),
+      ),
+    );
   }
 }
