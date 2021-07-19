@@ -30,10 +30,16 @@ class _ForecastRefreshState extends State<ForecastRefresh>
     _refreshAnimationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
-    );
+    )..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          _refreshAnimationController
+            ..reset()
+            ..forward();
+        }
+      });
 
     _refreshAnimation =
-        Tween(begin: 0.0, end: pi + pi).animate(_refreshAnimationController);
+        Tween(begin: 0.0, end: (pi + pi)).animate(_refreshAnimationController);
 
     _nextRefreshTime = getNow().toLocal();
   }
@@ -73,6 +79,10 @@ class _ForecastRefreshState extends State<ForecastRefresh>
               state.forecasts[state.selectedForecastIndex].lastUpdated!);
         }
       });
+
+      _refreshAnimationController
+        ..stop()
+        ..reset();
     }
   }
 
@@ -99,7 +109,10 @@ class _ForecastRefreshState extends State<ForecastRefresh>
                     borderRadius: BorderRadius.circular(40.0),
                     child: AnimatedBuilder(
                       animation: _refreshAnimationController,
-                      builder: (BuildContext context, Widget? child) =>
+                      builder: (
+                        BuildContext context,
+                        Widget? child,
+                      ) =>
                           Transform.rotate(
                         angle: _refreshAnimation.value,
                         child: child,
