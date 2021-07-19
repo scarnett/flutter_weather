@@ -117,14 +117,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               padding: const EdgeInsets.only(right: 5.0),
               child: AppOptionButton(
                 text: AppLocalizations.of(context)!.chartLine.toUpperCase(),
-                colorThemeColor: widget.forecastColor?.darken(0.15),
+                colorThemeColor: widget.forecastColor?.darken(15),
                 active: (_currentPage == 0),
                 onTap: (_currentPage == 0) ? null : () => _tapChartType(0),
               ),
             ),
             AppOptionButton(
               text: AppLocalizations.of(context)!.chartBar.toUpperCase(),
-              colorThemeColor: widget.forecastColor?.darken(0.15),
+              colorThemeColor: widget.forecastColor?.darken(15),
               active: (_currentPage == 1),
               onTap: (_currentPage == 1) ? null : () => _tapChartType(1),
             ),
