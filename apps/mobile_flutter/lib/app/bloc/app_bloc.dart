@@ -451,13 +451,21 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             messageType: MessageType.danger,
           );
 
-          yield state;
+          yield state.copyWith(
+            refreshStatus: Nullable<RefreshStatus?>(null),
+            crudStatus: Nullable<CRUDStatus?>(null),
+          );
         }
       } else {
         showSnackbar(
           event.context,
           AppLocalizations.of(event.context)!.connectivityFailure,
           messageType: MessageType.danger,
+        );
+
+        yield state.copyWith(
+          refreshStatus: Nullable<RefreshStatus?>(null),
+          crudStatus: Nullable<CRUDStatus?>(null),
         );
       }
     } on Exception catch (exception, stackTrace) {
@@ -469,7 +477,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         messageType: MessageType.danger,
       );
 
-      yield state;
+      yield state.copyWith(
+        refreshStatus: Nullable<RefreshStatus?>(null),
+        crudStatus: Nullable<CRUDStatus?>(null),
+      );
     }
   }
 
