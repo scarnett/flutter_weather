@@ -1,12 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
+import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
+import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
@@ -24,27 +24,6 @@ class ForecastWindSpeed extends StatefulWidget {
 }
 
 class _ForecastWindSpeedState extends State<ForecastWindSpeed> {
-  Stream<CompassEvent>? _headingStream;
-  StreamSubscription<CompassEvent>? _headingSubscription;
-  double? _heading;
-
-  @override
-  void initState() {
-    if (AppConfig.isRelease()) {
-      _headingStream = FlutterCompass.events;
-      _headingSubscription = _headingStream?.listen(
-          (CompassEvent event) => setState(() => _heading = event.heading));
-    }
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _headingSubscription?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(
     BuildContext context,
@@ -66,7 +45,34 @@ class _ForecastWindSpeedState extends State<ForecastWindSpeed> {
                   .windSpeed
                   .getText(context),
             ),
-            _buildWindDirection(heading: _heading),
+            StreamBuilder<CompassEvent>(
+              stream: FlutterCompass.events,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<CompassEvent> snapshot,
+              ) {
+                if (snapshot.hasError || AppConfig.isDebug()) {
+                  return _buildWindDirection();
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return SizedBox(
+                    height: 20.0,
+                    width: 20.0,
+                    child: AppProgressIndicator(color: AppTheme.primaryColor),
+                  );
+                }
+
+                double? heading = snapshot.data!.heading;
+
+                // If heading is null then this device does not have the
+                // required sensors
+                if (heading == null) {
+                  return _buildWindDirection();
+                }
+
+                return _buildWindDirection(heading: heading);
+              },
+            ),
           ],
         ),
       );
