@@ -417,9 +417,11 @@ packages:
   flutter_compass:
     dependency: "direct main"
     description:
-      name: flutter_compass
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: c5124963072598ee4446923bf4dc6e98ccb741fd
+      url: "https://github.com/scarnett/flutter_compass"
+    source: git
     version: "0.6.1"
   flutter_driver:
     dependency: transitive

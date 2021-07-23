@@ -27,7 +27,9 @@ dependencies:
     git:
       url: https://github.com/WxqKb/fl_chart
   flutter_bloc: '7.0.1'
-  flutter_compass: '0.6.1'
+  flutter_compass:
+    git:
+      url: https://github.com/scarnett/flutter_compass
   flutter_form_bloc: '0.20.6'
   flutter_switch: '0.3.2'
   geolocator: '7.3.0'
