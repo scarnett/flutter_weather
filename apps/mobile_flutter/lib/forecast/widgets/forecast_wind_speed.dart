@@ -1,10 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_compass/flutter_compass.dart';
-import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/enums/enums.dart';
@@ -24,27 +20,6 @@ class ForecastWindSpeed extends StatefulWidget {
 }
 
 class _ForecastWindSpeedState extends State<ForecastWindSpeed> {
-  Stream<CompassEvent>? _headingStream;
-  StreamSubscription<CompassEvent>? _headingSubscription;
-  double? _heading;
-
-  @override
-  void initState() {
-    if (AppConfig.isRelease()) {
-      _headingStream = FlutterCompass.events;
-      _headingSubscription = _headingStream?.listen(
-          (CompassEvent event) => setState(() => _heading = event.heading));
-    }
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _headingSubscription?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(
     BuildContext context,
@@ -66,7 +41,9 @@ class _ForecastWindSpeedState extends State<ForecastWindSpeed> {
                   .windSpeed
                   .getText(context),
             ),
-            _buildWindDirection(heading: _heading),
+            _buildWindDirection(
+              heading: context.read<AppBloc>().state.compassEvent?.heading,
+            ),
           ],
         ),
       );

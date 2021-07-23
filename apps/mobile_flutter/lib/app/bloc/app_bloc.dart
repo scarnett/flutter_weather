@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
@@ -29,6 +30,9 @@ part 'app_state.dart';
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+
+  Stream<CompassEvent>? _headingStream;
+  StreamSubscription<CompassEvent>? _headingSubscription;
 
   AppBloc() : super(AppState.initial());
 
@@ -86,12 +90,17 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapStreamConnectivityResultToState(event);
     } else if (event is SetConnectivityResult) {
       yield _mapSetConnectivityResultToState(event);
+    } else if (event is StreamCompassEvent) {
+      yield* _mapStreamCompassEventToState(event);
+    } else if (event is SetCompassEvent) {
+      yield _mapSetCompassEventToState(event);
     }
   }
 
   @override
   Future<void> close() {
     _connectivitySubscription?.cancel();
+    _headingSubscription?.cancel();
     return super.close();
   }
 
@@ -583,6 +592,32 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     return state.copyWith(
       connectivityResult:
           Nullable<ConnectivityResult?>(event.connectivityResult),
+    );
+  }
+
+  Stream<AppState> _mapStreamCompassEventToState(
+    StreamCompassEvent event,
+  ) async* {
+    _headingSubscription?.cancel();
+
+    if (AppConfig.isRelease()) {
+      _headingStream = FlutterCompass.events;
+      _headingSubscription = _headingStream
+          ?.listen((CompassEvent event) => add(SetCompassEvent(event)));
+    }
+
+    yield state;
+  }
+
+  AppState _mapSetCompassEventToState(
+    SetCompassEvent event,
+  ) {
+    if (event.compassEvent.heading == state.compassEvent?.heading) {
+      return state;
+    }
+
+    return state.copyWith(
+      compassEvent: Nullable<CompassEvent?>(event.compassEvent),
     );
   }
 

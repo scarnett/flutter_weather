@@ -269,6 +269,11 @@ class SetScrollDirection extends AppEvent {
   List<Object?> get props => [scrollDirection];
 }
 
+class StreamConnectivityResult extends AppEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class SetConnectivityResult extends AppEvent {
   final ConnectivityResult connectivityResult;
 
@@ -280,7 +285,18 @@ class SetConnectivityResult extends AppEvent {
   List<Object?> get props => [connectivityResult];
 }
 
-class StreamConnectivityResult extends AppEvent {
+class StreamCompassEvent extends AppEvent {
   @override
   List<Object?> get props => [];
+}
+
+class SetCompassEvent extends AppEvent {
+  final CompassEvent compassEvent;
+
+  const SetCompassEvent(
+    this.compassEvent,
+  );
+
+  @override
+  List<Object?> get props => [compassEvent];
 }
