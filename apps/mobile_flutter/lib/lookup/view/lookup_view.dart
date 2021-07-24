@@ -77,14 +77,9 @@ class _LookupPageViewState extends State<LookupPageView> {
             LookupState state,
           ) =>
               AppUiOverlayStyle(
-            systemNavigationBarIconBrightness:
-                context.watch<AppBloc>().state.colorTheme
-                    ? Brightness.dark
-                    : null,
+            systemNavigationBarIconBrightness: context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
             child: Theme(
-              data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
-                  ? appDarkThemeData
-                  : appLightThemeData,
+              data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark) ? appDarkThemeData : appLightThemeData,
               child: Scaffold(
                 key: _scaffoldKey,
                 appBar: AppBar(
@@ -244,8 +239,7 @@ class _LookupPageViewState extends State<LookupPageView> {
     Map<String, dynamic> lookupData = state.toJson();
     if (lookupData.containsKey('countryCode')) {
       final Country? country = (await IsoCountries.iso_countries)
-          .firstWhereOrNull(
-              (Country _country) => _country.name == lookupData['countryCode']);
+          .firstWhereOrNull((Country _country) => _country.name == lookupData['countryCode']);
 
       lookupData['countryCode'] = (country == null)
           ? null // AppConfig.instance.defaultCountryCode

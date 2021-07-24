@@ -39,7 +39,7 @@ class _AppFABState extends State<AppFAB> with SingleTickerProviderStateMixin {
               color: state.colorTheme
                   ? state.forecasts[state.selectedForecastIndex]
                       .getTemperatureColor()
-                      .darken(0.35)
+                      .darken(35)
                   : Colors.white),
           mini: true,
         ),

@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
@@ -29,6 +30,9 @@ part 'app_state.dart';
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+
+  Stream<CompassEvent>? _headingStream;
+  StreamSubscription<CompassEvent>? _headingSubscription;
 
   AppBloc() : super(AppState.initial());
 
@@ -86,12 +90,17 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield* _mapStreamConnectivityResultToState(event);
     } else if (event is SetConnectivityResult) {
       yield _mapSetConnectivityResultToState(event);
+    } else if (event is StreamCompassEvent) {
+      yield* _mapStreamCompassEventToState(event);
+    } else if (event is SetCompassEvent) {
+      yield _mapSetCompassEventToState(event);
     }
   }
 
   @override
   Future<void> close() {
     _connectivitySubscription?.cancel();
+    _headingSubscription?.cancel();
     return super.close();
   }
 
@@ -168,7 +177,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             yield state.copyWith(
               pushNotification:
                   Nullable<PushNotification?>(PushNotification.off),
-              pushNotificationExtras: Nullable<Map<String, dynamic>?>(null),
+              pushNotificationExtras: Nullable<NotificationExtras?>(null),
             );
           }
         }
@@ -190,7 +199,12 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     yield state.copyWith(
       pushNotification: Nullable<PushNotification?>(event.pushNotification),
       pushNotificationExtras:
-          Nullable<Map<String, dynamic>?>(event.pushNotificationExtras),
+          Nullable<NotificationExtras?>((event.pushNotificationExtras == null)
+              ? null
+              : NotificationExtras.fromJson({
+                  ...state.pushNotificationExtras?.toJson() ?? {},
+                  ...event.pushNotificationExtras?.toJson() ?? {},
+                })),
     );
 
     await _saveDeviceInfo(event.pushNotification);
@@ -446,13 +460,21 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             messageType: MessageType.danger,
           );
 
-          yield state;
+          yield state.copyWith(
+            refreshStatus: Nullable<RefreshStatus?>(null),
+            crudStatus: Nullable<CRUDStatus?>(null),
+          );
         }
       } else {
         showSnackbar(
           event.context,
           AppLocalizations.of(event.context)!.connectivityFailure,
           messageType: MessageType.danger,
+        );
+
+        yield state.copyWith(
+          refreshStatus: Nullable<RefreshStatus?>(null),
+          crudStatus: Nullable<CRUDStatus?>(null),
         );
       }
     } on Exception catch (exception, stackTrace) {
@@ -464,7 +486,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         messageType: MessageType.danger,
       );
 
-      yield state;
+      yield state.copyWith(
+        refreshStatus: Nullable<RefreshStatus?>(null),
+        crudStatus: Nullable<CRUDStatus?>(null),
+      );
     }
   }
 
@@ -570,6 +595,32 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
   }
 
+  Stream<AppState> _mapStreamCompassEventToState(
+    StreamCompassEvent event,
+  ) async* {
+    _headingSubscription?.cancel();
+
+    if (AppConfig.isRelease()) {
+      _headingStream = FlutterCompass.events;
+      _headingSubscription = _headingStream
+          ?.listen((CompassEvent event) => add(SetCompassEvent(event)));
+    }
+
+    yield state;
+  }
+
+  AppState _mapSetCompassEventToState(
+    SetCompassEvent event,
+  ) {
+    if (event.compassEvent.heading == state.compassEvent?.heading) {
+      return state;
+    }
+
+    return state.copyWith(
+      compassEvent: Nullable<CompassEvent?>(event.compassEvent),
+    );
+  }
+
   Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
     if ((pushNotification != null) &&
         (pushNotification != PushNotification.off)) {
@@ -598,7 +649,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         updatePeriod: getPeriod(id: jsonData['updatePeriod']),
         pushNotification: getPushNotification(jsonData['pushNotification']),
         pushNotificationExtras: (jsonData['pushNotificationExtras'] != null)
-            ? json.decode(jsonData['pushNotificationExtras'])
+            ? NotificationExtras.fromJson(jsonData['pushNotificationExtras'])
             : null,
         themeMode: getThemeMode(jsonData['themeMode']),
         colorTheme: jsonData['colorTheme'],
@@ -616,8 +667,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       {
         'updatePeriod': state.updatePeriod?.getInfo()?['id'],
         'pushNotification': state.pushNotification?.getInfo()?['id'],
-        'pushNotificationExtras': state.pushNotificationExtras != null
-            ? json.encode(state.pushNotificationExtras)
+        'pushNotificationExtras': (state.pushNotificationExtras != null)
+            ? state.pushNotificationExtras!.toJson()
             : null,
         'themeMode': state.themeMode.toString(),
         'colorTheme': state.colorTheme,
