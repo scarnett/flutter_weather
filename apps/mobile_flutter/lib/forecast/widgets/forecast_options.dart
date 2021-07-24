@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/app/widgets/app_premium_trigger.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 
@@ -36,7 +34,7 @@ class _ForecastOptionsState extends State<ForecastOptions> {
             ForecastEditButton(),
             ForecastRefresh(),
             if (!context.read<AppBloc>().state.isPremium)
-              _buildPremiumButton(context),
+              ForecastPremiumButton(),
             Expanded(child: Container()),
             AppColorThemeToggle(
               callback: () => context.read<AppBloc>().add(ToggleColorTheme()),
@@ -46,25 +44,6 @@ class _ForecastOptionsState extends State<ForecastOptions> {
             ),
             ForecastSettingsButton(),
           ],
-        ),
-      );
-
-  Widget _buildPremiumButton(
-    BuildContext context,
-  ) =>
-      Tooltip(
-        message: AppLocalizations.of(context)!.premium,
-        child: Material(
-          type: MaterialType.transparency,
-          child: Container(
-            height: 40.0,
-            width: 40.0,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(40.0),
-              child: AppPremiumTrigger(),
-              onTap: () => {},
-            ),
-          ),
         ),
       );
 }
