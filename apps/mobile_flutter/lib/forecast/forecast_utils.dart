@@ -8,6 +8,8 @@ import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+const double headerHeight = 260.0;
+
 Uri getDetailedUri(
   Map<String, dynamic> params,
 ) {
@@ -386,9 +388,9 @@ IconData getForecastIconData(
 
 String getTitle(
   BuildContext context,
-  num _currentPage,
+  num currentPage,
 ) {
-  if (_currentPage.toInt() == 1) {
+  if (currentPage.toInt() == 1) {
     return AppLocalizations.of(context)!.country;
   }
 
@@ -524,3 +526,27 @@ List<Forecast> sortForecasts(
 
         return forecast1.created!.compareTo(forecast2.created!);
       });
+
+List<Map<String, String?>> scrubAlertDescription(
+  String? description,
+) {
+  List<Map<String, String?>> data = [];
+
+  if (description != null) {
+    description = description.replaceAll('\n*', '*');
+    description = description.replaceAll('\n', ' ');
+    description.split('*').forEach((String line) {
+      if (line.startsWith('...') && line.endsWith('...')) {
+        line = line.replaceAll('...', '');
+        data.add({'label': null, 'text': line.trim()});
+      } else if (line.contains('...')) {
+        List<String> lineParts = line.split('...');
+        data.add({'label': lineParts[0].trim(), 'text': lineParts[1].trim()});
+      } else {
+        data.add({'label': null, 'text': line.trim()});
+      }
+    });
+  }
+
+  return data;
+}

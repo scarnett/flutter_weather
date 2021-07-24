@@ -4,7 +4,7 @@ part of 'app_bloc.dart';
 class AppState extends Equatable {
   final UpdatePeriod? updatePeriod;
   final PushNotification? pushNotification;
-  final Map<String, dynamic>? pushNotificationExtras;
+  final NotificationExtras? pushNotificationExtras;
   final ThemeMode themeMode;
   final bool colorTheme;
   final Units units;
@@ -17,6 +17,7 @@ class AppState extends Equatable {
   final CRUDStatus? crudStatus;
   final ScrollDirection? scrollDirection;
   final ConnectivityResult? connectivityResult;
+  final CompassEvent? compassEvent;
   final bool isPremium;
   final bool showPremiumInfo;
 
@@ -36,6 +37,7 @@ class AppState extends Equatable {
     this.crudStatus,
     this.scrollDirection,
     this.connectivityResult,
+    this.compassEvent,
     this.isPremium: false,
     this.showPremiumInfo: false,
   });
@@ -56,6 +58,7 @@ class AppState extends Equatable {
     this.crudStatus,
     this.scrollDirection: ScrollDirection.idle,
     this.connectivityResult,
+    this.compassEvent,
     this.isPremium: false,
     this.showPremiumInfo: false,
   });
@@ -65,7 +68,7 @@ class AppState extends Equatable {
   AppState copyWith({
     Nullable<UpdatePeriod?>? updatePeriod,
     Nullable<PushNotification?>? pushNotification,
-    Nullable<Map<String, dynamic>?>? pushNotificationExtras,
+    Nullable<NotificationExtras?>? pushNotificationExtras,
     ThemeMode? themeMode,
     bool? colorTheme,
     Units? units,
@@ -79,6 +82,7 @@ class AppState extends Equatable {
     Nullable<CRUDStatus?>? crudStatus,
     Nullable<ScrollDirection?>? scrollDirection,
     Nullable<ConnectivityResult?>? connectivityResult,
+    Nullable<CompassEvent?>? compassEvent,
     bool? isPremium,
     bool? showPremiumInfo,
   }) =>
@@ -111,6 +115,8 @@ class AppState extends Equatable {
         connectivityResult: (connectivityResult == null)
             ? this.connectivityResult
             : connectivityResult.value,
+        compassEvent:
+            (compassEvent == null) ? this.compassEvent : compassEvent.value,
         isPremium: isPremium ?? this.isPremium,
         showPremiumInfo: showPremiumInfo ?? this.showPremiumInfo,
       );
@@ -132,6 +138,7 @@ class AppState extends Equatable {
         crudStatus,
         scrollDirection,
         connectivityResult,
+        compassEvent,
         isPremium,
         showPremiumInfo,
       ];
@@ -146,6 +153,6 @@ class AppState extends Equatable {
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus, scrollDirection: $scrollDirection, ' +
-      'connectivityResult: $connectivityResult, ' +
+      'connectivityResult: $connectivityResult, compassEvent: $compassEvent' +
       'isPremium: $isPremium, showPremiumInfo: $showPremiumInfo}';
 }

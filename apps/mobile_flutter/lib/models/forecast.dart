@@ -89,7 +89,7 @@ class Forecast extends Equatable {
               .map((dynamic forecastJson) => Forecast.fromJson(forecastJson))
               .toList();
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'cityName': cityName,
         'postalCode': postalCode,
@@ -182,7 +182,7 @@ class ForecastCity extends Equatable {
               timezone: json['timezone'],
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'coord': (coord == null) ? null : coord!.toJson(),
@@ -235,7 +235,7 @@ class ForecastCityCoord extends Equatable {
               lat: json['lat'],
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'lon': lon,
         'lat': lat,
       };
@@ -344,7 +344,7 @@ class ForecastDay extends Equatable {
               .map((dynamic dayJson) => ForecastDay.fromJson(dayJson))
               .toList();
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'dt': dt,
         'sunrise': sunrise,
         'sunset': sunset,
@@ -442,7 +442,7 @@ class ForecastDayTemp extends Equatable {
               morn: json['morn'],
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'day': day,
         'min': min,
         'max': max,
@@ -498,7 +498,7 @@ class ForecastDayFeelsLike extends Equatable {
               morn: json['morn'],
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'day': day,
         'night': night,
         'eve': eve,
@@ -561,7 +561,7 @@ class ForecastDayWeather extends Equatable {
                   ForecastDayWeather.fromJson(weatherJson))
               .toList();
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'main': main,
         'description': description,
@@ -649,7 +649,7 @@ class ForecastDetails extends Equatable {
               alerts: ForecastAlert.fromJsonList(json['alerts']),
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'lon': lon,
         'lat': lat,
         'timezone': timezone,
@@ -768,7 +768,7 @@ class ForecastCurrent extends Equatable {
               weather: ForecastDayWeather.fromJsonList(json['weather']),
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'dt': dt,
         'sunrise': sunrise,
         'sunset': sunset,
@@ -848,7 +848,7 @@ class ForecastMinute extends Equatable {
               .map((dynamic minuteJson) => ForecastMinute.fromJson(minuteJson))
               .toList();
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'dt': dt,
         'precipitation': precipitation,
       };
@@ -974,7 +974,7 @@ class ForecastHour extends Equatable {
               .map((dynamic hourJson) => ForecastHour.fromJson(hourJson))
               .toList();
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'dt': dt,
         'temp': temp,
         'feels_like': feelsLike,
@@ -1135,7 +1135,7 @@ class ForecastDaily extends Equatable {
               .map((dynamic dailyJson) => ForecastDaily.fromJson(dailyJson))
               .toList();
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'dt': dt,
         'sunrise': sunrise,
         'sunset': sunset,
@@ -1248,7 +1248,7 @@ class ForecastAlert extends Equatable {
               .map((dynamic alertJson) => ForecastAlert.fromJson(alertJson))
               .toList();
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         'sender_name': senderName,
         'event': event,
         'start': start,
@@ -1301,7 +1301,7 @@ class ForecastRain extends Equatable {
               oneHour: json['1h'],
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         '1h': oneHour,
       };
 
@@ -1335,7 +1335,7 @@ class ForecastSnow extends Equatable {
               oneHour: json['1h'],
             );
 
-  dynamic toJson() => {
+  Map<String, dynamic> toJson() => {
         '1h': oneHour,
       };
 

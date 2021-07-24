@@ -134,7 +134,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          AppTheme.primaryColor.darken(0.1),
+                          AppTheme.primaryColor.darken(10),
                           AppTheme.primaryColor,
                         ],
                         stops: [0.0, 0.5],

@@ -12,12 +12,14 @@ class ForecastHours extends StatefulWidget {
   final ScrollController parentScrollController;
   final Forecast forecast;
   final Color? forecastColor;
+  final bool padBottom;
 
   ForecastHours({
     Key? key,
     required this.parentScrollController,
     required this.forecast,
     this.forecastColor,
+    this.padBottom: true,
   }) : super(key: key);
 
   @override
@@ -144,8 +146,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     int count = 0;
 
     for (ForecastHour hour in widget.forecast.details!.hourly!) {
-      DateTime hourDate = epochToDateTime(hour.dt!).getDate();
-      String? formatted = formatDateTime(date: hourDate, format: 'yyyyMMdd');
+      String? formatted = formatEpoch(epoch: hour.dt!, format: 'yyyyMMdd');
       if (formatted != null) {
         if (_hourData.containsKey(formatted)) {
           _hourData[formatted]!.add(hour);
@@ -179,7 +180,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     for (HourRange range in HourRange.values) {
       Widget option = AppOptionButton(
         text: range.getText(context).toUpperCase(),
-        colorThemeColor: widget.forecastColor?.darken(0.15),
+        colorThemeColor: widget.forecastColor?.darken(15),
         active: (state.hourRange == range),
         onTap: (state.hourRange == range) ? null : () => _tapHourRange(range),
       );

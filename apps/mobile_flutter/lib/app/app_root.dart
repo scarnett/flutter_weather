@@ -36,8 +36,9 @@ class WeatherApp extends StatelessWidget {
       MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (BuildContext context) =>
-                AppBloc()..add(StreamConnectivityResult()),
+            create: (BuildContext context) => AppBloc()
+              ..add(StreamConnectivityResult())
+              ..add(StreamCompassEvent()),
           ),
           BlocProvider(
             lazy: false,

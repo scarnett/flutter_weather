@@ -63,6 +63,11 @@ class AppLocalizations {
   String get pushNotificationSaved => addMessage('Saved Locations');
   String get pushNotificationCurrent => addMessage('Current Location');
   String get pushNotificationCurrentTap => addMessage('Tap to update');
+  String get pushNotificationOptions => addMessage('Message Options');
+  String get pushNotificationOptionPlaySound => addMessage('Play Sound?');
+  String get pushNotificationOptionShowUnits =>
+      addMessage('Show Temperature Units?');
+
   String get pushNotificationUpdated =>
       addMessage('Your push notification settings were updated');
 
@@ -96,7 +101,13 @@ class AppLocalizations {
   String get distanceUnits => addMessage('Distance Units');
   String get distanceMi => addMessage('mi');
   String get distanceKm => addMessage('km');
+  String get alerts => addMessage('Alerts');
+  String get meta => addMessage('Meta');
+  String get sender => addMessage('Sender');
+  String get start => addMessage('Start');
+  String get end => addMessage('End');
   String get forecast => addMessage('Forecast');
+  String get forecastAlerts => addMessage('Forecast Alerts');
   String get addForecast => addMessage('Add Forecast');
   String get addThisForecast => addMessage('Add This Forecast');
   String get editForecast => addMessage('Edit Forecast');
@@ -200,6 +211,24 @@ class AppLocalizations {
           appVersion,
         ],
       );
+
+  String getAlerts(
+    int count,
+  ) {
+    if (count == 1) {
+      return addMessage(
+        '$count Alert',
+        name: 'getAlerts',
+        args: [count],
+      );
+    }
+
+    return addMessage(
+      '$count Alerts',
+      name: 'getAlerts',
+      args: [count],
+    );
+  }
 
   addMessage(
     String message, {

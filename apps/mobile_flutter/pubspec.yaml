@@ -19,22 +19,24 @@ dependencies:
   connectivity_plus: '1.0.2'
   cupertino_icons: '1.0.3'
   device_info: '2.0.2'
-  equatable: '2.0.2'
-  firebase_core: '1.3.0'
+  equatable: '2.0.3'
+  firebase_core: '1.4.0'
   firebase_crashlytics: '2.0.6'
-  firebase_messaging: '10.0.2'
-  firebase_remote_config: '0.10.0+2'
+  firebase_messaging: '10.0.4'
+  firebase_remote_config: '0.10.0+3'
   fl_chart:
     git:
       url: https://github.com/WxqKb/fl_chart
   flutter_bloc: '7.0.1'
-  flutter_compass: '0.6.1'
+  flutter_compass:
+    git:
+      url: https://github.com/scarnett/flutter_compass
   flutter_form_bloc:
     git:
       url: git://github.com/GiancarloCode/form_bloc.git #see https://github.com/GiancarloCode/form_bloc/issues/221
       path: packages/flutter_form_bloc
-  flutter_switch: '0.3.1'
-  geolocator: '7.0.3'
+  flutter_switch: '0.3.2'
+  geolocator: '7.3.0'
   google_mobile_ads: '0.13.1'
   http: '0.13.3'
   hydrated_bloc: '7.0.1'
@@ -43,7 +45,7 @@ dependencies:
   package_info: '2.0.2'
   page_view_indicators: '2.0.0'
   path_provider: '2.0.2'
-  permission_handler: '8.0.1'
+  permission_handler: '8.1.2'
   sentry: '5.0.0'
   sentry_flutter: '5.0.0'
   shared_preferences: '2.0.6'
@@ -52,11 +54,11 @@ dependencies:
     git:
       url: https://github.com/Danesz/store_redirect
   timer_builder: '2.0.0'
-  url_launcher: '6.0.6'
+  url_launcher: '6.0.9'
   uuid: '3.0.4'
   version: '2.0.0'
   weather_icons: '3.0.0-nullsafety.0'
-  webview_flutter: '2.0.8'
+  webview_flutter: '2.0.10'
 
 dev_dependencies:
   flutter_test:
@@ -66,10 +68,10 @@ dev_dependencies:
     sdk: flutter
 
   bloc_test: '8.0.2'
-  build_runner: '2.0.4'
+  build_runner: '2.0.6'
   flutter_launcher_icons: '0.9.0'
   flutter_native_splash: '1.1.8+4'
-  mockito: '5.0.10'
+  mockito: '5.0.11'
 
 flutter:
   uses-material-design: true

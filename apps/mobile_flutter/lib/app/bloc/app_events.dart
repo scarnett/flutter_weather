@@ -51,7 +51,7 @@ class SetUpdatePeriod extends AppEvent {
 class SetPushNotification extends AppEvent {
   final BuildContext context;
   final PushNotification? pushNotification;
-  final Map<String, dynamic>? pushNotificationExtras;
+  final NotificationExtras? pushNotificationExtras;
   final Function? callback;
 
   const SetPushNotification({
@@ -348,6 +348,11 @@ class SetScrollDirection extends AppEvent {
   String toString() => 'SetScrollDirection{scrollDirection: $scrollDirection}';
 }
 
+class StreamConnectivityResult extends AppEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class SetConnectivityResult extends AppEvent {
   final ConnectivityResult connectivityResult;
 
@@ -363,7 +368,7 @@ class SetConnectivityResult extends AppEvent {
       'SetConnectivityResult{connectivityResult: $connectivityResult}';
 }
 
-class StreamConnectivityResult extends AppEvent {
+class StreamCompassEvent extends AppEvent {
   @override
   List<Object?> get props => [];
 
@@ -397,4 +402,15 @@ class SetShowPremiumInfo extends AppEvent {
 
   @override
   String toString() => 'SetShowPremiumInfo{showPremiumInfo: $showPremiumInfo}';
+}
+
+class SetCompassEvent extends AppEvent {
+  final CompassEvent compassEvent;
+
+  const SetCompassEvent(
+    this.compassEvent,
+  );
+
+  @override
+  List<Object?> get props => [compassEvent];
 }

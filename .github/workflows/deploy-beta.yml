@@ -6,7 +6,7 @@ on:
       flutterVersion:
         description: 'Flutter Version'
         required: true
-        default: '2.2.1'
+        default: '2.2.3'
       distributionGroups:
         description: 'Distribution Groups'
         required: true
@@ -46,7 +46,7 @@ jobs:
           configFilePath: ./git-version.yml
 
       - name: 'Create version.txt'
-        run: echo "${{ steps.gitversion.outputs.NuGetVersion }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
+        run: echo "${{ steps.gitversion.outputs.MajorMinorPatch }}+${{ github.run_id }}" > "${{ env.VERSION_TXT_PATH }}"
 
       - name: 'Upload version.txt'
         uses: actions/upload-artifact@v2
