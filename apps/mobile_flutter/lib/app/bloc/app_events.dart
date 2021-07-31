@@ -404,6 +404,21 @@ class SetShowPremiumInfo extends AppEvent {
   String toString() => 'SetShowPremiumInfo{showPremiumInfo: $showPremiumInfo}';
 }
 
+class SetShowPremiumSuccess extends AppEvent {
+  final bool? showPremiumSuccess;
+
+  const SetShowPremiumSuccess(
+    this.showPremiumSuccess,
+  );
+
+  @override
+  List<Object?> get props => [showPremiumSuccess];
+
+  @override
+  String toString() =>
+      'SetShowPremiumSuccess{showPremiumSuccess: $showPremiumSuccess}';
+}
+
 class SetCompassEvent extends AppEvent {
   final CompassEvent compassEvent;
 

@@ -5,7 +5,6 @@ import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
-import 'package:flutter_weather/premium/bloc/bloc.dart';
 import 'package:flutter_weather/premium/premium.dart';
 
 class PremiumOverlayView extends StatefulWidget {
@@ -86,73 +85,67 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
         child: widget.child,
       );
 
-  Widget _buildContent() => BlocBuilder<PremiumBloc, PremiumState>(
+  Widget _buildContent() => AnimatedBuilder(
+        animation: _overlayCurveTweenController,
         builder: (
           BuildContext context,
-          PremiumState state,
+          Widget? child,
         ) =>
-            AnimatedBuilder(
-          animation: _overlayCurveTweenController,
-          builder: (
-            BuildContext context,
-            Widget? child,
-          ) =>
-              Stack(
-            children: [
-              GestureDetector(
-                onTap: () =>
-                    context.read<AppBloc>().add(SetShowPremiumInfo(false)),
-                child: ClipPath(
-                  clipper: PremiumClipper(curveHeight: 0.0),
-                  child: AnimatedContainer(
-                    color: _backdropColor,
-                    height: context.read<AppBloc>().state.showPremiumInfo
-                        ? MediaQuery.of(context).size.height
-                        : 0.0,
-                    width: double.infinity,
-                    duration: _getBackdropAnimateDuration(),
-                    curve: Curves.easeOut,
-                  ),
+            Stack(
+          children: [
+            GestureDetector(
+              onTap: () =>
+                  context.read<AppBloc>().add(SetShowPremiumInfo(false)),
+              child: ClipPath(
+                clipper: PremiumClipper(curveHeight: 0.0),
+                child: AnimatedContainer(
+                  color: _backdropColor,
+                  height: context.read<AppBloc>().state.showPremiumInfo
+                      ? MediaQuery.of(context).size.height
+                      : 0.0,
+                  width: double.infinity,
+                  duration: _getBackdropAnimateDuration(),
+                  curve: Curves.easeOut,
                 ),
               ),
-              CustomPaint(
-                painter: PremiumClipperShadowPainter(
-                  clipper:
-                      PremiumClipper(curveHeight: _overlayCurveAnimation.value),
-                  shadow: Shadow(
-                    color: _overlayShadowColor,
-                    offset: Offset(0.0, 10.0),
-                  ),
+            ),
+            CustomPaint(
+              painter: PremiumClipperShadowPainter(
+                clipper:
+                    PremiumClipper(curveHeight: _overlayCurveAnimation.value),
+                shadow: Shadow(
+                  color: _overlayShadowColor,
+                  offset: Offset(0.0, 10.0),
                 ),
-                child: ClipPath(
-                  clipper:
-                      PremiumClipper(curveHeight: _overlayCurveAnimation.value),
-                  child: AnimatedContainer(
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor,
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          AppTheme.primaryColor.darken(10),
-                          AppTheme.primaryColor,
-                        ],
-                        stops: [0.0, 0.5],
-                      ),
+              ),
+              child: ClipPath(
+                clipper:
+                    PremiumClipper(curveHeight: _overlayCurveAnimation.value),
+                child: AnimatedContainer(
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppTheme.primaryColor.darken(10),
+                        AppTheme.primaryColor,
+                      ],
+                      stops: [0.0, 0.5],
                     ),
-                    height: context.read<AppBloc>().state.showPremiumInfo
-                        ? widget.expandHeight
-                        : 0.0,
-                    width: double.infinity,
-                    duration: Duration(milliseconds: widget.expandSpeed),
-                    curve: Curves.bounceOut,
-                    child: _buildTopContent(),
-                    clipBehavior: Clip.antiAlias,
                   ),
+                  height: context.read<AppBloc>().state.showPremiumInfo
+                      ? widget.expandHeight
+                      : 0.0,
+                  width: double.infinity,
+                  duration: Duration(milliseconds: widget.expandSpeed),
+                  curve: Curves.bounceOut,
+                  child: _buildTopContent(),
+                  clipBehavior: Clip.antiAlias,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
 
@@ -205,24 +198,7 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () => null, // TODO!
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          PremiumStar(),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: Text(
-                              AppLocalizations.of(context)!.premiumSubscribe,
-                              style: TextStyle(
-                                color: AppTheme.primaryColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    PremiumSubscriptionButton(),
                     Container(
                       width: double.infinity,
                       child: Text(
@@ -236,7 +212,6 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // PremiumPurchaseList(), // TODO!
                   ],
                 ),
               ),

@@ -3,11 +3,8 @@ import * as admin from 'firebase-admin'
 import * as glob from 'glob'
 import * as i18n from 'i18n'
 import * as path from 'path'
-import { IapRepository } from './iap/iap_repository'
 
 admin.initializeApp()
-
-exports.iapRepository = new IapRepository(admin.firestore())
 
 const paths: string[] = [
   './firestore/**/*.f.js', // Firestore

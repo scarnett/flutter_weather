@@ -34,8 +34,8 @@ class _ForecastHoursState extends State<ForecastHours> {
 
   @override
   void initState() {
-    initialize();
     super.initState();
+    _initialize();
   }
 
   @override
@@ -77,7 +77,7 @@ class _ForecastHoursState extends State<ForecastHours> {
         ),
       );
 
-  void initialize() {
+  void _initialize() {
     widget.parentScrollController.addListener(_parentScrollListener);
 
     _listViewScrollController = ScrollController();

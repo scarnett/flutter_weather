@@ -20,6 +20,7 @@ class AppState extends Equatable {
   final CompassEvent? compassEvent;
   final bool isPremium;
   final bool showPremiumInfo;
+  final bool showPremiumSuccess;
 
   AppState({
     this.updatePeriod,
@@ -40,6 +41,7 @@ class AppState extends Equatable {
     this.compassEvent,
     this.isPremium: false,
     this.showPremiumInfo: false,
+    this.showPremiumSuccess: false,
   });
 
   const AppState._({
@@ -61,6 +63,7 @@ class AppState extends Equatable {
     this.compassEvent,
     this.isPremium: false,
     this.showPremiumInfo: false,
+    this.showPremiumSuccess: false,
   });
 
   const AppState.initial() : this._();
@@ -85,6 +88,7 @@ class AppState extends Equatable {
     Nullable<CompassEvent?>? compassEvent,
     bool? isPremium,
     bool? showPremiumInfo,
+    bool? showPremiumSuccess,
   }) =>
       AppState._(
         updatePeriod:
@@ -119,6 +123,7 @@ class AppState extends Equatable {
             (compassEvent == null) ? this.compassEvent : compassEvent.value,
         isPremium: isPremium ?? this.isPremium,
         showPremiumInfo: showPremiumInfo ?? this.showPremiumInfo,
+        showPremiumSuccess: showPremiumSuccess ?? this.showPremiumSuccess,
       );
 
   @override
@@ -141,6 +146,7 @@ class AppState extends Equatable {
         compassEvent,
         isPremium,
         showPremiumInfo,
+        showPremiumSuccess,
       ];
 
   @override
@@ -154,5 +160,6 @@ class AppState extends Equatable {
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus, scrollDirection: $scrollDirection, ' +
       'connectivityResult: $connectivityResult, compassEvent: $compassEvent' +
-      'isPremium: $isPremium, showPremiumInfo: $showPremiumInfo}';
+      'isPremium: $isPremium, showPremiumInfo: $showPremiumInfo' +
+      'showPremiumSuccess: $showPremiumSuccess}';
 }

@@ -7,10 +7,9 @@ import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
-import 'package:flutter_weather/premium/bloc/bloc.dart';
 import 'package:flutter_weather/premium/premium.dart';
+import 'package:flutter_weather/services/services.dart';
 
 class WeatherApp extends StatelessWidget {
   WeatherApp({
@@ -37,14 +36,9 @@ class WeatherApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (BuildContext context) => AppBloc()
+              ..add(SetIsPremium(IAPService.instance.isPremium))
               ..add(StreamConnectivityResult())
               ..add(StreamCompassEvent()),
-          ),
-          BlocProvider(
-            lazy: false,
-            create: (BuildContext context) => PremiumBloc()
-              ..add(FetchProducts(getProductSourceByPlatform()))
-              ..add(StreamIAPResult(context)),
           ),
         ],
         child: FlutterWeatherAppView(),

@@ -11,6 +11,7 @@ import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ForecastView extends StatefulWidget {
   static Route route() =>
@@ -164,6 +165,45 @@ class _ForecastPageViewState extends State<ForecastView>
 
     if (_colorTheme != state.colorTheme) {
       _initialize();
+    }
+
+    if (state.isPremium && state.showPremiumSuccess) {
+      Alert(
+        context: context,
+        image: Image.asset(
+          'assets/images/logo.png',
+          height: 150.0,
+        ),
+        title: 'Congratulations!', // TODO! i18n
+        content: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 20.0,
+                right: 8.0,
+                left: 8.0,
+                bottom: 20.0,
+              ),
+              child: Text(
+                'Well done, you now have full access to the app', // TODO! i18n
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        buttons: [
+          DialogButton(
+            radius: BorderRadius.circular(10.0),
+            child: Text(
+              'COOL', // TODO! i18n
+            ),
+            onPressed: () {
+              context.read<AppBloc>().add(SetShowPremiumSuccess(false));
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ).show();
     }
   }
 

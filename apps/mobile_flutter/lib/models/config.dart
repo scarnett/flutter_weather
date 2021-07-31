@@ -14,6 +14,7 @@ class Config extends Equatable {
   final int refreshTimeout;
   final String defaultCountryCode;
   final String supportedLocales;
+  final String revenueCatApiKey;
   final String? privacyPolicyUrl;
   final String? githubUrl;
   final String? sentryDsn;
@@ -32,6 +33,7 @@ class Config extends Equatable {
     required this.refreshTimeout,
     required this.defaultCountryCode,
     required this.supportedLocales,
+    required this.revenueCatApiKey,
     this.privacyPolicyUrl,
     this.githubUrl,
     this.sentryDsn,
@@ -54,6 +56,7 @@ class Config extends Equatable {
         refreshTimeout: 300000,
         defaultCountryCode: 'us',
         supportedLocales: 'en',
+        revenueCatApiKey: '',
       );
 
   static Config fromRemoteConfig(Map<String, RemoteConfigValue> values) =>
@@ -74,6 +77,7 @@ class Config extends Equatable {
         refreshTimeout: values['refresh_timeout']!.asInt(),
         defaultCountryCode: values['default_country_code']!.asString(),
         supportedLocales: values['supported_locales']!.asString(),
+        revenueCatApiKey: values['revenuecat_api_key']!.asString(),
         privacyPolicyUrl: values['privacy_policy_url']!.asString(),
         githubUrl: values['github_url']!.asString(),
         sentryDsn: values['sentry_dsn']!.asString(),
@@ -94,6 +98,7 @@ class Config extends Equatable {
         refreshTimeout,
         defaultCountryCode,
         supportedLocales,
+        revenueCatApiKey,
         privacyPolicyUrl,
         githubUrl,
         sentryDsn,
@@ -108,10 +113,10 @@ class Config extends Equatable {
       'appConnectivityStatus: $appConnectivityStatus, ' +
       'openWeatherMapApiKey: $openWeatherMapApiKey, ' +
       'openWeatherMapApiUri: $openWeatherMapApiUri, ' +
-      'openWeatherMapApiDailyForecastPath: $openWeatherMapApiDailyForecastPath ' +
+      'openWeatherMapApiDailyForecastPath: $openWeatherMapApiDailyForecastPath, ' +
       'openWeatherMapApiOneCallPath: $openWeatherMapApiOneCallPath, ' +
-      'refreshTimeout: $refreshTimeout, defaultCountryCode: $defaultCountryCode ' +
-      'supportedLocales: $supportedLocales, privacyPolicyUrl: $privacyPolicyUrl ' +
-      'githubUrl: $githubUrl, sentryDsn: $sentryDsn, ' +
-      'adMobNativeUnitId: $adMobNativeUnitId}';
+      'refreshTimeout: $refreshTimeout, defaultCountryCode: $defaultCountryCode, ' +
+      'supportedLocales: $supportedLocales, revenueCatApiKey: $revenueCatApiKey, ' +
+      'privacyPolicyUrl: $privacyPolicyUrl githubUrl: $githubUrl, ' +
+      'sentryDsn: $sentryDsn, adMobNativeUnitId: $adMobNativeUnitId}';
 }

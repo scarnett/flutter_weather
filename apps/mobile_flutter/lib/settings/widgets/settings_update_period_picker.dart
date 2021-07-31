@@ -103,6 +103,7 @@ class _SettingsUpdatePeriodPickerState
       ));
     } else {
       switch (period) {
+        case UpdatePeriod.off:
         case UpdatePeriod.hour3:
         case UpdatePeriod.hour4:
         case UpdatePeriod.hour5:

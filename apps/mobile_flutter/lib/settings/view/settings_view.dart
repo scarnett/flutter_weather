@@ -121,7 +121,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   Widget _buildContent() {
     List<Widget> children = []
       ..addAll(_buildApplicationSection())
-      ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildUnitsSection());
 
     if (AppConfig.instance.config.privacyPolicyUrl != '') {
@@ -185,6 +184,29 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               context.read<AppBloc>().state.hourRange.getText(context),
           onTapCallback: () => _setPageListIndex(4),
         ),
+        Divider(),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.updatePeriod,
+          trailingText: context
+              .read<AppBloc>()
+              .state
+              .updatePeriod!
+              .getInfo(context: context)!['text'],
+          onTapCallback: () => _setPageListIndex(0),
+        ),
+        Divider(),
+        SettingsOption(
+          pageController: _pageController!,
+          title: AppLocalizations.of(context)!.pushNotification,
+          trailingText: getPushNotificationText(
+                context,
+                context.read<AppBloc>().state.pushNotification,
+                extras: context.read<AppBloc>().state.pushNotificationExtras,
+              ) ??
+              '',
+          onTapCallback: () => _setPageListIndex(1),
+        ),
       ]..addAll(_buildAds()),
     );
 
@@ -208,65 +230,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
         returnIndex: null,
       ),
     ];
-  }
-
-  List<Widget> _buildAutoUpdatePeriodSection() {
-    UpdatePeriod? updatePeriod = context.read<AppBloc>().state.updatePeriod;
-    List<Widget> widgets = <Widget>[];
-    widgets.addAll(
-      [
-        AppSectionHeader(
-          text: AppLocalizations.of(context)!.autoUpdates,
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 4.0,
-            top: 16.0,
-            bottom: 16.0,
-          ),
-          options: [
-            SizedBox(
-              height: 16.0,
-              child: Switch(
-                onChanged: (bool value) async => await _tapUpdatePeriod(
-                  value ? UpdatePeriod.hour4 : null,
-                  redirect: false,
-                ),
-                value: (updatePeriod != null),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-
-    if (updatePeriod != null) {
-      widgets.addAll([
-        SettingsOption(
-          pageController: _pageController!,
-          title: AppLocalizations.of(context)!.updatePeriod,
-          trailingText: context
-              .read<AppBloc>()
-              .state
-              .updatePeriod!
-              .getInfo(context: context)!['text'],
-          onTapCallback: () => _setPageListIndex(0),
-        ),
-        Divider(),
-        SettingsOption(
-          pageController: _pageController!,
-          title: AppLocalizations.of(context)!.pushNotification,
-          trailingText: getPushNotificationText(
-                context,
-                context.read<AppBloc>().state.pushNotification,
-                extras: context.read<AppBloc>().state.pushNotificationExtras,
-              ) ??
-              '',
-          onTapCallback: () => _setPageListIndex(1),
-        ),
-      ]);
-    }
-
-    return widgets;
   }
 
   List<Widget> _buildUnitsSection() => [
@@ -359,23 +322,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     num currentPage,
   ) {
     setState(() => _currentPage = currentPage);
-  }
-
-  Future<void> _tapUpdatePeriod(
-    UpdatePeriod? period, {
-    bool redirect: true,
-  }) async {
-    context.read<AppBloc>().add(
-          SetUpdatePeriod(
-            context: context,
-            updatePeriod: period,
-            callback: () async {
-              if (redirect) {
-                await animatePage(_pageController!, page: 0);
-              }
-            },
-          ),
-        );
   }
 
   void _tapPrivacyPolicy() =>

@@ -23,6 +23,7 @@ import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'app_events.dart';
 part 'app_state.dart';
@@ -33,6 +34,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   Stream<CompassEvent>? _headingStream;
   StreamSubscription<CompassEvent>? _headingSubscription;
+
+  final StreamTransformer<CompassEvent, CompassEvent> _debounceCompass =
+      StreamTransformer<CompassEvent, CompassEvent>.fromBind(
+          (Stream<CompassEvent> stream) =>
+              stream.debounce(const Duration(milliseconds: 10)));
 
   AppBloc() : super(AppState.initial());
 
@@ -98,6 +104,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       yield _mapSetIsPremiumToStates(event);
     } else if (event is SetShowPremiumInfo) {
       yield _mapSetShowPremiumInfoToStates(event);
+    } else if (event is SetShowPremiumSuccess) {
+      yield _mapSetShowPremiumSuccessToStates(event);
     }
   }
 
@@ -606,7 +614,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     if (AppConfig.isRelease()) {
       _headingStream = FlutterCompass.events;
       _headingSubscription = _headingStream
-          ?.listen((CompassEvent event) => add(SetCompassEvent(event)));
+          ?.transform(_debounceCompass)
+          .listen((CompassEvent event) => add(SetCompassEvent(event)));
     }
 
     yield state;
@@ -636,6 +645,13 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) =>
       state.copyWith(
         showPremiumInfo: event.showPremiumInfo,
+      );
+
+  AppState _mapSetShowPremiumSuccessToStates(
+    SetShowPremiumSuccess event,
+  ) =>
+      state.copyWith(
+        showPremiumSuccess: event.showPremiumSuccess,
       );
 
   Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {

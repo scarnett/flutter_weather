@@ -40,12 +40,13 @@ dependencies:
   google_mobile_ads: '0.13.1'
   http: '0.13.3'
   hydrated_bloc: '7.0.1'
-  in_app_purchase: '1.0.6'
   iso_countries: '2.0.1'
   package_info: '2.0.2'
   page_view_indicators: '2.0.0'
   path_provider: '2.0.2'
   permission_handler: '8.1.2'
+  purchases_flutter: '3.4.0'
+  rflutter_alert: '2.0.2'
   sentry: '5.0.0'
   sentry_flutter: '5.0.0'
   shared_preferences: '2.0.6'
@@ -53,6 +54,7 @@ dependencies:
   store_redirect:
     git:
       url: https://github.com/Danesz/store_redirect
+  stream_transform: '2.0.0'
   timer_builder: '2.0.0'
   url_launcher: '6.0.9'
   uuid: '3.0.4'
