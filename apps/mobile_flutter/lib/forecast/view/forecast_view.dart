@@ -11,7 +11,6 @@ import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ForecastView extends StatefulWidget {
   static Route route() =>
@@ -167,44 +166,18 @@ class _ForecastPageViewState extends State<ForecastView>
       _initialize();
     }
 
-    if (state.isPremium && state.showPremiumSuccess) {
-      Alert(
-        context: context,
-        image: Image.asset(
-          'assets/images/logo.png',
-          height: 150.0,
-        ),
-        title: 'Congratulations!', // TODO! i18n
-        content: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-                right: 8.0,
-                left: 8.0,
-                bottom: 20.0,
-              ),
-              child: Text(
-                'Well done, you now have full access to the app', // TODO! i18n
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-        buttons: [
-          DialogButton(
-            radius: BorderRadius.circular(10.0),
-            child: Text(
-              'COOL', // TODO! i18n
-            ),
-            onPressed: () {
-              context.read<AppBloc>().add(SetShowPremiumSuccess(false));
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ).show();
-    }
+    //if (state.isPremium && state.showPremiumSuccess) {
+    AppAlert(
+      image: Image.asset(
+        'assets/images/logo.png',
+        height: 50.0,
+        width: 50.0,
+      ),
+      title: 'Congratulations!', // TODO! i18n
+      description: 'Well done, you now have full access to the app',
+      text: "Flutter is better with RFlutter Alert.",
+    );
+    //}
   }
 
   Future<bool> _willPopCallback(

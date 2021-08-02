@@ -46,7 +46,6 @@ dependencies:
   path_provider: '2.0.2'
   permission_handler: '8.1.2'
   purchases_flutter: '3.4.0'
-  rflutter_alert: '2.0.2'
   sentry: '5.0.0'
   sentry_flutter: '5.0.0'
   shared_preferences: '2.0.6'
