@@ -33,9 +33,7 @@ class AppFormButton extends StatelessWidget {
           primary: Colors.white,
           onSurface: AppTheme.disabledTextColor,
           minimumSize: Size(100, 10),
-          textStyle: TextStyle(
-            color: Colors.white,
-          ),
+          textStyle: const TextStyle(color: Colors.white),
         ),
         child: (icon == null)
             ? (text == null)

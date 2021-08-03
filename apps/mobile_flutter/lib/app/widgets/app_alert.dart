@@ -2,19 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/app/app_theme.dart';
 
 class AppAlert extends StatefulWidget {
   final String title;
-  final String description;
-  final String text;
-  final Image image;
+  final String bodyText;
+  final String buttonText;
+  final Image? image;
 
   const AppAlert({
     Key? key,
     required this.title,
-    required this.description,
-    required this.text,
-    required this.image,
+    required this.bodyText,
+    required this.buttonText,
+    this.image,
   }) : super(key: key);
 
   @override
@@ -30,7 +31,7 @@ class _AppAlertState extends State<AppAlert> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        elevation: 0,
+        elevation: 0.0,
         backgroundColor: Colors.transparent,
         child: _buildContent(),
       );
@@ -44,7 +45,7 @@ class _AppAlertState extends State<AppAlert> {
               right: 20.0,
               bottom: 20.0,
             ),
-            margin: EdgeInsets.only(top: 65.0),
+            margin: EdgeInsets.only(top: 50.0),
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
@@ -62,29 +63,41 @@ class _AppAlertState extends State<AppAlert> {
               children: <Widget>[
                 Text(
                   widget.title,
-                  style: const TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.w600,
+                  style: TextStyle(
+                    color: AppTheme.secondaryColor.withOpacity(0.7),
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(
-                  height: 15.0,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    widget.bodyText,
+                    style: TextStyle(
+                      color: AppTheme.secondaryColor.withOpacity(0.7),
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w300,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                Text(
-                  widget.description,
-                  style: const TextStyle(fontSize: 14.0),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 22.0),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      widget.text,
-                      style: const TextStyle(fontSize: 18.0),
+                Center(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(widget.buttonText),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 10.0,
+                      ),
+                      backgroundColor: AppTheme.primaryColor,
+                      primary: Colors.white,
+                      onSurface: AppTheme.disabledTextColor,
+                      minimumSize: Size(100, 10),
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      ),
                     ),
                   ),
                 ),
@@ -92,18 +105,14 @@ class _AppAlertState extends State<AppAlert> {
             ),
           ),
           Positioned(
-            left: 20.0,
-            right: 20.0,
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: 45.0,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(45.0)),
-                child: Image.asset(
+            left: 0.0,
+            right: 0.0,
+            child: widget.image ??
+                Image.asset(
                   'assets/images/logo.png',
+                  height: 100.0,
+                  width: 100.0,
                 ),
-              ),
-            ),
           ),
         ],
       );

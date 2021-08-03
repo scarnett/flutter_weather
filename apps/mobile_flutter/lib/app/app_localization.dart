@@ -39,8 +39,13 @@ class AppLocalizations {
       );
 
   String get premiumNotAvailable => addMessage(
-      'Subscriptions are currentlt unavailable. Please try again later.');
+      'Subscriptions are currently unavailable. Please try again later.');
 
+  String get wellDone => addMessage('Well Done!');
+  String get fullAppAccess =>
+      addMessage('You now have full access to the app.');
+
+  String get cool => addMessage('Cool');
   String get application => addMessage('Application');
   String get settings => addMessage('Settings');
   String get buildInformation => addMessage('Build Information');
@@ -166,9 +171,13 @@ class AppLocalizations {
   String get chartBar => addMessage('Bar');
   String get hourRange => addMessage('Hour Range');
   String get hours12 => addMessage('12 hours');
+  String get hours12short => addMessage('12hr');
   String get hours24 => addMessage('24 hours');
+  String get hours24short => addMessage('24hr');
   String get hours36 => addMessage('36 hours');
+  String get hours36short => addMessage('36hr');
   String get hours48 => addMessage('48 hours');
+  String get hours48short => addMessage('48hr');
   String get disableAds => addMessage('Disable Ads');
 
   String getFeelsLike(

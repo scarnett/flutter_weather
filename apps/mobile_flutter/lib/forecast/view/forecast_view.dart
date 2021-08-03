@@ -166,18 +166,18 @@ class _ForecastPageViewState extends State<ForecastView>
       _initialize();
     }
 
-    //if (state.isPremium && state.showPremiumSuccess) {
-    AppAlert(
-      image: Image.asset(
-        'assets/images/logo.png',
-        height: 50.0,
-        width: 50.0,
-      ),
-      title: 'Congratulations!', // TODO! i18n
-      description: 'Well done, you now have full access to the app',
-      text: "Flutter is better with RFlutter Alert.",
-    );
-    //}
+    if (state.isPremium && state.showPremiumSuccess) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AppAlert(
+          title: AppLocalizations.of(context)!.wellDone,
+          bodyText: AppLocalizations.of(context)!.fullAppAccess,
+          buttonText: AppLocalizations.of(context)!.cool,
+        ),
+      );
+
+      context.read<AppBloc>().add(SetShowPremiumSuccess(false));
+    }
   }
 
   Future<bool> _willPopCallback(

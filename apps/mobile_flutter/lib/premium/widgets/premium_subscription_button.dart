@@ -87,8 +87,6 @@ class _PremiumSubscriptionButtonState extends State<PremiumSubscriptionButton> {
   Future<void> _initialize() async {
     try {
       Offerings offerings = await IAPService.instance.offerings;
-      print(offerings);
-      print(offerings.current);
       setState(() => _offerings = offerings);
     } on PlatformException catch (exception, stackTrace) {
       await Sentry.captureException(exception, stackTrace: stackTrace);

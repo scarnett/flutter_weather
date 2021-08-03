@@ -551,6 +551,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) {
     // If auto update is enabled then run the refresh
     if ((state.updatePeriod != null) &&
+        (state.updatePeriod != UpdatePeriod.off) &&
         state.forecasts.isNotEmpty &&
         (state.forecasts.length >= event.forecastIndex + 1)) {
       Forecast forecast = state.forecasts[event.forecastIndex];

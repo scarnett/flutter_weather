@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -143,6 +144,29 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
                   child: _buildTopContent(),
                   clipBehavior: Clip.antiAlias,
                 ),
+              ),
+            ),
+            CarouselSlider(
+              items: [
+                Container(
+                  color: Colors.red,
+                  width: 100.0,
+                  height: 100.0,
+                ),
+                Container(
+                  color: Colors.green,
+                  width: 100.0,
+                  height: 100.0,
+                ),
+              ],
+              options: CarouselOptions(
+                height: 50.0,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 10),
+                autoPlayAnimationDuration: const Duration(milliseconds: 300),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enableInfiniteScroll: false,
+                viewportFraction: 1.0,
               ),
             ),
           ],

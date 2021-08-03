@@ -168,7 +168,7 @@ ThemeData appLightThemeData = ThemeData(
   ),
   textTheme: _darkTextTheme,
   snackBarTheme: SnackBarThemeData(
-    contentTextStyle: TextStyle(color: Colors.white),
+    contentTextStyle: const TextStyle(color: Colors.white),
   ),
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
@@ -215,7 +215,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
     color: AppTheme.secondaryColor.withOpacity(0.925),
     elevation: 0.0,
     textTheme: TextTheme(
-      headline6: TextStyle(
+      headline6: const TextStyle(
         color: Colors.white,
         fontSize: 20.0,
       ),
@@ -232,7 +232,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   ),
   dialogTheme: DialogTheme(
     backgroundColor: AppTheme.secondaryColor,
-    contentTextStyle: TextStyle(color: Colors.white),
+    contentTextStyle: const TextStyle(color: Colors.white),
   ),
   textTheme: _lightTextTheme,
 );
