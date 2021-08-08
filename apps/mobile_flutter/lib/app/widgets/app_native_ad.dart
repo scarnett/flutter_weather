@@ -24,7 +24,7 @@ class AppNativeAd extends StatefulWidget {
     required this.factoryId,
     this.onAdLoaded,
     this.backgroundColor,
-    this.height: 55.0,
+    this.height: 75.0,
     this.alignment: Alignment.center,
   }) : super(key: key);
 
@@ -69,6 +69,7 @@ class _AppNativeAdState extends State<AppNativeAd>
     BuildContext context,
   ) {
     super.build(context);
+
     return ((_nativeUnitId != null) && (_ad != null) && _isLoaded)
         ? BlocListener<AppBloc, AppState>(
             listener: (
@@ -151,9 +152,12 @@ class _AppNativeAdState extends State<AppNativeAd>
 
   Widget _buildCloseButton() => GestureDetector(
         onTap: () => context.read<AppBloc>().add(SetShowPremiumInfo(true)),
-        child: Align(
-          alignment: Alignment.topRight,
-          child: const Icon(Icons.close, size: 16.0),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: const Icon(Icons.close, size: 16.0),
+          ),
         ),
       );
 }

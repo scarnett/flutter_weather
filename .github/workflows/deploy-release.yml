@@ -92,6 +92,7 @@ jobs:
       FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/local.properties' }}
       FLUTTER_WEATHER_KEY_PROPERTIES: ${{ secrets.FLUTTER_WEATHER_KEY_PROPERTIES }}
       FLUTTER_WEATHER_KEY_PROPERTIES_FILE_PATH: ${{ './apps/mobile_flutter/android/key.properties' }}
+      FLUTTER_WEATHER_ADMOB_ANDROID_APP_ID: ${{ secrets.FLUTTER_WEATHER_ADMOB_ANDROID_APP_ID }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_JSON: ${{ secrets.FLUTTER_WEATHER_GOOGLE_SERVICES_JSON }}
       FLUTTER_WEATHER_GOOGLE_SERVICES_JSON_FILE_PATH: ${{ './apps/mobile_flutter/android/app/google-services.json' }}
       FLUTTER_WEATHER_KEYSTORE: ${{ secrets.FLUTTER_WEATHER_KEYSTORE }}
@@ -177,6 +178,9 @@ jobs:
         with:
           find: 'flutter.versionCode=1'
           replace: 'flutter.versionCode=${{ github.run_number }}'
+
+      - name: 'Add admob application id to local properties'
+        run: echo "admob.applicationId=${{ env.FLUTTER_WEATHER_ADMOB_ANDROID_APP_ID }}" >> "${{ env.FLUTTER_WEATHER_LOCAL_PROPERTIES_FILE_PATH }}"
 
       - name: 'Flutter get'
         working-directory: '${{ env.FLUTTER_WEATHER_FOLDER }}'

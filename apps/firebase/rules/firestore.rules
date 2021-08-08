@@ -5,7 +5,7 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    match /products/{document=**} {
+    match /screenshots/{document=**} {
       allow read: if true;
     }
   }

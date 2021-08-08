@@ -5,46 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/list_tile_native_ad_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center_vertical"
-            android:scaleType="fitXY" />
+      <TextView style="@style/NormalTheme.AdAttribution"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="55dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:orientation="vertical">
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:paddingTop="5dp">
 
-            <TextView
-                android:id="@+id/list_tile_native_ad_headline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:maxLines="1"
-                android:textSize="16sp"
-                tools:text="Headline" />
+          <ImageView
+              android:id="@+id/list_tile_native_ad_icon"
+              android:layout_width="40dp"
+              android:layout_height="40dp"
+              android:adjustViewBounds="true"
+              android:paddingBottom="5dp"
+              android:paddingEnd="5dp"
+              android:paddingRight="5dp"/>
 
-            <TextView
-                android:id="@+id/list_tile_native_ad_body"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:maxLines="1"
-                android:textSize="14sp"
-                tools:text="Body" />
-        </LinearLayout>
-    </FrameLayout>
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:orientation="vertical">
+
+              <TextView
+                  android:id="@+id/list_tile_native_ad_headline"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:ellipsize="end"
+                  android:lines="1"
+                  android:maxLines="1"
+                  android:textSize="16sp"
+                  tools:text="Headline" />
+
+              <TextView
+                  android:id="@+id/list_tile_native_ad_body"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:ellipsize="end"
+                  android:lines="1"
+                  android:maxLines="1"
+                  android:textSize="14sp"
+                  tools:text="Body" />
+          </LinearLayout>
+      </FrameLayout>
+    </LinearLayout>
 </com.google.android.gms.ads.nativead.NativeAdView>

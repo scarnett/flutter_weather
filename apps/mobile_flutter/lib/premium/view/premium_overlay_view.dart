@@ -1,11 +1,7 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/app/app_localization.dart';
-import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
-import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/premium/premium.dart';
 
 class PremiumOverlayView extends StatefulWidget {
@@ -30,12 +26,18 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
     with TickerProviderStateMixin {
   bool _showOverlay = false;
 
+  late AnimationController _carouselCurveTweenController;
   late AnimationController _overlayCurveTweenController;
   late Animation _overlayCurveAnimation;
 
   @override
   void initState() {
     super.initState();
+
+    _carouselCurveTweenController = AnimationController(
+      duration: Duration(milliseconds: (widget.expandSpeed ~/ 2)),
+      vsync: this,
+    );
 
     _overlayCurveTweenController = AnimationController(
       duration: Duration(milliseconds: widget.expandSpeed),
@@ -44,6 +46,13 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
 
     _overlayCurveAnimation = Tween(begin: 0.0, end: widget.curveHeight)
         .animate(_overlayCurveTweenController);
+  }
+
+  @override
+  void dispose() {
+    _carouselCurveTweenController.dispose();
+    _overlayCurveTweenController.dispose();
+    super.dispose();
   }
 
   @override
@@ -71,8 +80,10 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
         _showOverlay = state.showPremiumInfo;
 
         if (state.showPremiumInfo) {
+          _carouselCurveTweenController.forward();
           _overlayCurveTweenController.forward();
         } else {
+          _carouselCurveTweenController.reverse();
           _overlayCurveTweenController.reverse();
         }
       });
@@ -94,211 +105,14 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
         ) =>
             Stack(
           children: [
-            GestureDetector(
-              onTap: () =>
-                  context.read<AppBloc>().add(SetShowPremiumInfo(false)),
-              child: ClipPath(
-                clipper: PremiumClipper(curveHeight: 0.0),
-                child: AnimatedContainer(
-                  color: _backdropColor,
-                  height: context.read<AppBloc>().state.showPremiumInfo
-                      ? MediaQuery.of(context).size.height
-                      : 0.0,
-                  width: double.infinity,
-                  duration: _getBackdropAnimateDuration(),
-                  curve: Curves.easeOut,
-                ),
-              ),
+            PremiumBackdrop(
+              animationController: _carouselCurveTweenController,
             ),
-            CustomPaint(
-              painter: PremiumClipperShadowPainter(
-                clipper:
-                    PremiumClipper(curveHeight: _overlayCurveAnimation.value),
-                shadow: Shadow(
-                  color: _overlayShadowColor,
-                  offset: Offset(0.0, 10.0),
-                ),
-              ),
-              child: ClipPath(
-                clipper:
-                    PremiumClipper(curveHeight: _overlayCurveAnimation.value),
-                child: AnimatedContainer(
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryColor,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppTheme.primaryColor.darken(10),
-                        AppTheme.primaryColor,
-                      ],
-                      stops: [0.0, 0.5],
-                    ),
-                  ),
-                  height: context.read<AppBloc>().state.showPremiumInfo
-                      ? widget.expandHeight
-                      : 0.0,
-                  width: double.infinity,
-                  duration: Duration(milliseconds: widget.expandSpeed),
-                  curve: Curves.bounceOut,
-                  child: _buildTopContent(),
-                  clipBehavior: Clip.antiAlias,
-                ),
-              ),
-            ),
-            CarouselSlider(
-              items: [
-                Container(
-                  color: Colors.red,
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                Container(
-                  color: Colors.green,
-                  width: 100.0,
-                  height: 100.0,
-                ),
-              ],
-              options: CarouselOptions(
-                height: 50.0,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 10),
-                autoPlayAnimationDuration: const Duration(milliseconds: 300),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enableInfiniteScroll: false,
-                viewportFraction: 1.0,
-              ),
+            PremiumBubble(
+              overlayCurveTweenController: _overlayCurveTweenController,
+              overlayCurveAnimation: _overlayCurveAnimation,
             ),
           ],
         ),
       );
-
-  Widget _buildTopContent() => SafeArea(
-        child: Stack(
-          children: [
-            AnimatedOpacity(
-              opacity:
-                  context.read<AppBloc>().state.showPremiumInfo ? 1.0 : 0.0,
-              duration: _getContentFadeDuration(),
-              child: AnimatedContainer(
-                duration: _getContentAnimateDuration(),
-                curve: Curves.easeOut,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
-                padding: const EdgeInsets.only(
-                  left: 20.0,
-                  right: 20.0,
-                ),
-                width: double.infinity,
-                height:
-                    context.read<AppBloc>().state.showPremiumInfo ? 400 : 0.0,
-                child: Wrap(
-                  runAlignment: WrapAlignment.center,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Text(
-                        AppLocalizations.of(context)!.premium,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline4!
-                            .copyWith(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 10.0,
-                        left: 40.0,
-                        right: 40.0,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.premiumText,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              color:
-                                  AppTheme.getFadedTextColor(colorTheme: true),
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    PremiumSubscriptionButton(),
-                    Container(
-                      width: double.infinity,
-                      child: Text(
-                        AppLocalizations.of(context)!.getPremiumCost(
-                            (2.00).formatDecimal(decimals: 2)), // TODO! cost
-                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                              color:
-                                  AppTheme.getFadedTextColor(colorTheme: true),
-                              fontWeight: FontWeight.bold,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      AppTheme.primaryColor,
-                      AppTheme.primaryColor.withOpacity(0.0),
-                    ],
-                    stops: [0.0, 1.0],
-                  ),
-                ),
-                height: ((widget.curveHeight / 2.0) -
-                    (_overlayCurveAnimation.value / 2.0)),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  Duration _getBackdropAnimateDuration() {
-    int speed = widget.expandSpeed;
-    return Duration(milliseconds: (speed - (speed * 0.75)).round());
-  }
-
-  Duration _getContentAnimateDuration() {
-    int speed = widget.expandSpeed;
-
-    if (context.read<AppBloc>().state.showPremiumInfo) {
-      speed = (speed + (speed * 0.75)).round();
-    } else {
-      speed = (speed - (speed * 0.25)).round();
-    }
-
-    return Duration(milliseconds: speed);
-  }
-
-  Duration _getContentFadeDuration() {
-    int speed = widget.expandSpeed;
-    return Duration(milliseconds: (speed / 1.5).round());
-  }
-
-  Color get _backdropColor {
-    AppState state = context.read<AppBloc>().state;
-    if (state.colorTheme) {
-      return Colors.black.withOpacity(0.75);
-    }
-
-    return Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9);
-  }
-
-  Color get _overlayShadowColor {
-    AppState state = context.read<AppBloc>().state;
-    if (state.colorTheme) {
-      return Colors.black.withOpacity(0.2);
-    }
-
-    return Colors.black.withOpacity(0.1);
-  }
 }

@@ -288,7 +288,7 @@ class _ForecastPageViewState extends State<ForecastView>
 
           Color _forecastDarkenedColor = state.showPremiumInfo
               ? _forecastColor!
-              : _forecastColor!.darken(40);
+              : _forecastColor!.darken(40.0);
 
           return AppUiOverlayStyle(
             systemNavigationBarColorOpacity:
@@ -427,7 +427,7 @@ class _ForecastPageViewState extends State<ForecastView>
       backgroundColor: state.colorTheme
           ? state.forecasts[state.selectedForecastIndex]
               .getTemperatureColor()
-              .darken(35)
+              .darken(35.0)
           : null,
     );
   }
