@@ -103,16 +103,24 @@ class _PremiumOverlayViewState extends State<PremiumOverlayView>
           BuildContext context,
           Widget? child,
         ) =>
-            Stack(
-          children: [
-            PremiumBackdrop(
-              animationController: _carouselCurveTweenController,
-            ),
-            PremiumBubble(
-              overlayCurveTweenController: _overlayCurveTweenController,
-              overlayCurveAnimation: _overlayCurveAnimation,
-            ),
-          ],
+            GestureDetector(
+          onPanUpdate: (DragUpdateDetails details) {
+            if (context.read<AppBloc>().state.showPremiumInfo &&
+                (details.delta.dy <= 0)) {
+              context.read<AppBloc>().add(SetShowPremiumInfo(false));
+            }
+          },
+          child: Stack(
+            children: [
+              PremiumBackdrop(
+                animationController: _carouselCurveTweenController,
+              ),
+              PremiumBubble(
+                overlayCurveTweenController: _overlayCurveTweenController,
+                overlayCurveAnimation: _overlayCurveAnimation,
+              ),
+            ],
+          ),
         ),
       );
 }
