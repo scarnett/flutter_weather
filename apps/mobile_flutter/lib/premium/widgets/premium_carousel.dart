@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_theme.dart';
+import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/models/models.dart';
+import 'package:flutter_weather/premium/premium.dart';
 import 'package:flutter_weather/services/services.dart';
 
 class PremiumCarousel extends StatefulWidget {
@@ -48,18 +51,28 @@ class _PremiumCarouselState extends State<PremiumCarousel> {
               child: Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
-                  CarouselSlider(
-                    items: snapshot.data!
-                        .map((Screenshot screenshot) =>
-                            NetworkImage(screenshot.url))
-                        .map((NetworkImage image) => Image(image: image))
-                        .toList(),
-                    carouselController: _buttonCarouselController,
-                    options: CarouselOptions(
-                      aspectRatio: 1.7,
-                      enlargeCenterPage: true,
-                      enlargeStrategy: CenterPageEnlargeStrategy.height,
-                      viewportFraction: 1.0,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: CarouselSlider(
+                      items: snapshot.data!
+                          .map((Screenshot screenshot) => NetworkImage(
+                                getScreenshot(
+                                  screenshot,
+                                  themeMode:
+                                      context.read<AppBloc>().state.themeMode,
+                                  colorized:
+                                      context.read<AppBloc>().state.colorTheme,
+                                ),
+                              ))
+                          .map((NetworkImage image) => Image(image: image))
+                          .toList(),
+                      carouselController: _buttonCarouselController,
+                      options: CarouselOptions(
+                        aspectRatio: 0.75,
+                        enlargeCenterPage: true,
+                        enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        viewportFraction: 1.0,
+                      ),
                     ),
                   ),
                   Positioned(

@@ -1,16 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Screenshot {
-  final String url;
+  final String colorized;
+  final String light;
+  final String dark;
 
   Screenshot({
-    required this.url,
+    required this.colorized,
+    required this.light,
+    required this.dark,
   });
 
   factory Screenshot.fromSnapshot(
     DocumentSnapshot snapshot,
   ) =>
       Screenshot(
-        url: snapshot['url'],
+        colorized: snapshot['colorized'],
+        light: snapshot['light'],
+        dark: snapshot['dark'],
       );
 }
