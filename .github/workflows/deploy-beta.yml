@@ -238,7 +238,7 @@ jobs:
       FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'ios-beta' }}
-      XCODE_VERSION: ${{ '12.3' }}
+      XCODE_VERSION: ${{ '13.2.1' }}
 
     steps:
       - uses: actions/checkout@v2
