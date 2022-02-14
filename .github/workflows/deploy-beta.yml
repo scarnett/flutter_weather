@@ -345,7 +345,7 @@ jobs:
           name: apk
 
       - name: 'Upload apk'
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APPID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
