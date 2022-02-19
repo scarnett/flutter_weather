@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
-import 'package:flutter_weather/forecast/widgets/forecast_alert_button.dart';
 import 'package:flutter_weather/models/models.dart';
 
 class ForecastDisplay extends StatefulWidget {

@@ -4,7 +4,6 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 
 class ForecastFormBloc extends FormBloc<String, String> {

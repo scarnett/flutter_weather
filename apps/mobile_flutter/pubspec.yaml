@@ -16,8 +16,8 @@ dependencies:
   collection: '1.15.0'
   cloud_firestore: '2.4.0'
   connectivity_plus: '2.2.1'
-  cupertino_icons: '1.0.3'
-  device_info: '2.0.2'
+  cupertino_icons: '1.0.4'
+  device_info: '2.0.3'
   equatable: '2.0.3'
   firebase_core: '1.4.0'
   firebase_crashlytics: '2.0.6'
@@ -27,18 +27,16 @@ dependencies:
     git:
       url: https://github.com/WxqKb/fl_chart
   flutter_bloc: '8.0.1'
-  flutter_compass:
-    git:
-      url: https://github.com/scarnett/flutter_compass
+  flutter_compass: '0.7.0'
   flutter_form_bloc: '0.29.3'
   flutter_switch: '0.3.2'
   geolocator: '7.3.0'
-  http: '0.13.3'
+  http: '0.13.4'
   hydrated_bloc: '8.0.0'
-  iso_countries: '2.0.1'
+  iso_countries: '2.1.0'
   package_info: '2.0.2'
   page_view_indicators: '2.0.0'
-  path_provider: '2.0.2'
+  path_provider: '2.0.9'
   permission_handler: '8.1.2'
   sentry: '5.0.0'
   sentry_flutter: '5.0.0'
@@ -49,7 +47,7 @@ dependencies:
       url: https://github.com/Danesz/store_redirect
   timer_builder: '2.0.0'
   url_launcher: '6.0.9'
-  uuid: '3.0.4'
+  uuid: '3.0.5'
   version: '2.0.0'
   weather_icons: '3.0.0-nullsafety.0'
   webview_flutter: '2.0.10'

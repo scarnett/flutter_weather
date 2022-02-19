@@ -14,14 +14,12 @@ import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/enums/message_type.dart';
-import 'package:flutter_weather/enums/wind_speed_unit.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:sentry/sentry.dart';
 
 part 'app_events.dart';

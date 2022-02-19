@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app/app_keys.dart';
 import 'package:flutter_weather/app/app_localization.dart';
@@ -9,7 +7,6 @@ import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
-import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
