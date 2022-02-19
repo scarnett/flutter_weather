@@ -68,7 +68,11 @@ Future<void> main() async {
   };
 
   if (appConfig.config.sentryDsn.isNullOrEmpty()) {
-    runApp(appConfig);
+    HydratedBlocOverrides.runZoned(
+      () => runApp(appConfig),
+      blocObserver: AppBlocObserver(),
+      storage: storage,
+    );
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options

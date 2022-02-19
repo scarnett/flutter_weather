@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_prefs.dart';
@@ -66,7 +65,11 @@ Future<void> main() async {
   };
 
   if (appConfig.config.sentryDsn.isNullOrEmpty()) {
-    runApp(appConfig);
+    HydratedBlocOverrides.runZoned(
+      () => runApp(appConfig),
+      blocObserver: AppBlocObserver(),
+      storage: storage,
+    );
   } else {
     await SentryFlutter.init(
       (SentryFlutterOptions options) => options
