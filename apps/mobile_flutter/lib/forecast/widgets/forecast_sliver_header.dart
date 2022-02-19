@@ -117,7 +117,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
       return forecast.getTemperatureColor().withOpacity(0.8);
     }
 
-    return Theme.of(context).appBarTheme.color!;
+    return Theme.of(context).appBarTheme.backgroundColor!;
   }
 
   double _calculateExpandRatio(

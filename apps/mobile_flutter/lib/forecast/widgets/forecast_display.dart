@@ -204,7 +204,7 @@ class _ForecastDisplayState extends State<ForecastDisplay> {
       return widget.forecastDarkenedColor!.withOpacity(0.925);
     }
 
-    return Theme.of(context).appBarTheme.color!;
+    return Theme.of(context).appBarTheme.backgroundColor!;
   }
 
   void _snapHeader({

@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  bloc: '7.0.0'
+  bloc: '8.0.2'
   carousel_slider: '4.0.0'
   collection: '1.15.0'
   cloud_firestore: '2.4.0'
@@ -26,15 +26,15 @@ dependencies:
   fl_chart:
     git:
       url: https://github.com/WxqKb/fl_chart
-  flutter_bloc: '7.0.1'
+  flutter_bloc: '8.0.1'
   flutter_compass:
     git:
       url: https://github.com/scarnett/flutter_compass
-  flutter_form_bloc: '0.20.6'
+  flutter_form_bloc: '0.29.3'
   flutter_switch: '0.3.2'
   geolocator: '7.3.0'
   http: '0.13.3'
-  hydrated_bloc: '7.0.1'
+  hydrated_bloc: '8.0.0'
   iso_countries: '2.0.1'
   package_info: '2.0.2'
   page_view_indicators: '2.0.0'
@@ -61,7 +61,7 @@ dev_dependencies:
   integration_test:
     sdk: flutter
 
-  bloc_test: '8.0.2'
+  bloc_test: '9.0.2'
   build_runner: '2.0.6'
   flutter_launcher_icons: '0.9.0'
   flutter_native_splash: '1.1.8+4'

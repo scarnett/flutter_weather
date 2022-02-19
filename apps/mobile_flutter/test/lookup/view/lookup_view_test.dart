@@ -34,12 +34,12 @@ class FakeFormBlocEvent extends Fake implements FormBlocEvent {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue<FormBlocState<String, String>>(FakeFormBlocState());
-    registerFallbackValue<FormBlocEvent>(FakeFormBlocEvent());
-    registerFallbackValue<AppEvent>(FakeAppEvent());
-    registerFallbackValue<AppState>(FakeAppState());
-    registerFallbackValue<LookupEvent>(FakeLookupEvent());
-    registerFallbackValue<LookupState>(FakeLookupState());
+    registerFallbackValue(FakeFormBlocState());
+    registerFallbackValue(FakeFormBlocEvent());
+    registerFallbackValue(FakeAppEvent());
+    registerFallbackValue(FakeAppState());
+    registerFallbackValue(FakeLookupEvent());
+    registerFallbackValue(FakeLookupState());
   });
 
   group('LookupView', () {

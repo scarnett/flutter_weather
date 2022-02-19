@@ -34,7 +34,7 @@ class AppUiOverlayStyle extends StatelessWidget {
         systemNavigationBarColor:
             state.colorTheme && (systemNavigationBarColor != null)
                 ? systemNavigationBarColor!.withOpacity(0.925)
-                : Theme.of(context).appBarTheme.color,
+                : Theme.of(context).appBarTheme.backgroundColor,
         systemNavigationBarIconBrightness:
             (systemNavigationBarIconBrightness != null)
                 ? systemNavigationBarIconBrightness

@@ -93,7 +93,7 @@ class _ForecastCountryPickerState extends State<ForecastCountryPicker> {
       );
 
   Widget _buildCountryFilter() => Container(
-        color: Theme.of(context).appBarTheme.color,
+        color: Theme.of(context).appBarTheme.backgroundColor,
         child: TextField(
           key: Key(AppKeys.locationCountryFilterKey),
           keyboardType: TextInputType.text,

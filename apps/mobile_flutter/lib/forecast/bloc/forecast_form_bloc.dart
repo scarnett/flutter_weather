@@ -38,11 +38,11 @@ class ForecastFormBloc extends FormBloc<String, String> {
   void onLoading() async {
     if (_initialForecast != null) {
       if (_initialForecast!.city != null) {
-        cityName.updateInitialValue(_initialForecast!.cityName);
+        cityName.updateInitialValue(_initialForecast!.cityName!);
       }
 
       if (_initialForecast!.postalCode != null) {
-        postalCode.updateInitialValue(_initialForecast!.postalCode);
+        postalCode.updateInitialValue(_initialForecast!.postalCode!);
       }
 
       if (_initialForecast!.countryCode != null) {
@@ -73,9 +73,9 @@ class ForecastFormBloc extends FormBloc<String, String> {
     _forecasts!.forEach((Forecast forecast) {
       if (!forecast.cityName.isNullOrEmpty() &&
           !forecast.countryCode.isNullOrEmpty() &&
-          (forecast.cityName!.toLowerCase() == cityName.value!.toLowerCase()) &&
+          (forecast.cityName!.toLowerCase() == cityName.value.toLowerCase()) &&
           (forecast.countryCode!.toLowerCase() ==
-              countryCode.value!.toLowerCase())) {
+              countryCode.value.toLowerCase())) {
         if ((_initialForecast == null) ||
             (_initialForecast!.id != forecast.id)) {
           cityName.addFieldError(
@@ -91,9 +91,9 @@ class ForecastFormBloc extends FormBloc<String, String> {
         }
       } else if (!forecast.postalCode.isNullOrEmpty() &&
           (forecast.postalCode!.toLowerCase() ==
-              postalCode.value!.toLowerCase()) &&
+              postalCode.value.toLowerCase()) &&
           (forecast.postalCode!.toLowerCase() ==
-              postalCode.value!.toLowerCase())) {
+              postalCode.value.toLowerCase())) {
         if ((_initialForecast == null) ||
             (_initialForecast!.id != forecast.id)) {
           postalCode.addFieldError(
