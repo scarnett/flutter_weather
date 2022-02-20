@@ -1,9 +1,7 @@
 package io.flutter_weather
 
-import androidx.annotation.NonNull
 import androidx.core.view.WindowCompat
 import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
 
 class MainActivity: FlutterActivity() {
     // @see https://github.com/goderbauer/scratchpad/commit/fb5c97d3ecadf6c48bff20b5a8d83f8b19226070
