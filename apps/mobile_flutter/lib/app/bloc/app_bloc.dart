@@ -32,68 +32,36 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   Stream<CompassEvent>? _headingStream;
   StreamSubscription<CompassEvent>? _headingSubscription;
 
-  AppBloc() : super(AppState.initial());
+  AppBloc() : super(AppState.initial()) {
+    on<ToggleThemeMode>(_onToggleThemeMode);
+    on<SetUpdatePeriod>(_onSetUpdatePeriod);
+    on<SetPushNotification>(_onSetPushNotification);
+    on<SetThemeMode>(_onSetThemeMode);
+    on<ToggleColorTheme>(_onToggleColorTheme);
+    on<SetColorTheme>(_onSetColorTheme);
+    on<SetTemperatureUnit>(_onSetTemperatureUnit);
+    on<SetWindSpeedUnit>(_onSetWindSpeedUnit);
+    on<SetPressureUnit>(_onSetPressureUnit);
+    on<SetDistanceUnit>(_onSetDistanceUnit);
+    on<SetChartType>(_onSetChartType);
+    on<SetHourRange>(_onSetHourRange);
+    on<SelectedForecastIndex>(_onSelectedForecastIndex);
+    on<AddForecast>(_onAddForecast);
+    on<UpdateForecast>(_onUpdateForecast);
+    on<RefreshForecast>(_onRefreshForecast);
+    on<DeleteForecast>(_onDeleteForecast);
+    on<ClearCRUDStatus>(_onClearCRUDStatus);
+    on<SetActiveForecastId>(_onSetActiveForecastIdToState);
+    on<ClearActiveForecastId>(_onClearActiveForecastIdToState);
+    on<AutoUpdateForecast>(_onAutoUpdateForecastToState);
+    on<SetScrollDirection>(_onSetScrollDirectionToState);
+    on<StreamConnectivityResult>(_onStreamConnectivityResultToState);
+    on<SetConnectivityResult>(_onSetConnectivityResultToState);
+    on<StreamCompassEvent>(_onStreamCompassEventToState);
+    on<SetCompassEvent>(_onSetCompassEventToState);
+  }
 
   AppState get initialState => AppState.initial();
-
-  @override
-  Stream<AppState> mapEventToState(
-    AppEvent event,
-  ) async* {
-    if (event is ToggleThemeMode) {
-      yield _mapToggleThemeModeToStates(event);
-    } else if (event is SetUpdatePeriod) {
-      yield* _mapSetUpdatePeriodToStates(event);
-    } else if (event is SetPushNotification) {
-      yield* _mapSetPushNotificationToStates(event);
-    } else if (event is SetThemeMode) {
-      yield _mapSetThemeModeToStates(event);
-    } else if (event is ToggleColorTheme) {
-      yield _mapToggleColorThemeToStates(event);
-    } else if (event is SetColorTheme) {
-      yield _mapSetColorThemeToStates(event);
-    } else if (event is SetTemperatureUnit) {
-      yield* _mapSetTemperatureUnitToStates(event);
-    } else if (event is SetWindSpeedUnit) {
-      yield* _mapSetWindSpeedUnitToStates(event);
-    } else if (event is SetPressureUnit) {
-      yield* _mapSetPressureUnitToStates(event);
-    } else if (event is SetDistanceUnit) {
-      yield* _mapSetDistanceUnitToStates(event);
-    } else if (event is SetChartType) {
-      yield _mapSetChartTypeToStates(event);
-    } else if (event is SetHourRange) {
-      yield _mapSetHourRangeToStates(event);
-    } else if (event is SelectedForecastIndex) {
-      yield _mapSelectedForecastIndexToStates(event);
-    } else if (event is AddForecast) {
-      yield* _mapAddForecastToStates(event);
-    } else if (event is UpdateForecast) {
-      yield* _mapUpdateForecastToStates(event);
-    } else if (event is RefreshForecast) {
-      yield* _mapRefreshForecastToStates(event);
-    } else if (event is DeleteForecast) {
-      yield* _mapDeleteForecastToStates(event);
-    } else if (event is ClearCRUDStatus) {
-      yield _mapClearCRUDStatusToStates(event);
-    } else if (event is SetActiveForecastId) {
-      yield _mapSetActiveForecastIdToState(event);
-    } else if (event is ClearActiveForecastId) {
-      yield _mapClearActiveForecastIdToState(event);
-    } else if (event is AutoUpdateForecast) {
-      yield _mapAutoUpdateForecastToState(event);
-    } else if (event is SetScrollDirection) {
-      yield _mapSetScrollDirectionToState(event);
-    } else if (event is StreamConnectivityResult) {
-      yield* _mapStreamConnectivityResultToState(event);
-    } else if (event is SetConnectivityResult) {
-      yield _mapSetConnectivityResultToState(event);
-    } else if (event is StreamCompassEvent) {
-      yield* _mapStreamCompassEventToState(event);
-    } else if (event is SetCompassEvent) {
-      yield _mapSetCompassEventToState(event);
-    }
-  }
 
   @override
   Future<void> close() {
@@ -102,31 +70,37 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     return super.close();
   }
 
-  AppState _mapToggleThemeModeToStates(
+  void _onToggleThemeMode(
     ToggleThemeMode event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(
-        themeMode: (state.themeMode == ThemeMode.dark)
-            ? ThemeMode.light
-            : ThemeMode.dark,
-        colorTheme: false,
+      emit(
+        state.copyWith(
+          themeMode: (state.themeMode == ThemeMode.dark)
+              ? ThemeMode.light
+              : ThemeMode.dark,
+          colorTheme: false,
+        ),
       );
 
-  Stream<AppState> _mapSetUpdatePeriodToStates(
+  void _onSetUpdatePeriod(
     SetUpdatePeriod event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) async {
     AppPrefs prefs = AppPrefs();
     prefs.updatePeriod = event.updatePeriod;
 
     String? deviceId = await getDeviceId();
 
-    yield state.copyWith(
-      updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
-      pushNotification: (event.updatePeriod == null)
-          ? Nullable<PushNotification?>(null)
-          : (state.pushNotification == null)
-              ? Nullable<PushNotification?>(PushNotification.off)
-              : Nullable<PushNotification?>(state.pushNotification),
+    emit(
+      state.copyWith(
+        updatePeriod: Nullable<UpdatePeriod?>(event.updatePeriod),
+        pushNotification: (event.updatePeriod == null)
+            ? Nullable<PushNotification?>(null)
+            : (state.pushNotification == null)
+                ? Nullable<PushNotification?>(PushNotification.off)
+                : Nullable<PushNotification?>(state.pushNotification),
+      ),
     );
 
     if (event.updatePeriod == null) {
@@ -149,9 +123,10 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
   }
 
-  Stream<AppState> _mapSetPushNotificationToStates(
+  void _onSetPushNotification(
     SetPushNotification event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) async {
     AppPrefs prefs = AppPrefs();
     prefs.pushNotification = event.pushNotification;
     prefs.pushNotificationExtras = event.pushNotificationExtras;
@@ -163,7 +138,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       if (prefs.pushNotification == PushNotification.currentLocation) {
         accessGranted = await requestLocationPermission();
         if (accessGranted) {
-          yield* _updatePushNotificationState(event);
+          _updatePushNotificationState(event, emit);
         } else {
           showSnackbar(
             event.context,
@@ -172,37 +147,42 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           );
 
           if (state.pushNotification == PushNotification.currentLocation) {
-            yield state.copyWith(
-              pushNotification:
-                  Nullable<PushNotification?>(PushNotification.off),
-              pushNotificationExtras: Nullable<NotificationExtras?>(null),
+            emit(
+              state.copyWith(
+                pushNotification:
+                    Nullable<PushNotification?>(PushNotification.off),
+                pushNotificationExtras: Nullable<NotificationExtras?>(null),
+              ),
             );
           }
         }
       } else {
-        yield* _updatePushNotificationState(event);
+        _updatePushNotificationState(event, emit);
       }
     } else {
-      yield* _updatePushNotificationState(event);
+      _updatePushNotificationState(event, emit);
     }
   }
 
-  Stream<AppState> _updatePushNotificationState(
+  void _updatePushNotificationState(
     SetPushNotification event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) async {
     if (event.callback != null) {
       event.callback!();
     }
 
-    yield state.copyWith(
-      pushNotification: Nullable<PushNotification?>(event.pushNotification),
-      pushNotificationExtras:
-          Nullable<NotificationExtras?>((event.pushNotificationExtras == null)
-              ? null
-              : NotificationExtras.fromJson({
-                  ...state.pushNotificationExtras?.toJson() ?? {},
-                  ...event.pushNotificationExtras?.toJson() ?? {},
-                })),
+    emit(
+      state.copyWith(
+        pushNotification: Nullable<PushNotification?>(event.pushNotification),
+        pushNotificationExtras:
+            Nullable<NotificationExtras?>((event.pushNotificationExtras == null)
+                ? null
+                : NotificationExtras.fromJson({
+                    ...state.pushNotificationExtras?.toJson() ?? {},
+                    ...event.pushNotificationExtras?.toJson() ?? {},
+                  })),
+      ),
     );
 
     await _saveDeviceInfo(event.pushNotification);
@@ -213,124 +193,153 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
   }
 
-  AppState _mapSetThemeModeToStates(
+  void _onSetThemeMode(
     SetThemeMode event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(
-        themeMode: event.themeMode,
-        colorTheme: false,
+      emit(
+        state.copyWith(
+          themeMode: event.themeMode,
+          colorTheme: false,
+        ),
       );
 
-  AppState _mapToggleColorThemeToStates(
+  void _onToggleColorTheme(
     ToggleColorTheme event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(
-        colorTheme: !state.colorTheme,
+      emit(
+        state.copyWith(
+          colorTheme: !state.colorTheme,
+        ),
       );
 
-  AppState _mapSetColorThemeToStates(
+  void _onSetColorTheme(
     SetColorTheme event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(
-        colorTheme: event.colorTheme,
+      emit(
+        state.copyWith(
+          colorTheme: event.colorTheme,
+        ),
       );
 
-  Stream<AppState> _mapSetTemperatureUnitToStates(
+  void _onSetTemperatureUnit(
     SetTemperatureUnit event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) async {
     AppPrefs prefs = AppPrefs();
     prefs.temperatureUnit = event.temperatureUnit;
 
-    yield state.copyWith(
-      units: state.units.copyWith(
-        temperature: event.temperatureUnit,
+    emit(
+      state.copyWith(
+        units: state.units.copyWith(
+          temperature: event.temperatureUnit,
+        ),
       ),
     );
 
     await _saveDeviceInfo(prefs.pushNotification);
   }
 
-  Stream<AppState> _mapSetWindSpeedUnitToStates(
+  void _onSetWindSpeedUnit(
     SetWindSpeedUnit event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) async {
     AppPrefs prefs = AppPrefs();
     prefs.windSpeedUnit = event.windSpeedUnit;
 
-    yield state.copyWith(
-      units: state.units.copyWith(
-        windSpeed: event.windSpeedUnit,
+    emit(
+      state.copyWith(
+        units: state.units.copyWith(
+          windSpeed: event.windSpeedUnit,
+        ),
       ),
     );
 
     await _saveDeviceInfo(prefs.pushNotification);
   }
 
-  Stream<AppState> _mapSetPressureUnitToStates(
+  void _onSetPressureUnit(
     SetPressureUnit event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) async {
     AppPrefs prefs = AppPrefs();
     prefs.pressureUnit = event.pressureUnit;
 
-    yield state.copyWith(
-      units: state.units.copyWith(
-        pressure: event.pressureUnit,
+    emit(
+      state.copyWith(
+        units: state.units.copyWith(
+          pressure: event.pressureUnit,
+        ),
       ),
     );
 
     await _saveDeviceInfo(prefs.pushNotification);
   }
 
-  Stream<AppState> _mapSetDistanceUnitToStates(
+  void _onSetDistanceUnit(
     SetDistanceUnit event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) async {
     AppPrefs prefs = AppPrefs();
     prefs.distanceUnit = event.distanceUnit;
 
-    yield state.copyWith(
-      units: state.units.copyWith(
-        distance: event.distanceUnit,
+    emit(
+      state.copyWith(
+        units: state.units.copyWith(
+          distance: event.distanceUnit,
+        ),
       ),
     );
 
     await _saveDeviceInfo(prefs.pushNotification);
   }
 
-  AppState _mapSetChartTypeToStates(
+  void _onSetChartType(
     SetChartType event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(
-        chartType: event.chartType,
+      emit(
+        state.copyWith(
+          chartType: event.chartType,
+        ),
       );
 
-  AppState _mapSetHourRangeToStates(
+  void _onSetHourRange(
     SetHourRange event,
+    Emitter<AppState> emit,
   ) {
-    if (event.hourRange == state.hourRange) {
-      return state;
+    if (event.hourRange != state.hourRange) {
+      emit(
+        state.copyWith(
+          hourRange: event.hourRange,
+        ),
+      );
     }
-
-    return state.copyWith(
-      hourRange: event.hourRange,
-    );
   }
 
-  AppState _mapSelectedForecastIndexToStates(
+  void _onSelectedForecastIndex(
     SelectedForecastIndex event,
+    Emitter<AppState> emit,
   ) {
-    if (event.index == state.selectedForecastIndex) {
-      return state;
+    if (event.index != state.selectedForecastIndex) {
+      emit(
+        state.copyWith(
+          selectedForecastIndex: event.index,
+        ),
+      );
     }
-
-    return state.copyWith(
-      selectedForecastIndex: event.index,
-    );
   }
 
-  Stream<AppState> _mapAddForecastToStates(
+  void _onAddForecast(
     AddForecast event,
-  ) async* {
-    yield state.copyWith(
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.creating),
+    Emitter<AppState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        crudStatus: Nullable<CRUDStatus>(CRUDStatus.creating),
+      ),
     );
 
     // TODO! sort
@@ -338,19 +347,24 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         List<Forecast>.from(state.forecasts) // Clone the existing state list
           ..add(event.forecast);
 
-    yield state.copyWith(
-      forecasts: forecasts,
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.created),
-      selectedForecastIndex: forecasts.indexWhere((Forecast forecast) =>
-          (forecast.postalCode == event.forecast.postalCode)),
+    emit(
+      state.copyWith(
+        forecasts: forecasts,
+        crudStatus: Nullable<CRUDStatus>(CRUDStatus.created),
+        selectedForecastIndex: forecasts.indexWhere((Forecast forecast) =>
+            (forecast.postalCode == event.forecast.postalCode)),
+      ),
     );
   }
 
-  Stream<AppState> _mapUpdateForecastToStates(
+  void _onUpdateForecast(
     UpdateForecast event,
-  ) async* {
-    yield state.copyWith(
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.updating),
+    Emitter<AppState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        crudStatus: Nullable<CRUDStatus>(CRUDStatus.updating),
+      ),
     );
 
     List<Forecast> forecasts = List<Forecast>.from(state.forecasts);
@@ -365,10 +379,12 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       lastUpdated: getNow(),
     );
 
-    yield state.copyWith(
-      activeForecastId: Nullable<String?>(null),
-      forecasts: forecasts,
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.updated),
+    emit(
+      state.copyWith(
+        activeForecastId: Nullable<String?>(null),
+        forecasts: forecasts,
+        crudStatus: Nullable<CRUDStatus>(CRUDStatus.updated),
+      ),
     );
 
     add(
@@ -380,12 +396,15 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     );
   }
 
-  Stream<AppState> _mapRefreshForecastToStates(
+  void _onRefreshForecast(
     RefreshForecast event,
-  ) async* {
-    yield state.copyWith(
-      refreshStatus: Nullable<RefreshStatus>(RefreshStatus.refreshing),
-      crudStatus: Nullable<CRUDStatus?>(null),
+    Emitter<AppState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        refreshStatus: Nullable<RefreshStatus>(RefreshStatus.refreshing),
+        crudStatus: Nullable<CRUDStatus?>(null),
+      ),
     );
 
     Map<String, String?> lookupData = {
@@ -418,8 +437,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
               AppLocalizations.of(event.context)!.refreshFailure,
               messageType: MessageType.danger,
             );
-
-            yield state;
           } else {
             Forecast forecast =
                 Forecast.fromJson(jsonDecode(forecastResponse.body));
@@ -445,10 +462,12 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
                       jsonDecode(forecastDetailsResponse.body))));
             }
 
-            yield state.copyWith(
-              forecasts: forecasts,
-              refreshStatus: Nullable<RefreshStatus?>(null),
-              crudStatus: Nullable<CRUDStatus?>(null),
+            emit(
+              state.copyWith(
+                forecasts: forecasts,
+                refreshStatus: Nullable<RefreshStatus?>(null),
+                crudStatus: Nullable<CRUDStatus?>(null),
+              ),
             );
           }
         } else {
@@ -458,9 +477,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
             messageType: MessageType.danger,
           );
 
-          yield state.copyWith(
-            refreshStatus: Nullable<RefreshStatus?>(null),
-            crudStatus: Nullable<CRUDStatus?>(null),
+          emit(
+            state.copyWith(
+              refreshStatus: Nullable<RefreshStatus?>(null),
+              crudStatus: Nullable<CRUDStatus?>(null),
+            ),
           );
         }
       } else {
@@ -470,9 +491,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
           messageType: MessageType.danger,
         );
 
-        yield state.copyWith(
-          refreshStatus: Nullable<RefreshStatus?>(null),
-          crudStatus: Nullable<CRUDStatus?>(null),
+        emit(
+          state.copyWith(
+            refreshStatus: Nullable<RefreshStatus?>(null),
+            crudStatus: Nullable<CRUDStatus?>(null),
+          ),
         );
       }
     } on Exception catch (exception, stackTrace) {
@@ -484,18 +507,23 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         messageType: MessageType.danger,
       );
 
-      yield state.copyWith(
-        refreshStatus: Nullable<RefreshStatus?>(null),
-        crudStatus: Nullable<CRUDStatus?>(null),
+      emit(
+        state.copyWith(
+          refreshStatus: Nullable<RefreshStatus?>(null),
+          crudStatus: Nullable<CRUDStatus?>(null),
+        ),
       );
     }
   }
 
-  Stream<AppState> _mapDeleteForecastToStates(
+  void _onDeleteForecast(
     DeleteForecast event,
-  ) async* {
-    yield state.copyWith(
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.deleting),
+    Emitter<AppState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        crudStatus: Nullable<CRUDStatus>(CRUDStatus.deleting),
+      ),
     );
 
     int _forecastIndex = state.forecasts
@@ -503,38 +531,50 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
     List<Forecast> _forecasts = state.forecasts..removeAt(_forecastIndex);
 
-    yield state.copyWith(
-      activeForecastId: Nullable<String?>(null),
-      colorTheme: hasForecasts(_forecasts) ? state.colorTheme : false,
-      forecasts: _forecasts,
-      selectedForecastIndex: (state.selectedForecastIndex > 0)
-          ? (state.selectedForecastIndex - 1)
-          : 0,
-      crudStatus: Nullable<CRUDStatus>(CRUDStatus.deleted),
+    emit(
+      state.copyWith(
+        activeForecastId: Nullable<String?>(null),
+        colorTheme: hasForecasts(_forecasts) ? state.colorTheme : false,
+        forecasts: _forecasts,
+        selectedForecastIndex: (state.selectedForecastIndex > 0)
+            ? (state.selectedForecastIndex - 1)
+            : 0,
+        crudStatus: Nullable<CRUDStatus>(CRUDStatus.deleted),
+      ),
     );
   }
 
-  AppState _mapClearCRUDStatusToStates(
+  void _onClearCRUDStatus(
     ClearCRUDStatus event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(crudStatus: Nullable<CRUDStatus?>(null));
+      emit(
+        state.copyWith(crudStatus: Nullable<CRUDStatus?>(null)),
+      );
 
-  AppState _mapSetActiveForecastIdToState(
+  void _onSetActiveForecastIdToState(
     SetActiveForecastId event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(
-        activeForecastId: Nullable<String?>(event.forecastId),
+      emit(
+        state.copyWith(
+          activeForecastId: Nullable<String?>(event.forecastId),
+        ),
       );
 
-  AppState _mapClearActiveForecastIdToState(
+  void _onClearActiveForecastIdToState(
     ClearActiveForecastId event,
+    Emitter<AppState> emit,
   ) =>
-      state.copyWith(
-        activeForecastId: Nullable<String?>(null),
+      emit(
+        state.copyWith(
+          activeForecastId: Nullable<String?>(null),
+        ),
       );
 
-  AppState _mapAutoUpdateForecastToState(
+  void _onAutoUpdateForecastToState(
     AutoUpdateForecast event,
+    Emitter<AppState> emit,
   ) {
     // If auto update is enabled then run the refresh
     if ((state.updatePeriod != null) &&
@@ -554,48 +594,48 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         );
       }
     }
-
-    return state;
   }
 
-  AppState _mapSetScrollDirectionToState(
+  void _onSetScrollDirectionToState(
     SetScrollDirection event,
+    Emitter<AppState> emit,
   ) {
-    if (event.scrollDirection == state.scrollDirection) {
-      return state;
+    if (event.scrollDirection != state.scrollDirection) {
+      emit(
+        state.copyWith(
+          scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
+        ),
+      );
     }
-
-    return state.copyWith(
-      scrollDirection: Nullable<ScrollDirection?>(event.scrollDirection),
-    );
   }
 
-  Stream<AppState> _mapStreamConnectivityResultToState(
+  void _onStreamConnectivityResultToState(
     StreamConnectivityResult event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) {
     _connectivitySubscription?.cancel();
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
         (ConnectivityResult result) => add(SetConnectivityResult(result)));
-
-    yield state;
   }
 
-  AppState _mapSetConnectivityResultToState(
+  void _onSetConnectivityResultToState(
     SetConnectivityResult event,
+    Emitter<AppState> emit,
   ) {
-    if (event.connectivityResult == state.connectivityResult) {
-      return state;
+    if (event.connectivityResult != state.connectivityResult) {
+      emit(
+        state.copyWith(
+          connectivityResult:
+              Nullable<ConnectivityResult?>(event.connectivityResult),
+        ),
+      );
     }
-
-    return state.copyWith(
-      connectivityResult:
-          Nullable<ConnectivityResult?>(event.connectivityResult),
-    );
   }
 
-  Stream<AppState> _mapStreamCompassEventToState(
+  void _onStreamCompassEventToState(
     StreamCompassEvent event,
-  ) async* {
+    Emitter<AppState> emit,
+  ) {
     _headingSubscription?.cancel();
 
     if (AppConfig.isRelease()) {
@@ -603,20 +643,19 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       _headingSubscription = _headingStream
           ?.listen((CompassEvent event) => add(SetCompassEvent(event)));
     }
-
-    yield state;
   }
 
-  AppState _mapSetCompassEventToState(
+  void _onSetCompassEventToState(
     SetCompassEvent event,
+    Emitter<AppState> emit,
   ) {
-    if (event.compassEvent.heading == state.compassEvent?.heading) {
-      return state;
+    if (event.compassEvent.heading != state.compassEvent?.heading) {
+      emit(
+        state.copyWith(
+          compassEvent: Nullable<CompassEvent?>(event.compassEvent),
+        ),
+      );
     }
-
-    return state.copyWith(
-      compassEvent: Nullable<CompassEvent?>(event.compassEvent),
-    );
   }
 
   Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
