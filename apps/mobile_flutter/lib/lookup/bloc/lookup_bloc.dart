@@ -15,26 +15,21 @@ part 'lookup_events.dart';
 part 'lookup_state.dart';
 
 class LookupBloc extends Bloc<LookupEvent, LookupState> {
-  LookupBloc() : super(LookupState.initial());
+  LookupBloc() : super(LookupState.initial()) {
+    on<LookupForecast>(_onLookupForecast);
+    on<ClearLookupForecast>(_onClearLookupForecast);
+  }
 
   LookupState get initialState => LookupState.initial();
 
-  @override
-  Stream<LookupState> mapEventToState(
-    LookupEvent event,
-  ) async* {
-    if (event is LookupForecast) {
-      yield* _mapLookupForecastToState(event);
-    } else if (event is ClearLookupForecast) {
-      yield* _mapClearLookupForecastToState(event);
-    }
-  }
-
-  Stream<LookupState> _mapLookupForecastToState(
+  void _onLookupForecast(
     LookupForecast event,
-  ) async* {
-    yield state.copyWith(
-      status: Nullable<LookupStatus?>(null),
+    Emitter<LookupState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: Nullable<LookupStatus?>(null),
+      ),
     );
 
     try {
@@ -66,37 +61,48 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
                     jsonDecode(forecastDetailsResponse.body))));
           }
 
-          yield state.copyWith(
-            cityName: Nullable<String?>(event.lookupData['cityName']),
-            postalCode: Nullable<String?>(event.lookupData['postalCode']),
-            countryCode: Nullable<String?>(event.lookupData['countryCode']),
-            lookupForecast: Nullable<Forecast>(forecast),
-            status: Nullable<LookupStatus>(LookupStatus.forecastFound),
+          emit(
+            state.copyWith(
+              cityName: Nullable<String?>(event.lookupData['cityName']),
+              postalCode: Nullable<String?>(event.lookupData['postalCode']),
+              countryCode: Nullable<String?>(event.lookupData['countryCode']),
+              lookupForecast: Nullable<Forecast>(forecast),
+              status: Nullable<LookupStatus>(LookupStatus.forecastFound),
+            ),
           );
         } else {
-          yield state.copyWith(
-            status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+          emit(
+            state.copyWith(
+              status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+            ),
           );
         }
       } else {
-        yield state.copyWith(
-          status: Nullable<LookupStatus>(LookupStatus.forecastConnectivity),
+        emit(
+          state.copyWith(
+            status: Nullable<LookupStatus>(LookupStatus.forecastConnectivity),
+          ),
         );
       }
     } on Exception catch (exception, stackTrace) {
       await Sentry.captureException(exception, stackTrace: stackTrace);
 
-      yield state.copyWith(
-        status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+      emit(
+        state.copyWith(
+          status: Nullable<LookupStatus>(LookupStatus.forecastNotFound),
+        ),
       );
     }
   }
 
-  Stream<LookupState> _mapClearLookupForecastToState(
+  void _onClearLookupForecast(
     ClearLookupForecast event,
-  ) async* {
-    yield state.copyWith(
-      lookupForecast: Nullable<Forecast?>(null),
+    Emitter<LookupState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        lookupForecast: Nullable<Forecast?>(null),
+      ),
     );
   }
 }

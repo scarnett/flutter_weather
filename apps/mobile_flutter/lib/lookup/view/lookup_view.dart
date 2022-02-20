@@ -1,7 +1,5 @@
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app/app_keys.dart';
 import 'package:flutter_weather/app/app_localization.dart';
@@ -14,7 +12,6 @@ import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 import 'package:flutter_weather/lookup/lookup.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 import 'package:uuid/uuid.dart';
 
@@ -77,9 +74,14 @@ class _LookupPageViewState extends State<LookupPageView> {
             LookupState state,
           ) =>
               AppUiOverlayStyle(
-            systemNavigationBarIconBrightness: context.watch<AppBloc>().state.colorTheme ? Brightness.dark : null,
+            systemNavigationBarIconBrightness:
+                context.watch<AppBloc>().state.colorTheme
+                    ? Brightness.dark
+                    : null,
             child: Theme(
-              data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark) ? appDarkThemeData : appLightThemeData,
+              data: (context.watch<AppBloc>().state.themeMode == ThemeMode.dark)
+                  ? appDarkThemeData
+                  : appLightThemeData,
               child: Scaffold(
                 key: _scaffoldKey,
                 appBar: AppBar(
@@ -239,7 +241,8 @@ class _LookupPageViewState extends State<LookupPageView> {
     Map<String, dynamic> lookupData = state.toJson();
     if (lookupData.containsKey('countryCode')) {
       final Country? country = (await IsoCountries.iso_countries)
-          .firstWhereOrNull((Country _country) => _country.name == lookupData['countryCode']);
+          .firstWhereOrNull(
+              (Country _country) => _country.name == lookupData['countryCode']);
 
       lookupData['countryCode'] = (country == null)
           ? null // AppConfig.instance.defaultCountryCode
