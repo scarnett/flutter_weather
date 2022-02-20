@@ -1,5 +1,5 @@
 name: flutter_weather
-description: Beautiful weather forecasting
+description: 'Beautiful Weather Forecasting'
 publish_to: 'none'
 version: 99.99.99
 
@@ -23,9 +23,7 @@ dependencies:
   firebase_crashlytics: '2.0.6'
   firebase_messaging: '10.0.4'
   firebase_remote_config: '0.10.0+3'
-  fl_chart:
-    git:
-      url: https://github.com/WxqKb/fl_chart
+  fl_chart: '0.45.0'
   flutter_bloc: '8.0.1'
   flutter_compass: '0.7.0'
   flutter_form_bloc: '0.29.3'
@@ -38,13 +36,11 @@ dependencies:
   page_view_indicators: '2.0.0'
   path_provider: '2.0.9'
   permission_handler: '8.1.2'
-  sentry: '5.0.0'
-  sentry_flutter: '5.0.0'
-  shared_preferences: '2.0.6'
+  sentry: '6.3.0'
+  sentry_flutter: '6.3.0'
+  shared_preferences: '2.0.13'
   sticky_headers: '0.2.0'
-  store_redirect:
-    git:
-      url: https://github.com/Danesz/store_redirect
+  store_redirect: '2.0.1'
   timer_builder: '2.0.0'
   url_launcher: '6.0.20'
   uuid: '3.0.6'

@@ -403,12 +403,10 @@ packages:
   fl_chart:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "730cf51f5ed5f5a92fd427f52639cd4fdf0c42a2"
-      url: "https://github.com/WxqKb/fl_chart"
-    source: git
-    version: "0.36.1"
+      name: fl_chart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.45.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -928,28 +926,42 @@ packages:
       name: sentry
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.3.0"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.3.0"
   shared_preferences:
     dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.13"
+  shared_preferences_android:
+    dependency: transitive
+    description:
+      name: shared_preferences_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.11"
+  shared_preferences_ios:
+    dependency: transitive
+    description:
+      name: shared_preferences_ios
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   shared_preferences_linux:
     dependency: transitive
     description:
       name: shared_preferences_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   shared_preferences_macos:
     dependency: transitive
     description:
@@ -977,7 +989,7 @@ packages:
       name: shared_preferences_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   shelf:
     dependency: transitive
     description:
@@ -1056,12 +1068,10 @@ packages:
   store_redirect:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "2d4deb3be15992092efd792ba503d17e1409d0b0"
-      url: "https://github.com/Danesz/store_redirect"
-    source: git
-    version: "2.0.0"
+      name: store_redirect
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   stream_channel:
     dependency: transitive
     description:

@@ -141,7 +141,7 @@ SideTitles buildLeftSideTitles({
     SideTitles(
       showTitles: true,
       reservedSize: 30.0,
-      getTextStyles: (double value) => Theme.of(context)
+      getTextStyles: (BuildContext context, double value) => Theme.of(context)
           .textTheme
           .subtitle2!
           .copyWith(fontWeight: FontWeight.bold),
@@ -163,7 +163,7 @@ SideTitles buildBottomSideTitles({
     SideTitles(
       showTitles: true,
       reservedSize: 30.0,
-      getTextStyles: (double value) => Theme.of(context)
+      getTextStyles: (BuildContext context, double value) => Theme.of(context)
           .textTheme
           .subtitle2!
           .copyWith(fontWeight: FontWeight.bold),
