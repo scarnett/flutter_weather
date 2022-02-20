@@ -20,9 +20,9 @@
     </queries>
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="${appLabel}${appLabelSuffix}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="false">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -34,6 +34,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

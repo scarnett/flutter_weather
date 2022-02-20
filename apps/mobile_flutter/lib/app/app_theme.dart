@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 
 class AppTheme {
@@ -89,20 +90,19 @@ ThemeData appLightThemeData = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   unselectedWidgetColor: Colors.grey[300],
   primaryColor: AppTheme.primaryColor,
-  accentColor: Colors.deepPurple[600],
+  colorScheme:
+      ColorScheme.fromSwatch().copyWith(secondary: Colors.deepPurple[600]),
   hintColor: AppTheme.getHintColor(ThemeMode.light),
   fontFamily: 'roboto',
   appBarTheme: AppBarTheme(
-    brightness: Brightness.light,
     color: Colors.white.withOpacity(0.925),
     elevation: 0.0,
-    textTheme: TextTheme(
-      headline6: TextStyle(
-        color: AppTheme.secondaryColor,
-        fontSize: 20.0,
-      ),
+    titleTextStyle: TextStyle(
+      color: AppTheme.secondaryColor,
+      fontSize: 20.0,
     ),
     iconTheme: IconThemeData(color: AppTheme.secondaryColor),
+    systemOverlayStyle: SystemUiOverlayStyle.dark,
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.light),
@@ -157,7 +157,7 @@ ThemeData appLightThemeData = ThemeData(
 );
 
 ThemeData appColorThemeData = appLightThemeData.copyWith(
-  accentColor: Colors.white,
+  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Colors.white,
     foregroundColor: AppTheme.secondaryColor,
@@ -183,16 +183,14 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   unselectedWidgetColor: Colors.grey[800],
   hintColor: AppTheme.getHintColor(ThemeMode.dark),
   appBarTheme: AppBarTheme(
-    brightness: Brightness.dark,
     color: AppTheme.secondaryColor.withOpacity(0.925),
     elevation: 0.0,
-    textTheme: TextTheme(
-      headline6: TextStyle(
-        color: Colors.white,
-        fontSize: 20.0,
-      ),
+    titleTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 20.0,
     ),
     iconTheme: IconThemeData(color: Colors.white),
+    systemOverlayStyle: SystemUiOverlayStyle.light,
   ),
   dividerTheme: DividerThemeData(
     color: AppTheme.getBorderColor(ThemeMode.dark),
