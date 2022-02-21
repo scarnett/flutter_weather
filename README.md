@@ -21,6 +21,7 @@
 </table>
 
 ## Analysis
+[![Deploy Release to App Stores](https://github.com/scarnett/flutter_weather/actions/workflows/deploy-release.yml/badge.svg)](https://github.com/scarnett/flutter_weather/actions/workflows/deploy-release.yml)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=scarnett_flutter_weather&metric=bugs)](https://sonarcloud.io/dashboard?id=scarnett_flutter_weather)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=scarnett_flutter_weather&metric=alert_status)](https://sonarcloud.io/dashboard?id=scarnett_flutter_weather)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=scarnett_flutter_weather&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=scarnett_flutter_weather)
