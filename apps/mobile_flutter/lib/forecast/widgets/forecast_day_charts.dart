@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/app_theme.dart';
@@ -99,11 +98,12 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     AppState state,
   ) async {
     if (_chartTypeNotifier.value != state.chartType.index) {
-      setState(() async {
+      setState(() {
         _currentPage = state.chartType.index;
         _chartTypeNotifier.value = state.chartType.index;
-        await animatePage(_pageController, page: state.chartType.index);
       });
+
+      await animatePage(_pageController, page: state.chartType.index);
     }
   }
 

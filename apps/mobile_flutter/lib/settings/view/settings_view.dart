@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/settings/settings.dart';
-import 'package:flutter_weather/settings/widgets/widgets.dart';
 import 'package:package_info/package_info.dart';
 
 class SettingsView extends StatelessWidget {

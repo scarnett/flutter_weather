@@ -30,10 +30,10 @@ extension PumpApp on WidgetTester {
     AppBloc? appBloc,
     LookupBloc? lookupBloc,
   }) async {
-    registerFallbackValue<AppEvent>(FakeAppEvent());
-    registerFallbackValue<AppState>(FakeAppState());
-    registerFallbackValue<LookupEvent>(FakeLookupEvent());
-    registerFallbackValue<LookupState>(FakeLookupState());
+    registerFallbackValue(FakeAppEvent());
+    registerFallbackValue(FakeAppState());
+    registerFallbackValue(FakeLookupEvent());
+    registerFallbackValue(FakeLookupState());
 
     return await pumpWidget(
       MultiBlocProvider(

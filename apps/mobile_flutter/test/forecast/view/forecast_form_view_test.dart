@@ -16,8 +16,8 @@ class FakeAppState extends Fake implements AppState {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue<AppEvent>(FakeAppEvent());
-    registerFallbackValue<AppState>(FakeAppState());
+    registerFallbackValue(FakeAppEvent());
+    registerFallbackValue(FakeAppState());
   });
 
   group('SettingsVersionStatusText', () {

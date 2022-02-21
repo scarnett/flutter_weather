@@ -168,7 +168,8 @@ String? getDateFormat(
 DateTime epochToDateTime(
   int epoch,
 ) {
-  DateTime date = DateTime.fromMillisecondsSinceEpoch(epoch * 1000);
+  DateTime date =
+      DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: true);
   return date;
 }
 

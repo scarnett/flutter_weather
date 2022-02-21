@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_weather/enums/enums.dart';
-import 'package:flutter_weather/enums/pressure_unit.dart';
 
 class Units extends Equatable {
   final TemperatureUnit temperature;
