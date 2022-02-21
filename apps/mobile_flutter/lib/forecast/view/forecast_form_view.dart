@@ -1,7 +1,5 @@
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app/app_keys.dart';
 import 'package:flutter_weather/app/app_localization.dart';
@@ -11,7 +9,6 @@ import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/enums/message_type.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
-import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 
 class ForecastFormView extends StatelessWidget {

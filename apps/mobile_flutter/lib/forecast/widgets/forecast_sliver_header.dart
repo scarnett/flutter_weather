@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
@@ -117,7 +116,7 @@ class ForecastSliverHeader extends SliverPersistentHeaderDelegate {
       return forecast.getTemperatureColor().withOpacity(0.8);
     }
 
-    return Theme.of(context).appBarTheme.color!;
+    return Theme.of(context).appBarTheme.backgroundColor!;
   }
 
   double _calculateExpandRatio(

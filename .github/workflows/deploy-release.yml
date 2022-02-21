@@ -6,7 +6,7 @@ on:
       flutterVersion:
         description: 'Flutter Version'
         required: true
-        default: '2.2.3'
+        default: '2.10.2'
       remoteConfigVersion:
         description: 'Remote Configuration Version'
         required: true
@@ -30,13 +30,13 @@ jobs:
         run: git fetch --unshallow
 
       - name: 'Install GitVersion'
-        uses: gittools/actions/gitversion/setup@v0.9.9
+        uses: gittools/actions/gitversion/setup@v0.9.11
         with:
           versionSpec: '5.x'
 
       - name: 'Use GitVersion'
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.9
+        uses: gittools/actions/gitversion/execute@v0.9.11
         with:
           useConfigFile: true
           configFilePath: ./git-version.yml
@@ -237,7 +237,7 @@ jobs:
       FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY: ${{ secrets.FLUTTER_WEATHER_APPSTORE_PRIVATE_KEY }}
       FLUTTER_WEATHER_KEYCHAIN: ${{ 'flutterWeather.keychain' }}
       FLUTTER_WEATHER_RELEASE_FILE_PREFIX: ${{ 'ios-release' }}
-      XCODE_VERSION: ${{ '12.3' }}
+      XCODE_VERSION: ${{ '13.2.1' }}
 
     steps:
       - uses: actions/checkout@v2
@@ -344,7 +344,7 @@ jobs:
           name: appbundle
 
       - name: 'Release to internal track'
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.0.15
         with:
           serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
           packageName: io.flutter_weather.prod

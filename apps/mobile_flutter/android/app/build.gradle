@@ -57,7 +57,7 @@ android {
 
     defaultConfig {
         applicationId 'io.flutter_weather'
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

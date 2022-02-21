@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +36,7 @@ class AppUiOverlayStyle extends StatelessWidget {
             state.colorTheme && (systemNavigationBarColor != null)
                 ? systemNavigationBarColor!
                     .withOpacity(systemNavigationBarColorOpacity ?? 0.925)
-                : Theme.of(context).appBarTheme.color,
+                : Theme.of(context).appBarTheme.backgroundColor,
         systemNavigationBarIconBrightness:
             (systemNavigationBarIconBrightness != null)
                 ? systemNavigationBarIconBrightness

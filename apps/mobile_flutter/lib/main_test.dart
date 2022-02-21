@@ -9,8 +9,8 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Bloc
-  HydratedBloc.storage = MockStorage();
+  // Mock Storage
+  Storage storage = MockStorage();
 
   // TEST Environment Specific Configuration
   AppConfig config = AppConfig(
@@ -25,5 +25,8 @@ Future<void> main() async {
     print(details.stack);
   };
 
-  runApp(config);
+  HydratedBlocOverrides.runZoned(
+    () => runApp(config),
+    storage: storage,
+  );
 }

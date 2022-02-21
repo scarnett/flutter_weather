@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/app/app_config.dart';
 import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart' as googleAds;
 import 'package:sentry/sentry.dart';
 
 class AppNativeAd extends StatefulWidget {
   final String factoryId;
   final Function({
-    required Ad ad,
+    required googleAds.Ad ad,
     required bool isLoaded,
   })? onAdLoaded;
 
@@ -35,11 +34,11 @@ class AppNativeAd extends StatefulWidget {
 class _AppNativeAdState extends State<AppNativeAd>
     with AutomaticKeepAliveClientMixin {
   String? _nativeUnitId;
-  NativeAd? _ad;
+  googleAds.NativeAd? _ad;
   bool _isLoaded = false;
 
   late ThemeMode _themeMode;
-  late AdWidget _adWidget;
+  late googleAds.AdWidget _adWidget;
 
   @override
   void initState() {
@@ -49,7 +48,7 @@ class _AppNativeAdState extends State<AppNativeAd>
     if ((_ad == null) && (_nativeUnitId != null)) {
       _ad = _buildNativeAd(state);
       _ad!.load();
-      _adWidget = AdWidget(ad: _ad!);
+      _adWidget = googleAds.AdWidget(ad: _ad!);
     }
 
     super.initState();
@@ -106,19 +105,19 @@ class _AppNativeAdState extends State<AppNativeAd>
           _ad?.dispose();
           _ad = _buildNativeAd(state);
           _ad!.load();
-          _adWidget = AdWidget(ad: _ad!);
+          _adWidget = googleAds.AdWidget(ad: _ad!);
         }
       });
     }
   }
 
-  NativeAd _buildNativeAd(
+  googleAds.NativeAd _buildNativeAd(
     AppState state,
   ) =>
-      NativeAd(
+      googleAds.NativeAd(
         adUnitId: _nativeUnitId!,
         factoryId: widget.factoryId,
-        request: AdRequest(),
+        request: googleAds.AdRequest(),
         customOptions: {
           'headlineTextColor': AppTheme.getAdmobHeadlineColor(
             state.themeMode,
@@ -131,15 +130,16 @@ class _AppNativeAdState extends State<AppNativeAd>
           )!
               .toHex(),
         },
-        listener: NativeAdListener(
-          onAdLoaded: (Ad ad) {
+        listener: googleAds.NativeAdListener(
+          onAdLoaded: (googleAds.Ad ad) {
             setState(() => _isLoaded = true);
 
             if (widget.onAdLoaded != null) {
               widget.onAdLoaded!(ad: ad, isLoaded: _isLoaded);
             }
           },
-          onAdFailedToLoad: (Ad ad, LoadAdError error) async {
+          onAdFailedToLoad:
+              (googleAds.Ad ad, googleAds.LoadAdError error) async {
             // ad.dispose();
             await Sentry.captureMessage(
               'Native ad load failed; code: ${error.code}, ' +

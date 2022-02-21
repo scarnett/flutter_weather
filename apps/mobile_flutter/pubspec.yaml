@@ -1,65 +1,54 @@
 name: flutter_weather
-description: Beautiful weather forecasting
+description: 'Beautiful Weather Forecasting'
 publish_to: 'none'
 version: 99.99.99
 
 environment:
-  flutter: 2.2.1
-  sdk: '>=2.12.0 <3.0.0'
+  flutter: 2.10.2
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  bloc: '7.0.0'
+  bloc: '8.0.2'
   carousel_slider: '4.0.0'
   collection: '1.15.0'
-  cloud_firestore: '2.2.1'
-  cloud_functions: '1.1.2'
-  connectivity_plus: '1.0.2'
-  cupertino_icons: '1.0.3'
-  device_info: '2.0.2'
+  cloud_firestore: '3.1.8'
+  connectivity_plus: '2.2.1'
+  cupertino_icons: '1.0.4'
+  device_info: '2.0.3'
   equatable: '2.0.3'
-  firebase_core: '1.4.0'
-  firebase_crashlytics: '2.0.6'
-  firebase_messaging: '10.0.4'
-  firebase_remote_config: '0.10.0+3'
-  fl_chart:
-    git:
-      url: https://github.com/WxqKb/fl_chart
-  flutter_bloc: '7.0.1'
-  flutter_compass:
-    git:
-      url: https://github.com/scarnett/flutter_compass
-  flutter_form_bloc:
-    git:
-      url: git://github.com/GiancarloCode/form_bloc.git #see https://github.com/GiancarloCode/form_bloc/issues/221
-      path: packages/flutter_form_bloc
+  firebase_core: '1.12.0'
+  firebase_crashlytics: '2.5.1'
+  firebase_messaging: '11.2.6'
+  firebase_remote_config: '2.0.0'
+  fl_chart: '0.45.0'
+  flutter_bloc: '8.0.1'
+  flutter_compass: '0.7.0'
+  flutter_form_bloc: '0.29.3'
   flutter_switch: '0.3.2'
-  geolocator: '7.3.0'
-  google_mobile_ads: '0.13.1'
-  http: '0.13.3'
-  hydrated_bloc: '7.0.1'
-  iso_countries: '2.0.1'
+  geolocator: '8.2.0'
+  google_mobile_ads: '1.1.0'
+  http: '0.13.4'
+  hydrated_bloc: '8.0.0'
+  iso_countries: '2.1.0'
   package_info: '2.0.2'
   page_view_indicators: '2.0.0'
-  path_provider: '2.0.2'
-  permission_handler: '8.1.2'
-  purchases_flutter: '3.4.0'
-  sentry: '5.0.0'
-  sentry_flutter: '5.0.0'
-  shared_preferences: '2.0.6'
+  path_provider: '2.0.9'
+  permission_handler: '9.1.0'
+  purchases_flutter: '3.9.4'
+  sentry: '6.3.0'
+  sentry_flutter: '6.3.0'
+  shared_preferences: '2.0.13'
   sticky_headers: '0.2.0'
-  store_redirect:
-    git:
-      url: https://github.com/Danesz/store_redirect
-  stream_transform: '2.0.0'
+  store_redirect: '2.0.1'
   timer_builder: '2.0.0'
-  url_launcher: '6.0.9'
-  uuid: '3.0.4'
+  url_launcher: '6.0.20'
+  uuid: '3.0.6'
   version: '2.0.0'
-  weather_icons: '3.0.0-nullsafety.0'
-  webview_flutter: '2.0.10'
+  weather_icons: '3.0.0'
+  webview_flutter: '3.0.0'
 
 dev_dependencies:
   flutter_test:
@@ -68,11 +57,11 @@ dev_dependencies:
   integration_test:
     sdk: flutter
 
-  bloc_test: '8.0.2'
-  build_runner: '2.0.6'
-  flutter_launcher_icons: '0.9.0'
-  flutter_native_splash: '1.1.8+4'
-  mockito: '5.0.11'
+  bloc_test: '9.0.2'
+  build_runner: '2.1.7'
+  flutter_launcher_icons: '0.9.2'
+  flutter_native_splash: '2.0.4'
+  mockito: '5.1.0'
 
 flutter:
   uses-material-design: true

@@ -4,7 +4,6 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/models/models.dart';
-import 'package:iso_countries/country.dart';
 import 'package:iso_countries/iso_countries.dart';
 
 class ForecastFormBloc extends FormBloc<String, String> {
@@ -38,11 +37,11 @@ class ForecastFormBloc extends FormBloc<String, String> {
   void onLoading() async {
     if (_initialForecast != null) {
       if (_initialForecast!.city != null) {
-        cityName.updateInitialValue(_initialForecast!.cityName);
+        cityName.updateInitialValue(_initialForecast!.cityName!);
       }
 
       if (_initialForecast!.postalCode != null) {
-        postalCode.updateInitialValue(_initialForecast!.postalCode);
+        postalCode.updateInitialValue(_initialForecast!.postalCode!);
       }
 
       if (_initialForecast!.countryCode != null) {
@@ -73,9 +72,9 @@ class ForecastFormBloc extends FormBloc<String, String> {
     _forecasts!.forEach((Forecast forecast) {
       if (!forecast.cityName.isNullOrEmpty() &&
           !forecast.countryCode.isNullOrEmpty() &&
-          (forecast.cityName!.toLowerCase() == cityName.value!.toLowerCase()) &&
+          (forecast.cityName!.toLowerCase() == cityName.value.toLowerCase()) &&
           (forecast.countryCode!.toLowerCase() ==
-              countryCode.value!.toLowerCase())) {
+              countryCode.value.toLowerCase())) {
         if ((_initialForecast == null) ||
             (_initialForecast!.id != forecast.id)) {
           cityName.addFieldError(
@@ -91,9 +90,9 @@ class ForecastFormBloc extends FormBloc<String, String> {
         }
       } else if (!forecast.postalCode.isNullOrEmpty() &&
           (forecast.postalCode!.toLowerCase() ==
-              postalCode.value!.toLowerCase()) &&
+              postalCode.value.toLowerCase()) &&
           (forecast.postalCode!.toLowerCase() ==
-              postalCode.value!.toLowerCase())) {
+              postalCode.value.toLowerCase())) {
         if ((_initialForecast == null) ||
             (_initialForecast!.id != forecast.id)) {
           postalCode.addFieldError(
