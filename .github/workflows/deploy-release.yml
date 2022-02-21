@@ -340,7 +340,7 @@ jobs:
           name: appbundle
 
       - name: 'Release to internal track'
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.0.15
         with:
           serviceAccountJsonPlainText: ${{ secrets.FLUTTER_WEATHER_PLAYSTORE_ACCOUNT_KEY }}
           packageName: io.flutter_weather.prod
