@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/app/app_localization.dart';
 
 enum UpdatePeriod {
+  off,
   hour1,
   hour2,
   hour3,
@@ -59,8 +60,12 @@ extension UpdatePeriodExtension on UpdatePeriod {
           'minutes': 300,
         };
 
+      case UpdatePeriod.off:
       default:
-        return null;
+        return {
+          'id': 'off',
+          'text': (context == null) ? 'Off' : AppLocalizations.of(context)!.off,
+        };
     }
   }
 }

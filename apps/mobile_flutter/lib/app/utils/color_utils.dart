@@ -26,4 +26,10 @@ extension Extension on Color {
       this.blue + ((255 - this.blue) * calc).round(),
     );
   }
+
+  String toHex({
+    bool prefixSymbol: true,
+  }) =>
+      '${prefixSymbol ? '#' : ''}' +
+      '${(value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
 }

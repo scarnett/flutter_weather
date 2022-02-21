@@ -21,6 +21,7 @@ import 'package:flutter_weather/settings/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sentry/sentry.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'app_events.dart';
 part 'app_state.dart';
@@ -31,6 +32,11 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
 
   Stream<CompassEvent>? _headingStream;
   StreamSubscription<CompassEvent>? _headingSubscription;
+
+  final StreamTransformer<CompassEvent, CompassEvent> _debounceCompass =
+      StreamTransformer<CompassEvent, CompassEvent>.fromBind(
+          (Stream<CompassEvent> stream) =>
+              stream.debounce(const Duration(milliseconds: 10)));
 
   AppBloc() : super(AppState.initial()) {
     on<ToggleThemeMode>(_onToggleThemeMode);
@@ -59,6 +65,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     on<SetConnectivityResult>(_onSetConnectivityResultToState);
     on<StreamCompassEvent>(_onStreamCompassEventToState);
     on<SetCompassEvent>(_onSetCompassEventToState);
+    on<SetIsPremium>(_onSetIsPremium);
+    on<SetShowPremiumInfo>(_onSetShowPremiumInfo);
+    on<SetShowPremiumSuccess>(_onSetShowPremiumSuccess);
   }
 
   AppState get initialState => AppState.initial();
@@ -342,10 +351,9 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       ),
     );
 
-    // TODO! sort
-    List<Forecast> forecasts =
+    List<Forecast> forecasts = sortForecasts(
         List<Forecast>.from(state.forecasts) // Clone the existing state list
-          ..add(event.forecast);
+          ..add(event.forecast));
 
     emit(
       state.copyWith(
@@ -424,6 +432,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
         http.Response forecastResponse = await tryLookupForecast(
           client: httpClient,
           lookupData: lookupData,
+          isPremium: state.isPremium,
         );
 
         if (forecastResponse.statusCode == 200) {
@@ -449,7 +458,6 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
               lastUpdated: getNow(),
             );
 
-            // TODO! premium
             http.Response forecastDetailsResponse = await fetchDetailedForecast(
               client: httpClient,
               longitude: forecast.city!.coord!.lon!,
@@ -578,6 +586,7 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   ) {
     // If auto update is enabled then run the refresh
     if ((state.updatePeriod != null) &&
+        (state.updatePeriod != UpdatePeriod.off) &&
         state.forecasts.isNotEmpty &&
         (state.forecasts.length >= event.forecastIndex + 1)) {
       Forecast forecast = state.forecasts[event.forecastIndex];
@@ -641,7 +650,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
     if (AppConfig.isRelease()) {
       _headingStream = FlutterCompass.events;
       _headingSubscription = _headingStream
-          ?.listen((CompassEvent event) => add(SetCompassEvent(event)));
+          ?.transform(_debounceCompass)
+          .listen((CompassEvent event) => add(SetCompassEvent(event)));
     }
   }
 
@@ -657,6 +667,36 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       );
     }
   }
+
+  void _onSetIsPremium(
+    SetIsPremium event,
+    Emitter<AppState> emit,
+  ) =>
+      emit(
+        state.copyWith(
+          isPremium: event.isPremium,
+        ),
+      );
+
+  void _onSetShowPremiumInfo(
+    SetShowPremiumInfo event,
+    Emitter<AppState> emit,
+  ) =>
+      emit(
+        state.copyWith(
+          showPremiumInfo: event.showPremiumInfo,
+        ),
+      );
+
+  void _onSetShowPremiumSuccess(
+    SetShowPremiumSuccess event,
+    Emitter<AppState> emit,
+  ) =>
+      emit(
+        state.copyWith(
+          showPremiumSuccess: event.showPremiumSuccess,
+        ),
+      );
 
   Future<void> _saveDeviceInfo(PushNotification? pushNotification) async {
     if ((pushNotification != null) &&

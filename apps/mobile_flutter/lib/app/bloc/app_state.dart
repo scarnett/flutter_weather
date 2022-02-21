@@ -18,6 +18,9 @@ class AppState extends Equatable {
   final ScrollDirection? scrollDirection;
   final ConnectivityResult? connectivityResult;
   final CompassEvent? compassEvent;
+  final bool isPremium;
+  final bool showPremiumInfo;
+  final bool showPremiumSuccess;
 
   AppState({
     this.updatePeriod,
@@ -36,6 +39,9 @@ class AppState extends Equatable {
     this.scrollDirection,
     this.connectivityResult,
     this.compassEvent,
+    this.isPremium: false,
+    this.showPremiumInfo: false,
+    this.showPremiumSuccess: false,
   });
 
   const AppState._({
@@ -55,6 +61,9 @@ class AppState extends Equatable {
     this.scrollDirection: ScrollDirection.idle,
     this.connectivityResult,
     this.compassEvent,
+    this.isPremium: false,
+    this.showPremiumInfo: false,
+    this.showPremiumSuccess: false,
   });
 
   const AppState.initial() : this._();
@@ -77,6 +86,9 @@ class AppState extends Equatable {
     Nullable<ScrollDirection?>? scrollDirection,
     Nullable<ConnectivityResult?>? connectivityResult,
     Nullable<CompassEvent?>? compassEvent,
+    bool? isPremium,
+    bool? showPremiumInfo,
+    bool? showPremiumSuccess,
   }) =>
       AppState._(
         updatePeriod:
@@ -109,6 +121,9 @@ class AppState extends Equatable {
             : connectivityResult.value,
         compassEvent:
             (compassEvent == null) ? this.compassEvent : compassEvent.value,
+        isPremium: isPremium ?? this.isPremium,
+        showPremiumInfo: showPremiumInfo ?? this.showPremiumInfo,
+        showPremiumSuccess: showPremiumSuccess ?? this.showPremiumSuccess,
       );
 
   @override
@@ -129,6 +144,9 @@ class AppState extends Equatable {
         scrollDirection,
         connectivityResult,
         compassEvent,
+        isPremium,
+        showPremiumInfo,
+        showPremiumSuccess,
       ];
 
   @override
@@ -141,5 +159,7 @@ class AppState extends Equatable {
       'selectedForecastIndex: $selectedForecastIndex, forecasts: $forecasts, ' +
       'activeForecastId: $activeForecastId, refreshStatus: $refreshStatus, ' +
       'crudStatus: $crudStatus, scrollDirection: $scrollDirection, ' +
-      'connectivityResult: $connectivityResult, compassEvent: $compassEvent}';
+      'connectivityResult: $connectivityResult, compassEvent: $compassEvent' +
+      'isPremium: $isPremium, showPremiumInfo: $showPremiumInfo' +
+      'showPremiumSuccess: $showPremiumSuccess}';
 }

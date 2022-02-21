@@ -222,13 +222,15 @@ class _LookupPageViewState extends State<LookupPageView> {
   }
 
   void _tapAddLocation() {
+    DateTime now = getNow();
     LookupState lookupState = context.read<LookupBloc>().state;
     Forecast forecast = lookupState.lookupForecast!.copyWith(
       id: Uuid().v4(),
       cityName: Nullable<String?>(lookupState.cityName),
       postalCode: Nullable<String?>(lookupState.postalCode),
       countryCode: Nullable<String?>(lookupState.countryCode),
-      lastUpdated: getNow(),
+      created: now,
+      lastUpdated: now,
     );
 
     context.read<AppBloc>().add(AddForecast(forecast));
@@ -249,9 +251,11 @@ class _LookupPageViewState extends State<LookupPageView> {
           : country.countryCode;
     }
 
+    AppState appState = context.read<AppBloc>().state;
     context.read<LookupBloc>().add(LookupForecast(
           lookupData,
-          context.read<AppBloc>().state.units.temperature,
+          appState.units.temperature,
+          appState.isPremium,
         ));
   }
 

@@ -12,6 +12,7 @@ class Forecast extends Equatable {
   final int? cnt;
   final List<ForecastDay>? list;
   final ForecastDetails? details;
+  final DateTime? created;
   final DateTime? lastUpdated;
 
   Forecast({
@@ -25,6 +26,7 @@ class Forecast extends Equatable {
     this.cnt,
     this.list,
     this.details,
+    this.created,
     this.lastUpdated,
   });
 
@@ -39,6 +41,7 @@ class Forecast extends Equatable {
     int? cnt,
     List<ForecastDay>? list,
     Nullable<ForecastDetails?>? details,
+    DateTime? created,
     DateTime? lastUpdated,
   }) =>
       Forecast(
@@ -53,6 +56,7 @@ class Forecast extends Equatable {
         cnt: cnt ?? this.cnt,
         list: list ?? this.list,
         details: (details == null) ? this.details : details.value,
+        created: created ?? this.created,
         lastUpdated: lastUpdated ?? this.lastUpdated,
       );
 
@@ -72,6 +76,7 @@ class Forecast extends Equatable {
               cnt: json['cnt'],
               list: ForecastDay.fromJsonList(json['list']),
               details: ForecastDetails.fromJson(json['details']),
+              created: fromIso8601String(json['created']),
               lastUpdated: fromIso8601String(json['lastUpdated']),
             );
 
@@ -95,6 +100,7 @@ class Forecast extends Equatable {
         'cnt': cnt,
         'list': ForecastDay.toJsonList(list),
         'details': (details == null) ? null : details!.toJson(),
+        'created': toIso8601String(created),
         'lastUpdated': toIso8601String(lastUpdated),
       };
 
@@ -117,6 +123,7 @@ class Forecast extends Equatable {
         cnt,
         list,
         details,
+        created,
         lastUpdated,
       ];
 
@@ -124,7 +131,8 @@ class Forecast extends Equatable {
   String toString() =>
       'Forecast{id: $id, cityName: $cityName, postalCode: $postalCode, ' +
       'countryCode: $countryCode, city: ${city?.name}, cod: $cod, ' +
-      'message: $message, cnt: $cnt, lastUpdated: $lastUpdated}';
+      'message: $message, cnt: $cnt, created: $created, ' +
+      'lastUpdated: $lastUpdated}';
 }
 
 class ForecastCity extends Equatable {

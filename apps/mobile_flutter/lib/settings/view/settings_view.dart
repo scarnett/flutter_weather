@@ -9,6 +9,7 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/premium/view/view.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:package_info/package_info.dart';
 
@@ -24,7 +25,9 @@ class SettingsView extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) =>
-      SettingsPageView();
+      PremiumOverlayView(
+        child: SettingsPageView(),
+      );
 }
 
 class SettingsPageView extends StatefulWidget {
@@ -116,7 +119,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
   Widget _buildContent() {
     List<Widget> children = []
       ..addAll(_buildApplicationSection())
-      ..addAll(_buildAutoUpdatePeriodSection())
       ..addAll(_buildUnitsSection());
 
     if (AppConfig.instance.config.privacyPolicyUrl != '') {
@@ -180,43 +182,7 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               context.read<AppBloc>().state.hourRange.getText(context),
           onTapCallback: () => _setPageListIndex(4),
         ),
-      ],
-    );
-
-    return widgets;
-  }
-
-  List<Widget> _buildAutoUpdatePeriodSection() {
-    UpdatePeriod? updatePeriod = context.read<AppBloc>().state.updatePeriod;
-    List<Widget> widgets = <Widget>[];
-    widgets.addAll(
-      [
-        AppSectionHeader(
-          text: AppLocalizations.of(context)!.autoUpdates,
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 4.0,
-            top: 16.0,
-            bottom: 16.0,
-          ),
-          options: [
-            SizedBox(
-              height: 16.0,
-              child: Switch(
-                onChanged: (bool value) async => await _tapUpdatePeriod(
-                  value ? UpdatePeriod.hour2 : null,
-                  redirect: false,
-                ),
-                value: (updatePeriod != null),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-
-    if (updatePeriod != null) {
-      widgets.addAll([
+        Divider(),
         SettingsOption(
           pageController: _pageController!,
           title: AppLocalizations.of(context)!.updatePeriod,
@@ -239,10 +205,29 @@ class _SettingsPageViewState extends State<SettingsPageView> {
               '',
           onTapCallback: () => _setPageListIndex(1),
         ),
-      ]);
-    }
+      ]..addAll(_buildAds()),
+    );
 
     return widgets;
+  }
+
+  List<Widget> _buildAds() {
+    AppState state = context.read<AppBloc>().state;
+    if (state.isPremium) {
+      return [];
+    }
+
+    return [
+      Divider(),
+      SettingsOption(
+        pageController: _pageController!,
+        title: AppLocalizations.of(context)!.disableAds,
+        // trailing: PremiumStar(iconSize: 20.0),
+        onTapCallback: () =>
+            context.read<AppBloc>().add(SetShowPremiumInfo(true)),
+        returnIndex: null,
+      ),
+    ];
   }
 
   List<Widget> _buildUnitsSection() => [
@@ -335,23 +320,6 @@ class _SettingsPageViewState extends State<SettingsPageView> {
     num currentPage,
   ) {
     setState(() => _currentPage = currentPage);
-  }
-
-  Future<void> _tapUpdatePeriod(
-    UpdatePeriod? period, {
-    bool redirect: true,
-  }) async {
-    context.read<AppBloc>().add(
-          SetUpdatePeriod(
-            context: context,
-            updatePeriod: period,
-            callback: () async {
-              if (redirect) {
-                await animatePage(_pageController!, page: 0);
-              }
-            },
-          ),
-        );
   }
 
   void _tapPrivacyPolicy() =>

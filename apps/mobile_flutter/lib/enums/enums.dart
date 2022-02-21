@@ -5,6 +5,8 @@ export 'flavor.dart';
 export 'hour_range.dart';
 export 'lookup_status.dart';
 export 'pressure_unit.dart';
+export 'product_source.dart';
+export 'product_status.dart';
 export 'push_notifications.dart';
 export 'refresh_status.dart';
 export 'temperature_unit.dart';

@@ -234,13 +234,14 @@ def write_profile(profile):
         print('created provisioning profile at {}; {}'.format(filePath, str(os.path.exists(filePath))))
 
 
-def download_certificate(token, profileId):
+def download_certificate(token, profileId, certificatePath):
     '''
     Downloads the certificate for a provisioning profile
 
     Args:
         token (string): The JWT token
         profileId (string): The profile id
+        certificatePath (string): The certificiate output file path
     '''
 
     try:
@@ -251,12 +252,11 @@ def download_certificate(token, profileId):
             certificates = jsonData['data']
 
             # Write the certificate content to a file
-            filePath = './apps/mobile_flutter/ios/certs.p12' #TODO! cer path
-            make_file(filePath)
-            with open(filePath, 'w+') as cerFile:
+            make_file(certificatePath)
+            with open(certificatePath, 'w+') as cerFile:
                 content = base64.b64decode(certificates[0]['attributes']['certificateContent'])
                 cerFile.write(content)
-                print('created certificate at {}; {}'.format(filePath, str(os.path.exists(filePath))))
+                print('created certificate at {}; {}'.format(certificatePath, str(os.path.exists(certificatePath))))
 
             return certificates[0]
         else:
@@ -312,7 +312,7 @@ def lets_do_this():
                     # print('downloading certificate')
 
                     """
-                    certificate = download_certificate(token, newProfile['id'])
+                    certificate = download_certificate(token, newProfile['id'], args.certificatePath)
                     if certificate:
                         print('certificate downloaded')
                     else:
@@ -326,7 +326,7 @@ def lets_do_this():
                     write_profile(profile)
 
                     """
-                    certificate = download_certificate(token, profile['id'])
+                    certificate = download_certificate(token, profile['id'], args.certificatePath)
                     if certificate:
                         print('certificate downloaded')
                     else:

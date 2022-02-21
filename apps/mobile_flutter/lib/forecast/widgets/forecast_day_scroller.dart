@@ -74,7 +74,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
   List<Widget> _buildDayForecasts(
     BuildContext context,
     List<ForecastDay> days, {
-    int count: 3, // TODO! parameter?
+    int count: 3,
   }) {
     int index = 0;
     List<Widget> forecasts = [];
@@ -173,7 +173,7 @@ class _ForecastDayScrollerState extends State<ForecastDayScroller> {
 
   Widget _buildDayForecastsCircleIndicator({
     List<ForecastDay>? days,
-    int dayCount: 3, // TODO! parameter?
+    int dayCount: 3,
   }) {
     AppState state = context.read<AppBloc>().state;
     int pageCount = 0;

@@ -11,6 +11,7 @@ import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/enums/enums.dart';
 import 'package:flutter_weather/models/models.dart';
 import 'package:flutter_weather/services/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -28,6 +29,9 @@ Future<void> main() async {
 
   // Messaging
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Admob
+  MobileAds.instance.initialize();
 
   // Crashlytics
   await FirebaseCrashlytics.instance
@@ -53,6 +57,9 @@ Future<void> main() async {
     config: Config.fromRemoteConfig(remoteConfig.data),
     child: WeatherApp(),
   );
+
+  // IAP
+  await IAPService.instance.initialize(appConfig.flavor);
 
   // Error listening
   FlutterError.onError = (FlutterErrorDetails details) async {

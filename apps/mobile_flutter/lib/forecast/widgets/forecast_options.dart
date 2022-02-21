@@ -5,9 +5,18 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/forecast/forecast.dart';
 
-class ForecastOptions extends StatelessWidget {
+class ForecastOptions extends StatefulWidget {
   static final double height = 50.0;
 
+  ForecastOptions({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ForecastOptionsState();
+}
+
+class _ForecastOptionsState extends State<ForecastOptions> {
   @override
   Widget build(
     BuildContext context,
@@ -24,6 +33,8 @@ class ForecastOptions extends StatelessWidget {
           children: <Widget>[
             ForecastEditButton(),
             ForecastRefresh(),
+            if (!context.read<AppBloc>().state.isPremium)
+              ForecastPremiumButton(),
             Expanded(child: Container()),
             AppColorThemeToggle(
               callback: () => context.read<AppBloc>().add(ToggleColorTheme()),

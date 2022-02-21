@@ -27,20 +27,37 @@ extension HourRangeExtension on HourRange {
   }
 
   String getText(
-    BuildContext context,
-  ) {
+    BuildContext context, {
+    bool short: false,
+  }) {
     switch (this) {
       case HourRange.hours24:
+        if (short) {
+          return AppLocalizations.of(context)!.hours24short;
+        }
+
         return AppLocalizations.of(context)!.hours24;
 
       case HourRange.hours36:
+        if (short) {
+          return AppLocalizations.of(context)!.hours36short;
+        }
+
         return AppLocalizations.of(context)!.hours36;
 
       case HourRange.hours48:
+        if (short) {
+          return AppLocalizations.of(context)!.hours48short;
+        }
+
         return AppLocalizations.of(context)!.hours48;
 
       case HourRange.hours12:
       default:
+        if (short) {
+          return AppLocalizations.of(context)!.hours12short;
+        }
+
         return AppLocalizations.of(context)!.hours12;
     }
   }

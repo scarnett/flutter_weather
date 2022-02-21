@@ -29,7 +29,6 @@ class ForecastUVIndex extends StatelessWidget {
                       .toDouble()
                       .formatDecimal(decimals: 1)
                       .toString(),
-              unit: '', // TODO!
             ),
             SizedBox(
               height: 30.0,

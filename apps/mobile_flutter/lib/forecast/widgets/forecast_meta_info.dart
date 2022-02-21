@@ -6,13 +6,13 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 class ForecastMetaInfo extends StatelessWidget {
   final String label;
   final String value;
-  final String unit;
+  final String? unit;
 
   const ForecastMetaInfo({
     Key? key,
     required this.label,
     required this.value,
-    required this.unit,
+    this.unit,
   }) : super(key: key);
 
   @override
@@ -44,23 +44,24 @@ class ForecastMetaInfo extends StatelessWidget {
                       height: 1.0,
                     ),
               ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 2.0),
-                  child: Text(
-                    unit,
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: AppTheme.getHintColor(
-                            context.read<AppBloc>().state.themeMode,
-                            colorTheme:
-                                context.read<AppBloc>().state.colorTheme,
+              if (unit != null)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 2.0),
+                    child: Text(
+                      unit!,
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: AppTheme.getHintColor(
+                              context.read<AppBloc>().state.themeMode,
+                              colorTheme:
+                                  context.read<AppBloc>().state.colorTheme,
+                            ),
+                            fontWeight: FontWeight.bold,
                           ),
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ],

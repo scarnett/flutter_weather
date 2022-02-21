@@ -21,6 +21,7 @@ export 'forecast_location.dart';
 export 'forecast_meta.dart';
 export 'forecast_meta_info.dart';
 export 'forecast_options.dart';
+export 'forecast_premium_button.dart';
 export 'forecast_pressure.dart';
 export 'forecast_refresh.dart';
 export 'forecast_settings_button.dart';

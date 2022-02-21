@@ -18,7 +18,7 @@ i18n.configure({
 })
 
 for (const filePath of paths) {
-  const files: string[] = glob.sync(filePath, {cwd: __dirname, ignore: `./node_modules/**`})
+  const files: string[] = glob.sync(filePath, { cwd: __dirname, ignore: `./node_modules/**` })
   for (const file of files) {
     processExport(file)
   }

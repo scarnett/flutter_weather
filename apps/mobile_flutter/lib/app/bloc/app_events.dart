@@ -5,6 +5,9 @@ abstract class AppEvent extends Equatable {
 
   @override
   List<Object?> get props => [];
+
+  @override
+  String toString() => 'AppEvent{}';
 }
 
 class GetRemoteConfig extends AppEvent {
@@ -12,6 +15,9 @@ class GetRemoteConfig extends AppEvent {
 
   @override
   List<Object> get props => [];
+
+  @override
+  String toString() => 'GetRemoteConfig{}';
 }
 
 class ToggleThemeMode extends AppEvent {
@@ -19,6 +25,9 @@ class ToggleThemeMode extends AppEvent {
 
   @override
   List<Object> get props => [];
+
+  @override
+  String toString() => 'ToggleThemeMode{}';
 }
 
 class SetUpdatePeriod extends AppEvent {
@@ -34,6 +43,9 @@ class SetUpdatePeriod extends AppEvent {
 
   @override
   List<Object?> get props => [updatePeriod];
+
+  @override
+  String toString() => 'SetUpdatePeriod{updatePeriod: $updatePeriod}';
 }
 
 class SetPushNotification extends AppEvent {
@@ -54,6 +66,11 @@ class SetPushNotification extends AppEvent {
         pushNotification,
         pushNotificationExtras,
       ];
+
+  @override
+  String toString() =>
+      'SetPushNotification{pushNotification: $pushNotification, ' +
+      'pushNotificationExtras: $pushNotificationExtras}';
 }
 
 class SetThemeMode extends AppEvent {
@@ -65,6 +82,9 @@ class SetThemeMode extends AppEvent {
 
   @override
   List<Object?> get props => [themeMode];
+
+  @override
+  String toString() => 'SetThemeMode{themeMode: $themeMode}';
 }
 
 class ToggleColorTheme extends AppEvent {
@@ -72,6 +92,9 @@ class ToggleColorTheme extends AppEvent {
 
   @override
   List<Object> get props => [];
+
+  @override
+  String toString() => 'ToggleColorTheme{}';
 }
 
 class SetColorTheme extends AppEvent {
@@ -83,6 +106,9 @@ class SetColorTheme extends AppEvent {
 
   @override
   List<Object?> get props => [colorTheme];
+
+  @override
+  String toString() => 'SetColorTheme{colorTheme: $colorTheme}';
 }
 
 class SetTemperatureUnit extends AppEvent {
@@ -94,6 +120,9 @@ class SetTemperatureUnit extends AppEvent {
 
   @override
   List<Object?> get props => [temperatureUnit];
+
+  @override
+  String toString() => 'SetTemperatureUnit{temperatureUnit: $temperatureUnit}';
 }
 
 class SetWindSpeedUnit extends AppEvent {
@@ -105,6 +134,9 @@ class SetWindSpeedUnit extends AppEvent {
 
   @override
   List<Object?> get props => [windSpeedUnit];
+
+  @override
+  String toString() => 'SetWindSpeedUnit{windSpeedUnit: $windSpeedUnit}';
 }
 
 class SetPressureUnit extends AppEvent {
@@ -116,6 +148,9 @@ class SetPressureUnit extends AppEvent {
 
   @override
   List<Object?> get props => [pressureUnit];
+
+  @override
+  String toString() => 'SetPressureUnit{pressureUnit: $pressureUnit}';
 }
 
 class SetDistanceUnit extends AppEvent {
@@ -127,6 +162,9 @@ class SetDistanceUnit extends AppEvent {
 
   @override
   List<Object?> get props => [distanceUnit];
+
+  @override
+  String toString() => 'SetDistanceUnit{distanceUnit: $distanceUnit}';
 }
 
 class SetChartType extends AppEvent {
@@ -138,6 +176,9 @@ class SetChartType extends AppEvent {
 
   @override
   List<Object?> get props => [chartType];
+
+  @override
+  String toString() => 'SetChartType{chartType: $chartType}';
 }
 
 class SetHourRange extends AppEvent {
@@ -149,6 +190,9 @@ class SetHourRange extends AppEvent {
 
   @override
   List<Object?> get props => [hourRange];
+
+  @override
+  String toString() => 'SetHourRange{hourRange: $hourRange}';
 }
 
 class AddForecast extends AppEvent {
@@ -160,6 +204,9 @@ class AddForecast extends AppEvent {
 
   @override
   List<Object> get props => [forecast];
+
+  @override
+  String toString() => 'AddForecast{forecast: $forecast}';
 }
 
 class UpdateForecast extends AppEvent {
@@ -174,7 +221,14 @@ class UpdateForecast extends AppEvent {
   );
 
   @override
-  List<Object?> get props => [forecastId, forecastData];
+  List<Object?> get props => [
+        forecastId,
+        forecastData,
+      ];
+
+  @override
+  String toString() =>
+      'UpdateForecast{forecastId: $forecastId, forecastData: $forecastData}';
 }
 
 class RefreshForecast extends AppEvent {
@@ -193,6 +247,10 @@ class RefreshForecast extends AppEvent {
         forecast,
         temperatureUnit,
       ];
+
+  @override
+  String toString() =>
+      'RefreshForecast{forecast: $forecast, temperatureUnit: $temperatureUnit}';
 }
 
 class DeleteForecast extends AppEvent {
@@ -204,6 +262,9 @@ class DeleteForecast extends AppEvent {
 
   @override
   List<Object?> get props => [forecastId];
+
+  @override
+  String toString() => 'DeleteForecast{forecastId: $forecastId}';
 }
 
 class SelectedForecastIndex extends AppEvent {
@@ -215,6 +276,9 @@ class SelectedForecastIndex extends AppEvent {
 
   @override
   List<Object> get props => [index];
+
+  @override
+  String toString() => 'SelectedForecastIndex{index: $index}';
 }
 
 class SetActiveForecastId extends AppEvent {
@@ -226,6 +290,9 @@ class SetActiveForecastId extends AppEvent {
 
   @override
   List<Object?> get props => [forecastId];
+
+  @override
+  String toString() => 'SetActiveForecastId{forecastId: $forecastId}';
 }
 
 class ClearActiveForecastId extends AppEvent {
@@ -233,6 +300,9 @@ class ClearActiveForecastId extends AppEvent {
 
   @override
   List<Object> get props => [];
+
+  @override
+  String toString() => 'ClearActiveForecastId{}';
 }
 
 class AutoUpdateForecast extends AppEvent {
@@ -249,6 +319,9 @@ class AutoUpdateForecast extends AppEvent {
         context,
         forecastIndex,
       ];
+
+  @override
+  String toString() => 'AutoUpdateForecast{forecastIndex: $forecastIndex}';
 }
 
 class ClearCRUDStatus extends AppEvent {
@@ -256,6 +329,9 @@ class ClearCRUDStatus extends AppEvent {
 
   @override
   List<Object> get props => [];
+
+  @override
+  String toString() => 'ClearCRUDStatus{}';
 }
 
 class SetScrollDirection extends AppEvent {
@@ -267,6 +343,9 @@ class SetScrollDirection extends AppEvent {
 
   @override
   List<Object?> get props => [scrollDirection];
+
+  @override
+  String toString() => 'SetScrollDirection{scrollDirection: $scrollDirection}';
 }
 
 class StreamConnectivityResult extends AppEvent {
@@ -283,11 +362,61 @@ class SetConnectivityResult extends AppEvent {
 
   @override
   List<Object?> get props => [connectivityResult];
+
+  @override
+  String toString() =>
+      'SetConnectivityResult{connectivityResult: $connectivityResult}';
 }
 
 class StreamCompassEvent extends AppEvent {
   @override
   List<Object?> get props => [];
+
+  @override
+  String toString() => 'StreamConnectivityResult{}';
+}
+
+class SetIsPremium extends AppEvent {
+  final bool? isPremium;
+
+  const SetIsPremium(
+    this.isPremium,
+  );
+
+  @override
+  List<Object?> get props => [isPremium];
+
+  @override
+  String toString() => 'SetIsPremium{isPremium: $isPremium}';
+}
+
+class SetShowPremiumInfo extends AppEvent {
+  final bool? showPremiumInfo;
+
+  const SetShowPremiumInfo(
+    this.showPremiumInfo,
+  );
+
+  @override
+  List<Object?> get props => [showPremiumInfo];
+
+  @override
+  String toString() => 'SetShowPremiumInfo{showPremiumInfo: $showPremiumInfo}';
+}
+
+class SetShowPremiumSuccess extends AppEvent {
+  final bool? showPremiumSuccess;
+
+  const SetShowPremiumSuccess(
+    this.showPremiumSuccess,
+  );
+
+  @override
+  List<Object?> get props => [showPremiumSuccess];
+
+  @override
+  String toString() =>
+      'SetShowPremiumSuccess{showPremiumSuccess: $showPremiumSuccess}';
 }
 
 class SetCompassEvent extends AppEvent {

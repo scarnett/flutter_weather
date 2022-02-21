@@ -164,6 +164,19 @@ class _ForecastPageViewState extends State<ForecastView>
     if (_colorTheme != state.colorTheme) {
       _initialize();
     }
+
+    if (state.isPremium && state.showPremiumSuccess) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AppAlert(
+          title: AppLocalizations.of(context)!.wellDone,
+          bodyText: AppLocalizations.of(context)!.fullAppAccess,
+          buttonText: AppLocalizations.of(context)!.cool,
+        ),
+      );
+
+      context.read<AppBloc>().add(SetShowPremiumSuccess(false));
+    }
   }
 
   Future<bool> _willPopCallback(
@@ -272,10 +285,15 @@ class _ForecastPageViewState extends State<ForecastView>
                   AlwaysStoppedAnimation(_forecastColorValue),
                 );
 
-          Color _forecastDarkenedColor = _forecastColor!.darken(40);
+          Color _forecastDarkenedColor = state.showPremiumInfo
+              ? _forecastColor!
+              : _forecastColor!.darken(40.0);
 
           return AppUiOverlayStyle(
-            systemNavigationBarColor: _forecastDarkenedColor,
+            systemNavigationBarColorOpacity:
+                state.showPremiumInfo ? 0.01 : 0.925,
+            systemNavigationBarColor:
+                state.showPremiumInfo ? Colors.black : _forecastDarkenedColor,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: _forecastColor,
@@ -334,7 +352,7 @@ class _ForecastPageViewState extends State<ForecastView>
         child: ForecastDisplay(
           forecastColor: forecastColor,
           forecastDarkenedColor: forecastDarkenedColor,
-          forecast: state.forecasts[position],
+          forecast: sortForecasts(state.forecasts)[position],
         ),
       );
     }
@@ -342,7 +360,7 @@ class _ForecastPageViewState extends State<ForecastView>
     return ForecastDisplay(
       forecastColor: forecastColor,
       forecastDarkenedColor: forecastDarkenedColor,
-      forecast: state.forecasts[position],
+      forecast: sortForecasts(state.forecasts)[position],
     );
   }
 
@@ -408,7 +426,7 @@ class _ForecastPageViewState extends State<ForecastView>
       backgroundColor: state.colorTheme
           ? state.forecasts[state.selectedForecastIndex]
               .getTemperatureColor()
-              .darken(35)
+              .darken(35.0)
           : null,
     );
   }

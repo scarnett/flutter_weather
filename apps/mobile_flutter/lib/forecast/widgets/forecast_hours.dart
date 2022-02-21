@@ -33,8 +33,8 @@ class _ForecastHoursState extends State<ForecastHours> {
 
   @override
   void initState() {
-    initialize();
     super.initState();
+    _initialize();
   }
 
   @override
@@ -76,7 +76,7 @@ class _ForecastHoursState extends State<ForecastHours> {
         ),
       );
 
-  void initialize() {
+  void _initialize() {
     widget.parentScrollController.addListener(_parentScrollListener);
 
     _listViewScrollController = ScrollController();
@@ -178,8 +178,8 @@ class _ForecastHoursState extends State<ForecastHours> {
 
     for (HourRange range in HourRange.values) {
       Widget option = AppOptionButton(
-        text: range.getText(context).toUpperCase(),
-        colorThemeColor: widget.forecastColor?.darken(15),
+        text: range.getText(context, short: true).toUpperCase(),
+        colorThemeColor: widget.forecastColor?.darken(15.0),
         active: (state.hourRange == range),
         onTap: (state.hourRange == range) ? null : () => _tapHourRange(range),
       );
@@ -225,25 +225,23 @@ class _ForecastHoursState extends State<ForecastHours> {
           ),
         );
 
-        int hourCount = 0;
-
         // Add hour tiles
         for (ForecastHour hour in hours) {
-          Widget hourTile = ForecastHourTile(hour: hour);
+          tiles.add(ForecastHourTile(hour: hour));
+        }
 
-          if (widget.padBottom &&
-              ((dayCount + 1) == _hourData.length) &&
-              ((hourCount + 1) == hours.length)) {
-            hourTile = Container(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
-              child: hourTile,
-            );
-          }
+        if (!context.read<AppBloc>().state.isPremium) {
+          tiles.add(AppNativeAd(factoryId: 'listTile'));
+        }
 
-          tiles.add(hourTile);
-          hourCount++;
+        // Pad the last tile
+        if (((dayCount + 1) == _hourData.length)) {
+          tiles[tiles.length - 1] = Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
+            child: tiles[tiles.length - 1],
+          );
         }
 
         dayCount++;
@@ -257,7 +255,7 @@ class _ForecastHoursState extends State<ForecastHours> {
     HourRange range,
   ) {
     _selectedHourRange = range.hours;
-    context.read<AppBloc>().add(SetHourRange(range));
+    tapHourRange(context.read<AppBloc>(), range);
     _buildDataMap(_selectedHourRange);
   }
 }

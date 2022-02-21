@@ -71,6 +71,22 @@ class AppTheme {
     ThemeMode themeMode,
   ) =>
       (themeMode == ThemeMode.dark) ? Colors.grey[700] : Colors.grey[300];
+
+  static Color? getAdmobHeadlineColor(
+    ThemeMode themeMode, {
+    bool colorTheme: false,
+  }) =>
+      colorTheme
+          ? Colors.white
+          : (themeMode == ThemeMode.dark)
+              ? Colors.white
+              : Colors.grey[900];
+
+  static Color? getAdmobBodyColor(
+    ThemeMode themeMode, {
+    bool colorTheme: false,
+  }) =>
+      colorTheme ? Colors.white : Colors.grey[500];
 }
 
 ThemeMode getThemeMode(
@@ -152,7 +168,19 @@ ThemeData appLightThemeData = ThemeData(
   ),
   textTheme: _darkTextTheme,
   snackBarTheme: SnackBarThemeData(
-    contentTextStyle: TextStyle(color: Colors.white),
+    contentTextStyle: const TextStyle(color: Colors.white),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+      overlayColor: MaterialStateProperty.all<Color>(
+          AppTheme.primaryColor.withOpacity(0.2)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+      ),
+    ),
   ),
 );
 
@@ -202,7 +230,7 @@ ThemeData appDarkThemeData = appLightThemeData.copyWith(
   ),
   dialogTheme: DialogTheme(
     backgroundColor: AppTheme.secondaryColor,
-    contentTextStyle: TextStyle(color: Colors.white),
+    contentTextStyle: const TextStyle(color: Colors.white),
   ),
   textTheme: _lightTextTheme,
 );

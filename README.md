@@ -45,13 +45,13 @@ nx run mobile_flutter:runProd
 
 ### Firebase Functions
 ```bash
-nx run firebase-functions:deploy
+nx run firebase:deploy-functions
 ```
 [**Read More**](apps/firebase/README.md)
 
 ### Firebase Firestore Rules
 ```bash
-nx run firebase-rules:deploy
+nx run firebase:deploy-firestore-rules
 ```
 [**Read More**](apps/firebase/README.md)
 

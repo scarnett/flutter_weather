@@ -42,13 +42,13 @@ class LookupBloc extends Bloc<LookupEvent, LookupState> {
         http.Response forecastResponse = await tryLookupForecast(
           client: httpClient,
           lookupData: event.lookupData,
+          isPremium: event.isPremium,
         );
 
         if (forecastResponse.statusCode == 200) {
           Forecast forecast =
               Forecast.fromJson(jsonDecode(forecastResponse.body));
 
-          // TODO! premium
           http.Response forecastDetailsResponse = await fetchDetailedForecast(
             client: httpClient,
             longitude: forecast.city!.coord!.lon!,

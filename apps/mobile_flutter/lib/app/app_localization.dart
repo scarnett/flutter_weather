@@ -23,6 +23,28 @@ class AppLocalizations {
 
   static String get appTitle => 'Flutter Weather';
 
+  String get premium => addMessage('$appTitle Premium');
+  String get premiumSubscribe => addMessage('Subscribe Today');
+  String get premiumText => addMessage(
+      'Refresh your forecasts anytime, severe weather alerts, extended hour forecasts, \nad free, and more!');
+
+  String getPremiumCost(
+    String cost,
+  ) =>
+      addMessage(
+        '\$${cost} per year',
+        name: 'getPremiumCost',
+        args: [cost],
+      );
+
+  String get premiumNotAvailable => addMessage(
+      'Subscriptions are currently unavailable. Please try again later.');
+
+  String get wellDone => addMessage('Well Done!');
+  String get fullAppAccess =>
+      addMessage('You now have full access to the app.');
+
+  String get cool => addMessage('Cool');
   String get application => addMessage('Application');
   String get settings => addMessage('Settings');
   String get buildInformation => addMessage('Build Information');
@@ -33,7 +55,7 @@ class AppLocalizations {
   String get updateNow => addMessage('Update Now');
   String get later => addMessage('Later');
   String get beta => addMessage('Beta');
-  String get autoUpdates => addMessage('Auto Updates');
+  String get off => addMessage('Off');
   String get updatePeriod => addMessage('Update Period');
   String get updatePeriod1hr => addMessage('1 hour');
   String get updatePeriod2hr => addMessage('2 hours');
@@ -44,7 +66,6 @@ class AppLocalizations {
       addMessage('Your update period settings were updated');
 
   String get pushNotification => addMessage('Push Notification');
-  String get pushNotificationOff => addMessage('Off');
   String get pushNotificationSaved => addMessage('Saved Locations');
   String get pushNotificationCurrent => addMessage('Current Location');
   String get pushNotificationCurrentTap => addMessage('Tap to update');
@@ -148,10 +169,15 @@ class AppLocalizations {
   String get chartLine => addMessage('Line');
   String get chartBar => addMessage('Bar');
   String get hourRange => addMessage('Hour Range');
-  String get hours12 => addMessage('12hr');
-  String get hours24 => addMessage('24hr');
-  String get hours36 => addMessage('36hr');
-  String get hours48 => addMessage('48hr');
+  String get hours12 => addMessage('12 hours');
+  String get hours12short => addMessage('12hr');
+  String get hours24 => addMessage('24 hours');
+  String get hours24short => addMessage('24hr');
+  String get hours36 => addMessage('36 hours');
+  String get hours36short => addMessage('36hr');
+  String get hours48 => addMessage('48 hours');
+  String get hours48short => addMessage('48hr');
+  String get disableAds => addMessage('Disable Ads');
 
   String getFeelsLike(
     String temp,

@@ -35,9 +35,7 @@ extension PushNotificationExtension on PushNotification {
       default:
         return {
           'id': 'off',
-          'text': (context == null)
-              ? 'Off'
-              : AppLocalizations.of(context)!.pushNotificationOff,
+          'text': (context == null) ? 'Off' : AppLocalizations.of(context)!.off,
         };
     }
   }

@@ -5,6 +5,7 @@ import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
 import 'package:flutter_weather/enums/enums.dart';
+import 'package:flutter_weather/forecast/forecast.dart';
 
 class SettingsHourRangePicker extends StatefulWidget {
   SettingsHourRangePicker({
@@ -47,7 +48,8 @@ class _SettingsHourRangePickerState extends State<SettingsHourRangePicker> {
           title: hourRange.getText(context),
           value: hourRange,
           groupValue: _hourRange,
-          onTap: _tapHourRange,
+          onTap: (HourRange? range) =>
+              tapHourRange(context.read<AppBloc>(), range),
         ),
       );
 
@@ -60,9 +62,4 @@ class _SettingsHourRangePickerState extends State<SettingsHourRangePicker> {
 
     return ListView(children: widgets);
   }
-
-  void _tapHourRange(
-    HourRange? hourRange,
-  ) =>
-      context.read<AppBloc>().add(SetHourRange(hourRange));
 }

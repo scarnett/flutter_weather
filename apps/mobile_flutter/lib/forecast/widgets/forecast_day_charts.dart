@@ -117,14 +117,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
               padding: const EdgeInsets.only(right: 5.0),
               child: AppOptionButton(
                 text: AppLocalizations.of(context)!.chartLine.toUpperCase(),
-                colorThemeColor: widget.forecastColor?.darken(15),
+                colorThemeColor: widget.forecastColor?.darken(15.0),
                 active: (_currentPage == 0),
                 onTap: (_currentPage == 0) ? null : () => _tapChartType(0),
               ),
             ),
             AppOptionButton(
               text: AppLocalizations.of(context)!.chartBar.toUpperCase(),
-              colorThemeColor: widget.forecastColor?.darken(15),
+              colorThemeColor: widget.forecastColor?.darken(15.0),
               active: (_currentPage == 1),
               onTap: (_currentPage == 1) ? null : () => _tapChartType(1),
             ),
@@ -141,17 +141,25 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
       child: LineChart(
         LineChartData(
           minX: 0.0,
-          maxX: (_getDays().length.toDouble() - 1.0),
+          maxX: (_getDays(isPremium: state.isPremium).length.toDouble() - 1.0),
           minY: round5(
             number: getTemperature(
-              widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+              widget.forecast
+                  .getDayLowMin(isPremium: state.isPremium)
+                  .temp!
+                  .min!
+                  .toDouble(),
               state.units.temperature,
             ).toDouble(),
             offset: -5.0,
           ),
           maxY: round5(
             number: getTemperature(
-              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+              widget.forecast
+                  .getDayHighMax(isPremium: state.isPremium)
+                  .temp!
+                  .max!
+                  .toDouble(),
               state.units.temperature,
             ).toDouble(),
           ),
@@ -231,14 +239,14 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   ) =>
       [
         getLineData(
-          spots: _getTempMaxSpots(),
+          spots: _getTempMaxSpots(isPremium: state.isPremium),
           colors: widget.gradientColors ?? getLineColors(state.colorTheme),
           colorTheme: state.colorTheme,
           forecastColor: widget.forecastColor,
         ),
         getLineData(
           opacity: 0.5,
-          spots: _getTempMinSpots(),
+          spots: _getTempMinSpots(isPremium: state.isPremium),
           colors: widget.gradientColors ??
               getLineColors(
                 state.colorTheme,
@@ -251,6 +259,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
 
   Widget _buildBarChart() {
     AppState state = context.read<AppBloc>().state;
+
     return Container(
       padding: const EdgeInsets.only(left: 10.0),
       child: BarChart(
@@ -258,14 +267,22 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           alignment: BarChartAlignment.center,
           minY: round5(
             number: getTemperature(
-              widget.forecast.getDayLowMin().temp!.min!.toDouble(),
+              widget.forecast
+                  .getDayLowMin(isPremium: state.isPremium)
+                  .temp!
+                  .min!
+                  .toDouble(),
               state.units.temperature,
             ).toDouble(),
             offset: -5.0,
           ),
           maxY: round5(
             number: getTemperature(
-              widget.forecast.getDayHighMax().temp!.max!.toDouble(),
+              widget.forecast
+                  .getDayHighMax(isPremium: state.isPremium)
+                  .temp!
+                  .max!
+                  .toDouble(),
               state.units.temperature,
             ).toDouble(),
           ),
@@ -343,7 +360,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     List<BarChartGroupData> rodData = <BarChartGroupData>[];
     int count = 0;
 
-    for (ForecastDaily day in _getDays()) {
+    for (ForecastDaily day in _getDays(isPremium: state.isPremium)) {
       double tempMax = getTemperature(
         day.temp!.max!.toDouble(),
         state.units.temperature,
@@ -392,24 +409,28 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   }
 
   List<ForecastDaily> _getDays({
-    int count: 8, // TODO! premium
+    required bool isPremium,
   }) {
+    int maxCount = getDailyChartPointCount(isPremium);
+
     if (widget.forecast.details!.daily == null) {
       return [];
-    } else if (widget.forecast.details!.daily!.length < count) {
+    } else if (widget.forecast.details!.daily!.length < maxCount) {
       return widget.forecast.details!.daily!;
     }
 
-    return widget.forecast.details!.daily!.sublist(0, (count - 1));
+    return widget.forecast.details!.daily!.sublist(0, (maxCount - 1));
   }
 
-  List<FlSpot> _getTempMaxSpots() {
+  List<FlSpot> _getTempMaxSpots({
+    required bool isPremium,
+  }) {
     int index = 0;
     List<FlSpot> spots = [];
     TemperatureUnit temperatureUnit =
         context.read<AppBloc>().state.units.temperature;
 
-    for (ForecastDaily day in _getDays()) {
+    for (ForecastDaily day in _getDays(isPremium: isPremium)) {
       spots.add(
         FlSpot(
           index.toDouble(),
@@ -423,13 +444,15 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
     return spots;
   }
 
-  List<FlSpot> _getTempMinSpots() {
+  List<FlSpot> _getTempMinSpots({
+    required bool isPremium,
+  }) {
     int index = 0;
     List<FlSpot> spots = [];
     TemperatureUnit temperatureUnit =
         context.read<AppBloc>().state.units.temperature;
 
-    for (ForecastDaily day in _getDays()) {
+    for (ForecastDaily day in _getDays(isPremium: isPremium)) {
       spots.add(
         FlSpot(
           index.toDouble(),

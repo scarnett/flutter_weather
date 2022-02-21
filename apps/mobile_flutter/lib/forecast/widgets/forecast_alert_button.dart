@@ -198,7 +198,7 @@ class _ForecastAlertButtonState extends State<ForecastAlertButton>
                     alignment: Alignment.centerLeft,
                     child: Text(
                       alert.event ?? 'N/A',
-                      style: TextStyle(fontSize: 16.0),
+                      style: const TextStyle(fontSize: 16.0),
                       //style: Theme.of(context).textTheme.headline5,
                     ),
                   ),

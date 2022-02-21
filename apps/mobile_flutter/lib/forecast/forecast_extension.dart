@@ -49,43 +49,41 @@ extension ForecastExtension on Forecast {
   }
 
   List<ForecastDaily> filterDays({
-    int? maxTemps: 8,
-  }) =>
-      this
-          .details!
-          .daily!
-          .sublist(
-              0,
-              (maxTemps == null)
-                  ? (this.details!.daily!.length - 1)
-                  : (maxTemps - 1))
-          .toList();
+    required bool isPremium,
+  }) {
+    int maxTemps = utils.getDailyForecastCount(isPremium);
+    if (maxTemps > this.details!.daily!.length) {
+      return this.details!.daily!;
+    }
+
+    return this.details!.daily!.sublist(0, maxTemps).toList();
+  }
 
   ForecastDaily getDayHighMax({
-    int? maxTemps,
+    required bool isPremium,
   }) =>
-      filterDays(maxTemps: maxTemps).reduce(
+      filterDays(isPremium: isPremium).reduce(
           (ForecastDaily current, ForecastDaily next) =>
               (current.temp!.max! > next.temp!.max!) ? current : next);
 
   ForecastDaily getDayHighMin({
-    int? maxTemps,
+    required bool isPremium,
   }) =>
-      filterDays(maxTemps: maxTemps).reduce(
+      filterDays(isPremium: isPremium).reduce(
           (ForecastDaily current, ForecastDaily next) =>
               (current.temp!.max! < next.temp!.max!) ? current : next);
 
   ForecastDaily getDayLowMax({
-    int? maxTemps,
+    required bool isPremium,
   }) =>
-      filterDays(maxTemps: maxTemps).reduce(
+      filterDays(isPremium: isPremium).reduce(
           (ForecastDaily current, ForecastDaily next) =>
               (current.temp!.min! > next.temp!.min!) ? current : next);
 
   ForecastDaily getDayLowMin({
-    int? maxTemps,
+    required bool isPremium,
   }) =>
-      filterDays(maxTemps: maxTemps).reduce(
+      filterDays(isPremium: isPremium).reduce(
           (ForecastDaily current, ForecastDaily next) =>
               (current.temp!.min! < next.temp!.min!) ? current : next);
 

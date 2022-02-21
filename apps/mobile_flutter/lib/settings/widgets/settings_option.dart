@@ -7,16 +7,18 @@ import 'package:flutter_weather/app/utils/utils.dart';
 class SettingsOption extends StatelessWidget {
   final PageController pageController;
   final String title;
-  final String trailingText;
-  final int pageIndex;
+  final Widget? trailing;
+  final String? trailingText;
+  final int? returnIndex;
   final Function()? onTapCallback;
 
   const SettingsOption({
     Key? key,
     required this.pageController,
     required this.title,
-    required this.trailingText,
-    this.pageIndex: 1,
+    this.trailing,
+    this.trailingText,
+    this.returnIndex: 1,
     this.onTapCallback,
   }) : super(key: key);
 
@@ -30,31 +32,45 @@ class SettingsOption extends StatelessWidget {
           title,
           style: Theme.of(context).textTheme.subtitle1,
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              trailingText,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Icon(
-                Icons.chevron_right,
-                color: AppTheme.getHintColor(
-                  context.read<AppBloc>().state.themeMode,
-                )!
-                    .withOpacity(0.3),
-              ),
-            ),
-          ],
-        ),
+        trailing: _buildTrailingChildren(context),
         onTap: () async {
           if (onTapCallback != null) {
             onTapCallback!();
           }
 
-          await animatePage(pageController, page: pageIndex);
+          if (returnIndex != null) {
+            await animatePage(pageController, page: returnIndex!);
+          }
         },
       );
+
+  Widget? _buildTrailingChildren(
+    BuildContext context,
+  ) {
+    if (trailing != null) {
+      return trailing!;
+    } else if (trailingText == null) {
+      return null;
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          trailingText!,
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Icon(
+            Icons.chevron_right,
+            color: AppTheme.getHintColor(
+              context.read<AppBloc>().state.themeMode,
+            )!
+                .withOpacity(0.3),
+          ),
+        ),
+      ],
+    );
+  }
 }

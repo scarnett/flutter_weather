@@ -6,11 +6,13 @@ import 'package:flutter_weather/app/bloc/bloc.dart';
 class AppUiOverlayStyle extends StatelessWidget {
   final Widget? child;
   final Color? systemNavigationBarColor;
+  final double? systemNavigationBarColorOpacity;
   final Brightness? systemNavigationBarIconBrightness;
 
   AppUiOverlayStyle({
     this.child,
     this.systemNavigationBarColor,
+    this.systemNavigationBarColorOpacity,
     this.systemNavigationBarIconBrightness,
   });
 
@@ -32,7 +34,8 @@ class AppUiOverlayStyle extends StatelessWidget {
                 : Brightness.light,
         systemNavigationBarColor:
             state.colorTheme && (systemNavigationBarColor != null)
-                ? systemNavigationBarColor!.withOpacity(0.925)
+                ? systemNavigationBarColor!
+                    .withOpacity(systemNavigationBarColorOpacity ?? 0.925)
                 : Theme.of(context).appBarTheme.backgroundColor,
         systemNavigationBarIconBrightness:
             (systemNavigationBarIconBrightness != null)
