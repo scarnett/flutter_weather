@@ -129,7 +129,7 @@ jobs:
         run: exec .github/scripts/configure-android-keystore.sh
 
       - name: 'Get version.txt'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: gitversion
 
@@ -281,7 +281,7 @@ jobs:
         run: sed -i '' "s/FLUTTER_WEATHER_DEVELOPMENT_TEAM/$FLUTTER_WEATHER_APPSTORE_DEVELOPMENT_TEAM/g" ./project.pbxproj
 
       - name: 'Get version.txt'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: gitversion
 
@@ -339,7 +339,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: 'Get app bundle from artifacts'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: appbundle
 
@@ -365,7 +365,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: 'Get ipa from artifacts'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ipa
 
@@ -384,7 +384,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: 'Get version.txt'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: gitversion
 
