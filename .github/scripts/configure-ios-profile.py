@@ -1,4 +1,7 @@
+#!/usr/bin/python3
+
 import argparse, requests, os, time, json, base64, errno
+
 from authlib.jose import jwt
 
 
