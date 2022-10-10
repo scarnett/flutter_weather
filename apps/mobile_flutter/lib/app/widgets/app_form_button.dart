@@ -23,14 +23,13 @@ class AppFormButton extends StatelessWidget {
   ) =>
       TextButton(
         style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(
             horizontal: 10.0,
             vertical: 10.0,
           ),
-          backgroundColor:
-              (buttonColor == null) ? AppTheme.primaryColor : buttonColor,
-          primary: Colors.white,
-          onSurface: AppTheme.disabledTextColor,
+          backgroundColor: (buttonColor == null) ? AppTheme.primaryColor : buttonColor,
+          disabledForegroundColor: AppTheme.disabledTextColor.withOpacity(0.38),
           minimumSize: Size(100, 10),
           textStyle: TextStyle(
             color: Colors.white,

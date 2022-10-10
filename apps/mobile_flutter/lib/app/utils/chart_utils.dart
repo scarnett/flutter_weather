@@ -23,9 +23,7 @@ List<Color> getLineColors(
   bool colorTheme, {
   double opacity: 1.0,
 }) =>
-    colorTheme
-        ? [Colors.white.withOpacity(opacity)]
-        : AppTheme.getComplimentaryColors(opacity: opacity);
+    colorTheme ? [Colors.white.withOpacity(opacity)] : AppTheme.getComplimentaryColors(opacity: opacity);
 
 LineChartBarData getLineData({
   List<FlSpot>? spots,
@@ -141,10 +139,10 @@ SideTitles buildLeftSideTitles({
     SideTitles(
       showTitles: true,
       reservedSize: 30.0,
-      getTextStyles: (BuildContext context, double value) => Theme.of(context)
-          .textTheme
-          .subtitle2!
-          .copyWith(fontWeight: FontWeight.bold),
+      getTextStyles: (BuildContext context, double value) => Theme.of(context).textTheme.subtitle2!.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 9.0,
+          ),
       getTitles: (double value) {
         if ((value % 5) == 0) {
           return '${value.round().toString()} ${temperatureUnit.unitSymbol}';
@@ -163,10 +161,10 @@ SideTitles buildBottomSideTitles({
     SideTitles(
       showTitles: true,
       reservedSize: 30.0,
-      getTextStyles: (BuildContext context, double value) => Theme.of(context)
-          .textTheme
-          .subtitle2!
-          .copyWith(fontWeight: FontWeight.bold),
+      getTextStyles: (BuildContext context, double value) => Theme.of(context).textTheme.subtitle2!.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 9.0,
+          ),
       getTitles: (double value) => title(value),
     );
 

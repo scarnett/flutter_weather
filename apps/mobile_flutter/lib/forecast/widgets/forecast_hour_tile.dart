@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_weather/app/app_theme.dart';
 import 'package:flutter_weather/app/bloc/bloc.dart';
 import 'package:flutter_weather/app/utils/utils.dart';
 import 'package:flutter_weather/app/widgets/widgets.dart';
@@ -41,6 +42,7 @@ class ForecastHourTile extends StatelessWidget {
               icon: getForecastIconData(
                 (hour.weather == null) ? null : hour.weather!.first.icon,
               ),
+              color: (state.themeMode == ThemeMode.dark) || state.colorTheme ? Colors.white : AppTheme.secondaryColor,
               shadowColor: Colors.black26,
             ),
           ),
@@ -48,8 +50,7 @@ class ForecastHourTile extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: AppTemperatureDisplay(
-                temperature: getTemperature(hour.temp, state.units.temperature)
-                    .toString(),
+                temperature: getTemperature(hour.temp, state.units.temperature).toString(),
                 style: Theme.of(context).textTheme.headline5!.copyWith(
                       shadows: state.colorTheme ? commonTextShadow() : null,
                     ),

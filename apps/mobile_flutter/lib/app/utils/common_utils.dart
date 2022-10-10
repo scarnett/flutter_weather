@@ -4,11 +4,9 @@ import 'package:url_launcher/url_launcher.dart';
 extension ObjectExtension on Object? {
   bool isNullOrEmpty() => (this == null) || (this == '');
 
-  bool isNullEmptyOrFalse() =>
-      (this == null) || (this == '') || !(this as bool);
+  bool isNullEmptyOrFalse() => (this == null) || (this == '') || !(this as bool);
 
-  bool isNullEmptyZeroOrFalse() =>
-      (this == null) || (this == '') || !(this as bool) || (this == 0);
+  bool isNullEmptyZeroOrFalse() => (this == null) || (this == '') || !(this as bool) || (this == 0);
 }
 
 extension ListExtension on List? {
@@ -21,10 +19,8 @@ extension StringExtension on String {
   String camelCase() {
     String s = this
         .replaceAllMapped(
-          RegExp(
-              r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+'),
-          (Match match) =>
-              '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}',
+          RegExp(r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+'),
+          (Match match) => '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}',
         )
         .replaceAll(
           RegExp(r'(_|-|\s)+'),
@@ -39,8 +35,7 @@ extension DoubleExtension on double {
   double formatDecimal({
     int decimals: 2,
   }) =>
-      double.parse(this
-          .toStringAsFixed((this.truncateToDouble() == this) ? 0 : decimals));
+      double.parse(this.toStringAsFixed((this.truncateToDouble() == this) ? 0 : decimals));
 }
 
 List<Shadow> commonTextShadow({
@@ -69,8 +64,8 @@ Future<void> launchURL(
     throw 'URL is null';
   }
 
-  if (await canLaunch(url)) {
-    await launch(url);
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
   } else {
     throw 'Could not launch $url';
   }
