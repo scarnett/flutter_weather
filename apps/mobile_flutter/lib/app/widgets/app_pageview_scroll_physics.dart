@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/physics.dart';
 
 class AppPageViewScrollPhysics extends ScrollPhysics {
   const AppPageViewScrollPhysics({

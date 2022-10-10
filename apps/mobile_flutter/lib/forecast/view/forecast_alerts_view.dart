@@ -86,9 +86,8 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
 
     _alertsNotifier = ValueNotifier<int>(0);
 
-    WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
-      _arguments = ModalRoute.of(context)!.settings.arguments
-          as ForecastAlertsViewArguments;
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      _arguments = ModalRoute.of(context)!.settings.arguments as ForecastAlertsViewArguments;
 
       if (_arguments.initialIndex > 0) {
         setState(() {
@@ -114,8 +113,7 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
     BuildContext context,
   ) =>
       AppUiOverlayStyle(
-        systemNavigationBarIconBrightness:
-            context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
+        systemNavigationBarIconBrightness: context.read<AppBloc>().state.colorTheme ? Brightness.dark : null,
         child: Scaffold(
           appBar: AppBar(
             title: Text(
@@ -126,8 +124,7 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          backgroundColor:
-              Theme.of(context).scaffoldBackgroundColor.withOpacity(0.975),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.975),
           body: AppUiSafeArea(
             top: false,
             bottom: false,
@@ -162,37 +159,27 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
                         child: Column(
                           children: [
                             ForecastAlertDescription(
-                              description: _forecast
-                                  .details!.alerts![position].description,
+                              description: _forecast.details!.alerts![position].description,
                             ),
                             AppSectionHeader(
-                              text: AppLocalizations.of(context)!
-                                  .meta
-                                  .toUpperCase(),
+                              text: AppLocalizations.of(context)!.meta.toUpperCase(),
                             ),
                             _buildMeta(
                               AppLocalizations.of(context)!.sender,
-                              _forecast
-                                  .details?.alerts?[_currentPage].senderName,
+                              _forecast.details?.alerts?[_currentPage].senderName,
                             ),
                             ForecastDivider(padding: const EdgeInsets.all(0.0)),
                             _buildMeta(
                               AppLocalizations.of(context)!.start,
                               formatEpoch(
-                                epoch: _forecast
-                                        .details?.alerts?[_currentPage].start!
-                                        .toInt() ??
-                                    0,
+                                epoch: _forecast.details?.alerts?[_currentPage].start!.toInt() ?? 0,
                               ),
                             ),
                             ForecastDivider(padding: const EdgeInsets.all(0.0)),
                             _buildMeta(
                               AppLocalizations.of(context)!.end,
                               formatEpoch(
-                                epoch: _forecast
-                                        .details?.alerts?[_currentPage].end!
-                                        .toInt() ??
-                                    0,
+                                epoch: _forecast.details?.alerts?[_currentPage].end!.toInt() ?? 0,
                               ),
                             ),
                           ],
@@ -201,8 +188,7 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom),
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
                     child: _buildAlertsCircleIndicator(
                       alerts: _forecast.details!.alerts!,
                     ),
@@ -227,9 +213,7 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
               context.read<AppBloc>().state.themeMode,
               colorTheme: context.read<AppBloc>().state.colorTheme,
             ),
-            selectedDotColor: context.read<AppBloc>().state.colorTheme
-                ? Colors.white
-                : AppTheme.primaryColor,
+            selectedDotColor: context.read<AppBloc>().state.colorTheme ? Colors.white : AppTheme.primaryColor,
             selectedSize: 6.0,
             itemCount: alerts.length,
             currentPageNotifier: _alertsNotifier,
@@ -248,14 +232,19 @@ class _ForecastAlertsViewState extends State<ForecastAlertsView> {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              label,
-              style: Theme.of(context).textTheme.subtitle1,
+            Expanded(
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
-            Text(
-              text ?? defaultText,
-              style: Theme.of(context).textTheme.subtitle1,
+            Expanded(
+              child: Text(
+                text ?? defaultText,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
           ],
         ),

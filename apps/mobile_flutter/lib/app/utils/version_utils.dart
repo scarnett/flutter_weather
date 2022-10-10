@@ -39,8 +39,8 @@ bool needsAppUpdate(
     return true;
   }
 
-  Version parsedAppVersion = Version.parse(appVersion);
-  Version parsedPackageVersion = Version.parse(packageVersion);
+  Version parsedAppVersion = Version.parse(appVersion!);
+  Version parsedPackageVersion = Version.parse(packageVersion!);
   return (parsedAppVersion > parsedPackageVersion);
 }
 

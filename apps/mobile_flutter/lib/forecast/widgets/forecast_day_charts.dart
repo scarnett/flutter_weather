@@ -44,9 +44,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           if (isInteger(_pageController.page)) {
             _currentPage = _pageController.page!.toInt();
             _chartTypeNotifier.value = _currentPage!.toInt();
-            context
-                .read<AppBloc>()
-                .add(SetChartType(ChartType.values[_currentPage!]));
+            context.read<AppBloc>().add(SetChartType(ChartType.values[_currentPage!]));
           }
         });
       });
@@ -78,9 +76,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                physics: widget.enabled
-                    ? const AppPageViewScrollPhysics()
-                    : const NeverScrollableScrollPhysics(),
+                physics: widget.enabled ? const AppPageViewScrollPhysics() : const NeverScrollableScrollPhysics(),
                 clipBehavior: Clip.none,
                 children: [
                   _buildLineChart(),
@@ -181,13 +177,15 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
           showingTooltipIndicators: (_selectedSpot == null)
               ? null
               : [
-                  ShowingTooltipIndicators([
-                    LineBarSpot(
-                      lineBarsData[0],
-                      lineBarsData.indexOf(lineBarsData[0]),
-                      lineBarsData[0].spots[_selectedSpot!],
-                    ),
-                  ]),
+                  ShowingTooltipIndicators(
+                    [
+                      LineBarSpot(
+                        lineBarsData[0],
+                        lineBarsData.indexOf(lineBarsData[0]),
+                        lineBarsData[0].spots[_selectedSpot!],
+                      ),
+                    ],
+                  ),
                 ],
           titlesData: FlTitlesData(
             show: true,
@@ -326,8 +324,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
             state.themeMode,
             colorTheme: state.colorTheme,
           ),
-          selectedDotColor:
-              state.colorTheme ? Colors.white : AppTheme.primaryColor,
+          selectedDotColor: state.colorTheme ? Colors.white : AppTheme.primaryColor,
           selectedSize: 6.0,
           itemCount: ChartType.values.length,
           currentPageNotifier: _chartTypeNotifier,
@@ -406,8 +403,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   List<FlSpot> _getTempMaxSpots() {
     int index = 0;
     List<FlSpot> spots = [];
-    TemperatureUnit temperatureUnit =
-        context.read<AppBloc>().state.units.temperature;
+    TemperatureUnit temperatureUnit = context.read<AppBloc>().state.units.temperature;
 
     for (ForecastDaily day in _getDays()) {
       spots.add(
@@ -426,8 +422,7 @@ class _ForecastDayChartsState extends State<ForecastDayCharts> {
   List<FlSpot> _getTempMinSpots() {
     int index = 0;
     List<FlSpot> spots = [];
-    TemperatureUnit temperatureUnit =
-        context.read<AppBloc>().state.units.temperature;
+    TemperatureUnit temperatureUnit = context.read<AppBloc>().state.units.temperature;
 
     for (ForecastDaily day in _getDays()) {
       spots.add(

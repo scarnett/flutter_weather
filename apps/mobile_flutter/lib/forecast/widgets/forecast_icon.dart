@@ -24,8 +24,7 @@ class ForecastIcon extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) {
-    if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) &&
-        !context.watch<AppBloc>().state.colorTheme) {
+    if ((context.watch<AppBloc>().state.themeMode == ThemeMode.light) && !context.watch<AppBloc>().state.colorTheme) {
       return SizedBox(
         height: getContainerSize(),
         child: BoxedIcon(

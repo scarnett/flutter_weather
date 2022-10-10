@@ -18,7 +18,7 @@ class WeatherApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    if (WidgetsBinding.instance?.lifecycleState == AppLifecycleState.resumed) {
+    if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
       // Set the initial appstate (resumed) in the shared prefs
       AppPrefs prefs = AppPrefs();
       prefs.appState = 0;
@@ -42,19 +42,18 @@ class FlutterWeatherAppView extends StatefulWidget {
   _FlutterWeatherAppViewState createState() => _FlutterWeatherAppViewState();
 }
 
-class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView>
-    with WidgetsBindingObserver {
+class _FlutterWeatherAppViewState extends State<FlutterWeatherAppView> with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
